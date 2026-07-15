@@ -1,7 +1,15 @@
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || '';
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || '';
+const configuredSupabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+const configuredSupabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+
+// En développement sans .env, on conserve un client valide vers une origine
+// injoignable afin que les pages publiques basculent sur leurs données de
+// secours au lieu de faire échouer tout le rendu React au démarrage.
+const supabaseUrl = configuredSupabaseUrl || 'https://supabase-not-configured.invalid';
+const supabaseAnonKey = configuredSupabaseAnonKey || 'development-placeholder-anon-key';
+
+export const isSupabaseConfigured = Boolean(configuredSupabaseUrl && configuredSupabaseAnonKey);
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 

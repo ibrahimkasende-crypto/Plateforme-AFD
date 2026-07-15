@@ -9,15 +9,17 @@ export default {
       /* ── Police par défaut — Inter, avec repli système ── */
       fontFamily: {
         sans: ['Inter', ...defaultTheme.fontFamily.sans],
+        display: ['Inter', ...defaultTheme.fontFamily.sans],
       },
       colors: {
         brand: {
-          deep: '#0B5D46',
-          emerald: '#14866D',
-          aubergine: '#5B2C56',
-          gold: '#C79A45',
-          sand: '#F5F1E9',
-          ink: '#18201D',
+          deep: '#073F34',
+          emerald: '#0C7A62',
+          aubergine: '#4D2347',
+          gold: '#D3A64A',
+          sand: '#F8F5EF',
+          mist: '#EEF2F0',
+          ink: '#15201C',
           muted: '#66706B',
           error: '#B42318',
           success: '#16794A',
@@ -34,6 +36,14 @@ export default {
           800: '#154A70',
           900: '#0F3754',
         },
+      },
+      borderRadius: {
+        card: '1rem',
+        panel: '1.5rem',
+      },
+      boxShadow: {
+        soft: '0 18px 50px rgba(7, 63, 52, 0.10)',
+        lift: '0 24px 60px rgba(7, 63, 52, 0.16)',
       },
     },
   },

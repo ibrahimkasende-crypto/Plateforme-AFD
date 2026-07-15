@@ -36,9 +36,14 @@
 
 /* ── Variables CSS AFD — Charte graphique officielle ── */
 :root {
-  --afd-primary: #36A2E0;   /* Bleu principal du logo */
-  --afd-secondary: #1F6FA8; /* Bleu secondaire foncé */
-  --afd-light: #EAF6FD;     /* Fond bleu très léger */
+  --afd-primary: #073F34;
+  --afd-secondary: #0C7A62;
+  --afd-light: #F8F5EF;
+  --afd-aubergine: #4D2347;
+  --afd-gold: #D3A64A;
+  --afd-radius-card: 1rem;
+  --afd-radius-panel: 1.5rem;
+  --afd-ease: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 /* ================================================================
