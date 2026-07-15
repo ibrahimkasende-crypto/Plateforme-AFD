@@ -1,4 +1,4 @@
-﻿# Site Web AFD
+﻿# MECH-JC
 
 Application web React + TypeScript pour le site de l''Association (AFD), avec espace d''administration et base de données Supabase.
 
