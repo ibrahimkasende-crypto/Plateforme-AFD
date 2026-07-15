@@ -37,7 +37,9 @@ export default function Donate() {
           amount: parseFloat(amount),
           currency,
           payment_method: paymentMethod,
-          status: 'completed',
+          // Aucun prestataire de paiement n'est connecté : il s'agit exclusivement
+          // d'une intention de don à traiter par l'organisation.
+          status: 'pending',
         }]);
 
       if (error) throw error;
@@ -61,10 +63,10 @@ export default function Donate() {
             <Check className="h-8 w-8 text-green-600 dark:text-green-400" />
           </div>
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
-            Merci pour votre générosité !
+            Votre intention de don a bien été reçue.
           </h2>
           <p className="text-gray-600 dark:text-gray-400 mb-8">
-            Votre don va directement contribuer à l'autonomisation des femmes et au développement des communautés en RDC.
+            Aucun paiement n’a été confirmé sur le site. L’AFD vous contactera pour vous transmettre les modalités de contribution.
           </p>
           <button
             onClick={() => setIsSuccess(false)}
@@ -274,11 +276,11 @@ export default function Donate() {
                 className="w-full px-6 py-4 bg-afd-400 text-white rounded-lg hover:bg-afd-600 font-semibold text-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2"
               >
                 <Heart className="h-5 w-5" fill="white" />
-                <span>{isSubmitting ? 'Traitement...' : 'Finaliser le don'}</span>
+                <span>{isSubmitting ? 'Enregistrement...' : 'Envoyer mon intention de don'}</span>
               </button>
 
               <p className="text-center text-sm text-gray-500 dark:text-gray-400">
-                Votre don est sécurisé et confidentiel. Vous recevrez un reçu par email.
+                Votre demande est traitée de manière confidentielle. Aucun paiement ne sera prélevé depuis ce formulaire.
               </p>
             </form>
           </div>

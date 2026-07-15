@@ -1,10 +1,7 @@
-// Diagnostic sur le bon projet Supabase (celui du .env)
-import { createClient } from '@supabase/supabase-js';
-
-const supabase = createClient(
-    'https://uazdlascrmkwhylwwqrx.supabase.co',
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVhemRsYXNjcm1rd2h5bHd3cXJ4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE0NTQ0NjcsImV4cCI6MjA4NzAzMDQ2N30.TdiAy-S7I3EOiX7BdYQqvsRUqzjlMRmYkkM905zJS3I'
-);
+// Script historique désactivé : ne pas enregistrer les URL ou clés Supabase
+// dans le dépôt. Utiliser les outils Supabase authentifiés localement.
+const supabase = null;
+throw new Error('diagnostic.mjs est désactivé. Utilisez Supabase CLI avec les variables locales non versionnées.');
 
 const tables = [
     'programmes', 'projets', 'actualites', 'galerie',

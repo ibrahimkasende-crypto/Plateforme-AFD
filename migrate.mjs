@@ -1,14 +1,10 @@
-// Script de migration : exécute le SQL sur Supabase
-// Usage : node migrate.mjs
-
-import { createClient } from '@supabase/supabase-js';
-
-const supabaseUrl = 'https://twylznmdxpybmxyfosag.supabase.co';
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR3eWx6bm1keHB5Ym14eWZvc2FnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzEzMDkwNDEsImV4cCI6MjA4Njg4NTA0MX0.16PjQ7SxJHEQVfOEKduDA3QC60uO72ZSevurDdr5pPM';
-
-const supabase = createClient(supabaseUrl, supabaseKey);
+// Script historique retiré de l'exécution.
+// Les migrations versionnées dans supabase/migrations sont l'unique méthode
+// autorisée. Aucune URL ni clé ne doit être inscrite dans ce fichier.
+const supabase = null;
 
 async function migrate() {
+    throw new Error('migrate.mjs est désactivé : appliquez les migrations Supabase versionnées après sauvegarde et validation du schéma.');
     console.log('🚀 Démarrage de la migration AFD...\n');
 
     // 1. site_settings

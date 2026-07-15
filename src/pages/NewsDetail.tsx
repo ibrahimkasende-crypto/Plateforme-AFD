@@ -26,19 +26,17 @@ export default function NewsDetail() {
 
   async function fetchArticle() {
     // Diagnostic Supabase — table actualites (détail)
-    const { data, error } = await queryWithRetry<News>(() =>
+    const { data } = await queryWithRetry<News>(() =>
       supabase
         .from('actualites')
         .select('*')
         .eq('slug', slug)
+        .eq('published', true)
         .maybeSingle()
     );
-    console.log('[NewsDetail] actualite DATA:', data);
-    if (error) console.error('[NewsDetail] actualite ERROR:', error);
     if (data) {
       setArticle(data);
     } else {
-      console.warn('[NewsDetail] actualite non trouvée ou erreur, recherche dans les données de secours');
       const fallback = fallbackNews.find(n => n.slug === slug);
       if (fallback) {
         setArticle(fallback);

@@ -10,8 +10,18 @@ export default {
       fontFamily: {
         sans: ['Inter', ...defaultTheme.fontFamily.sans],
       },
-      /* ── Palette AFD — couleurs issues du logo officiel ── */
       colors: {
+        brand: {
+          deep: '#0B5D46',
+          emerald: '#14866D',
+          aubergine: '#5B2C56',
+          gold: '#C79A45',
+          sand: '#F5F1E9',
+          ink: '#18201D',
+          muted: '#66706B',
+          error: '#B42318',
+          success: '#16794A',
+        },
         afd: {
           50:  '#EAF6FD',  /* Fond léger */
           100: '#D0ECFA',
