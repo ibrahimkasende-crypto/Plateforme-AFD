@@ -1,17 +1,35 @@
 "use server";
 
 import {
-  getNewsletterPopupEligibilityAction as getEligibility,
-  subscribeNewsletterAction as subscribeAction,
-  type NewsletterActionResult,
-} from "@/features/newsletter/actions/subscribe";
+  isEmailSubscribed,
+} from "@/features/newsletter/services/newsletter.service";
+import { createClientSafe } from "@/lib/supabase/safe";
 
-export type { NewsletterActionResult };
+export async function getNewsletterPopupEligibilityAction(): Promise<{
+  shouldShow: boolean;
+  reason:
+    | "anonymous"
+    | "authenticated_unsubscribed"
+    | "subscribed"
+    | "no_email";
+}> {
+  const supabase = await createClientSafe();
+  if (!supabase) {
+    return { shouldShow: true, reason: "anonymous" };
+  }
 
-export async function getNewsletterPopupEligibilityAction() {
-  return getEligibility();
-}
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
-export async function subscribeNewsletterAction(input: unknown) {
-  return subscribeAction(input);
+  if (!user?.email) {
+    return { shouldShow: true, reason: "anonymous" };
+  }
+
+  const subscribed = await isEmailSubscribed(user.email);
+  if (subscribed) {
+    return { shouldShow: false, reason: "subscribed" };
+  }
+
+  return { shouldShow: true, reason: "authenticated_unsubscribed" };
 }

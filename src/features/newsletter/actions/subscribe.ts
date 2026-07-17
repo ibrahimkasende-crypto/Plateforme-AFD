@@ -1,11 +1,7 @@
 "use server";
 
 import { z } from "zod";
-import {
-  isEmailSubscribed,
-  subscribeToNewsletter,
-} from "@/features/newsletter/services/newsletter.service";
-import { createClientSafe } from "@/lib/supabase/safe";
+import { subscribeToNewsletter } from "@/features/newsletter/services/newsletter.service";
 
 const actionSchema = z.object({
   email: z.string().email().max(200),
@@ -71,33 +67,4 @@ export async function subscribeNewsletterAction(
         "L’inscription newsletter n’a pas pu être finalisée. Réessayez plus tard.",
     };
   }
-}
-
-export async function getNewsletterPopupEligibilityAction(): Promise<{
-  shouldShow: boolean;
-  reason:
-    | "anonymous"
-    | "authenticated_unsubscribed"
-    | "subscribed"
-    | "no_email";
-}> {
-  const supabase = await createClientSafe();
-  if (!supabase) {
-    return { shouldShow: true, reason: "anonymous" };
-  }
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user?.email) {
-    return { shouldShow: true, reason: "anonymous" };
-  }
-
-  const subscribed = await isEmailSubscribed(user.email);
-  if (subscribed) {
-    return { shouldShow: false, reason: "subscribed" };
-  }
-
-  return { shouldShow: true, reason: "authenticated_unsubscribed" };
 }
