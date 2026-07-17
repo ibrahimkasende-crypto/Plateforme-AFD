@@ -1,27 +1,11 @@
-import { ModulePlaceholder } from "@/components/shared/ModulePlaceholder";
+import { notFound } from "next/navigation";
 
-export default function Page() {
-  return (
-    <ModulePlaceholder
-      title="Histoire d’impact"
-      description="Détail d’une histoire d’impact."
-      breadcrumbs={[
-      {
-            "label": "Accueil",
-            "href": "/"
-      },
-      {
-            "label": "Notre impact",
-            "href": "/impact"
-      },
-      {
-            "label": "Histoires",
-            "href": "/impact/histoires"
-      },
-      {
-            "label": "Détail"
-      }
-]}
-    />
-  );
+type PageProps = {
+  params: Promise<{ slug: string }>;
+};
+
+export default async function HistoireDetailPage(props: PageProps) {
+  // Table histoires_impact non encore créée — aucune histoire inventée.
+  await props.params;
+  notFound();
 }

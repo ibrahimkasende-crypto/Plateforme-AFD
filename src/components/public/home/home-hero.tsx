@@ -12,7 +12,7 @@ function InstitutionalCard({ className }: { className?: string }) {
     <div
       className={
         className ??
-        "w-full rounded-[16px] bg-white p-5 text-[#10233f] shadow-[0_12px_28px_rgba(3,27,60,0.18)] sm:max-w-md lg:max-w-[14.5rem] lg:p-3.5"
+        "w-full rounded-[16px] border border-white/40 bg-white/70 p-5 text-[#10233f] shadow-[0_12px_28px_rgba(3,27,60,0.18)] backdrop-blur-md sm:max-w-md lg:max-w-[14.5rem] lg:p-3.5"
       }
     >
       <div className="inline-flex size-9 items-center justify-center rounded-full bg-[#eaf5fd] text-[#0877d1] lg:size-8">

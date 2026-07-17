@@ -7,14 +7,14 @@ export default defineConfig({
   retries: process.env.CI ? 1 : 0,
   reporter: "list",
   use: {
-    baseURL: process.env.PLAYWRIGHT_BASE_URL ?? "http://127.0.0.1:3000",
+    baseURL: process.env.PLAYWRIGHT_BASE_URL ?? "http://127.0.0.1:3010",
     trace: "on-first-retry",
     ...devices["Desktop Chrome"],
   },
   webServer: {
-    command: "npm run start -- --port 3000 --hostname 127.0.0.1",
-    url: "http://127.0.0.1:3000",
-    reuseExistingServer: !process.env.CI,
+    command: "npm run start -- --port 3010 --hostname 127.0.0.1",
+    url: "http://127.0.0.1:3010",
+    reuseExistingServer: false,
     timeout: 120_000,
   },
   projects: [
