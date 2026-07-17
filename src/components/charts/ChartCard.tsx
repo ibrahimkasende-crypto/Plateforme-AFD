@@ -27,7 +27,7 @@ export function ChartCard({
           <p className="mt-1 text-sm text-[var(--afd-muted)]">{description}</p>
         ) : null}
       </div>
-      <div className="h-64 w-full">{children}</div>
+      <div className="h-72 w-full">{children}</div>
     </div>
   );
 }

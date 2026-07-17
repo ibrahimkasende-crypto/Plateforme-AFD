@@ -1,7 +1,14 @@
+export type AdminNavBadgeKey =
+  | "newsletter"
+  | "messages"
+  | "adhesions"
+  | "notifications";
+
 export type AdminNavItem = {
   label: string;
   href: string;
   icon?: string;
+  badgeKey?: AdminNavBadgeKey;
 };
 
 export type AdminNavGroup = {
@@ -9,34 +16,63 @@ export type AdminNavGroup = {
   items: AdminNavItem[];
 };
 
+/** Menu plat aligné sur la maquette administrative AFD. */
+export const adminSidebarItems: AdminNavItem[] = [
+  { label: "Tableau de bord", href: "/admin", icon: "LayoutDashboard" },
+  { label: "Programmes", href: "/admin/programmes", icon: "FolderKanban" },
+  { label: "Projets", href: "/admin/projets", icon: "Briefcase" },
+  { label: "Activités", href: "/admin/activites", icon: "ListChecks" },
+  { label: "Bénéficiaires", href: "/admin/beneficiaires", icon: "Users" },
+  {
+    label: "Indicateurs et résultats",
+    href: "/admin/indicateurs",
+    icon: "Target",
+  },
+  { label: "Finances", href: "/admin/finances", icon: "Wallet" },
+  {
+    label: "Carte des interventions",
+    href: "/admin/zones-intervention",
+    icon: "Map",
+  },
+  { label: "Actualités", href: "/admin/actualites", icon: "Newspaper" },
+  { label: "Médiathèque", href: "/admin/mediatheque", icon: "Images" },
+  {
+    label: "Newsletter",
+    href: "/admin/newsletter",
+    icon: "Mail",
+    badgeKey: "newsletter",
+  },
+  {
+    label: "Demandes et messages",
+    href: "/admin/messages",
+    icon: "MessageSquare",
+    badgeKey: "messages",
+  },
+  { label: "Partenaires", href: "/admin/partenaires", icon: "Handshake" },
+  { label: "Équipe et RH", href: "/admin/equipe", icon: "UsersRound" },
+  { label: "Rapports", href: "/admin/rapports", icon: "FileText" },
+  {
+    label: "Utilisateurs et rôles",
+    href: "/admin/utilisateurs",
+    icon: "Shield",
+  },
+  { label: "Paramètres", href: "/admin/parametres", icon: "Settings" },
+  {
+    label: "Journal d’activité",
+    href: "/admin/journal-activite",
+    icon: "ScrollText",
+  },
+];
+
+/** Navigation groupée (modules détaillés / sous-pages). */
 export const adminNavigation: AdminNavGroup[] = [
   {
-    label: "Tableau de bord",
-    items: [{ label: "Vue d’ensemble", href: "/admin", icon: "LayoutDashboard" }],
+    label: "Principal",
+    items: adminSidebarItems,
   },
   {
-    label: "Gestion des actions",
+    label: "Finances détaillées",
     items: [
-      { label: "Programmes", href: "/admin/programmes", icon: "FolderKanban" },
-      { label: "Projets", href: "/admin/projets", icon: "Briefcase" },
-      { label: "Activités", href: "/admin/activites", icon: "ListChecks" },
-      { label: "Bénéficiaires", href: "/admin/beneficiaires", icon: "Users" },
-      {
-        label: "Indicateurs et résultats",
-        href: "/admin/indicateurs",
-        icon: "Target",
-      },
-      {
-        label: "Zones d’intervention",
-        href: "/admin/zones-intervention",
-        icon: "Map",
-      },
-    ],
-  },
-  {
-    label: "Finances",
-    items: [
-      { label: "Budgets", href: "/admin/finances", icon: "Wallet" },
       {
         label: "Intentions de dons",
         href: "/admin/dons/intentions",
@@ -55,11 +91,8 @@ export const adminNavigation: AdminNavGroup[] = [
     ],
   },
   {
-    label: "Communication",
+    label: "Newsletter",
     items: [
-      { label: "Actualités", href: "/admin/actualites", icon: "Newspaper" },
-      { label: "Médiathèque", href: "/admin/mediatheque", icon: "Images" },
-      { label: "Newsletter", href: "/admin/newsletter", icon: "Mail" },
       {
         label: "Abonnés",
         href: "/admin/newsletter/abonnes",
@@ -73,35 +106,8 @@ export const adminNavigation: AdminNavGroup[] = [
     ],
   },
   {
-    label: "Organisation",
+    label: "Rapports",
     items: [
-      { label: "Équipe et RH", href: "/admin/equipe", icon: "UsersRound" },
-      {
-        label: "Départements",
-        href: "/admin/departements",
-        icon: "Building2",
-      },
-      { label: "Partenaires", href: "/admin/partenaires", icon: "Handshake" },
-      { label: "Clusters", href: "/admin/clusters", icon: "Network" },
-    ],
-  },
-  {
-    label: "Demandes",
-    items: [
-      { label: "Messages", href: "/admin/messages", icon: "MessageSquare" },
-      { label: "Adhésions", href: "/admin/adhesions", icon: "UserPlus" },
-      { label: "Dons", href: "/admin/dons", icon: "Heart" },
-    ],
-  },
-  {
-    label: "Suivi et rapports",
-    items: [
-      {
-        label: "Statistiques",
-        href: "/admin/statistiques",
-        icon: "BarChart3",
-      },
-      { label: "Rapports", href: "/admin/rapports", icon: "FileText" },
       {
         label: "Nouveau rapport",
         href: "/admin/rapports/nouveau",
@@ -116,19 +122,6 @@ export const adminNavigation: AdminNavGroup[] = [
         label: "Historique",
         href: "/admin/rapports/historique",
         icon: "History",
-      },
-    ],
-  },
-  {
-    label: "Administration",
-    items: [
-      { label: "Utilisateurs", href: "/admin/utilisateurs", icon: "Shield" },
-      { label: "Rôles et permissions", href: "/admin/roles", icon: "KeyRound" },
-      { label: "Paramètres", href: "/admin/parametres", icon: "Settings" },
-      {
-        label: "Journal d’activité",
-        href: "/admin/journal-activite",
-        icon: "ScrollText",
       },
     ],
   },
