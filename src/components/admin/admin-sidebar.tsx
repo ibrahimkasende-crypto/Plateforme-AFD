@@ -26,6 +26,9 @@ import {
 } from "lucide-react";
 import { adminSidebarItems } from "@/config/admin-navigation";
 import type { AdminNavBadgeKey } from "@/config/admin-navigation";
+import { navItemAllowed } from "@/config/admin-nav-permissions";
+import { roleHasPermission } from "@/config/permissions";
+import type { Role } from "@/config/roles";
 import type { SidebarBadges } from "@/features/statistiques/types/dashboard";
 import { cn } from "@/lib/utils";
 
@@ -69,23 +72,32 @@ function isNavActive(pathname: string, href: string): boolean {
   return pathname === href || pathname.startsWith(`${href}/`);
 }
 
+function filterSidebarItems(role: Role) {
+  const has = (permission: Parameters<typeof roleHasPermission>[1]) =>
+    roleHasPermission(role, permission);
+  return adminSidebarItems.filter((item) => navItemAllowed(item.href, has));
+}
+
 type AdminSidebarNavProps = {
   badges: SidebarBadges;
+  role: Role;
   onNavigate?: () => void;
   className?: string;
 };
 
 export function AdminSidebarNav({
   badges,
+  role,
   onNavigate,
   className,
 }: AdminSidebarNavProps) {
   const pathname = usePathname();
+  const items = filterSidebarItems(role);
 
   return (
     <nav className={cn("flex-1 overflow-y-auto px-3 py-4", className)} aria-label="Navigation admin">
       <ul className="space-y-1">
-        {adminSidebarItems.map((item) => {
+        {items.map((item) => {
           const Icon = item.icon ? adminNavIconMap[item.icon] : undefined;
           const active = isNavActive(pathname, item.href);
           const count = resolveBadge(item.badgeKey, badges);
@@ -125,11 +137,12 @@ export function AdminSidebarNav({
 
 type AdminSidebarProps = {
   badges: SidebarBadges;
+  role: Role;
   className?: string;
   onNavigate?: () => void;
 };
 
-export function AdminSidebar({ badges, className, onNavigate }: AdminSidebarProps) {
+export function AdminSidebar({ badges, role, className, onNavigate }: AdminSidebarProps) {
   return (
     <aside
       className={cn(
@@ -149,7 +162,7 @@ export function AdminSidebar({ badges, className, onNavigate }: AdminSidebarProp
         </div>
       </div>
 
-      <AdminSidebarNav badges={badges} onNavigate={onNavigate} />
+      <AdminSidebarNav badges={badges} role={role} onNavigate={onNavigate} />
 
       <div className="mt-auto border-t border-white/10 px-4 py-4">
         <div className="rounded-xl bg-white/5 px-3 py-3 text-xs text-white/70">

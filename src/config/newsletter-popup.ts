@@ -15,6 +15,9 @@ export const LOADER_DURATION_MS = 1200;
 export const NEWSLETTER_EXCLUDED_PATH_PREFIXES = [
   "/admin",
   "/connexion",
+  "/mot-de-passe-oublie",
+  "/nouveau-mot-de-passe",
+  "/acces-refuse",
   "/login",
   "/auth",
   "/ressources/newsletter/desabonnement",

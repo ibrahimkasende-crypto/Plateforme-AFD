@@ -135,6 +135,10 @@ export async function getDashboardBundle(
 ): Promise<DashboardBundle> {
   void filters;
   const viewer = await getAdminViewer();
+  if (!viewer) {
+    throw new Error("Admin session required");
+  }
+
   const supabase = await createClientSafe();
 
   if (!supabase) {

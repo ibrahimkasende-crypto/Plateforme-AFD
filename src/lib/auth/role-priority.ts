@@ -1,0 +1,59 @@
+import { roles, type Role } from "@/config/roles";
+
+const LEGACY_ROLE_MAP: Record<string, Role> = {
+  super_admin: "super_admin",
+  direction_generale: "direction_generale",
+  secretariat: "secretariat",
+  charge_programmes: "charge_programmes",
+  coordination_urgences: "coordination_urgences",
+  coordination_sante: "coordination_sante",
+  coordination_developpement: "coordination_developpement",
+  coordination_meal: "coordination_meal",
+  logistique: "logistique",
+  ressources_humaines: "ressources_humaines",
+  finance: "finance",
+  communication: "communication",
+  lecture_partenaire: "lecture_partenaire",
+  // Rôles historiques migration 20260715
+  administrateur: "direction_generale",
+  editeur: "charge_programmes",
+  suivi_evaluation: "coordination_meal",
+  finance_lecture: "finance",
+};
+
+const ROLE_RANK: Record<Role, number> = {
+  super_admin: 100,
+  direction_generale: 90,
+  charge_programmes: 80,
+  coordination_meal: 75,
+  coordination_urgences: 70,
+  coordination_sante: 70,
+  coordination_developpement: 70,
+  finance: 65,
+  communication: 60,
+  ressources_humaines: 55,
+  secretariat: 50,
+  logistique: 45,
+  lecture_partenaire: 10,
+};
+
+export function mapDbRoleToAppRole(roleName: string): Role | null {
+  const mapped = LEGACY_ROLE_MAP[roleName];
+  if (mapped) return mapped;
+  if ((roles as readonly string[]).includes(roleName)) {
+    return roleName as Role;
+  }
+  return null;
+}
+
+export function pickPrimaryRole(roleNames: string[]): Role | null {
+  const mapped = roleNames
+    .map(mapDbRoleToAppRole)
+    .filter((role): role is Role => role !== null);
+
+  if (mapped.length === 0) return null;
+
+  return mapped.reduce((best, current) =>
+    ROLE_RANK[current] > ROLE_RANK[best] ? current : best,
+  );
+}

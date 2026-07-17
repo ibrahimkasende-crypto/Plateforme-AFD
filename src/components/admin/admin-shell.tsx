@@ -24,13 +24,14 @@ export function AdminShell({
   return (
     <div className="min-h-screen bg-[#f0f2f5]">
       <div className="hidden lg:fixed lg:inset-y-0 lg:flex">
-        <AdminSidebar badges={badges} />
+        <AdminSidebar badges={badges} role={viewer.role} />
       </div>
 
       <AdminMobileSidebar
         open={mobileOpen}
         onClose={() => setMobileOpen(false)}
         badges={badges}
+        role={viewer.role}
       />
 
       <div className="flex min-h-screen flex-col lg:pl-[260px]">

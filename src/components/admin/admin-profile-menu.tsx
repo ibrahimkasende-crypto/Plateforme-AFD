@@ -2,9 +2,9 @@
 
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import { ChevronDown, ExternalLink, LogOut } from "lucide-react";
+import { ChevronDown, ExternalLink, KeyRound, LogOut } from "lucide-react";
+import { signOut } from "@/actions/auth";
 import type { AdminViewer } from "@/features/statistiques/types/dashboard";
-import { cn } from "@/lib/utils";
 
 type AdminProfileMenuProps = {
   viewer: AdminViewer;
@@ -62,20 +62,26 @@ export function AdminProfileMenu({ viewer }: AdminProfileMenuProps) {
             <ExternalLink className="size-4" aria-hidden />
             Voir le site
           </Link>
-          <a
-            href="#"
+          <Link
+            href="/nouveau-mot-de-passe"
             role="menuitem"
-            className={cn(
-              "flex items-center gap-2 px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50",
-            )}
-            onClick={(event) => {
-              event.preventDefault();
-              setOpen(false);
-            }}
+            className="flex items-center gap-2 px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50"
+            onClick={() => setOpen(false)}
           >
-            <LogOut className="size-4" aria-hidden />
-            Déconnexion
-          </a>
+            <KeyRound className="size-4" aria-hidden />
+            Changer le mot de passe
+          </Link>
+          <form action={signOut}>
+            <button
+              type="submit"
+              role="menuitem"
+              className="flex w-full items-center gap-2 px-4 py-2.5 text-left text-sm text-slate-700 hover:bg-slate-50"
+              onClick={() => setOpen(false)}
+            >
+              <LogOut className="size-4" aria-hidden />
+              Déconnexion
+            </button>
+          </form>
         </div>
       ) : null}
     </div>

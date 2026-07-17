@@ -2,6 +2,7 @@
 
 import { X } from "lucide-react";
 import { AdminSidebarNav } from "@/components/admin/admin-sidebar";
+import type { Role } from "@/config/roles";
 import type { SidebarBadges } from "@/features/statistiques/types/dashboard";
 import { cn } from "@/lib/utils";
 
@@ -9,12 +10,14 @@ type AdminMobileSidebarProps = {
   open: boolean;
   onClose: () => void;
   badges: SidebarBadges;
+  role: Role;
 };
 
 export function AdminMobileSidebar({
   open,
   onClose,
   badges,
+  role,
 }: AdminMobileSidebarProps) {
   return (
     <>
@@ -53,7 +56,7 @@ export function AdminMobileSidebar({
             <X className="size-5" />
           </button>
         </div>
-        <AdminSidebarNav badges={badges} onNavigate={onClose} />
+        <AdminSidebarNav badges={badges} role={role} onNavigate={onClose} />
       </aside>
     </>
   );
