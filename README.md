@@ -1,36 +1,32 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Plateforme-ADF
 
-## Getting Started
+Plateforme web institutionnelle de l’Alliance des Femmes pour le Développement (AFD), permettant de présenter ses actions, programmes et actualités, avec un espace d’administration sécurisé pour gérer les contenus.
 
-First, run the development server:
+Projet reconstruit avec **Next.js (App Router)** — architecture alignée pour le développement progressif des modules.
+
+## Démarrage
 
 ```bash
+cd AFD
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Ouvrir [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Scripts
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- `npm run dev` — serveur de développement
+- `npm run build` — build de production
+- `npm run start` — démarrer le build
+- `npm run lint` — ESLint
+- `npm run typecheck` — TypeScript
 
-## Learn More
+## Documentation
 
-To learn more about Next.js, take a look at the following resources:
+- `docs/ARCHITECTURE_ALIGNED_V2.md`
+- `docs/ALIGNEMENT_ARCHITECTURE_AUDIT.md`
+- `docs/SUPABASE_TARGET_SCHEMA.md`
+- `docs/SERDIPAY_INTEGRATION_REQUIREMENTS.md`
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Configurer les variables dans `.env.local` à partir de `.env.example`.
