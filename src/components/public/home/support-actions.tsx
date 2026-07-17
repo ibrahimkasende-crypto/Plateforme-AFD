@@ -1,7 +1,7 @@
 import Link from "next/link";
 import {
   ArrowRight,
-  HeartHandshake,
+  Heart,
   Handshake,
   Mail,
   UserPlus,
@@ -16,7 +16,7 @@ import { cn } from "@/lib/utils";
 const icons: Record<string, LucideIcon> = {
   adhesion: UserPlus,
   partenaire: Handshake,
-  soutenir: HeartHandshake,
+  soutenir: Heart,
   contact: Mail,
 };
 
@@ -24,9 +24,9 @@ export function SupportActions() {
   return (
     <Section className="bg-white">
       <SiteContainer>
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4 lg:gap-7">
           {homeContent.supportActions.map((action, index) => {
-            const Icon = icons[action.id] ?? HeartHandshake;
+            const Icon = icons[action.id] ?? Heart;
             const featured = action.id === "soutenir";
 
             return (
@@ -34,17 +34,21 @@ export function SupportActions() {
                 key={action.id}
                 delay={index * 0.05}
                 className={cn(
-                  "flex h-full flex-col rounded-2xl border p-5",
+                  "flex h-full flex-col rounded-[18px] border p-6",
                   featured
-                    ? "border-[var(--afd-support)]/25 bg-[var(--afd-support)]/5"
-                    : "border-[var(--afd-border)] bg-[var(--afd-surface)]/40",
+                    ? "border-[var(--afd-orange)]/30 bg-[var(--afd-orange)]/[0.06]"
+                    : "border-[var(--afd-border)] bg-[var(--afd-background)]",
                 )}
               >
-                <Icon className="size-6 text-[var(--afd-accent)]" aria-hidden />
-                <h3 className="font-display mt-4 text-lg font-semibold text-[var(--afd-accent-strong)]">
-                  {action.title}
-                </h3>
-                <p className="mt-2 flex-1 text-sm leading-relaxed text-[var(--afd-muted)]">
+                <Icon
+                  className={cn(
+                    "size-6 text-[var(--afd-blue)]",
+                    featured && "fill-[var(--afd-orange)] text-[var(--afd-orange)]",
+                  )}
+                  aria-hidden
+                />
+                <h3 className="afd-h3 mt-4">{action.title}</h3>
+                <p className="mt-2 flex-1 text-[14px] leading-[1.6] text-[var(--afd-muted)]">
                   {action.description}
                 </p>
                 {"note" in action && action.note ? (
@@ -52,7 +56,7 @@ export function SupportActions() {
                 ) : null}
                 <Link
                   href={action.href}
-                  className="mt-5 inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-[var(--afd-accent)]"
+                  className="afd-btn-text mt-5 inline-flex min-h-11 items-center gap-2 text-[var(--afd-blue)]"
                 >
                   {action.cta}
                   <ArrowRight className="size-4" aria-hidden />

@@ -21,12 +21,10 @@ const iconMap: Record<string, LucideIcon> = {
 
 export function InstitutionalHighlights() {
   return (
-    <Section className="border-y border-[var(--afd-border)] bg-[var(--afd-surface)] py-10 md:py-12">
+    <Section className="border-y border-[var(--afd-border)] bg-[var(--afd-light-blue)] py-12 md:py-14">
       <SiteContainer>
         <FadeIn>
-          <p className="mb-6 text-sm font-semibold uppercase tracking-[0.14em] text-[var(--afd-accent)]">
-            Nos valeurs
-          </p>
+          <p className="afd-label mb-6 text-[var(--afd-blue)]">Nos valeurs</p>
         </FadeIn>
         <div className="grid gap-0 sm:grid-cols-2 lg:grid-cols-5">
           {homeContent.values.map((value, index) => {
@@ -39,14 +37,12 @@ export function InstitutionalHighlights() {
               >
                 <div className="flex items-start gap-3 lg:flex-col lg:gap-3">
                   <Icon
-                    className="size-5 shrink-0 text-[var(--afd-accent)]"
+                    className="size-5 shrink-0 text-[var(--afd-blue)]"
                     aria-hidden
                   />
                   <div>
-                    <h3 className="font-display text-lg font-semibold text-[var(--afd-ink)]">
-                      {value.title}
-                    </h3>
-                    <p className="mt-1 text-sm leading-relaxed text-[var(--afd-muted)]">
+                    <h3 className="afd-h3">{value.title}</h3>
+                    <p className="mt-1 text-[14px] leading-[1.6] text-[var(--afd-muted)]">
                       {value.description}
                     </p>
                   </div>

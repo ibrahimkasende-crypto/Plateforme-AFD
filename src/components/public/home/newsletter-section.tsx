@@ -5,22 +5,21 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { toast } from "sonner";
+import { Mail } from "lucide-react";
+import Link from "next/link";
 import { FadeIn } from "@/components/motion/FadeIn";
 import { Section } from "@/components/shared/Section";
 import { SiteContainer } from "@/components/shared/SiteContainer";
 import { homeContent } from "@/config/home-content";
 import { subscribeNewsletterAction } from "@/features/newsletter/actions/subscribe";
-import { cn } from "@/lib/utils";
+import { markNewsletterSubscribed } from "@/lib/newsletter/client-storage";
 
 const formSchema = z.object({
   name: z.string().trim().max(100).optional(),
   email: z.string().email("Adresse e-mail invalide"),
-  interests: z.array(z.string()),
-  consent: z
-    .boolean()
-    .refine((value) => value === true, {
-      message: "Le consentement est obligatoire",
-    }),
+  consent: z.boolean().refine((value) => value === true, {
+    message: "Le consentement est obligatoire",
+  }),
   website: z.string().max(0).optional(),
 });
 
@@ -33,37 +32,26 @@ export function NewsletterSection() {
     register,
     handleSubmit,
     reset,
-    setValue,
-    watch,
     formState: { errors },
   } = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
       email: "",
-      interests: [],
       consent: false,
       website: "",
     },
   });
-
-  const selectedInterests = watch("interests") ?? [];
-
-  function toggleInterest(id: string) {
-    const next = selectedInterests.includes(id)
-      ? selectedInterests.filter((value) => value !== id)
-      : [...selectedInterests, id];
-    setValue("interests", next, { shouldValidate: true });
-  }
 
   function onSubmit(values: FormValues) {
     startTransition(async () => {
       const result = await subscribeNewsletterAction({
         email: values.email,
         firstName: values.name || undefined,
-        preferences: values.interests,
+        preferences: [],
         consent: true,
         website: values.website,
+        source: "bandeau_accueil",
       });
 
       if (!result.ok) {
@@ -72,12 +60,12 @@ export function NewsletterSection() {
         return;
       }
 
+      markNewsletterSubscribed();
       setStatusMessage(result.message);
       toast.success(result.message);
       reset({
         name: "",
         email: "",
-        interests: [],
         consent: false,
         website: "",
       });
@@ -85,17 +73,22 @@ export function NewsletterSection() {
   }
 
   return (
-    <Section className="bg-[var(--afd-accent)] py-10 md:py-12">
+    <Section className="bg-[var(--afd-blue)] py-12 md:py-14">
       <SiteContainer>
         <FadeIn>
-          <div className="grid items-center gap-8 text-white lg:grid-cols-12">
-            <div className="lg:col-span-5">
-              <h2 className="font-display text-2xl font-semibold tracking-tight md:text-3xl">
-                {homeContent.newsletter.title}
-              </h2>
-              <p className="mt-2 text-sm leading-relaxed text-white/80">
-                {homeContent.newsletter.description}
-              </p>
+          <div className="grid items-center gap-8 text-white lg:grid-cols-12 lg:gap-10">
+            <div className="flex items-start gap-4 lg:col-span-5">
+              <span className="inline-flex size-14 shrink-0 items-center justify-center rounded-2xl bg-white/15">
+                <Mail className="size-7" aria-hidden />
+              </span>
+              <div>
+                <h2 className="font-heading text-2xl font-extrabold tracking-tight md:text-3xl">
+                  {homeContent.newsletter.title}
+                </h2>
+                <p className="mt-2 max-w-md text-[15px] leading-relaxed text-white/85">
+                  {homeContent.newsletter.description}
+                </p>
+              </div>
             </div>
 
             <form
@@ -123,7 +116,7 @@ export function NewsletterSection() {
                     id="newsletter-name"
                     type="text"
                     placeholder="Votre nom"
-                    className="min-h-11 w-full rounded-lg border-0 bg-white px-3 text-sm text-[var(--afd-ink)] placeholder:text-[var(--afd-muted)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+                    className="min-h-12 w-full rounded-lg border-0 bg-white px-3.5 text-sm text-[var(--afd-text)] placeholder:text-[var(--afd-muted)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
                     {...register("name")}
                   />
                 </div>
@@ -140,57 +133,43 @@ export function NewsletterSection() {
                     aria-describedby={
                       errors.email ? "newsletter-email-error" : undefined
                     }
-                    className="min-h-11 w-full rounded-lg border-0 bg-white px-3 text-sm text-[var(--afd-ink)] placeholder:text-[var(--afd-muted)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+                    className="min-h-12 w-full rounded-lg border-0 bg-white px-3.5 text-sm text-[var(--afd-text)] placeholder:text-[var(--afd-muted)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
                     {...register("email")}
                   />
                 </div>
                 <button
                   type="submit"
                   disabled={pending}
-                  className="inline-flex min-h-11 shrink-0 items-center justify-center rounded-lg bg-[var(--afd-support)] px-5 text-sm font-semibold text-white transition duration-150 hover:bg-[var(--afd-support-strong)] disabled:opacity-60"
+                  className="afd-btn-text inline-flex min-h-12 w-full shrink-0 items-center justify-center rounded-lg bg-[var(--afd-orange)] px-6 text-white transition duration-180 hover:bg-[var(--afd-orange-hover)] disabled:opacity-60 sm:w-auto"
                 >
                   {pending ? "…" : "S’inscrire"}
                 </button>
               </div>
 
               {errors.email ? (
-                <p id="newsletter-email-error" className="text-xs text-amber-200">
+                <p id="newsletter-email-error" className="text-xs text-amber-100">
                   {errors.email.message}
                 </p>
               ) : null}
 
-              <div className="flex flex-wrap gap-2">
-                {homeContent.newsletter.interests.map((interest) => {
-                  const active = selectedInterests.includes(interest.id);
-                  return (
-                    <button
-                      key={interest.id}
-                      type="button"
-                      onClick={() => toggleInterest(interest.id)}
-                      className={cn(
-                        "min-h-9 rounded-full border px-3 text-xs font-medium transition duration-150",
-                        active
-                          ? "border-white bg-white text-[var(--afd-accent-strong)]"
-                          : "border-white/30 text-white hover:bg-white/10",
-                      )}
-                      aria-pressed={active}
-                    >
-                      {interest.label}
-                    </button>
-                  );
-                })}
-              </div>
-
-              <label className="flex items-start gap-3 text-xs leading-relaxed text-white/85">
+              <label className="flex items-start gap-3 text-[12px] leading-relaxed text-white/90">
                 <input
                   type="checkbox"
                   className="mt-0.5 size-4 rounded border-white/30"
                   {...register("consent")}
                 />
-                <span>{homeContent.newsletter.consentLabel}</span>
+                <span>
+                  {homeContent.newsletter.consentLabel}{" "}
+                  <Link
+                    href="/politique-confidentialite"
+                    className="underline underline-offset-2"
+                  >
+                    Politique de confidentialité
+                  </Link>
+                </span>
               </label>
               {errors.consent ? (
-                <p className="text-xs text-amber-200">{errors.consent.message}</p>
+                <p className="text-xs text-amber-100">{errors.consent.message}</p>
               ) : null}
 
               <div aria-live="polite" className="min-h-5 text-xs text-white/75">

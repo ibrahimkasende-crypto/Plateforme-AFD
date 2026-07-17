@@ -1,27 +1,48 @@
 @import "tailwindcss";
 
 :root {
-  --afd-bg: #f5f8fc;
-  --afd-surface: #eef3f9;
-  --afd-ink: #0f2744;
-  --afd-muted: #5a6f86;
-  --afd-border: #d5e0ec;
-  --afd-accent: #1a4f8c;
-  --afd-accent-strong: #0f355f;
-  --afd-accent-soft: #e3eef9;
-  --afd-accent-bright: #2563a8;
-  --afd-support: #c47a2c;
-  --afd-support-strong: #a8641f;
-  --afd-gold: #d4a017;
-  --background: var(--afd-bg);
-  --foreground: var(--afd-ink);
+  /* Palette officielle AFD */
+  --afd-blue: #0877d1;
+  --afd-blue-hover: #0565b4;
+  --afd-navy: #062653;
+  --afd-dark-navy: #031b3c;
+  --afd-light-blue: #eaf5fd;
+  --afd-orange: #e99308;
+  --afd-orange-hover: #cc7c00;
+  --afd-white: #ffffff;
+  --afd-background: #f8fafc;
+  --afd-text: #10233f;
+  --afd-muted: #5f6f83;
+  --afd-border: #dce5ef;
+  --afd-success: #16834b;
+  --afd-error: #b42318;
+
+  /* Alias de compatibilité */
+  --afd-bg: var(--afd-background);
+  --afd-surface: var(--afd-light-blue);
+  --afd-ink: var(--afd-text);
+  --afd-accent: var(--afd-blue);
+  --afd-accent-strong: var(--afd-navy);
+  --afd-accent-soft: var(--afd-light-blue);
+  --afd-accent-bright: var(--afd-blue);
+  --afd-support: var(--afd-orange);
+  --afd-support-strong: var(--afd-orange-hover);
+  --afd-gold: var(--afd-orange);
+
+  /* Layout */
+  --afd-container: 1360px;
+  --afd-section-y: clamp(3.5rem, 6vw, 7rem);
+  --afd-section-gap: clamp(1.5rem, 3vw, 2.75rem);
+
+  --background: var(--afd-background);
+  --foreground: var(--afd-text);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-source-sans);
-  --font-display: var(--font-source-serif);
+  --font-sans: var(--font-body);
+  --font-display: var(--font-heading);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -35,13 +56,70 @@
 }
 
 body {
-  background: var(--afd-bg);
-  color: var(--afd-ink);
-  font-family: var(--font-source-sans), "Segoe UI", sans-serif;
+  background: var(--afd-background);
+  color: var(--afd-text);
+  font-family: var(--font-body), "Segoe UI", sans-serif;
+  font-size: 16px;
+  line-height: 1.65;
 }
 
-.font-display {
-  font-family: var(--font-source-serif), Georgia, serif;
+.font-display,
+.font-heading,
+h1,
+h2,
+h3 {
+  font-family: var(--font-heading), "Segoe UI", sans-serif;
+}
+
+.afd-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.afd-prose {
+  max-width: 40rem;
+  font-size: clamp(1rem, 0.2vw + 0.95rem, 1.125rem);
+  line-height: 1.7;
+  color: var(--afd-muted);
+}
+
+.afd-h1-hero {
+  font-family: var(--font-heading), "Segoe UI", sans-serif;
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  line-height: 1.08;
+  font-size: clamp(2.125rem, 1.2rem + 3.2vw, 3.75rem);
+  max-width: 44rem;
+}
+
+.afd-h2 {
+  font-family: var(--font-heading), "Segoe UI", sans-serif;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  color: var(--afd-navy);
+  font-size: clamp(1.5rem, 1rem + 1.5vw, 2.125rem);
+}
+
+.afd-h3 {
+  font-family: var(--font-heading), "Segoe UI", sans-serif;
+  font-weight: 700;
+  line-height: 1.25;
+  font-size: clamp(1.0625rem, 0.95rem + 0.4vw, 1.25rem);
+  color: var(--afd-navy);
+}
+
+.afd-nav-link {
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.25rem;
+}
+
+.afd-btn-text {
+  font-size: 0.875rem;
+  font-weight: 700;
 }
 
 @keyframes afd-drawer-in {
@@ -59,8 +137,45 @@ body {
   animation: afd-drawer-in 240ms ease-out;
 }
 
+@keyframes afd-heart-breathe {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.85;
+  }
+  50% {
+    transform: scale(1.08);
+    opacity: 1;
+  }
+}
+
+@keyframes afd-ring-pulse {
+  0% {
+    transform: scale(0.92);
+    opacity: 0.45;
+  }
+  70% {
+    transform: scale(1.25);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1.25);
+    opacity: 0;
+  }
+}
+
+.afd-heart-breathe {
+  animation: afd-heart-breathe 1.4s ease-in-out infinite;
+}
+
+.afd-ring-pulse {
+  animation: afd-ring-pulse 1.6s ease-out infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .afd-drawer-panel {
+  .afd-drawer-panel,
+  .afd-heart-breathe,
+  .afd-ring-pulse {
     animation: none;
   }
 }

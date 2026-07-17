@@ -62,10 +62,10 @@ function DesktopDropdown({
       <button
         type="button"
         className={cn(
-          "group relative inline-flex min-h-11 items-center gap-1 px-2.5 py-2 text-sm font-medium transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--afd-accent)] focus-visible:ring-offset-2",
+          "afd-nav-link group relative inline-flex min-h-11 items-center gap-1.5 py-2 transition-colors duration-180 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--afd-blue)] focus-visible:ring-offset-2",
           active
-            ? "font-semibold text-[var(--afd-accent-bright)]"
-            : "text-[var(--afd-ink)] hover:text-[var(--afd-accent)]",
+            ? "text-[var(--afd-blue)]"
+            : "text-[var(--afd-text)] hover:text-[var(--afd-blue)]",
         )}
         aria-expanded={open}
         aria-haspopup="true"
@@ -82,7 +82,7 @@ function DesktopDropdown({
         />
         <span
           className={cn(
-            "absolute inset-x-2 -bottom-0.5 h-0.5 origin-left rounded-full bg-[var(--afd-accent-bright)] transition-transform duration-200",
+            "absolute inset-x-0 -bottom-0.5 h-0.5 origin-left rounded-full bg-[var(--afd-blue)] transition-transform duration-200",
             active ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100",
           )}
           aria-hidden
@@ -94,15 +94,15 @@ function DesktopDropdown({
         role="menu"
         hidden={!open}
         className={cn(
-          "absolute left-1/2 top-full z-50 w-max min-w-[18rem] max-w-[min(36rem,calc(100vw-2rem))] -translate-x-1/2 pt-2 transition-opacity duration-200",
+          "absolute left-1/2 top-full z-50 w-max min-w-[20rem] max-w-[min(40rem,calc(100vw-2rem))] -translate-x-1/2 pt-3 transition-opacity duration-200",
           open ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0",
         )}
       >
-        <div className="rounded-xl border border-[var(--afd-border)] bg-white p-2 shadow-[0_8px_28px_rgba(15,39,68,0.08)]">
+        <div className="rounded-2xl border border-[var(--afd-border)] bg-white p-3 shadow-[0_12px_36px_rgba(16,35,63,0.1)]">
           <div
             className={cn(
-              "grid gap-1",
-              columns === 2 && "sm:grid-cols-2 sm:gap-x-1",
+              "grid gap-2.5",
+              columns === 2 && "sm:grid-cols-2 sm:gap-x-3",
             )}
           >
             {item.children?.map((child) => {
@@ -118,24 +118,24 @@ function DesktopDropdown({
                   role="menuitem"
                   onClick={onClose}
                   className={cn(
-                    "rounded-lg px-3 py-2.5 transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--afd-accent)]",
+                    "rounded-xl px-3.5 py-3 transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--afd-blue)]",
                     childActive
-                      ? "bg-[var(--afd-accent-soft)]"
-                      : "hover:bg-[var(--afd-surface)]",
+                      ? "bg-[var(--afd-light-blue)]"
+                      : "hover:bg-[var(--afd-background)]",
                   )}
                 >
                   <span
                     className={cn(
-                      "block text-sm font-medium",
+                      "block text-sm font-semibold",
                       childActive
-                        ? "text-[var(--afd-accent-bright)]"
-                        : "text-[var(--afd-ink)]",
+                        ? "text-[var(--afd-blue)]"
+                        : "text-[var(--afd-navy)]",
                     )}
                   >
                     {child.label}
                   </span>
                   {child.description ? (
-                    <span className="mt-0.5 block text-xs leading-snug text-[var(--afd-muted)]">
+                    <span className="mt-1 block text-[13px] leading-snug text-[var(--afd-muted)]">
                       {child.description}
                     </span>
                   ) : null}
@@ -161,7 +161,7 @@ export function DesktopNavigation() {
 
   return (
     <nav
-      className="hidden items-center gap-0.5 xl:flex"
+      className="hidden items-center gap-7 min-[1200px]:flex min-[1280px]:gap-8"
       aria-label="Navigation principale"
     >
       {publicNavigation.map((item) => {
@@ -175,16 +175,16 @@ export function DesktopNavigation() {
               href={item.href}
               aria-current={active ? "page" : undefined}
               className={cn(
-                "group relative inline-flex min-h-11 items-center px-2.5 py-2 text-sm font-medium transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--afd-accent)] focus-visible:ring-offset-2",
+                "afd-nav-link group relative inline-flex min-h-11 items-center py-2 transition-colors duration-180 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--afd-blue)] focus-visible:ring-offset-2",
                 active
-                  ? "font-semibold text-[var(--afd-accent-bright)]"
-                  : "text-[var(--afd-ink)] hover:text-[var(--afd-accent)]",
+                  ? "text-[var(--afd-blue)]"
+                  : "text-[var(--afd-text)] hover:text-[var(--afd-blue)]",
               )}
             >
               {item.label}
               <span
                 className={cn(
-                  "absolute inset-x-2 -bottom-0.5 h-0.5 origin-left rounded-full bg-[var(--afd-accent-bright)] transition-transform duration-200",
+                  "absolute inset-x-0 -bottom-0.5 h-0.5 origin-left rounded-full bg-[var(--afd-blue)] transition-transform duration-200",
                   active ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100",
                 )}
                 aria-hidden

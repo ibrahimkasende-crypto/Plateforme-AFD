@@ -2,22 +2,23 @@ import { siteConfig } from "@/config/site";
 
 export const homeContent = {
   hero: {
-    eyebrow: "AFD ASBL · République démocratique du Congo",
+    eyebrow: "ONG nationale congolaise",
     title:
       "Des femmes engagées pour des communautés plus fortes et résilientes.",
     description:
-      "L’Alliance des Femmes pour le Développement accompagne les communautés vulnérables à travers des réponses humanitaires et des solutions durables, inclusives et participatives en République démocratique du Congo.",
+      "Depuis 2024, l’Alliance des Femmes pour le Développement agit aux côtés des communautés vulnérables à travers des réponses humanitaires et des solutions durables, inclusives et participatives.",
     primaryCta: { label: "Découvrir nos actions", href: "/actions" },
-    secondaryCta: { label: "Soutenir l’AFD", href: "/soutenir" },
+    secondaryCta: { label: "Devenir partenaire", href: "/contact" },
     trustItems: [
       "ONG nationale congolaise",
       "Créée en 2024",
       "Portée par les femmes et les jeunes",
     ] as const,
     institutionalNote:
-      "Conseil d’administration composé à 80 % de femmes de moins de 35 ans et de jeunes.",
+      "80 % de femmes de moins de 35 ans et de jeunes au Conseil d’administration.",
     image: {
       src: "/images/adf1.jpg",
+      preferredSrc: "/images/home/hero-afd.webp",
       alt: "Visuel institutionnel AFD — à remplacer par une photographie de terrain documentée",
       credit: "Visuel temporaire — photo de terrain AFD à intégrer",
       isTemporary: true,
@@ -154,14 +155,19 @@ export const homeContent = {
     },
   ] as const,
   newsletter: {
-    title: "Restez informé des actions de l’AFD",
+    title: "Restez informé de nos actions",
     description:
-      "Recevez nos actualités, nos résultats, nos publications et les opportunités liées à nos programmes.",
+      "Inscrivez-vous à notre newsletter pour recevoir nos actualités, nos rapports et nos opportunités d’engagement.",
+    popupTitle: "Suivez les actions de l’AFD",
+    popupDescription:
+      "Recevez nos actualités, publications, opportunités et informations sur nos actions humanitaires et de développement.",
     interests: [
-      { id: "actualites", label: "Actualités" },
+      { id: "actualites", label: "Actualités générales" },
+      { id: "programmes", label: "Programmes humanitaires" },
+      { id: "autonomisation", label: "Autonomisation des femmes" },
       { id: "rapports", label: "Rapports et publications" },
       { id: "opportunites", label: "Opportunités" },
-      { id: "urgences", label: "Urgences humanitaires" },
+      { id: "appels", label: "Appels d’offres" },
     ] as const,
     consentLabel:
       "J’accepte que l’AFD utilise mon adresse e-mail pour m’envoyer des informations liées à ses actions.",

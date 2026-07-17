@@ -4,12 +4,11 @@ import { FeaturedPrograms } from "@/components/public/home/featured-programs";
 import { FeaturedProjects } from "@/components/public/home/featured-projects";
 import { HomeHero } from "@/components/public/home/home-hero";
 import { HomeSectionSkeleton } from "@/components/public/home/home-section-skeleton";
+import { ImpactAndNews } from "@/components/public/home/impact-and-news";
 import { ImpactStatistics } from "@/components/public/home/impact-statistics";
-import { ImpactStory } from "@/components/public/home/impact-story";
 import { InstitutionalHighlights } from "@/components/public/home/institutional-highlights";
 import { InterventionPillars } from "@/components/public/home/intervention-pillars";
 import { InterventionZones } from "@/components/public/home/intervention-zones";
-import { LatestNews } from "@/components/public/home/latest-news";
 import { NewsletterSection } from "@/components/public/home/newsletter-section";
 import { OrganizationIntroduction } from "@/components/public/home/organization-introduction";
 import { PartnersSection } from "@/components/public/home/partners-section";
@@ -74,14 +73,12 @@ async function ZonesBlock() {
   return <InterventionZones zones={zones} />;
 }
 
-async function StoryBlock() {
-  const story = await getFeaturedImpactStory();
-  return <ImpactStory story={story} />;
-}
-
-async function NewsBlock() {
-  const news = await getLatestPublishedNews();
-  return <LatestNews news={news} />;
+async function ImpactNewsBlock() {
+  const [story, news] = await Promise.all([
+    getFeaturedImpactStory(),
+    getLatestPublishedNews(),
+  ]);
+  return <ImpactAndNews story={story} news={news} />;
 }
 
 async function PartnersBlock() {
@@ -121,7 +118,7 @@ export default function HomePage() {
 
       <Suspense
         fallback={
-          <div className="-mt-8 pb-4 md:-mt-12">
+          <div className="-mt-10 pb-2 md:-mt-14">
             <HomeSectionSkeleton cards={6} />
           </div>
         }
@@ -134,7 +131,9 @@ export default function HomePage() {
       <InterventionPillars />
 
       <Suspense
-        fallback={<HomeSectionSkeleton cards={4} className="bg-[var(--afd-surface)]" />}
+        fallback={
+          <HomeSectionSkeleton cards={4} className="bg-[var(--afd-background)]" />
+        }
       >
         <ProgramsBlock />
       </Suspense>
@@ -143,27 +142,24 @@ export default function HomePage() {
         <ProjectsBlock />
       </Suspense>
 
-      <div className="grid lg:grid-cols-1">
-        <Suspense
-          fallback={
-            <HomeSectionSkeleton cards={4} className="bg-[var(--afd-surface)]" />
-          }
-        >
-          <ZonesBlock />
-        </Suspense>
-        <Suspense fallback={<HomeSectionSkeleton cards={1} />}>
-          <StoryBlock />
-        </Suspense>
-      </div>
+      <Suspense
+        fallback={
+          <HomeSectionSkeleton cards={4} className="bg-[var(--afd-surface)]" />
+        }
+      >
+        <ZonesBlock />
+      </Suspense>
 
-      <Suspense fallback={<HomeSectionSkeleton cards={3} />}>
-        <NewsBlock />
+      <Suspense fallback={<HomeSectionSkeleton cards={4} />}>
+        <ImpactNewsBlock />
       </Suspense>
 
       <NewsletterSection />
 
       <Suspense
-        fallback={<HomeSectionSkeleton cards={5} className="bg-[var(--afd-surface)]" />}
+        fallback={
+          <HomeSectionSkeleton cards={5} className="bg-[var(--afd-background)]" />
+        }
       >
         <PartnersBlock />
       </Suspense>

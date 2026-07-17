@@ -28,30 +28,24 @@ export function InterventionPillars() {
     <Section className="bg-white">
       <SiteContainer>
         <FadeIn>
-          <p className="text-sm font-semibold uppercase tracking-[0.14em] text-[var(--afd-accent)]">
-            Priorités
-          </p>
-          <h2 className="font-display mt-2 text-3xl font-semibold tracking-tight text-[var(--afd-accent-strong)] md:text-4xl">
-            Nos domaines d’intervention
-          </h2>
+          <div className="h-1 w-10 rounded-full bg-[var(--afd-blue)]" aria-hidden />
+          <h2 className="afd-h2 mt-4">Nos domaines d’intervention</h2>
         </FadeIn>
 
-        <div className="mt-10 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-10 grid grid-cols-1 gap-8 sm:grid-cols-2 sm:gap-x-8 sm:gap-y-10 lg:grid-cols-3 xl:grid-cols-6 xl:gap-6">
           {homeContent.pillars.map((pillar, index) => {
             const Icon = iconMap[pillar.icon] ?? HeartPulse;
             return (
               <FadeIn key={pillar.id} delay={index * 0.04}>
                 <Link
                   href="/actions/domaines-intervention"
-                  className="group block rounded-xl p-1 transition duration-200 hover:bg-[var(--afd-surface)]"
+                  className="group flex h-full flex-col items-start rounded-xl p-1 transition duration-180 hover:bg-[var(--afd-light-blue)]/60"
                 >
-                  <div className="inline-flex size-14 items-center justify-center rounded-full border border-[var(--afd-accent)]/25 bg-[var(--afd-accent-soft)] text-[var(--afd-accent)] transition duration-200 group-hover:border-[var(--afd-accent)]/50">
+                  <div className="inline-flex size-14 items-center justify-center rounded-full border border-[var(--afd-blue)]/20 bg-[var(--afd-light-blue)] text-[var(--afd-blue)] transition duration-180 group-hover:border-[var(--afd-blue)]/40">
                     <Icon className="size-6" aria-hidden />
                   </div>
-                  <h3 className="font-display mt-4 text-lg font-semibold text-[var(--afd-accent-strong)]">
-                    {pillar.title}
-                  </h3>
-                  <p className="mt-2 text-sm leading-relaxed text-[var(--afd-muted)]">
+                  <h3 className="afd-h3 mt-4">{pillar.title}</h3>
+                  <p className="mt-2 text-[14px] leading-[1.6] text-[var(--afd-muted)]">
                     {pillar.description}
                   </p>
                 </Link>
@@ -60,10 +54,10 @@ export function InterventionPillars() {
           })}
         </div>
 
-        <div className="mt-8">
+        <div className="mt-10">
           <Link
             href="/actions/domaines-intervention"
-            className="inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-[var(--afd-accent)]"
+            className="afd-btn-text inline-flex min-h-11 items-center gap-2 text-[var(--afd-blue)] hover:text-[var(--afd-blue-hover)]"
           >
             Voir tous les domaines
             <ArrowRight className="size-4" aria-hidden />

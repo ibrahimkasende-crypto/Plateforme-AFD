@@ -1,0 +1,189 @@
+import Image from "next/image";
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
+import { FadeIn } from "@/components/motion/FadeIn";
+import { EmptyState } from "@/components/shared/EmptyState";
+import { Section } from "@/components/shared/Section";
+import { SiteContainer } from "@/components/shared/SiteContainer";
+import type { FeaturedImpactStory, LatestNews } from "@/lib/queries/home";
+import { cn } from "@/lib/utils";
+
+function formatDate(value: string | null) {
+  if (!value) return null;
+  return new Intl.DateTimeFormat("fr-FR", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  }).format(new Date(value));
+}
+
+export function ImpactAndNews({
+  story,
+  news,
+}: {
+  story: FeaturedImpactStory;
+  news: LatestNews[];
+}) {
+  const isDev = process.env.NODE_ENV === "development";
+  const showStory = Boolean(story) || isDev;
+
+  return (
+    <Section className="bg-white">
+      <SiteContainer>
+        <div
+          className={cn(
+            "grid gap-10 lg:gap-12",
+            showStory ? "lg:grid-cols-12" : "lg:grid-cols-1",
+          )}
+        >
+          {showStory ? (
+            <div className="lg:col-span-5">
+              <FadeIn>
+                <div className="h-1 w-10 rounded-full bg-[var(--afd-blue)]" aria-hidden />
+                <h2 className="afd-h2 mt-4">Histoire d’impact</h2>
+              </FadeIn>
+              <div className="mt-6">
+                <ImpactStoryCard story={story} isDev={isDev} />
+              </div>
+            </div>
+          ) : null}
+
+          <div className={showStory ? "lg:col-span-7" : undefined}>
+            <FadeIn>
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+                <div>
+                  <div className="h-1 w-10 rounded-full bg-[var(--afd-blue)]" aria-hidden />
+                  <h2 className="afd-h2 mt-4">Actualités récentes</h2>
+                </div>
+                <Link
+                  href="/actualites"
+                  className="afd-btn-text inline-flex min-h-11 items-center gap-2 text-[var(--afd-blue)]"
+                >
+                  Voir toutes les actualités
+                  <ArrowRight className="size-4" aria-hidden />
+                </Link>
+              </div>
+            </FadeIn>
+
+            <div className="mt-6">
+              {news.length === 0 ? (
+                <EmptyState
+                  title="Aucune actualité publiée"
+                  description="Les prochaines publications apparaîtront ici."
+                />
+              ) : (
+                <div className="grid gap-5 sm:grid-cols-3">
+                  {news.slice(0, 3).map((item, index) => (
+                    <FadeIn key={item.id} delay={0.05 * index}>
+                      <NewsCard item={item} />
+                    </FadeIn>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </SiteContainer>
+    </Section>
+  );
+}
+
+function ImpactStoryCard({
+  story,
+  isDev,
+}: {
+  story: FeaturedImpactStory;
+  isDev: boolean;
+}) {
+  if (!story) {
+    return (
+      <div className="rounded-[20px] border border-dashed border-[var(--afd-border)] bg-[var(--afd-light-blue)] p-6">
+        <p className="afd-label text-[var(--afd-blue)]">Développement</p>
+        <p className="afd-h3 mt-3">Histoire d’impact — placeholder</p>
+        <p className="mt-2 text-sm text-[var(--afd-muted)]">
+          Aucune histoire publiée. Section masquée en production
+          {isDev ? " (visible ici en développement)" : ""}.
+        </p>
+      </div>
+    );
+  }
+
+  return (
+    <FadeIn>
+      <article className="overflow-hidden rounded-[20px] bg-[var(--afd-navy)] text-white">
+        <div className="relative aspect-[4/5] max-h-[420px] bg-[var(--afd-dark-navy)]">
+          {story.imageUrl ? (
+            <Image
+              src={story.imageUrl}
+              alt=""
+              fill
+              sizes="(max-width:1024px) 100vw, 40vw"
+              className="object-cover"
+            />
+          ) : null}
+          <div className="absolute inset-0 bg-gradient-to-t from-[var(--afd-navy)] via-[var(--afd-navy)]/40 to-transparent" />
+        </div>
+        <div className="space-y-3 p-6 md:p-7">
+          <p className="font-heading text-4xl leading-none text-white/35" aria-hidden>
+            “
+          </p>
+          <h3 className="font-heading text-xl font-bold leading-snug">{story.title}</h3>
+          <p className="text-[15px] leading-relaxed text-white/85">{story.excerpt}</p>
+          {story.location ? (
+            <p className="text-sm font-semibold text-white/70">{story.location}</p>
+          ) : null}
+          <Link
+            href={story.href}
+            className="afd-btn-text inline-flex min-h-11 items-center gap-2 text-white"
+          >
+            Lire l’histoire
+            <ArrowRight className="size-4" aria-hidden />
+          </Link>
+        </div>
+      </article>
+    </FadeIn>
+  );
+}
+
+function NewsCard({ item }: { item: LatestNews }) {
+  const dateLabel = formatDate(item.published_at);
+
+  return (
+    <Link
+      href={`/actualites/${item.slug}`}
+      className="group flex h-full flex-col overflow-hidden rounded-[18px] border border-[var(--afd-border)] bg-[var(--afd-background)] transition duration-180 hover:border-[var(--afd-blue)]/35"
+    >
+      <div className="relative aspect-[16/10] bg-[var(--afd-light-blue)]">
+        {item.image_url ? (
+          <Image
+            src={item.image_url}
+            alt=""
+            fill
+            sizes="(max-width:768px) 100vw, 30vw"
+            className="object-cover transition duration-300 group-hover:scale-[1.03]"
+          />
+        ) : (
+          <div className="absolute inset-0 flex items-center justify-center text-xs text-[var(--afd-muted)]">
+            Image à venir
+          </div>
+        )}
+      </div>
+      <div className="flex flex-1 flex-col p-4">
+        <div className="flex flex-wrap gap-2 text-[12px] text-[var(--afd-muted)]">
+          {item.category ? (
+            <span className="font-bold text-[var(--afd-blue)]">{item.category}</span>
+          ) : null}
+          {dateLabel ? <span>{dateLabel}</span> : null}
+        </div>
+        <h3 className="afd-h3 mt-2 line-clamp-3">{item.title}</h3>
+        <p className="mt-2 line-clamp-3 text-[13px] leading-[1.55] text-[var(--afd-muted)]">
+          {item.excerpt}
+        </p>
+        <span className="afd-btn-text mt-auto inline-flex items-center gap-2 pt-4 text-[var(--afd-blue)]">
+          Lire la suite
+          <ArrowRight className="size-3.5" aria-hidden />
+        </span>
+      </div>
+    </Link>
+  );
+}

@@ -35,13 +35,9 @@ export function OrganizationIntroduction() {
           </FadeIn>
 
           <FadeIn delay={0.08} className="lg:col-span-7">
-            <p className="text-sm font-semibold uppercase tracking-[0.14em] text-[var(--afd-accent)]">
-              {content.eyebrow}
-            </p>
-            <h2 className="font-display mt-3 text-3xl font-semibold tracking-tight text-[var(--afd-ink)] md:text-4xl">
-              {content.title}
-            </h2>
-            <div className="mt-5 space-y-4 text-base leading-relaxed text-[var(--afd-muted)]">
+            <p className="afd-label text-[var(--afd-blue)]">{content.eyebrow}</p>
+            <h2 className="afd-h2 mt-3">{content.title}</h2>
+            <div className="mt-5 max-w-[40rem] space-y-4 text-base leading-[1.7] text-[var(--afd-muted)] md:text-[1.05rem]">
               {content.paragraphs.map((paragraph) => (
                 <p key={paragraph}>{paragraph}</p>
               ))}

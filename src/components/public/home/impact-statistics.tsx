@@ -61,7 +61,7 @@ const cards: {
   { key: "personnesAccompagnees", label: "Personnes accompagnées", icon: Users },
   { key: "projetsRealises", label: "Projets réalisés", icon: FolderKanban },
   { key: "provincesCouvertes", label: "Provinces d’intervention", icon: MapPinned },
-  { key: "femmesAccompagnees", label: "Femmes accompagnées", icon: UsersRound },
+  { key: "femmesAccompagnees", label: "Femmes et filles bénéficiaires", icon: UsersRound },
   { key: "partenairesActifs", label: "Partenaires actifs", icon: Handshake },
   { key: "activitesRealisees", label: "Activités réalisées", icon: Activity },
 ];
@@ -79,13 +79,13 @@ export function ImpactStatistics({ stats }: { stats: PublicImpactStats }) {
   return (
     <section
       aria-label="Chiffres clés"
-      className="relative z-10 -mt-8 pb-4 md:-mt-12"
+      className="relative z-10 -mt-10 pb-2 md:-mt-14"
     >
       <SiteContainer>
         <FadeIn>
-          <div className="rounded-2xl border border-[var(--afd-border)] bg-white px-4 py-5 shadow-[0_10px_40px_rgba(15,39,68,0.08)] md:px-6 md:py-6">
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
-              {visibleCards.map((card) => {
+          <div className="rounded-[20px] border border-[var(--afd-border)] bg-white px-4 py-6 shadow-[0_14px_44px_rgba(16,35,63,0.1)] md:px-6 md:py-7">
+            <div className="grid grid-cols-2 gap-5 md:grid-cols-3 xl:grid-cols-6 xl:gap-0">
+              {visibleCards.map((card, index) => {
                 const value = stats[card.key];
                 const numeric = typeof value === "number" ? value : null;
                 const Icon = card.icon;
@@ -93,15 +93,19 @@ export function ImpactStatistics({ stats }: { stats: PublicImpactStats }) {
                 return (
                   <div
                     key={card.key}
-                    className="flex flex-col items-start gap-2 px-2 py-1"
+                    className={cn(
+                      "flex flex-col items-start gap-2 px-3 py-1 md:px-4",
+                      index > 0 &&
+                        "xl:border-l xl:border-[var(--afd-border)]",
+                    )}
                   >
                     <Icon
-                      className="size-5 text-[var(--afd-accent)]"
+                      className="size-5 text-[var(--afd-blue)]"
                       aria-hidden
                     />
                     <p
                       className={cn(
-                        "font-display text-2xl font-semibold text-[var(--afd-accent-strong)]",
+                        "font-heading text-2xl font-extrabold tracking-tight text-[var(--afd-navy)] md:text-[1.65rem]",
                         numeric == null && "text-[var(--afd-muted)]",
                       )}
                     >
@@ -111,14 +115,14 @@ export function ImpactStatistics({ stats }: { stats: PublicImpactStats }) {
                         "À renseigner"
                       )}
                     </p>
-                    <p className="text-xs leading-snug text-[var(--afd-muted)]">
+                    <p className="max-w-[9.5rem] text-[13px] leading-snug text-[var(--afd-muted)]">
                       {card.label}
                     </p>
                   </div>
                 );
               })}
             </div>
-            <p className="mt-4 border-t border-[var(--afd-border)] pt-3 text-[11px] text-[var(--afd-muted)]">
+            <p className="mt-5 border-t border-[var(--afd-border)] pt-3 text-[11px] text-[var(--afd-muted)]">
               {homeContent.statsDisclaimer} Aucun chiffre inventé n’est affiché.
             </p>
           </div>

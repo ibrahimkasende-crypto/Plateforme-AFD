@@ -49,7 +49,7 @@ export function MobileNavigation() {
   }, [open]);
 
   return (
-    <div className="flex items-center gap-2 xl:hidden">
+    <div className="flex items-center gap-2 min-[1200px]:hidden">
       <HeaderActions
         compact
         showJoin={false}
@@ -70,7 +70,7 @@ export function MobileNavigation() {
       </button>
 
       {open ? (
-        <div className="fixed inset-0 z-[60] xl:hidden" role="presentation">
+        <div className="fixed inset-0 z-[60] min-[1200px]:hidden" role="presentation">
           <button
             type="button"
             className="absolute inset-0 bg-[var(--afd-ink)]/40"

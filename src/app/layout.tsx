@@ -1,17 +1,19 @@
 import type { Metadata } from "next";
-import { Source_Sans_3, Source_Serif_4 } from "next/font/google";
+import { Inter, Manrope } from "next/font/google";
 import { AppProviders } from "@/providers/app-providers";
 import { siteConfig } from "@/config/site";
 import "./globals.css";
 
-const sourceSans = Source_Sans_3({
-  variable: "--font-source-sans",
+const inter = Inter({
+  variable: "--font-body",
   subsets: ["latin"],
+  display: "swap",
 });
 
-const sourceSerif = Source_Serif_4({
-  variable: "--font-source-serif",
+const manrope = Manrope({
+  variable: "--font-heading",
   subsets: ["latin"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -31,9 +33,9 @@ export default function RootLayout({
   return (
     <html
       lang="fr"
-      className={`${sourceSans.variable} ${sourceSerif.variable} h-full antialiased`}
+      className={`${inter.variable} ${manrope.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-[var(--afd-bg)] text-[var(--afd-ink)]">
+      <body className="flex min-h-full flex-col bg-[var(--afd-background)] font-sans text-[var(--afd-text)]">
         <AppProviders>{children}</AppProviders>
       </body>
     </html>

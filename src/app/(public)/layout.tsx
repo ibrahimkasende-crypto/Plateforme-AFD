@@ -1,3 +1,4 @@
+import { AppEntryExperience } from "@/components/shared/app-entry-loader";
 import { SiteFooter } from "@/components/public/site-footer";
 import { SiteHeader } from "@/components/public/site-header";
 import type { ReactNode } from "react";
@@ -8,6 +9,7 @@ export default function PublicLayout({ children }: { children: ReactNode }) {
       <SiteHeader />
       <main className="flex-1">{children}</main>
       <SiteFooter />
+      <AppEntryExperience />
     </div>
   );
 }
