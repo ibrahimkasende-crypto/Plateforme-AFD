@@ -1,17 +1,20 @@
 @import "tailwindcss";
 
 :root {
-  --adf-bg: #f7f8f5;
-  --adf-surface: #eef2ec;
-  --adf-ink: #14231c;
-  --adf-muted: #5b6b63;
-  --adf-border: #d7e0d8;
-  --adf-accent: #1a5c45;
-  --adf-accent-strong: #0f3d2e;
-  --adf-accent-soft: #dcebe3;
-  --adf-gold: #d4af37;
-  --background: var(--adf-bg);
-  --foreground: var(--adf-ink);
+  --afd-bg: #f5f8fc;
+  --afd-surface: #eef3f9;
+  --afd-ink: #0f2744;
+  --afd-muted: #5a6f86;
+  --afd-border: #d5e0ec;
+  --afd-accent: #1a4f8c;
+  --afd-accent-strong: #0f355f;
+  --afd-accent-soft: #e3eef9;
+  --afd-accent-bright: #2563a8;
+  --afd-support: #c47a2c;
+  --afd-support-strong: #a8641f;
+  --afd-gold: #d4a017;
+  --background: var(--afd-bg);
+  --foreground: var(--afd-ink);
 }
 
 @theme inline {
@@ -21,12 +24,43 @@
   --font-display: var(--font-source-serif);
 }
 
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
 body {
-  background: var(--adf-bg);
-  color: var(--adf-ink);
+  background: var(--afd-bg);
+  color: var(--afd-ink);
   font-family: var(--font-source-sans), "Segoe UI", sans-serif;
 }
 
 .font-display {
   font-family: var(--font-source-serif), Georgia, serif;
+}
+
+@keyframes afd-drawer-in {
+  from {
+    transform: translateX(100%);
+    opacity: 0.9;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.afd-drawer-panel {
+  animation: afd-drawer-in 240ms ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .afd-drawer-panel {
+    animation: none;
+  }
 }

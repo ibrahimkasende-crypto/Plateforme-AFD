@@ -16,18 +16,40 @@ export const publicNavigation: PublicNavItem[] = [
     label: "Qui sommes-nous",
     href: "/qui-sommes-nous",
     children: [
-      { label: "Présentation de l’AFD", href: "/qui-sommes-nous" },
-      { label: "Notre histoire", href: "/qui-sommes-nous/histoire" },
+      {
+        label: "Présentation de l’AFD",
+        href: "/qui-sommes-nous",
+        description: "Identité et ancrage institutionnel",
+      },
+      {
+        label: "Notre histoire",
+        href: "/qui-sommes-nous/histoire",
+        description: "Parcours et jalons de l’AFD",
+      },
       {
         label: "Mission, vision et valeurs",
         href: "/qui-sommes-nous/mission-vision-valeurs",
+        description: "Fondements stratégiques",
       },
-      { label: "Gouvernance", href: "/qui-sommes-nous/gouvernance" },
-      { label: "Équipe", href: "/qui-sommes-nous/equipe" },
-      { label: "Organigramme", href: "/qui-sommes-nous/organigramme" },
+      {
+        label: "Gouvernance",
+        href: "/qui-sommes-nous/gouvernance",
+        description: "Instances de direction",
+      },
+      {
+        label: "Équipe",
+        href: "/qui-sommes-nous/equipe",
+        description: "Profils et compétences",
+      },
+      {
+        label: "Organigramme",
+        href: "/qui-sommes-nous/organigramme",
+        description: "Structure organisationnelle",
+      },
       {
         label: "Politiques et engagements",
         href: "/qui-sommes-nous/politiques-engagements",
+        description: "Cadre éthique et engagements",
       },
     ],
   },
@@ -38,14 +60,32 @@ export const publicNavigation: PublicNavItem[] = [
       {
         label: "Domaines d’intervention",
         href: "/actions/domaines-intervention",
+        description: "Secteurs prioritaires",
       },
-      { label: "Programmes", href: "/actions/programmes" },
-      { label: "Projets", href: "/actions/projets" },
-      { label: "Réponses d’urgence", href: "/actions/urgences" },
-      { label: "Zones d’intervention", href: "/actions/zones-intervention" },
+      {
+        label: "Programmes",
+        href: "/actions/programmes",
+        description: "Programmes institutionnels",
+      },
+      {
+        label: "Projets",
+        href: "/actions/projets",
+        description: "Projets en cours et réalisés",
+      },
+      {
+        label: "Réponses d’urgence",
+        href: "/actions/urgences",
+        description: "Interventions humanitaires",
+      },
+      {
+        label: "Zones d’intervention",
+        href: "/actions/zones-intervention",
+        description: "Territoires d’action",
+      },
       {
         label: "Clusters et groupes de travail",
         href: "/actions/clusters",
+        description: "Coordination sectorielle",
       },
     ],
   },
@@ -53,15 +93,31 @@ export const publicNavigation: PublicNavItem[] = [
     label: "Notre impact",
     href: "/impact",
     children: [
-      { label: "Chiffres clés", href: "/impact" },
-      { label: "Résultats", href: "/impact/resultats" },
-      { label: "Histoires d’impact", href: "/impact/histoires" },
-      { label: "Témoignages", href: "/impact/temoignages" },
       {
-        label: "Carte des interventions",
-        href: "/impact#carte-interventions",
+        label: "Vue générale",
+        href: "/impact",
+        description: "Chiffres et synthèse d’impact",
       },
-      { label: "Rapports et publications", href: "/impact/rapports" },
+      {
+        label: "Résultats",
+        href: "/impact/resultats",
+        description: "Indicateurs consolidés",
+      },
+      {
+        label: "Histoires d’impact",
+        href: "/impact/histoires",
+        description: "Récits de terrain",
+      },
+      {
+        label: "Témoignages",
+        href: "/impact/temoignages",
+        description: "Voix des communautés",
+      },
+      {
+        label: "Rapports et publications",
+        href: "/impact/rapports",
+        description: "Documents officiels",
+      },
     ],
   },
   { label: "Actualités", href: "/actualites" },
@@ -69,20 +125,54 @@ export const publicNavigation: PublicNavItem[] = [
     label: "Ressources",
     href: "/ressources",
     children: [
-      { label: "Médiathèque", href: "/ressources/mediatheque" },
-      { label: "Documents", href: "/ressources/documents" },
-      { label: "Rapports", href: "/impact/rapports" },
-      { label: "Appels d’offres", href: "/ressources/appels-offres" },
-      { label: "Opportunités", href: "/ressources/opportunites" },
-      { label: "Newsletter", href: "/ressources/newsletter" },
+      {
+        label: "Médiathèque",
+        href: "/ressources/mediatheque",
+        description: "Photos et médias",
+      },
+      {
+        label: "Documents",
+        href: "/ressources/documents",
+        description: "Documents institutionnels",
+      },
+      {
+        label: "Rapports",
+        href: "/impact/rapports",
+        description: "Rapports et publications",
+      },
+      {
+        label: "Appels d’offres",
+        href: "/ressources/appels-offres",
+        description: "Consultations et AO",
+      },
+      {
+        label: "Opportunités",
+        href: "/ressources/opportunites",
+        description: "Carrières et collaborations",
+      },
+      {
+        label: "Newsletter",
+        href: "/ressources/newsletter",
+        description: "Restez informés",
+      },
     ],
   },
   { label: "Contact", href: "/contact" },
 ];
 
 export const publicCtas = [
-  { label: "Nous rejoindre", href: "/adhesion", variant: "secondary" as const },
-  { label: "Soutenir l’AFD", href: "/soutenir", variant: "primary" as const },
+  {
+    label: "Nous rejoindre",
+    href: "/adhesion",
+    variant: "secondary" as const,
+    icon: "user" as const,
+  },
+  {
+    label: "Soutenir l’AFD",
+    href: "/soutenir",
+    variant: "primary" as const,
+    icon: "heart" as const,
+  },
 ] as const;
 
 export const footerLinks = {
@@ -100,3 +190,8 @@ export const footerLinks = {
     { label: "Contact", href: "/contact" },
   ],
 } as const;
+
+export function isNavItemActive(pathname: string, href: string): boolean {
+  if (href === "/") return pathname === "/";
+  return pathname === href || pathname.startsWith(`${href}/`);
+}

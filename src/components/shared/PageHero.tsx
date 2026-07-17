@@ -18,7 +18,7 @@ export function PageHero({
   return (
     <div
       className={cn(
-        "relative overflow-hidden border-b border-[var(--adf-border)] bg-[linear-gradient(135deg,#0f3d2e_0%,#1a5c45_45%,#2d7a5a_100%)] text-white",
+        "relative overflow-hidden border-b border-[var(--afd-border)] bg-[linear-gradient(135deg,#0f355f_0%,#1a4f8c_45%,#2563a8_100%)] text-white",
         className,
       )}
     >
@@ -32,7 +32,7 @@ export function PageHero({
       />
       <SiteContainer className="relative py-14 md:py-20">
         {eyebrow ? (
-          <p className="mb-3 text-sm font-semibold uppercase tracking-[0.16em] text-[var(--adf-gold)]">
+          <p className="mb-3 text-sm font-semibold uppercase tracking-[0.16em] text-[var(--afd-gold)]">
             {eyebrow}
           </p>
         ) : null}
