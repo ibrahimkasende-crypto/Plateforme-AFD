@@ -22,10 +22,14 @@ export function FadeIn({
   return (
     <motion.div
       className={className}
-      initial={{ opacity: 0, y: 12 }}
+      initial={{ opacity: 0, y: 8 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-40px" }}
-      transition={{ duration: 0.45, delay, ease: "easeOut" }}
+      viewport={{ once: true, margin: "-24px" }}
+      transition={{
+        duration: 0.35,
+        delay: Math.min(delay, 0.2),
+        ease: "easeOut",
+      }}
       {...props}
     >
       {children}

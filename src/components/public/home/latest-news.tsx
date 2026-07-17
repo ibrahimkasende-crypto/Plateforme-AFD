@@ -22,7 +22,7 @@ export function LatestNews({ news }: { news: LatestNews[] }) {
   const [primary, ...rest] = news;
 
   return (
-    <Section className="bg-white">
+    <Section className="bg-[var(--afd-surface-elevated)]">
       <SiteContainer>
         <FadeIn>
           <SectionHeading

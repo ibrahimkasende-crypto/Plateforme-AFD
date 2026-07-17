@@ -38,7 +38,7 @@ export function InterventionZones({ zones }: { zones: InterventionZone[] }) {
                 {zones.map((zone) => (
                   <li
                     key={zone.label}
-                    className="rounded-2xl border border-[var(--afd-border)] bg-white p-4"
+                    className="rounded-2xl border border-[var(--afd-border)] bg-[var(--afd-surface-elevated)] p-4"
                   >
                     <div className="flex items-start gap-3">
                       <MapPinned

@@ -17,7 +17,7 @@ export function FeaturedProjects({
   const [primary, ...rest] = projects;
 
   return (
-    <Section className="bg-white">
+    <Section className="bg-[var(--afd-surface-elevated)]">
       <SiteContainer>
         <FadeIn>
           <SectionHeading

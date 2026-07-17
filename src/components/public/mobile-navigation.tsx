@@ -17,20 +17,20 @@ export function MobileNavigation() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [expanded, setExpanded] = useState<string | null>(null);
-  const [pathSnapshot, setPathSnapshot] = useState(pathname);
+  const backdropArmedRef = useRef(false);
   const panelId = useId();
   const closeButtonRef = useRef<HTMLButtonElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
 
-  if (pathname !== pathSnapshot) {
-    setPathSnapshot(pathname);
-    setOpen(false);
-    setExpanded(null);
-  }
-
   useEffect(() => {
-    if (!open) return;
+    if (!open) {
+      backdropArmedRef.current = false;
+      return;
+    }
 
+    const armTimer = window.setTimeout(() => {
+      backdropArmedRef.current = true;
+    }, 120);
     const previousOverflow = document.body.style.overflow;
     const triggerNode = triggerRef.current;
     document.body.style.overflow = "hidden";
@@ -42,40 +42,56 @@ export function MobileNavigation() {
 
     document.addEventListener("keydown", onKeyDown);
     return () => {
+      window.clearTimeout(armTimer);
       document.body.style.overflow = previousOverflow;
       document.removeEventListener("keydown", onKeyDown);
       triggerNode?.focus();
     };
   }, [open]);
 
+  function closeMenu() {
+    setOpen(false);
+    setExpanded(null);
+  }
+
+  function toggleMenu() {
+    setOpen((value) => !value);
+  }
+
   return (
-    <div className="flex items-center gap-2 min-[1200px]:hidden">
+    <div className="flex items-center gap-1.5 sm:gap-2">
       <HeaderActions
         compact
         showJoin={false}
         showSupport
-        className="hidden sm:flex"
+        className="flex"
       />
 
       <button
         ref={triggerRef}
         type="button"
-        className="inline-flex size-11 items-center justify-center rounded-lg border border-[var(--afd-border)] text-[var(--afd-ink)] transition-colors duration-150 hover:bg-[var(--afd-surface)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--afd-accent)] focus-visible:ring-offset-2"
+        data-testid="mobile-menu-trigger"
+        className={cn(
+          "inline-flex size-11 shrink-0 items-center justify-center rounded-md border border-[var(--afd-border)] text-[var(--afd-navy)] transition-colors duration-150 hover:bg-[var(--afd-light-blue)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--afd-blue)] focus-visible:ring-offset-2",
+          open && "relative z-[70]",
+        )}
         aria-label={open ? "Fermer le menu" : "Ouvrir le menu"}
         aria-expanded={open}
         aria-controls={panelId}
-        onClick={() => setOpen((value) => !value)}
+        onClick={toggleMenu}
       >
         {open ? <X className="size-5" aria-hidden /> : <Menu className="size-5" aria-hidden />}
       </button>
 
       {open ? (
-        <div className="fixed inset-0 z-[60] min-[1200px]:hidden" role="presentation">
+        <div className="fixed inset-0 z-[60]" role="presentation">
           <button
             type="button"
-            className="absolute inset-0 bg-[var(--afd-ink)]/40"
+            className="absolute inset-0 bg-[var(--afd-navy)]/40"
             aria-label="Fermer le menu"
-            onClick={() => setOpen(false)}
+            onClick={() => {
+              if (backdropArmedRef.current) closeMenu();
+            }}
           />
 
           <div
@@ -83,7 +99,8 @@ export function MobileNavigation() {
             role="dialog"
             aria-modal="true"
             aria-label="Menu de navigation"
-            className="afd-drawer-panel absolute inset-y-0 right-0 flex w-full max-w-sm flex-col bg-white shadow-[0_0_40px_rgba(15,39,68,0.12)]"
+            data-testid="mobile-menu-panel"
+            className="afd-drawer-panel absolute inset-y-0 right-0 flex w-[min(100%,88vw)] max-w-sm flex-col bg-[var(--afd-surface-elevated)] pb-[env(safe-area-inset-bottom)] shadow-[0_0_40px_rgba(15,39,68,0.12)]"
           >
             <div className="flex items-center justify-between border-b border-[var(--afd-border)] px-4 py-3">
               <HeaderLogo compact />
@@ -92,14 +109,14 @@ export function MobileNavigation() {
                 type="button"
                 className="inline-flex size-11 items-center justify-center rounded-lg border border-[var(--afd-border)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--afd-accent)]"
                 aria-label="Fermer le menu"
-                onClick={() => setOpen(false)}
+                onClick={closeMenu}
               >
                 <X className="size-5" aria-hidden />
               </button>
             </div>
 
             <nav
-              className="flex-1 overflow-y-auto px-3 py-4"
+              className="flex-1 overflow-y-auto overscroll-contain px-3 py-4"
               aria-label="Navigation mobile"
             >
               <ul className="space-y-1">
@@ -114,9 +131,9 @@ export function MobileNavigation() {
                         <Link
                           href={item.href}
                           aria-current={active ? "page" : undefined}
-                          onClick={() => setOpen(false)}
+                          onClick={closeMenu}
                           className={cn(
-                            "flex min-h-11 items-center rounded-lg px-3 text-sm font-medium transition-colors duration-150",
+                            "flex min-h-11 items-center rounded-lg px-3 text-[15px] font-medium transition-colors duration-150",
                             active
                               ? "bg-[var(--afd-accent-soft)] text-[var(--afd-accent-bright)]"
                               : "text-[var(--afd-ink)] hover:bg-[var(--afd-surface)]",
@@ -133,7 +150,7 @@ export function MobileNavigation() {
                       <button
                         type="button"
                         className={cn(
-                          "flex min-h-11 w-full items-center justify-between rounded-lg px-3 text-left text-sm font-medium transition-colors duration-150",
+                          "flex min-h-11 w-full items-center justify-between rounded-lg px-3 text-left text-[15px] font-medium transition-colors duration-150",
                           active
                             ? "bg-[var(--afd-accent-soft)] text-[var(--afd-accent-bright)]"
                             : "text-[var(--afd-ink)] hover:bg-[var(--afd-surface)]",
@@ -148,7 +165,7 @@ export function MobileNavigation() {
                         {item.label}
                         <ChevronDown
                           className={cn(
-                            "size-4 transition-transform duration-200",
+                            "size-4 shrink-0 transition-transform duration-200",
                             isExpanded && "rotate-180",
                           )}
                           aria-hidden
@@ -161,7 +178,7 @@ export function MobileNavigation() {
                             <li key={`${child.href}-${child.label}`}>
                               <Link
                                 href={child.href}
-                                onClick={() => setOpen(false)}
+                                onClick={closeMenu}
                                 className="flex min-h-11 items-center rounded-lg px-3 text-sm text-[var(--afd-muted)] transition-colors duration-150 hover:bg-[var(--afd-surface)] hover:text-[var(--afd-ink)]"
                               >
                                 {child.label}
@@ -177,7 +194,7 @@ export function MobileNavigation() {
             </nav>
 
             <div className="space-y-3 border-t border-[var(--afd-border)] p-4">
-              <HeaderActions fullWidth onNavigate={() => setOpen(false)} />
+              <HeaderActions fullWidth onNavigate={closeMenu} />
               <p className="text-center text-xs text-[var(--afd-muted)]">
                 {siteConfig.shortName} · {siteConfig.countryShort}
               </p>

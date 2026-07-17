@@ -12,6 +12,13 @@ const nextConfig: NextConfig = {
   },
   async redirects() {
     return [
+      { source: "/brand/logo-afd.jpg", destination: "/assets/brand/Logo_AFD.jpeg", permanent: true },
+      { source: "/images/adf1.jpg", destination: "/assets/home/Femmes_AFD.png", permanent: true },
+      { source: "/images/adf2.png", destination: "/assets/home/presentation-afd.png", permanent: true },
+      { source: "/images/adf-logo.jpg", destination: "/assets/brand/Logo_AFD.jpeg", permanent: true },
+      { source: "/images/adf-logo0.jpg", destination: "/assets/brand/Logo_AFD.jpeg", permanent: true },
+      { source: "/assets/brand/logo-afd.jpg", destination: "/assets/brand/Logo_AFD.jpeg", permanent: true },
+      { source: "/assets/home/hero-afd.jpg", destination: "/assets/home/Femmes_AFD.png", permanent: true },
       { source: "/about", destination: "/qui-sommes-nous", permanent: true },
       { source: "/programs", destination: "/actions/programmes", permanent: true },
       {

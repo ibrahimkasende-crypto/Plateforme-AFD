@@ -1,3 +1,5 @@
+import { assets } from "@/config/assets";
+
 export const siteConfig = {
   name: "Alliance des Femmes pour le Développement",
   shortName: "AFD ASBL",
@@ -15,7 +17,7 @@ export const siteConfig = {
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000",
   locale: "fr-CD",
   logo: {
-    src: "/brand/logo-afd.jpg",
+    src: assets.brand.logo,
     alt: "Logo officiel AFD — Alliance des Femmes pour le Développement",
     width: 64,
     height: 64,
@@ -36,6 +38,7 @@ export const siteConfig = {
     linkedin: "",
     twitter: "",
     youtube: "",
+    tiktok: "",
   },
   currencies: ["CDF", "USD", "EUR"] as const,
   defaultCurrency: "USD" as const,

@@ -4,18 +4,21 @@
   /* Palette officielle AFD */
   --afd-blue: #0877d1;
   --afd-blue-hover: #0565b4;
+  --afd-sky: #3ba3e6;
   --afd-navy: #062653;
   --afd-dark-navy: #031b3c;
-  --afd-light-blue: #eaf5fd;
+  --afd-light-blue: #e4edf5;
   --afd-orange: #e99308;
   --afd-orange-hover: #cc7c00;
   --afd-white: #ffffff;
-  --afd-background: #f8fafc;
+  --afd-background: #e9eef3;
+  --afd-surface-elevated: #ffffff;
   --afd-text: #10233f;
   --afd-muted: #5f6f83;
-  --afd-border: #dce5ef;
+  --afd-border: #cfd8e3;
   --afd-success: #16834b;
   --afd-error: #b42318;
+  --afd-header-bg: rgba(255, 255, 255, 0.96);
 
   /* Alias de compatibilité */
   --afd-bg: var(--afd-background);
@@ -31,11 +34,45 @@
 
   /* Layout */
   --afd-container: 1360px;
-  --afd-section-y: clamp(3.5rem, 6vw, 7rem);
+  --afd-section-y: clamp(3.5rem, 5.5vw, 7rem);
   --afd-section-gap: clamp(1.5rem, 3vw, 2.75rem);
 
   --background: var(--afd-background);
   --foreground: var(--afd-text);
+  color-scheme: light;
+}
+
+.dark {
+  --afd-blue: #4db0ef;
+  --afd-blue-hover: #6bc0f5;
+  --afd-sky: #6bc0f5;
+  --afd-navy: #d7e8f7;
+  --afd-dark-navy: #0a1628;
+  --afd-light-blue: #15263a;
+  --afd-orange: #f0a93a;
+  --afd-orange-hover: #f5b955;
+  --afd-white: #0f1a2a;
+  --afd-background: #0c1522;
+  --afd-surface-elevated: #152233;
+  --afd-text: #e8eef5;
+  --afd-muted: #9aabbd;
+  --afd-border: #2a3c50;
+  --afd-success: #3dbf7a;
+  --afd-error: #f07167;
+  --afd-header-bg: rgba(12, 21, 34, 0.94);
+  --afd-bg: var(--afd-background);
+  --afd-surface: var(--afd-light-blue);
+  --afd-ink: var(--afd-text);
+  --afd-accent: var(--afd-blue);
+  --afd-accent-strong: var(--afd-navy);
+  --afd-accent-soft: var(--afd-light-blue);
+  --afd-accent-bright: var(--afd-blue);
+  --afd-support: var(--afd-orange);
+  --afd-support-strong: var(--afd-orange-hover);
+  --afd-gold: var(--afd-orange);
+  --background: var(--afd-background);
+  --foreground: var(--afd-text);
+  color-scheme: dark;
 }
 
 @theme inline {
@@ -89,8 +126,8 @@ h3 {
   font-family: var(--font-heading), "Segoe UI", sans-serif;
   font-weight: 800;
   letter-spacing: -0.025em;
-  line-height: 1.08;
-  font-size: clamp(2.125rem, 1.2rem + 3.2vw, 3.75rem);
+  line-height: 1.1;
+  font-size: clamp(2.125rem, 8vw, 4rem);
   max-width: 44rem;
 }
 
@@ -100,7 +137,7 @@ h3 {
   letter-spacing: -0.02em;
   line-height: 1.2;
   color: var(--afd-navy);
-  font-size: clamp(1.5rem, 1rem + 1.5vw, 2.125rem);
+  font-size: clamp(1.55rem, 5vw, 2.25rem);
 }
 
 .afd-h3 {
@@ -172,10 +209,91 @@ h3 {
   animation: afd-ring-pulse 1.6s ease-out infinite;
 }
 
+@keyframes afd-partners-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.afd-partners-track {
+  animation: afd-partners-scroll 32s linear infinite;
+}
+
+.afd-partners-track:hover {
+  animation-play-state: paused;
+}
+
+@keyframes afd-hero-kenburns {
+  0% {
+    transform: scale(1) translate3d(0, 0, 0);
+  }
+  50% {
+    transform: scale(1.08) translate3d(-1.5%, -1%, 0);
+  }
+  100% {
+    transform: scale(1) translate3d(0, 0, 0);
+  }
+}
+
+@keyframes afd-hero-glow {
+  0%,
+  100% {
+    opacity: 0.45;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    opacity: 0.7;
+    transform: translate3d(2%, -1%, 0) scale(1.05);
+  }
+}
+
+.afd-hero-media {
+  animation: afd-hero-kenburns 28s ease-in-out infinite;
+  will-change: transform;
+}
+
+.afd-hero-glow {
+  animation: afd-hero-glow 12s ease-in-out infinite;
+  will-change: opacity, transform;
+}
+
+@media (max-width: 1023px) {
+  .afd-hero-media,
+  .afd-hero-glow {
+    animation: none;
+    transform: none;
+  }
+}
+
+html {
+  overflow-x: clip;
+}
+
+body {
+  overflow-x: clip;
+  min-width: 0;
+}
+
+html.afd-custom-cursor,
+html.afd-custom-cursor * {
+  cursor: none !important;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .afd-drawer-panel,
   .afd-heart-breathe,
-  .afd-ring-pulse {
+  .afd-ring-pulse,
+  .afd-partners-track,
+  .afd-hero-media,
+  .afd-hero-glow {
     animation: none;
+  }
+
+  html.afd-custom-cursor,
+  html.afd-custom-cursor * {
+    cursor: auto !important;
   }
 }

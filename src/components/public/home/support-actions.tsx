@@ -22,9 +22,9 @@ const icons: Record<string, LucideIcon> = {
 
 export function SupportActions() {
   return (
-    <Section className="bg-white">
+    <Section className="bg-[var(--afd-surface-elevated)]">
       <SiteContainer>
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4 lg:gap-7">
+        <div className="grid grid-cols-1 gap-4 min-[360px]:grid-cols-2 min-[360px]:gap-5 lg:grid-cols-4 lg:gap-7">
           {homeContent.supportActions.map((action, index) => {
             const Icon = icons[action.id] ?? Heart;
             const featured = action.id === "soutenir";
@@ -32,34 +32,39 @@ export function SupportActions() {
             return (
               <FadeIn
                 key={action.id}
-                delay={index * 0.05}
-                className={cn(
-                  "flex h-full flex-col rounded-[18px] border p-6",
-                  featured
-                    ? "border-[var(--afd-orange)]/30 bg-[var(--afd-orange)]/[0.06]"
-                    : "border-[var(--afd-border)] bg-[var(--afd-background)]",
-                )}
+                delay={index * 0.04}
+                className="min-w-0"
               >
-                <Icon
-                  className={cn(
-                    "size-6 text-[var(--afd-blue)]",
-                    featured && "fill-[var(--afd-orange)] text-[var(--afd-orange)]",
-                  )}
-                  aria-hidden
-                />
-                <h3 className="afd-h3 mt-4">{action.title}</h3>
-                <p className="mt-2 flex-1 text-[14px] leading-[1.6] text-[var(--afd-muted)]">
-                  {action.description}
-                </p>
-                {"note" in action && action.note ? (
-                  <p className="mt-2 text-xs text-[var(--afd-muted)]">{action.note}</p>
-                ) : null}
                 <Link
                   href={action.href}
-                  className="afd-btn-text mt-5 inline-flex min-h-11 items-center gap-2 text-[var(--afd-blue)]"
+                  className={cn(
+                    "group flex h-full min-h-[11rem] flex-col rounded-[16px] border p-5 transition duration-180 sm:rounded-[18px] sm:p-6",
+                    featured
+                      ? "border-[var(--afd-orange)]/30 bg-[var(--afd-orange)]/[0.06]"
+                      : "border-[var(--afd-border)] bg-[var(--afd-background)] hover:border-[var(--afd-blue)]/30",
+                  )}
                 >
-                  {action.cta}
-                  <ArrowRight className="size-4" aria-hidden />
+                  <Icon
+                    className={cn(
+                      "size-6 text-[var(--afd-blue)]",
+                      featured && "fill-[var(--afd-orange)] text-[var(--afd-orange)]",
+                    )}
+                    aria-hidden
+                  />
+                  <h3 className="afd-h3 mt-4 break-words">{action.title}</h3>
+                  <p className="mt-2 flex-1 text-[14px] leading-[1.6] text-[var(--afd-muted)]">
+                    {action.description}
+                  </p>
+                  {"note" in action && action.note ? (
+                    <p className="mt-2 text-xs text-[var(--afd-muted)]">{action.note}</p>
+                  ) : null}
+                  <span className="afd-btn-text mt-5 inline-flex min-h-11 items-center gap-2 text-[var(--afd-blue)]">
+                    {action.cta}
+                    <ArrowRight
+                      className="size-4 transition group-hover:translate-x-0.5"
+                      aria-hidden
+                    />
+                  </span>
                 </Link>
               </FadeIn>
             );

@@ -79,12 +79,12 @@ export function ImpactStatistics({ stats }: { stats: PublicImpactStats }) {
   return (
     <section
       aria-label="Chiffres clés"
-      className="relative z-10 -mt-10 pb-2 md:-mt-14"
+      className="relative z-10 -mt-6 pb-2 sm:-mt-8 md:-mt-14"
     >
       <SiteContainer>
         <FadeIn>
-          <div className="rounded-[20px] border border-[var(--afd-border)] bg-white px-4 py-6 shadow-[0_14px_44px_rgba(16,35,63,0.1)] md:px-6 md:py-7">
-            <div className="grid grid-cols-2 gap-5 md:grid-cols-3 xl:grid-cols-6 xl:gap-0">
+          <div className="rounded-[16px] border border-[var(--afd-border)] bg-[var(--afd-surface-elevated)] px-3 py-5 shadow-[0_14px_44px_rgba(16,35,63,0.1)] sm:rounded-[20px] sm:px-4 sm:py-6 md:px-6 md:py-7">
+            <div className="grid grid-cols-1 gap-3 min-[360px]:grid-cols-2 min-[360px]:gap-4 md:grid-cols-3 xl:grid-cols-6 xl:gap-0">
               {visibleCards.map((card, index) => {
                 const value = stats[card.key];
                 const numeric = typeof value === "number" ? value : null;
@@ -94,18 +94,17 @@ export function ImpactStatistics({ stats }: { stats: PublicImpactStats }) {
                   <div
                     key={card.key}
                     className={cn(
-                      "flex flex-col items-start gap-2 px-3 py-1 md:px-4",
-                      index > 0 &&
-                        "xl:border-l xl:border-[var(--afd-border)]",
+                      "flex min-w-0 flex-col items-start gap-1.5 rounded-xl bg-[var(--afd-background)]/60 px-3.5 py-3.5 xl:rounded-none xl:bg-transparent xl:px-4 xl:py-1",
+                      index > 0 && "xl:border-l xl:border-[var(--afd-border)]",
                     )}
                   >
                     <Icon
-                      className="size-5 text-[var(--afd-blue)]"
+                      className="size-4 text-[var(--afd-blue)] sm:size-5"
                       aria-hidden
                     />
                     <p
                       className={cn(
-                        "font-heading text-2xl font-extrabold tracking-tight text-[var(--afd-navy)] md:text-[1.65rem]",
+                        "font-heading text-[22px] font-extrabold tracking-tight text-[var(--afd-navy)] sm:text-2xl md:text-[1.65rem]",
                         numeric == null && "text-[var(--afd-muted)]",
                       )}
                     >
@@ -115,14 +114,14 @@ export function ImpactStatistics({ stats }: { stats: PublicImpactStats }) {
                         "À renseigner"
                       )}
                     </p>
-                    <p className="max-w-[9.5rem] text-[13px] leading-snug text-[var(--afd-muted)]">
+                    <p className="max-w-full text-[12px] leading-snug text-[var(--afd-muted)] sm:text-[13px]">
                       {card.label}
                     </p>
                   </div>
                 );
               })}
             </div>
-            <p className="mt-5 border-t border-[var(--afd-border)] pt-3 text-[11px] text-[var(--afd-muted)]">
+            <p className="mt-4 border-t border-[var(--afd-border)] pt-3 text-[11px] text-[var(--afd-muted)] sm:mt-5">
               {homeContent.statsDisclaimer} Aucun chiffre inventé n’est affiché.
             </p>
           </div>

@@ -13,7 +13,7 @@ export function ImpactStory({ story }: { story: FeaturedImpactStory }) {
 
   if (!story) {
     return (
-      <Section className="bg-white">
+      <Section className="bg-[var(--afd-surface-elevated)]">
         <SiteContainer>
           <div className="rounded-2xl border border-dashed border-[var(--afd-border)] bg-[var(--afd-surface)] p-8">
             <p className="text-xs font-semibold uppercase tracking-wide text-[var(--afd-accent)]">
@@ -34,7 +34,7 @@ export function ImpactStory({ story }: { story: FeaturedImpactStory }) {
   }
 
   return (
-    <Section className="bg-white">
+    <Section className="bg-[var(--afd-surface-elevated)]">
       <SiteContainer>
         <FadeIn>
           <div className="grid overflow-hidden rounded-2xl border border-[var(--afd-border)] lg:grid-cols-2">

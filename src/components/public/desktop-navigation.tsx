@@ -62,7 +62,7 @@ function DesktopDropdown({
       <button
         type="button"
         className={cn(
-          "afd-nav-link group relative inline-flex min-h-11 items-center gap-1.5 py-2 transition-colors duration-180 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--afd-blue)] focus-visible:ring-offset-2",
+          "group relative inline-flex min-h-10 items-center gap-1 whitespace-nowrap px-1 py-2 text-[13px] font-semibold leading-5 tracking-[0.01em] transition-colors duration-180 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--afd-blue)] focus-visible:ring-offset-2",
           active
             ? "text-[var(--afd-blue)]"
             : "text-[var(--afd-text)] hover:text-[var(--afd-blue)]",
@@ -75,14 +75,14 @@ function DesktopDropdown({
         {item.label}
         <ChevronDown
           className={cn(
-            "size-3.5 transition-transform duration-200",
+            "size-3.5 opacity-70 transition-transform duration-200",
             open && "rotate-180",
           )}
           aria-hidden
         />
         <span
           className={cn(
-            "absolute inset-x-0 -bottom-0.5 h-0.5 origin-left rounded-full bg-[var(--afd-blue)] transition-transform duration-200",
+            "absolute inset-x-1 -bottom-0.5 h-0.5 origin-left rounded-full bg-[var(--afd-blue)] transition-transform duration-200",
             active ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100",
           )}
           aria-hidden
@@ -98,7 +98,7 @@ function DesktopDropdown({
           open ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0",
         )}
       >
-        <div className="rounded-2xl border border-[var(--afd-border)] bg-white p-3 shadow-[0_12px_36px_rgba(16,35,63,0.1)]">
+        <div className="rounded-2xl border border-[var(--afd-border)] bg-[var(--afd-surface-elevated)] p-3 shadow-[0_12px_36px_rgba(16,35,63,0.1)]">
           <div
             className={cn(
               "grid gap-2.5",
@@ -149,7 +149,7 @@ function DesktopDropdown({
   );
 }
 
-export function DesktopNavigation() {
+export function DesktopNavigation({ className }: { className?: string }) {
   const pathname = usePathname();
   const [openHref, setOpenHref] = useState<string | null>(null);
   const [pathSnapshot, setPathSnapshot] = useState(pathname);
@@ -161,7 +161,10 @@ export function DesktopNavigation() {
 
   return (
     <nav
-      className="hidden items-center gap-7 min-[1200px]:flex min-[1280px]:gap-8"
+      className={cn(
+        "items-center justify-center gap-4 min-[1280px]:gap-5 min-[1440px]:gap-6",
+        className,
+      )}
       aria-label="Navigation principale"
     >
       {publicNavigation.map((item) => {
@@ -175,7 +178,7 @@ export function DesktopNavigation() {
               href={item.href}
               aria-current={active ? "page" : undefined}
               className={cn(
-                "afd-nav-link group relative inline-flex min-h-11 items-center py-2 transition-colors duration-180 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--afd-blue)] focus-visible:ring-offset-2",
+                "group relative inline-flex min-h-10 items-center whitespace-nowrap px-1 py-2 text-[13px] font-semibold leading-5 tracking-[0.01em] transition-colors duration-180 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--afd-blue)] focus-visible:ring-offset-2",
                 active
                   ? "text-[var(--afd-blue)]"
                   : "text-[var(--afd-text)] hover:text-[var(--afd-blue)]",
@@ -184,7 +187,7 @@ export function DesktopNavigation() {
               {item.label}
               <span
                 className={cn(
-                  "absolute inset-x-0 -bottom-0.5 h-0.5 origin-left rounded-full bg-[var(--afd-blue)] transition-transform duration-200",
+                  "absolute inset-x-1 -bottom-0.5 h-0.5 origin-left rounded-full bg-[var(--afd-blue)] transition-transform duration-200",
                   active ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100",
                 )}
                 aria-hidden

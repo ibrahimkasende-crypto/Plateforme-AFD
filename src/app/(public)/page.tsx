@@ -6,7 +6,6 @@ import { HomeHero } from "@/components/public/home/home-hero";
 import { HomeSectionSkeleton } from "@/components/public/home/home-section-skeleton";
 import { ImpactAndNews } from "@/components/public/home/impact-and-news";
 import { ImpactStatistics } from "@/components/public/home/impact-statistics";
-import { InstitutionalHighlights } from "@/components/public/home/institutional-highlights";
 import { InterventionPillars } from "@/components/public/home/intervention-pillars";
 import { InterventionZones } from "@/components/public/home/intervention-zones";
 import { NewsletterSection } from "@/components/public/home/newsletter-section";
@@ -118,7 +117,7 @@ export default function HomePage() {
 
       <Suspense
         fallback={
-          <div className="-mt-10 pb-2 md:-mt-14">
+          <div className="-mt-6 pb-2 sm:-mt-8 md:-mt-14">
             <HomeSectionSkeleton cards={6} />
           </div>
         }
@@ -127,7 +126,6 @@ export default function HomePage() {
       </Suspense>
 
       <OrganizationIntroduction />
-      <InstitutionalHighlights />
       <InterventionPillars />
 
       <Suspense

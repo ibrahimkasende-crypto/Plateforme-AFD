@@ -28,16 +28,16 @@ export function ImpactAndNews({
   const showStory = Boolean(story) || isDev;
 
   return (
-    <Section className="bg-white">
+    <Section className="bg-[var(--afd-surface-elevated)]">
       <SiteContainer>
         <div
           className={cn(
-            "grid gap-10 lg:gap-12",
+            "grid gap-12 lg:gap-12",
             showStory ? "lg:grid-cols-12" : "lg:grid-cols-1",
           )}
         >
           {showStory ? (
-            <div className="lg:col-span-5">
+            <div className="min-w-0 lg:col-span-5">
               <FadeIn>
                 <div className="h-1 w-10 rounded-full bg-[var(--afd-blue)]" aria-hidden />
                 <h2 className="afd-h2 mt-4">Histoire d’impact</h2>
@@ -45,10 +45,17 @@ export function ImpactAndNews({
               <div className="mt-6">
                 <ImpactStoryCard story={story} isDev={isDev} />
               </div>
+              <Link
+                href="/impact/histoires"
+                className="afd-btn-text mt-5 inline-flex min-h-11 items-center gap-2 text-[var(--afd-blue)] lg:hidden"
+              >
+                Voir toutes les histoires
+                <ArrowRight className="size-4" aria-hidden />
+              </Link>
             </div>
           ) : null}
 
-          <div className={showStory ? "lg:col-span-7" : undefined}>
+          <div className={cn("min-w-0", showStory && "lg:col-span-7")}>
             <FadeIn>
               <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
                 <div>
@@ -57,7 +64,7 @@ export function ImpactAndNews({
                 </div>
                 <Link
                   href="/actualites"
-                  className="afd-btn-text inline-flex min-h-11 items-center gap-2 text-[var(--afd-blue)]"
+                  className="afd-btn-text hidden min-h-11 items-center gap-2 text-[var(--afd-blue)] sm:inline-flex"
                 >
                   Voir toutes les actualités
                   <ArrowRight className="size-4" aria-hidden />
@@ -72,15 +79,23 @@ export function ImpactAndNews({
                   description="Les prochaines publications apparaîtront ici."
                 />
               ) : (
-                <div className="grid gap-5 sm:grid-cols-3">
+                <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
                   {news.slice(0, 3).map((item, index) => (
-                    <FadeIn key={item.id} delay={0.05 * index}>
+                    <FadeIn key={item.id} delay={0.04 * index} className="min-w-0">
                       <NewsCard item={item} />
                     </FadeIn>
                   ))}
                 </div>
               )}
             </div>
+
+            <Link
+              href="/actualites"
+              className="afd-btn-text mt-6 inline-flex min-h-11 items-center gap-2 text-[var(--afd-blue)] sm:hidden"
+            >
+              Voir toutes les actualités
+              <ArrowRight className="size-4" aria-hidden />
+            </Link>
           </div>
         </div>
       </SiteContainer>
@@ -97,7 +112,7 @@ function ImpactStoryCard({
 }) {
   if (!story) {
     return (
-      <div className="rounded-[20px] border border-dashed border-[var(--afd-border)] bg-[var(--afd-light-blue)] p-6">
+      <div className="rounded-[16px] border border-dashed border-[var(--afd-border)] bg-[var(--afd-light-blue)] p-5 sm:rounded-[20px] sm:p-6">
         <p className="afd-label text-[var(--afd-blue)]">Développement</p>
         <p className="afd-h3 mt-3">Histoire d’impact — placeholder</p>
         <p className="mt-2 text-sm text-[var(--afd-muted)]">
@@ -110,8 +125,8 @@ function ImpactStoryCard({
 
   return (
     <FadeIn>
-      <article className="overflow-hidden rounded-[20px] bg-[var(--afd-navy)] text-white">
-        <div className="relative aspect-[4/5] max-h-[420px] bg-[var(--afd-dark-navy)]">
+      <article className="flex w-full max-w-full flex-col overflow-hidden rounded-[16px] bg-[var(--afd-navy)] text-white sm:rounded-[20px]">
+        <div className="relative aspect-[4/3] max-h-[280px] bg-[var(--afd-dark-navy)] sm:aspect-[4/5] sm:max-h-[420px]">
           {story.imageUrl ? (
             <Image
               src={story.imageUrl}
@@ -123,11 +138,13 @@ function ImpactStoryCard({
           ) : null}
           <div className="absolute inset-0 bg-gradient-to-t from-[var(--afd-navy)] via-[var(--afd-navy)]/40 to-transparent" />
         </div>
-        <div className="space-y-3 p-6 md:p-7">
-          <p className="font-heading text-4xl leading-none text-white/35" aria-hidden>
+        <div className="space-y-3 p-5 sm:p-6 md:p-7">
+          <p className="font-heading text-3xl leading-none text-white/35 sm:text-4xl" aria-hidden>
             “
           </p>
-          <h3 className="font-heading text-xl font-bold leading-snug">{story.title}</h3>
+          <h3 className="font-heading text-lg font-bold leading-snug sm:text-xl">
+            {story.title}
+          </h3>
           <p className="text-[15px] leading-relaxed text-white/85">{story.excerpt}</p>
           {story.location ? (
             <p className="text-sm font-semibold text-white/70">{story.location}</p>
@@ -151,7 +168,7 @@ function NewsCard({ item }: { item: LatestNews }) {
   return (
     <Link
       href={`/actualites/${item.slug}`}
-      className="group flex h-full flex-col overflow-hidden rounded-[18px] border border-[var(--afd-border)] bg-[var(--afd-background)] transition duration-180 hover:border-[var(--afd-blue)]/35"
+      className="group flex h-full min-w-0 flex-col overflow-hidden rounded-[16px] border border-[var(--afd-border)] bg-[var(--afd-background)] transition duration-180 hover:border-[var(--afd-blue)]/35 sm:rounded-[18px]"
     >
       <div className="relative aspect-[16/10] bg-[var(--afd-light-blue)]">
         {item.image_url ? (
@@ -159,7 +176,7 @@ function NewsCard({ item }: { item: LatestNews }) {
             src={item.image_url}
             alt=""
             fill
-            sizes="(max-width:768px) 100vw, 30vw"
+            sizes="(max-width:768px) 100vw, (max-width:1024px) 50vw, 33vw"
             className="object-cover transition duration-300 group-hover:scale-[1.03]"
           />
         ) : (
@@ -175,11 +192,11 @@ function NewsCard({ item }: { item: LatestNews }) {
           ) : null}
           {dateLabel ? <span>{dateLabel}</span> : null}
         </div>
-        <h3 className="afd-h3 mt-2 line-clamp-3">{item.title}</h3>
-        <p className="mt-2 line-clamp-3 text-[13px] leading-[1.55] text-[var(--afd-muted)]">
+        <h3 className="afd-h3 mt-2 line-clamp-3 break-words">{item.title}</h3>
+        <p className="mt-2 line-clamp-3 text-[13px] leading-[1.55] text-[var(--afd-muted)] sm:text-[14px]">
           {item.excerpt}
         </p>
-        <span className="afd-btn-text mt-auto inline-flex items-center gap-2 pt-4 text-[var(--afd-blue)]">
+        <span className="afd-btn-text mt-auto inline-flex min-h-10 items-center gap-2 pt-4 text-[var(--afd-blue)]">
           Lire la suite
           <ArrowRight className="size-3.5" aria-hidden />
         </span>

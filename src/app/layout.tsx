@@ -33,8 +33,16 @@ export default function RootLayout({
   return (
     <html
       lang="fr"
+      suppressHydrationWarning
       className={`${inter.variable} ${manrope.variable} h-full antialiased`}
     >
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var t=localStorage.getItem('afd-theme');if(t==='dark'){document.documentElement.classList.add('dark');document.documentElement.dataset.theme='dark';}else{document.documentElement.dataset.theme='light';}}catch(e){}})();`,
+          }}
+        />
+      </head>
       <body className="flex min-h-full flex-col bg-[var(--afd-background)] font-sans text-[var(--afd-text)]">
         <AppProviders>{children}</AppProviders>
       </body>

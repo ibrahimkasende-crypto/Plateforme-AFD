@@ -13,15 +13,16 @@ export function HeaderLogo({ compact = false, className }: HeaderLogoProps) {
     <Link
       href={siteConfig.routes.home}
       className={cn(
-        "group flex min-w-0 shrink-0 items-center gap-3.5 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--afd-blue)] focus-visible:ring-offset-2",
+        "group flex min-w-0 shrink-0 items-center gap-2.5 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--afd-blue)] focus-visible:ring-offset-2 sm:gap-3.5",
         className,
       )}
       aria-label={`${siteConfig.name} — Accueil`}
     >
       <span
         className={cn(
-          "relative shrink-0 overflow-hidden rounded-full bg-white ring-1 ring-[var(--afd-border)] transition-[width,height] duration-200",
-          compact ? "size-14" : "size-16",
+          "relative shrink-0 overflow-hidden rounded-full bg-[var(--afd-surface-elevated)] ring-1 ring-[var(--afd-border)] transition-[width,height] duration-200",
+          "size-11 min-[1200px]:size-[3.25rem]",
+          compact && "min-[1200px]:size-12",
         )}
       >
         <Image
@@ -34,15 +35,16 @@ export function HeaderLogo({ compact = false, className }: HeaderLogoProps) {
         />
       </span>
 
-      <span className="hidden min-w-0 sm:flex sm:flex-col sm:gap-0.5">
+      {/* Desktop / tablette large : nom complet */}
+      <span className="hidden min-w-0 min-[1200px]:flex min-[1200px]:flex-col min-[1200px]:gap-0.5">
         {siteConfig.brandLines.map((line, index) => (
           <span
             key={line}
             className={cn(
-              "font-heading leading-[1.15] font-bold tracking-[0.02em] text-[var(--afd-navy)] transition-[font-size] duration-200",
+              "font-heading leading-[1.15] font-bold tracking-[0.02em] text-[var(--afd-sky)] transition-[font-size] duration-200",
               compact ? "text-[11px]" : "text-xs",
               index === siteConfig.brandLines.length - 1 &&
-                "font-semibold tracking-wide text-[var(--afd-muted)]",
+                "font-semibold tracking-wide",
             )}
           >
             {line}
@@ -50,12 +52,10 @@ export function HeaderLogo({ compact = false, className }: HeaderLogoProps) {
         ))}
       </span>
 
-      <span className="flex min-w-0 flex-col sm:hidden">
-        <span className="font-heading text-sm font-bold text-[var(--afd-navy)]">
-          {siteConfig.acronym}
-        </span>
-        <span className="text-[11px] font-semibold text-[var(--afd-muted)]">
-          {siteConfig.countryShort}
+      {/* Mobile / tablette : libellé court */}
+      <span className="flex min-w-0 flex-col min-[1200px]:hidden">
+        <span className="font-heading truncate text-sm font-bold text-[var(--afd-sky)]">
+          {siteConfig.shortName}
         </span>
       </span>
     </Link>

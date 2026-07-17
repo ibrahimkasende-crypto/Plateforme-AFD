@@ -1,3 +1,4 @@
+import { assets } from "@/config/assets";
 import { siteConfig } from "@/config/site";
 
 export const homeContent = {
@@ -17,11 +18,11 @@ export const homeContent = {
     institutionalNote:
       "80 % de femmes de moins de 35 ans et de jeunes au Conseil d’administration.",
     image: {
-      src: "/images/adf1.jpg",
-      preferredSrc: "/images/home/hero-afd.webp",
-      alt: "Visuel institutionnel AFD — à remplacer par une photographie de terrain documentée",
-      credit: "Visuel temporaire — photo de terrain AFD à intégrer",
-      isTemporary: true,
+      src: assets.home.hero,
+      preferredSrc: assets.home.hero,
+      alt: "Femmes de l’Alliance des Femmes pour le Développement sur le terrain",
+      credit: "",
+      isTemporary: false,
     },
   },
   about: {
@@ -40,7 +41,7 @@ export const homeContent = {
       "Le Conseil d’administration est composé à 80 % de femmes de moins de 35 ans et de jeunes.",
     cta: { label: "En savoir plus", href: "/qui-sommes-nous" },
     image: {
-      src: "/images/adf2.png",
+      src: assets.home.presentation,
       alt: "Visuel institutionnel AFD — à remplacer par une photographie authentique d’activité",
       caption: "Visuel temporaire en attendant une photographie de terrain validée",
       isTemporary: true,

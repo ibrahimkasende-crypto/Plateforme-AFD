@@ -25,8 +25,13 @@ Ouvrir [http://localhost:3000](http://localhost:3000).
 ## Documentation
 
 - `docs/ARCHITECTURE_ALIGNED_V2.md`
-- `docs/ALIGNEMENT_ARCHITECTURE_AUDIT.md`
+- `docs/ASSETS_ORGANISATION.md`
 - `docs/SUPABASE_TARGET_SCHEMA.md`
 - `docs/SERDIPAY_INTEGRATION_REQUIREMENTS.md`
+- `docs/TYPOGRAPHY_LAYOUT_NEWSLETTER_LOADER.md`
+
+## Assets
+
+Images publiques : `public/assets/` (URL `/assets/...`)
 
 Configurer les variables dans `.env.local` à partir de `.env.example`.
