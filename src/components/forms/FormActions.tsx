@@ -34,19 +34,19 @@ export function ConfirmDialog({
       <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl">
         <h2
           id="confirm-dialog-title"
-          className="font-display text-xl font-semibold text-[var(--adf-ink)]"
+          className="font-display text-xl font-semibold text-[var(--afd-ink)]"
         >
           {title}
         </h2>
         {description ? (
-          <p className="mt-2 text-sm text-[var(--adf-muted)]">{description}</p>
+          <p className="mt-2 text-sm text-[var(--afd-muted)]">{description}</p>
         ) : null}
         <div className="mt-6 flex justify-end gap-3">
           <button
             type="button"
             onClick={onCancel}
             disabled={busy}
-            className="rounded-lg border border-[var(--adf-border)] px-4 py-2 text-sm font-medium text-[var(--adf-ink)]"
+            className="rounded-lg border border-[var(--afd-border)] px-4 py-2 text-sm font-medium text-[var(--afd-ink)]"
           >
             {cancelLabel}
           </button>
@@ -55,7 +55,7 @@ export function ConfirmDialog({
             onClick={onConfirm}
             disabled={busy}
             className={cn(
-              "rounded-lg bg-[var(--adf-accent)] px-4 py-2 text-sm font-medium text-white",
+              "rounded-lg bg-[var(--afd-accent)] px-4 py-2 text-sm font-medium text-white",
               busy && "opacity-60",
             )}
           >

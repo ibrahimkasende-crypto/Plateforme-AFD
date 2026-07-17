@@ -11,7 +11,7 @@ export function LoadingState({
   return (
     <div
       className={cn(
-        "flex items-center justify-center gap-3 py-16 text-[var(--adf-muted)]",
+        "flex items-center justify-center gap-3 py-16 text-[var(--afd-muted)]",
         className,
       )}
       role="status"

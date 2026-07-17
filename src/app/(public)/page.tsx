@@ -19,7 +19,7 @@ export default function HomePage() {
           <>
             <Link
               href="/soutenir"
-              className="inline-flex items-center gap-2 rounded-lg bg-[var(--adf-gold)] px-5 py-2.5 text-sm font-semibold text-[var(--adf-ink)]"
+              className="inline-flex items-center gap-2 rounded-lg bg-[var(--afd-gold)] px-5 py-2.5 text-sm font-semibold text-[var(--afd-ink)]"
             >
               Soutenir l’AFD
               <HeartHandshake className="size-4" aria-hidden />
@@ -65,13 +65,13 @@ export default function HomePage() {
               <FadeIn key={item.href}>
                 <Link
                   href={item.href}
-                  className="group block rounded-2xl border border-[var(--adf-border)] bg-white p-6 transition hover:border-[var(--adf-accent)]/40"
+                  className="group block rounded-2xl border border-[var(--afd-border)] bg-white p-6 transition hover:border-[var(--afd-accent)]/40"
                 >
-                  <h3 className="font-display text-xl font-semibold text-[var(--adf-ink)]">
+                  <h3 className="font-display text-xl font-semibold text-[var(--afd-ink)]">
                     {item.title}
                   </h3>
-                  <p className="mt-2 text-sm text-[var(--adf-muted)]">{item.text}</p>
-                  <span className="mt-4 inline-flex items-center gap-1 text-sm font-medium text-[var(--adf-accent)]">
+                  <p className="mt-2 text-sm text-[var(--afd-muted)]">{item.text}</p>
+                  <span className="mt-4 inline-flex items-center gap-1 text-sm font-medium text-[var(--afd-accent)]">
                     Découvrir
                     <ArrowRight className="size-4 transition group-hover:translate-x-0.5" />
                   </span>
@@ -82,7 +82,7 @@ export default function HomePage() {
         </SiteContainer>
       </Section>
 
-      <Section className="bg-[var(--adf-surface)]">
+      <Section className="bg-[var(--afd-surface)]">
         <SiteContainer>
           <SectionHeading
             title="Domaines d’intervention"
@@ -92,7 +92,7 @@ export default function HomePage() {
             {sectors.map((sector) => (
               <div
                 key={sector.id}
-                className="rounded-xl border border-[var(--adf-border)] bg-white px-4 py-3 text-sm font-medium text-[var(--adf-ink)]"
+                className="rounded-xl border border-[var(--afd-border)] bg-white px-4 py-3 text-sm font-medium text-[var(--afd-ink)]"
               >
                 {sector.label}
               </div>
@@ -101,7 +101,7 @@ export default function HomePage() {
           <div className="mt-8">
             <Link
               href="/actions/domaines-intervention"
-              className="inline-flex items-center gap-2 text-sm font-semibold text-[var(--adf-accent)]"
+              className="inline-flex items-center gap-2 text-sm font-semibold text-[var(--afd-accent)]"
             >
               Voir les domaines
               <ArrowRight className="size-4" />

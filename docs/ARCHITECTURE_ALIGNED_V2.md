@@ -1,4 +1,4 @@
-# Architecture alignée V2 — Plateforme-ADF
+# Architecture alignée V2 — Plateforme-AFD
 
 **Date :** 17 juillet 2026  
 **Branche :** `reconstruction-nextjs`
@@ -77,7 +77,13 @@ Toutes les routes publiques/admin non encore métier affichent `ModulePlaceholde
 
 ## 19. Tests réalisés
 
-`npm run typecheck`, `npm run lint`, `npm run build` (à valider en CI locale).
+| Commande | Résultat |
+|----------|----------|
+| `npm run typecheck` | OK |
+| `npm run lint` | OK |
+| `npm run build` | OK (73 pages générées) |
+
+Commit local : `chore: align Plateforme-AFD architecture for development` (`6f5ec54`).
 
 ## 20. Prochaines étapes
 

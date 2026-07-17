@@ -33,7 +33,7 @@ export default function RootLayout({
       lang="fr"
       className={`${sourceSans.variable} ${sourceSerif.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-[var(--adf-bg)] text-[var(--adf-ink)]">
+      <body className="min-h-full flex flex-col bg-[var(--afd-bg)] text-[var(--afd-ink)]">
         <AppProviders>{children}</AppProviders>
       </body>
     </html>

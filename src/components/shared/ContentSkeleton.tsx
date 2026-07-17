@@ -12,7 +12,7 @@ export function ContentSkeleton({
       {Array.from({ length: rows }).map((_, index) => (
         <div
           key={index}
-          className="h-4 rounded bg-[var(--adf-border)]"
+          className="h-4 rounded bg-[var(--afd-border)]"
           style={{ width: `${100 - index * 12}%` }}
         />
       ))}

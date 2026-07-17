@@ -1,6 +1,6 @@
 # Exigences d’intégration SerdiPay
 
-Document à transmettre / compléter avec SerdiPay avant toute activation des paiements sur Plateforme-ADF.
+Document à transmettre / compléter avec SerdiPay avant toute activation des paiements sur Plateforme-AFD.
 
 ## Informations à demander
 
@@ -27,7 +27,7 @@ Document à transmettre / compléter avec SerdiPay avant toute activation des pa
 21. Environnement de test (comptes, montants)
 22. Contacts du support technique
 
-## Règles Plateforme-ADF (non négociables)
+## Règles Plateforme-AFD (non négociables)
 
 - Aucun endpoint inventé
 - Aucune confirmation de paiement côté navigateur

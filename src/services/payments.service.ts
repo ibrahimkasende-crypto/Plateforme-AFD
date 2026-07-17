@@ -11,7 +11,7 @@ export function createIdempotencyKey() {
 }
 
 export function createInternalPaymentReference() {
-  return `ADF-${Date.now()}-${randomUUID().slice(0, 8).toUpperCase()}`;
+  return `AFD-${Date.now()}-${randomUUID().slice(0, 8).toUpperCase()}`;
 }
 
 /**

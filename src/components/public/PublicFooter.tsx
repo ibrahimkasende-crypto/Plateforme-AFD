@@ -5,7 +5,7 @@ import { SiteContainer } from "@/components/shared/SiteContainer";
 
 export function PublicFooter() {
   return (
-    <footer className="mt-auto border-t border-[var(--adf-border)] bg-[var(--adf-ink)] text-white">
+    <footer className="mt-auto border-t border-[var(--afd-border)] bg-[var(--afd-ink)] text-white">
       <SiteContainer className="grid gap-10 py-12 md:grid-cols-3">
         <div>
           <p className="font-display text-xl font-semibold">{siteConfig.shortName}</p>
@@ -14,7 +14,7 @@ export function PublicFooter() {
           </p>
         </div>
         <div>
-          <p className="text-sm font-semibold uppercase tracking-wide text-[var(--adf-gold)]">
+          <p className="text-sm font-semibold uppercase tracking-wide text-[var(--afd-gold)]">
             Accès rapide
           </p>
           <ul className="mt-3 space-y-2 text-sm text-white/80">
@@ -28,7 +28,7 @@ export function PublicFooter() {
           </ul>
         </div>
         <div>
-          <p className="text-sm font-semibold uppercase tracking-wide text-[var(--adf-gold)]">
+          <p className="text-sm font-semibold uppercase tracking-wide text-[var(--afd-gold)]">
             Contact
           </p>
           <ul className="mt-3 space-y-2 text-sm text-white/80">

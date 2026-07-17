@@ -1,4 +1,4 @@
-# Intégration SerdiPay — Plateforme-ADF
+# Intégration SerdiPay — Plateforme-AFD
 
 ## État
 

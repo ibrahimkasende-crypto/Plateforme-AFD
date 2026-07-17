@@ -23,7 +23,7 @@ export function DataTable<T>({
 }) {
   if (rows.length === 0) {
     return (
-      <p className="rounded-xl border border-dashed border-[var(--adf-border)] p-6 text-sm text-[var(--adf-muted)]">
+      <p className="rounded-xl border border-dashed border-[var(--afd-border)] p-6 text-sm text-[var(--afd-muted)]">
         {emptyMessage}
       </p>
     );
@@ -32,12 +32,12 @@ export function DataTable<T>({
   return (
     <div
       className={cn(
-        "overflow-x-auto rounded-xl border border-[var(--adf-border)] bg-white",
+        "overflow-x-auto rounded-xl border border-[var(--afd-border)] bg-white",
         className,
       )}
     >
       <table className="min-w-full text-left text-sm">
-        <thead className="bg-[var(--adf-surface)] text-[var(--adf-muted)]">
+        <thead className="bg-[var(--afd-surface)] text-[var(--afd-muted)]">
           <tr>
             {columns.map((column) => (
               <th
@@ -56,12 +56,12 @@ export function DataTable<T>({
           {rows.map((row) => (
             <tr
               key={getRowKey(row)}
-              className="border-t border-[var(--adf-border)]"
+              className="border-t border-[var(--afd-border)]"
             >
               {columns.map((column) => (
                 <td
                   key={column.key}
-                  className={cn("px-4 py-3 text-[var(--adf-ink)]", column.className)}
+                  className={cn("px-4 py-3 text-[var(--afd-ink)]", column.className)}
                 >
                   {column.cell(row)}
                 </td>

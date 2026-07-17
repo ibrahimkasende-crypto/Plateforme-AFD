@@ -13,7 +13,7 @@ export function FilterBar({
   return (
     <div
       className={cn(
-        "mb-4 flex flex-wrap items-end gap-3 rounded-xl border border-[var(--adf-border)] bg-white p-3",
+        "mb-4 flex flex-wrap items-end gap-3 rounded-xl border border-[var(--afd-border)] bg-white p-3",
         className,
       )}
     >
@@ -35,22 +35,22 @@ export function DateRangeFilter({
 }) {
   return (
     <div className="flex flex-wrap gap-3">
-      <label className="flex flex-col gap-1 text-xs font-medium text-[var(--adf-muted)]">
+      <label className="flex flex-col gap-1 text-xs font-medium text-[var(--afd-muted)]">
         Du
         <input
           type="date"
           value={from ?? ""}
           onChange={(event) => onFromChange(event.target.value)}
-          className="rounded-lg border border-[var(--adf-border)] px-3 py-2 text-sm text-[var(--adf-ink)]"
+          className="rounded-lg border border-[var(--afd-border)] px-3 py-2 text-sm text-[var(--afd-ink)]"
         />
       </label>
-      <label className="flex flex-col gap-1 text-xs font-medium text-[var(--adf-muted)]">
+      <label className="flex flex-col gap-1 text-xs font-medium text-[var(--afd-muted)]">
         Au
         <input
           type="date"
           value={to ?? ""}
           onChange={(event) => onToChange(event.target.value)}
-          className="rounded-lg border border-[var(--adf-border)] px-3 py-2 text-sm text-[var(--adf-ink)]"
+          className="rounded-lg border border-[var(--afd-border)] px-3 py-2 text-sm text-[var(--afd-ink)]"
         />
       </label>
     </div>

@@ -1,4 +1,4 @@
-# Schéma Supabase cible — Plateforme-ADF
+# Schéma Supabase cible — Plateforme-AFD
 
 **Principe :** proposition **non destructive**. Aucune table existante ne doit être détruite. Aucun `supabase db reset`. Aucune migration déjà appliquée ne doit être modifiée.
 

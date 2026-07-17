@@ -19,20 +19,20 @@ function CardShell({
   const content = (
     <article
       className={cn(
-        "h-full rounded-2xl border border-[var(--adf-border)] bg-white p-5 transition hover:border-[var(--adf-accent)]/40 hover:shadow-sm",
+        "h-full rounded-2xl border border-[var(--afd-border)] bg-white p-5 transition hover:border-[var(--afd-accent)]/40 hover:shadow-sm",
         className,
       )}
     >
       {meta ? (
-        <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-[var(--adf-accent)]">
+        <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-[var(--afd-accent)]">
           {meta}
         </p>
       ) : null}
-      <h3 className="font-display text-lg font-semibold text-[var(--adf-ink)]">
+      <h3 className="font-display text-lg font-semibold text-[var(--afd-ink)]">
         {title}
       </h3>
       {description ? (
-        <p className="mt-2 text-sm leading-relaxed text-[var(--adf-muted)]">
+        <p className="mt-2 text-sm leading-relaxed text-[var(--afd-muted)]">
           {description}
         </p>
       ) : null}

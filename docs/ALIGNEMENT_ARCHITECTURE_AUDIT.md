@@ -1,4 +1,4 @@
-# Audit d’alignement d’architecture — Plateforme-ADF
+# Audit d’alignement d’architecture — Plateforme-AFD
 
 **Date :** 17 juillet 2026  
 **Branche :** `reconstruction-nextjs`  

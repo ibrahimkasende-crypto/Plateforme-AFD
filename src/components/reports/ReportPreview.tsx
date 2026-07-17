@@ -13,17 +13,17 @@ export function ReportPreview({
   return (
     <div
       className={cn(
-        "rounded-2xl border border-[var(--adf-border)] bg-white p-6 shadow-sm",
+        "rounded-2xl border border-[var(--afd-border)] bg-white p-6 shadow-sm",
         className,
       )}
     >
-      <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-[var(--adf-accent)]">
+      <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-[var(--afd-accent)]">
         Aperçu du rapport
       </p>
-      <h3 className="font-display text-xl font-semibold text-[var(--adf-ink)]">
+      <h3 className="font-display text-xl font-semibold text-[var(--afd-ink)]">
         {title}
       </h3>
-      <div className="mt-4 prose-sm max-w-none text-[var(--adf-muted)]">
+      <div className="mt-4 prose-sm max-w-none text-[var(--afd-muted)]">
         {children}
       </div>
     </div>

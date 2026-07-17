@@ -15,5 +15,5 @@
 - Pages organisation, programmes, projets, actualités, impact, médiathèque, partenaires, contact, adhésion, don, connexion et administration.
 
 ## À corriger
-- Replacer le contenu d’accueil généré par Next.js par la direction artistique Plateforme-ADF.
+- Replacer le contenu d’accueil généré par Next.js par la direction artistique Plateforme-AFD.
 - Ajouter les scripts de test, les routes, les composants et les clients Supabase SSR.

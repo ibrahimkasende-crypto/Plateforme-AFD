@@ -19,13 +19,13 @@ export function FileUploader({
   return (
     <label
       className={cn(
-        "flex cursor-pointer flex-col items-center justify-center gap-2 rounded-2xl border border-dashed border-[var(--adf-border)] bg-[var(--adf-surface)] px-6 py-10 text-center transition hover:border-[var(--adf-accent)]",
+        "flex cursor-pointer flex-col items-center justify-center gap-2 rounded-2xl border border-dashed border-[var(--afd-border)] bg-[var(--afd-surface)] px-6 py-10 text-center transition hover:border-[var(--afd-accent)]",
         disabled && "cursor-not-allowed opacity-60",
         className,
       )}
     >
-      <Upload className="size-6 text-[var(--adf-accent)]" aria-hidden />
-      <span className="text-sm font-medium text-[var(--adf-ink)]">{label}</span>
+      <Upload className="size-6 text-[var(--afd-accent)]" aria-hidden />
+      <span className="text-sm font-medium text-[var(--afd-ink)]">{label}</span>
       <input
         type="file"
         className="sr-only"
