@@ -1,0 +1,32 @@
+@import "tailwindcss";
+
+:root {
+  --adf-bg: #f7f8f5;
+  --adf-surface: #eef2ec;
+  --adf-ink: #14231c;
+  --adf-muted: #5b6b63;
+  --adf-border: #d7e0d8;
+  --adf-accent: #1a5c45;
+  --adf-accent-strong: #0f3d2e;
+  --adf-accent-soft: #dcebe3;
+  --adf-gold: #d4af37;
+  --background: var(--adf-bg);
+  --foreground: var(--adf-ink);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-source-sans);
+  --font-display: var(--font-source-serif);
+}
+
+body {
+  background: var(--adf-bg);
+  color: var(--adf-ink);
+  font-family: var(--font-source-sans), "Segoe UI", sans-serif;
+}
+
+.font-display {
+  font-family: var(--font-source-serif), Georgia, serif;
+}
