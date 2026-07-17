@@ -12,8 +12,6 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { FadeIn } from "@/components/motion/FadeIn";
-import { Section } from "@/components/shared/Section";
-import { SectionHeading } from "@/components/shared/SectionHeading";
 import { SiteContainer } from "@/components/shared/SiteContainer";
 import { homeContent } from "@/config/home-content";
 import type { PublicImpactStats } from "@/lib/queries/home";
@@ -61,9 +59,9 @@ const cards: {
   icon: LucideIcon;
 }[] = [
   { key: "personnesAccompagnees", label: "Personnes accompagnées", icon: Users },
-  { key: "femmesAccompagnees", label: "Femmes accompagnées", icon: UsersRound },
   { key: "projetsRealises", label: "Projets réalisés", icon: FolderKanban },
-  { key: "provincesCouvertes", label: "Provinces couvertes", icon: MapPinned },
+  { key: "provincesCouvertes", label: "Provinces d’intervention", icon: MapPinned },
+  { key: "femmesAccompagnees", label: "Femmes accompagnées", icon: UsersRound },
   { key: "partenairesActifs", label: "Partenaires actifs", icon: Handshake },
   { key: "activitesRealisees", label: "Activités réalisées", icon: Activity },
 ];
@@ -79,35 +77,32 @@ export function ImpactStatistics({ stats }: { stats: PublicImpactStats }) {
   if (visibleCards.length === 0) return null;
 
   return (
-    <Section className="bg-[var(--afd-accent-strong)] text-white">
+    <section
+      aria-label="Chiffres clés"
+      className="relative z-10 -mt-8 pb-4 md:-mt-12"
+    >
       <SiteContainer>
         <FadeIn>
-          <SectionHeading
-            title="Notre impact en chiffres"
-            description="Indicateurs issus des données publiées de la plateforme."
-            className="[&_h2]:text-white [&_p]:text-white/75"
-          />
-        </FadeIn>
+          <div className="rounded-2xl border border-[var(--afd-border)] bg-white px-4 py-5 shadow-[0_10px_40px_rgba(15,39,68,0.08)] md:px-6 md:py-6">
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
+              {visibleCards.map((card) => {
+                const value = stats[card.key];
+                const numeric = typeof value === "number" ? value : null;
+                const Icon = card.icon;
 
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {visibleCards.map((card, index) => {
-            const value = stats[card.key];
-            const numeric = typeof value === "number" ? value : null;
-            const Icon = card.icon;
-
-            return (
-              <FadeIn
-                key={card.key}
-                delay={index * 0.05}
-                className="rounded-2xl border border-white/15 bg-white/5 p-5 backdrop-blur-sm"
-              >
-                <div className="flex items-start justify-between gap-3">
-                  <div>
-                    <p className="text-sm text-white/70">{card.label}</p>
+                return (
+                  <div
+                    key={card.key}
+                    className="flex flex-col items-start gap-2 px-2 py-1"
+                  >
+                    <Icon
+                      className="size-5 text-[var(--afd-accent)]"
+                      aria-hidden
+                    />
                     <p
                       className={cn(
-                        "mt-2 font-display text-3xl font-semibold",
-                        numeric == null && "text-white/55",
+                        "font-display text-2xl font-semibold text-[var(--afd-accent-strong)]",
+                        numeric == null && "text-[var(--afd-muted)]",
                       )}
                     >
                       {numeric != null ? (
@@ -116,16 +111,19 @@ export function ImpactStatistics({ stats }: { stats: PublicImpactStats }) {
                         "À renseigner"
                       )}
                     </p>
+                    <p className="text-xs leading-snug text-[var(--afd-muted)]">
+                      {card.label}
+                    </p>
                   </div>
-                  <Icon className="size-5 text-[var(--afd-gold)]" aria-hidden />
-                </div>
-              </FadeIn>
-            );
-          })}
-        </div>
-
-        <p className="mt-6 text-xs text-white/60">{homeContent.statsDisclaimer}</p>
+                );
+              })}
+            </div>
+            <p className="mt-4 border-t border-[var(--afd-border)] pt-3 text-[11px] text-[var(--afd-muted)]">
+              {homeContent.statsDisclaimer} Aucun chiffre inventé n’est affiché.
+            </p>
+          </div>
+        </FadeIn>
       </SiteContainer>
-    </Section>
+    </section>
   );
 }

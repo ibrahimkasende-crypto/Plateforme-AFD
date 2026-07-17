@@ -80,9 +80,9 @@ export const homeContent = {
   pillars: [
     {
       id: "sante-wash",
-      title: "Santé, nutrition et WASH",
+      title: "Santé, Nutrition et WASH",
       description:
-        "Renforcer l’accès aux soins de santé communautaire, à la nutrition et à des services d’eau, hygiène et assainissement.",
+        "Soins communautaires, nutrition et accès à l’eau, l’hygiène et l’assainissement.",
       topics: [
         "Santé communautaire et primaire",
         "Nutrition",
@@ -93,9 +93,9 @@ export const homeContent = {
     },
     {
       id: "protection",
-      title: "Protection et droits des femmes",
+      title: "Protection, VBG et droits des femmes",
       description:
-        "Prévenir et répondre aux violences, protéger les enfants et promouvoir la dignité.",
+        "Protection de l’enfant, prévention des VBG et lutte contre l’exploitation.",
       topics: [
         "Protection de l’enfant",
         "Lutte contre les VBG",
@@ -108,7 +108,7 @@ export const homeContent = {
       id: "economie",
       title: "Autonomisation économique",
       description:
-        "Soutenir l’entrepreneuriat féminin, les coopératives et les activités génératrices de revenus.",
+        "Entrepreneuriat, coopératives et activités génératrices de revenus.",
       topics: [
         "Autonomisation financière des femmes",
         "Entrepreneuriat",
@@ -121,16 +121,16 @@ export const homeContent = {
       id: "education",
       title: "Éducation et leadership",
       description:
-        "Favoriser l’éducation, l’alphabétisation et la participation des femmes aux décisions.",
+        "Éducation, alphabétisation et participation des femmes aux décisions.",
       topics: ["Éducation", "Alphabétisation", "Leadership des femmes"],
       icon: "GraduationCap",
       featured: false,
     },
     {
       id: "alimentaire",
-      title: "Sécurité alimentaire et environnement",
+      title: "Sécurité alimentaire et agriculture",
       description:
-        "Appuyer l’agriculture durable, la pêche, l’élevage et les moyens de subsistance.",
+        "Agriculture durable, pêche, élevage et moyens de subsistance.",
       topics: [
         "Sécurité alimentaire",
         "Agriculture durable",
@@ -141,9 +141,9 @@ export const homeContent = {
     },
     {
       id: "urgences",
-      title: "Urgences, relèvement et cohésion sociale",
+      title: "Urgences, cohésion et redevabilité",
       description:
-        "Répondre aux crises, accompagner le relèvement et renforcer la cohésion communautaire.",
+        "Réponses d’urgence, relèvement, Cash for Work et engagement communautaire.",
       topics: [
         "Réponse humanitaire d’urgence",
         "Relèvement et Cash for Work",
@@ -169,11 +169,11 @@ export const homeContent = {
   supportActions: [
     {
       id: "adhesion",
-      title: "Rejoindre l’AFD",
+      title: "Devenir membre",
       description:
         "Engagez-vous aux côtés des femmes et des jeunes pour transformer durablement les communautés.",
       href: "/adhesion",
-      cta: "Nous rejoindre",
+      cta: "En savoir plus",
     },
     {
       id: "partenaire",
@@ -185,12 +185,20 @@ export const homeContent = {
     },
     {
       id: "soutenir",
-      title: "Soutenir nos actions",
+      title: "Soutenir un projet",
       description:
         "Soutenez les interventions de l’AFD. Le paiement en ligne sera prochainement disponible.",
       href: "/soutenir",
-      cta: "Soutenir l’AFD",
-      note: "L’intégration SerdiPay sera activée après configuration officielle des identifiants et webhooks.",
+      cta: "Faire un don",
+      note: "L’intégration SerdiPay sera activée après configuration officielle.",
+    },
+    {
+      id: "contact",
+      title: "Nous contacter",
+      description:
+        "Une question, une proposition de collaboration ou une demande d’information ?",
+      href: "/contact",
+      cta: "Nous écrire",
     },
   ] as const,
   statsDisclaimer: "Données validées par l’équipe AFD.",

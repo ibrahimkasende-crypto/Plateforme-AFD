@@ -3,7 +3,7 @@
 import { motion, useReducedMotion } from "motion/react";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowDown, ArrowRight } from "lucide-react";
+import { ArrowRight, Handshake, UsersRound } from "lucide-react";
 import { homeContent } from "@/config/home-content";
 import { SiteContainer } from "@/components/shared/SiteContainer";
 
@@ -12,13 +12,13 @@ export function HomeHero() {
   const reduceMotion = useReducedMotion();
 
   return (
-    <section className="relative isolate min-h-[88vh] overflow-hidden bg-[var(--afd-accent-strong)] text-white">
+    <section className="relative isolate overflow-hidden bg-[var(--afd-accent-strong)] text-white">
       <div className="absolute inset-0">
         <motion.div
           className="absolute inset-0"
-          initial={reduceMotion ? false : { scale: 1.06 }}
+          initial={reduceMotion ? false : { scale: 1.05 }}
           animate={reduceMotion ? undefined : { scale: 1 }}
-          transition={{ duration: 1.2, ease: "easeOut" }}
+          transition={{ duration: 1.15, ease: "easeOut" }}
         >
           <Image
             src={content.image.src}
@@ -26,25 +26,25 @@ export function HomeHero() {
             fill
             priority
             sizes="100vw"
-            className="object-cover"
+            className="object-cover object-center"
           />
         </motion.div>
-        <div className="absolute inset-0 bg-[linear-gradient(105deg,rgba(15,53,95,0.92)_0%,rgba(26,79,140,0.78)_48%,rgba(15,53,95,0.55)_100%)]" />
+        <div className="absolute inset-0 bg-[linear-gradient(100deg,rgba(10,40,75,0.88)_0%,rgba(15,53,95,0.72)_42%,rgba(15,53,95,0.35)_100%)]" />
       </div>
 
-      <SiteContainer className="relative flex min-h-[88vh] flex-col justify-center py-20 md:py-28">
-        <div className="max-w-3xl">
-          <motion.p
-            className="mb-4 text-xs font-semibold uppercase tracking-[0.18em] text-[var(--afd-gold)] md:text-sm"
+      <SiteContainer className="relative grid min-h-[78vh] items-center gap-10 py-20 md:min-h-[82vh] md:py-24 lg:grid-cols-12 lg:py-28">
+        <div className="lg:col-span-7">
+          <motion.span
+            className="inline-flex rounded-full bg-[var(--afd-accent)] px-3.5 py-1.5 text-[11px] font-semibold uppercase tracking-[0.14em] text-white"
             initial={reduceMotion ? false : { opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4 }}
           >
-            {content.eyebrow}
-          </motion.p>
+            ONG nationale congolaise
+          </motion.span>
 
           <motion.h1
-            className="font-display text-3xl font-semibold leading-tight tracking-tight sm:text-4xl md:text-5xl lg:text-[3.25rem]"
+            className="font-display mt-5 max-w-3xl text-3xl font-semibold leading-[1.12] tracking-tight sm:text-4xl md:text-5xl lg:text-[3.15rem]"
             initial={reduceMotion ? false : { opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.08 }}
@@ -53,12 +53,12 @@ export function HomeHero() {
           </motion.h1>
 
           <motion.p
-            className="mt-5 max-w-2xl text-base leading-relaxed text-white/88 md:text-lg"
+            className="mt-5 max-w-2xl text-base leading-relaxed text-white/90 md:text-lg"
             initial={reduceMotion ? false : { opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.45, delay: 0.16 }}
           >
-            {content.description}
+            Depuis 2024, {content.description}
           </motion.p>
 
           <motion.div
@@ -69,54 +69,43 @@ export function HomeHero() {
           >
             <Link
               href={content.primaryCta.href}
-              className="inline-flex min-h-11 items-center gap-2 rounded-lg bg-white px-5 py-2.5 text-sm font-semibold text-[var(--afd-accent-strong)] transition-colors duration-150 hover:bg-[var(--afd-accent-soft)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+              className="inline-flex min-h-11 items-center gap-2 rounded-lg bg-[var(--afd-accent)] px-5 py-2.5 text-sm font-semibold text-white transition-colors duration-150 hover:bg-[var(--afd-accent-bright)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
             >
               {content.primaryCta.label}
               <ArrowRight className="size-4" aria-hidden />
             </Link>
             <Link
-              href={content.secondaryCta.href}
-              className="inline-flex min-h-11 items-center gap-2 rounded-lg bg-[var(--afd-support)] px-5 py-2.5 text-sm font-semibold text-white transition-colors duration-150 hover:bg-[var(--afd-support-strong)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+              href="/contact"
+              className="inline-flex min-h-11 items-center gap-2 rounded-lg border border-white/70 bg-transparent px-5 py-2.5 text-sm font-semibold text-white transition-colors duration-150 hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
             >
-              {content.secondaryCta.label}
+              <Handshake className="size-4" aria-hidden />
+              Devenir partenaire
             </Link>
           </motion.div>
 
-          <motion.ul
-            className="mt-10 flex flex-wrap gap-x-5 gap-y-2 text-sm text-white/85"
-            initial={reduceMotion ? false : { opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.4, delay: 0.32 }}
-          >
-            {content.trustItems.map((item) => (
-              <li key={item} className="flex items-center gap-2">
-                <span className="size-1.5 rounded-full bg-[var(--afd-gold)]" aria-hidden />
-                {item}
-              </li>
-            ))}
-          </motion.ul>
-
-          <motion.p
-            className="mt-4 max-w-xl text-xs leading-relaxed text-white/70"
-            initial={reduceMotion ? false : { opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.35, delay: 0.4 }}
-          >
-            {content.institutionalNote}
-          </motion.p>
-
           {content.image.isTemporary ? (
-            <p className="mt-4 text-[11px] text-white/55">{content.image.credit}</p>
+            <p className="mt-6 text-[11px] text-white/55">{content.image.credit}</p>
           ) : null}
         </div>
 
-        <a
-          href="#presentation-afd"
-          className="absolute bottom-8 left-1/2 hidden -translate-x-1/2 items-center gap-2 text-xs font-medium text-white/70 transition hover:text-white md:inline-flex"
+        <motion.aside
+          className="hidden lg:col-span-5 lg:flex lg:justify-end"
+          initial={reduceMotion ? false : { opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.45, delay: 0.28 }}
         >
-          Découvrir
-          <ArrowDown className="size-3.5" aria-hidden />
-        </a>
+          <div className="max-w-sm rounded-2xl bg-white p-5 text-[var(--afd-ink)] shadow-[0_12px_40px_rgba(10,40,75,0.18)]">
+            <div className="inline-flex size-10 items-center justify-center rounded-full bg-[var(--afd-accent-soft)] text-[var(--afd-accent)]">
+              <UsersRound className="size-5" aria-hidden />
+            </div>
+            <p className="mt-3 text-sm font-semibold leading-snug text-[var(--afd-accent-strong)]">
+              80 % de femmes et de jeunes au Conseil d’administration
+            </p>
+            <p className="mt-2 text-sm leading-relaxed text-[var(--afd-muted)]">
+              Leadership engagé, innovant et ancré dans les réalités locales.
+            </p>
+          </div>
+        </motion.aside>
       </SiteContainer>
     </section>
   );

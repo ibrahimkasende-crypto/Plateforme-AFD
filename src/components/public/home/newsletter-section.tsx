@@ -85,134 +85,118 @@ export function NewsletterSection() {
   }
 
   return (
-    <Section className="bg-white">
+    <Section className="bg-[var(--afd-accent)] py-10 md:py-12">
       <SiteContainer>
         <FadeIn>
-          <div className="overflow-hidden rounded-2xl border border-[var(--afd-border)] bg-[linear-gradient(135deg,#0f355f_0%,#1a4f8c_100%)] p-8 text-white md:p-10">
-            <div className="grid gap-8 lg:grid-cols-2">
-              <div>
-                <h2 className="font-display text-3xl font-semibold tracking-tight">
-                  {homeContent.newsletter.title}
-                </h2>
-                <p className="mt-3 text-sm leading-relaxed text-white/80 md:text-base">
-                  {homeContent.newsletter.description}
-                </p>
+          <div className="grid items-center gap-8 text-white lg:grid-cols-12">
+            <div className="lg:col-span-5">
+              <h2 className="font-display text-2xl font-semibold tracking-tight md:text-3xl">
+                {homeContent.newsletter.title}
+              </h2>
+              <p className="mt-2 text-sm leading-relaxed text-white/80">
+                {homeContent.newsletter.description}
+              </p>
+            </div>
+
+            <form
+              onSubmit={handleSubmit(onSubmit)}
+              className="space-y-3 lg:col-span-7"
+              noValidate
+            >
+              <div className="absolute -left-[9999px]" aria-hidden>
+                <label htmlFor="newsletter-website">Site web</label>
+                <input
+                  id="newsletter-website"
+                  type="text"
+                  tabIndex={-1}
+                  autoComplete="off"
+                  {...register("website")}
+                />
               </div>
 
-              <form
-                onSubmit={handleSubmit(onSubmit)}
-                className="space-y-4"
-                noValidate
-              >
-                <div className="absolute -left-[9999px]" aria-hidden>
-                  <label htmlFor="newsletter-website">Site web</label>
+              <div className="flex flex-col gap-3 sm:flex-row">
+                <div className="flex-1">
+                  <label htmlFor="newsletter-name" className="sr-only">
+                    Votre nom
+                  </label>
                   <input
-                    id="newsletter-website"
+                    id="newsletter-name"
                     type="text"
-                    tabIndex={-1}
-                    autoComplete="off"
-                    {...register("website")}
+                    placeholder="Votre nom"
+                    className="min-h-11 w-full rounded-lg border-0 bg-white px-3 text-sm text-[var(--afd-ink)] placeholder:text-[var(--afd-muted)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+                    {...register("name")}
                   />
                 </div>
-
-                <div className="grid gap-3 sm:grid-cols-2">
-                  <div>
-                    <label
-                      htmlFor="newsletter-name"
-                      className="mb-1.5 block text-xs font-medium text-white/80"
-                    >
-                      Prénom ou nom (facultatif)
-                    </label>
-                    <input
-                      id="newsletter-name"
-                      type="text"
-                      className="min-h-11 w-full rounded-lg border border-white/20 bg-white/10 px-3 text-sm text-white placeholder:text-white/45 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
-                      {...register("name")}
-                    />
-                  </div>
-                  <div>
-                    <label
-                      htmlFor="newsletter-email"
-                      className="mb-1.5 block text-xs font-medium text-white/80"
-                    >
-                      E-mail
-                    </label>
-                    <input
-                      id="newsletter-email"
-                      type="email"
-                      required
-                      aria-invalid={Boolean(errors.email)}
-                      aria-describedby={
-                        errors.email ? "newsletter-email-error" : undefined
-                      }
-                      className="min-h-11 w-full rounded-lg border border-white/20 bg-white/10 px-3 text-sm text-white placeholder:text-white/45 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
-                      {...register("email")}
-                    />
-                    {errors.email ? (
-                      <p
-                        id="newsletter-email-error"
-                        className="mt-1 text-xs text-amber-200"
-                      >
-                        {errors.email.message}
-                      </p>
-                    ) : null}
-                  </div>
-                </div>
-
-                <fieldset>
-                  <legend className="mb-2 text-xs font-medium text-white/80">
-                    Centres d’intérêt (facultatif)
-                  </legend>
-                  <div className="flex flex-wrap gap-2">
-                    {homeContent.newsletter.interests.map((interest) => {
-                      const active = selectedInterests.includes(interest.id);
-                      return (
-                        <button
-                          key={interest.id}
-                          type="button"
-                          onClick={() => toggleInterest(interest.id)}
-                          className={cn(
-                            "min-h-10 rounded-full border px-3 text-xs font-medium transition duration-150",
-                            active
-                              ? "border-white bg-white text-[var(--afd-accent-strong)]"
-                              : "border-white/25 text-white hover:bg-white/10",
-                          )}
-                          aria-pressed={active}
-                        >
-                          {interest.label}
-                        </button>
-                      );
-                    })}
-                  </div>
-                </fieldset>
-
-                <label className="flex items-start gap-3 text-xs leading-relaxed text-white/85">
+                <div className="flex-1">
+                  <label htmlFor="newsletter-email" className="sr-only">
+                    Votre e-mail
+                  </label>
                   <input
-                    type="checkbox"
-                    className="mt-0.5 size-4 rounded border-white/30"
-                    {...register("consent")}
+                    id="newsletter-email"
+                    type="email"
+                    required
+                    placeholder="Votre e-mail"
+                    aria-invalid={Boolean(errors.email)}
+                    aria-describedby={
+                      errors.email ? "newsletter-email-error" : undefined
+                    }
+                    className="min-h-11 w-full rounded-lg border-0 bg-white px-3 text-sm text-[var(--afd-ink)] placeholder:text-[var(--afd-muted)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+                    {...register("email")}
                   />
-                  <span>{homeContent.newsletter.consentLabel}</span>
-                </label>
-                {errors.consent ? (
-                  <p className="text-xs text-amber-200">
-                    {errors.consent.message}
-                  </p>
-                ) : null}
-
+                </div>
                 <button
                   type="submit"
                   disabled={pending}
-                  className="inline-flex min-h-11 items-center justify-center rounded-lg bg-[var(--afd-support)] px-5 text-sm font-semibold text-white transition duration-150 hover:bg-[var(--afd-support-strong)] disabled:opacity-60"
+                  className="inline-flex min-h-11 shrink-0 items-center justify-center rounded-lg bg-[var(--afd-support)] px-5 text-sm font-semibold text-white transition duration-150 hover:bg-[var(--afd-support-strong)] disabled:opacity-60"
                 >
-                  {pending ? "Inscription…" : "S’inscrire"}
+                  {pending ? "…" : "S’inscrire"}
                 </button>
+              </div>
 
-                <div aria-live="polite" className="min-h-5 text-xs text-white/75">
-                  {statusMessage}
-                </div>
-              </form>
-            </div>
+              {errors.email ? (
+                <p id="newsletter-email-error" className="text-xs text-amber-200">
+                  {errors.email.message}
+                </p>
+              ) : null}
+
+              <div className="flex flex-wrap gap-2">
+                {homeContent.newsletter.interests.map((interest) => {
+                  const active = selectedInterests.includes(interest.id);
+                  return (
+                    <button
+                      key={interest.id}
+                      type="button"
+                      onClick={() => toggleInterest(interest.id)}
+                      className={cn(
+                        "min-h-9 rounded-full border px-3 text-xs font-medium transition duration-150",
+                        active
+                          ? "border-white bg-white text-[var(--afd-accent-strong)]"
+                          : "border-white/30 text-white hover:bg-white/10",
+                      )}
+                      aria-pressed={active}
+                    >
+                      {interest.label}
+                    </button>
+                  );
+                })}
+              </div>
+
+              <label className="flex items-start gap-3 text-xs leading-relaxed text-white/85">
+                <input
+                  type="checkbox"
+                  className="mt-0.5 size-4 rounded border-white/30"
+                  {...register("consent")}
+                />
+                <span>{homeContent.newsletter.consentLabel}</span>
+              </label>
+              {errors.consent ? (
+                <p className="text-xs text-amber-200">{errors.consent.message}</p>
+              ) : null}
+
+              <div aria-live="polite" className="min-h-5 text-xs text-white/75">
+                {statusMessage}
+              </div>
+            </form>
           </div>
         </FadeIn>
       </SiteContainer>

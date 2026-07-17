@@ -118,16 +118,24 @@ export default function HomePage() {
       />
 
       <HomeHero />
-      <OrganizationIntroduction />
-      <InstitutionalHighlights />
 
-      <Suspense fallback={<HomeSectionSkeleton cards={6} className="bg-[var(--afd-accent-strong)]" />}>
+      <Suspense
+        fallback={
+          <div className="-mt-8 pb-4 md:-mt-12">
+            <HomeSectionSkeleton cards={6} />
+          </div>
+        }
+      >
         <StatsBlock />
       </Suspense>
 
+      <OrganizationIntroduction />
+      <InstitutionalHighlights />
       <InterventionPillars />
 
-      <Suspense fallback={<HomeSectionSkeleton cards={4} className="bg-[var(--afd-surface)]" />}>
+      <Suspense
+        fallback={<HomeSectionSkeleton cards={4} className="bg-[var(--afd-surface)]" />}
+      >
         <ProgramsBlock />
       </Suspense>
 
@@ -135,23 +143,31 @@ export default function HomePage() {
         <ProjectsBlock />
       </Suspense>
 
-      <Suspense fallback={<HomeSectionSkeleton cards={4} className="bg-[var(--afd-surface)]" />}>
-        <ZonesBlock />
-      </Suspense>
-
-      <Suspense fallback={<HomeSectionSkeleton cards={1} />}>
-        <StoryBlock />
-      </Suspense>
+      <div className="grid lg:grid-cols-1">
+        <Suspense
+          fallback={
+            <HomeSectionSkeleton cards={4} className="bg-[var(--afd-surface)]" />
+          }
+        >
+          <ZonesBlock />
+        </Suspense>
+        <Suspense fallback={<HomeSectionSkeleton cards={1} />}>
+          <StoryBlock />
+        </Suspense>
+      </div>
 
       <Suspense fallback={<HomeSectionSkeleton cards={3} />}>
         <NewsBlock />
       </Suspense>
 
-      <Suspense fallback={<HomeSectionSkeleton cards={5} className="bg-[var(--afd-surface)]" />}>
+      <NewsletterSection />
+
+      <Suspense
+        fallback={<HomeSectionSkeleton cards={5} className="bg-[var(--afd-surface)]" />}
+      >
         <PartnersBlock />
       </Suspense>
 
-      <NewsletterSection />
       <SupportActions />
     </>
   );
