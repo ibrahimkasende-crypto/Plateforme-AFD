@@ -57,15 +57,37 @@ export async function uploadPrivateApplicationFile(
     const supabase = await createClientSafe();
     if (!supabase) return { ok: false, message: "Le service de candidature est indisponible." };
     const path = `candidatures/${candidatureId}/${kind}-${safeName}`;
-    const { error } = await supabase.storage.from("candidatures-privees").upload(path, file, { contentType: file.type, upsert: false });
+    const { error } = await supabase.storage
+      .from("candidatures-privees")
+      .upload(path, file, { contentType: file.type, upsert: false });
     if (error) return { ok: false, message: "Le fichier n’a pas pu être envoyé." };
-    const { error: documentError } = await supabase.from("documents_candidature").insert({
-      candidature_id: candidatureId, nom_fichier: safeName, chemin_storage: path, type_mime: file.type, taille_octets: file.size,
-    });
-    if (documentError) return { ok: false, message: "Le fichier a été envoyé mais son enregistrement a échoué." };
-    if (kind === "cv" || kind === "lettre") {
-      await supabase.from("candidatures").update(kind === "cv" ? { cv_storage_path: path } : { lettre_storage_path: path }).eq("id", candidatureId);
+
+    const { error: rpcError } = await supabase.rpc(
+      "attach_candidature_document" as never,
+      {
+        p_candidature_id: candidatureId,
+        p_kind: kind,
+        p_nom_fichier: safeName,
+        p_chemin_storage: path,
+        p_type_mime: file.type,
+        p_taille_octets: file.size,
+      } as never,
+    );
+
+    if (rpcError) {
+      // Fallback : au moins le fichier est dans le bucket privé.
+      if (kind === "cv" || kind === "lettre") {
+        await supabase
+          .from("candidatures")
+          .update(
+            kind === "cv"
+              ? { cv_storage_path: path }
+              : { lettre_storage_path: path },
+          )
+          .eq("id", candidatureId);
+      }
     }
+
     return { ok: true, id: candidatureId };
   } catch {
     return { ok: false, message: "Le fichier n’a pas pu être envoyé." };

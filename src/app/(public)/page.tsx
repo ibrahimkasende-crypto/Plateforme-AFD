@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import { FeaturedPrograms } from "@/components/public/home/featured-programs";
-import { FeaturedProjects } from "@/components/public/home/featured-projects";
-import { FieldActions } from "@/components/public/home/field-actions";
+import { NewsletterGoogleReturn } from "@/components/newsletter/newsletter-google-return";
 import { HomeHero } from "@/components/public/home/home-hero";
 import { HomeSectionSkeleton } from "@/components/public/home/home-section-skeleton";
 import { ImpactAndNews } from "@/components/public/home/impact-and-news";
@@ -11,7 +9,7 @@ import { InterventionPillars } from "@/components/public/home/intervention-pilla
 import { InterventionZones } from "@/components/public/home/intervention-zones";
 import { NewsletterSection } from "@/components/public/home/newsletter-section";
 import { OrganizationIntroduction } from "@/components/public/home/organization-introduction";
-import { OpenOpportunities } from "@/components/public/home/open-opportunities";
+import { OpenOpportunitiesSection } from "@/components/public/home/open-opportunities-section";
 import { PartnersSection } from "@/components/public/home/partners-section";
 import { SupportActions } from "@/components/public/home/support-actions";
 import { homeContent } from "@/config/home-content";
@@ -19,8 +17,6 @@ import { siteConfig } from "@/config/site";
 import {
   getActivePartners,
   getFeaturedImpactStory,
-  getFeaturedPrograms,
-  getFeaturedProjects,
   getLatestPublishedNews,
   getPublicImpactStats,
 } from "@/lib/queries/home";
@@ -57,16 +53,6 @@ export const metadata: Metadata = {
 async function StatsBlock() {
   const stats = await getPublicImpactStats();
   return <ImpactStatistics stats={stats} />;
-}
-
-async function ProgramsBlock() {
-  const programs = await getFeaturedPrograms();
-  return <FeaturedPrograms programs={programs} />;
-}
-
-async function ProjectsBlock() {
-  const projects = await getFeaturedProjects();
-  return <FeaturedProjects projects={projects} />;
 }
 
 async function ZonesBlock() {
@@ -115,6 +101,10 @@ export default function HomePage() {
         }}
       />
 
+      <Suspense fallback={null}>
+        <NewsletterGoogleReturn />
+      </Suspense>
+
       <HomeHero />
 
       <Suspense
@@ -139,20 +129,6 @@ export default function HomePage() {
 
       <Suspense
         fallback={
-          <HomeSectionSkeleton cards={4} className="bg-[var(--afd-background)]" />
-        }
-      >
-        <ProgramsBlock />
-      </Suspense>
-
-      <FieldActions />
-
-      <Suspense fallback={<HomeSectionSkeleton cards={3} />}>
-        <ProjectsBlock />
-      </Suspense>
-
-      <Suspense
-        fallback={
           <HomeSectionSkeleton cards={4} className="bg-[var(--afd-surface)]" />
         }
       >
@@ -161,6 +137,14 @@ export default function HomePage() {
 
       <Suspense fallback={<HomeSectionSkeleton cards={4} />}>
         <ImpactNewsBlock />
+      </Suspense>
+
+      <Suspense
+        fallback={
+          <HomeSectionSkeleton cards={2} className="bg-[var(--afd-surface)]" />
+        }
+      >
+        <OpenOpportunitiesSection />
       </Suspense>
 
       <NewsletterSection />
@@ -174,9 +158,6 @@ export default function HomePage() {
       </Suspense>
 
       <SupportActions />
-      <Suspense fallback={null}>
-        <OpenOpportunities />
-      </Suspense>
     </>
   );
 }
