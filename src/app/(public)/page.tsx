@@ -4,6 +4,7 @@ import { NewsletterGoogleReturn } from "@/components/newsletter/newsletter-googl
 import { HomeHero } from "@/components/public/home/home-hero";
 import { HomeSectionSkeleton } from "@/components/public/home/home-section-skeleton";
 import { FeaturedPrograms } from "@/components/public/home/featured-programs";
+import { FieldActions } from "@/components/public/home/field-actions";
 import { ImpactAndNews } from "@/components/public/home/impact-and-news";
 import { ImpactStatistics } from "@/components/public/home/impact-statistics";
 import { InterventionPillars } from "@/components/public/home/intervention-pillars";
@@ -148,6 +149,10 @@ export default function HomePage() {
       >
         <ProgramsBlock />
       </Suspense>
+
+      <SectionDivider variant="line" className="my-2" />
+
+      <FieldActions />
 
       <SectionDivider variant="wave-soft" from="var(--afd-background)" to="var(--afd-surface)" />
 

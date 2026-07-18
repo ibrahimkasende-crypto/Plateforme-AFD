@@ -100,7 +100,7 @@ export function MobileNavigation() {
             aria-modal="true"
             aria-label="Menu de navigation"
             data-testid="mobile-menu-panel"
-            className="afd-drawer-panel absolute inset-y-0 right-0 flex w-[min(100%,88vw)] max-w-sm flex-col bg-[var(--afd-surface-elevated)] pb-[env(safe-area-inset-bottom)] shadow-[0_0_40px_rgba(15,39,68,0.12)]"
+            className="afd-drawer-panel absolute right-0 top-0 flex h-[100dvh] max-h-[100dvh] w-[min(100%,90vw)] max-w-sm flex-col bg-[var(--afd-surface-elevated)] pb-[env(safe-area-inset-bottom)] pt-[env(safe-area-inset-top)] shadow-[0_0_40px_rgba(15,39,68,0.12)]"
           >
             <div className="flex items-center justify-between border-b border-[var(--afd-border)] px-4 py-3">
               <HeaderLogo compact />

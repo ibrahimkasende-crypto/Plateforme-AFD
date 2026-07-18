@@ -28,8 +28,14 @@ export function ProvinceDetails({
         )}
       >
         <p className="text-sm text-[var(--afd-muted)]">
-          Survolez une province bleue sur la carte pour voir ses données. Cliquez
-          pour la sélectionner.
+          <span className="md:hidden">
+            Touchez une province bleue sur la carte pour afficher ses données
+            ici.
+          </span>
+          <span className="hidden md:inline">
+            Survolez une province bleue pour un aperçu, puis cliquez pour la
+            sélectionner.
+          </span>
         </p>
       </div>
     );

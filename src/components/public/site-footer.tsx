@@ -212,8 +212,8 @@ export function SiteFooter() {
       />
 
       <SiteContainer className="py-10 md:py-12">
-        <div className="grid gap-8 lg:grid-cols-[1.4fr_1fr_1fr_1fr] lg:gap-10">
-          <div className="max-w-md">
+        <div className="grid gap-8 lg:grid-cols-[minmax(0,1.35fr)_minmax(0,1fr)] lg:gap-10 xl:grid-cols-[minmax(0,1.2fr)_repeat(4,minmax(0,1fr))]">
+          <div className="max-w-md lg:col-span-1">
             <Link href="/" className="inline-flex items-center gap-3">
               <Image
                 src={siteConfig.logo.src}
@@ -261,60 +261,80 @@ export function SiteFooter() {
             </ul>
           </div>
 
-          <FooterAccordion title="Explorer" defaultOpen>
-            <ul className="space-y-1 text-sm text-white/78">
-              {publicNavigation.map((item) => (
-                <li key={item.href}>
-                  <Link
-                    href={item.href}
-                    className="inline-flex min-h-9 items-center transition hover:text-white md:min-h-0 md:py-1"
-                  >
-                    {item.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </FooterAccordion>
-
-          <FooterAccordion title="Nos actions">
-            <ul className="space-y-1 text-sm text-white/78">
-              {(actionLinks.length > 0
-                ? actionLinks
-                : homeContent.pillars.map((pillar) => ({
-                    label: pillar.title,
-                    href: "/actions",
-                  }))
-              ).map((item) => (
-                <li key={`${item.label}-${item.href}`}>
-                  {"href" in item && item.href ? (
+          <div className="grid gap-0 lg:col-span-1 lg:grid lg:grid-cols-2 lg:gap-8 xl:contents">
+            <FooterAccordion title="Liens rapides" defaultOpen>
+              <ul className="space-y-1 text-sm text-white/78">
+                {publicNavigation.map((item) => (
+                  <li key={item.href}>
                     <Link
                       href={item.href}
-                      className="inline-flex min-h-9 items-center transition hover:text-white md:min-h-0 md:py-1"
+                      className="inline-flex min-h-11 items-center text-[14px] transition hover:text-white md:min-h-0 md:py-1"
                     >
                       {item.label}
                     </Link>
-                  ) : (
-                    <span className="inline-flex py-1">{item.label}</span>
-                  )}
-                </li>
-              ))}
-            </ul>
-          </FooterAccordion>
+                  </li>
+                ))}
+              </ul>
+            </FooterAccordion>
 
-          <FooterAccordion title="S’engager">
-            <ul className="space-y-1 text-sm text-white/78">
-              {footerLinks.quick.map((link) => (
-                <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    className="inline-flex min-h-9 items-center transition hover:text-white md:min-h-0 md:py-1"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </FooterAccordion>
+            <FooterAccordion title="Nos actions">
+              <ul className="space-y-1 text-sm text-white/78">
+                {(actionLinks.length > 0
+                  ? actionLinks
+                  : homeContent.pillars.map((pillar) => ({
+                      label: pillar.title,
+                      href: "/actions",
+                    }))
+                ).map((item) => (
+                  <li key={`${item.label}-${item.href}`}>
+                    {"href" in item && item.href ? (
+                      <Link
+                        href={item.href}
+                        className="inline-flex min-h-11 items-center text-[14px] transition hover:text-white md:min-h-0 md:py-1"
+                      >
+                        {item.label}
+                      </Link>
+                    ) : (
+                      <span className="inline-flex py-1">{item.label}</span>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </FooterAccordion>
+
+            <FooterAccordion title="Ressources">
+              <ul className="space-y-1 text-sm text-white/78">
+                {(
+                  publicNavigation.find((item) => item.href === "/ressources")
+                    ?.children ?? []
+                ).map((link) => (
+                  <li key={link.href}>
+                    <Link
+                      href={link.href}
+                      className="inline-flex min-h-11 items-center text-[14px] transition hover:text-white md:min-h-0 md:py-1"
+                    >
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </FooterAccordion>
+
+            <FooterAccordion title="Nous rejoindre">
+              <ul className="space-y-1 text-sm text-white/78">
+                {footerLinks.quick.map((link) => (
+                  <li key={link.href}>
+                    <Link
+                      href={link.href}
+                      className="inline-flex min-h-11 items-center text-[14px] transition hover:text-white md:min-h-0 md:py-1"
+                    >
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </FooterAccordion>
+          </div>
         </div>
 
         <FooterEngageBar />

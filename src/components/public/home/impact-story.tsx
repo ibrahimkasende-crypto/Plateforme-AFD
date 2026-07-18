@@ -15,7 +15,7 @@ export function ImpactStory({ story }: { story: FeaturedImpactStory }) {
     return (
       <Section className="bg-[var(--afd-surface-elevated)]">
         <SiteContainer>
-          <div className="rounded-2xl border border-dashed border-[var(--afd-border)] bg-[var(--afd-surface)] p-8">
+          <div className="rounded-2xl border border-dashed border-[var(--afd-border)] bg-[var(--afd-surface)] p-6 sm:p-8">
             <p className="text-xs font-semibold uppercase tracking-wide text-[var(--afd-accent)]">
               Développement
             </p>
@@ -37,26 +37,25 @@ export function ImpactStory({ story }: { story: FeaturedImpactStory }) {
     <Section className="bg-[var(--afd-surface-elevated)]">
       <SiteContainer>
         <FadeIn>
-          <div className="grid overflow-hidden rounded-2xl border border-[var(--afd-border)] lg:grid-cols-2">
-            <div className="relative min-h-72 bg-[var(--afd-accent-soft)]">
+          {/* Mobile : carte verticale ; desktop : split horizontal */}
+          <article className="grid overflow-hidden rounded-[18px] border border-[var(--afd-border)] bg-white shadow-[0_10px_32px_rgba(6,38,83,0.06)] lg:grid-cols-2 lg:rounded-2xl">
+            <div className="relative aspect-[4/3] bg-[var(--afd-accent-soft)] sm:aspect-[4/5] lg:aspect-auto lg:min-h-[22rem]">
               {story.imageUrl ? (
                 <Image
                   src={story.imageUrl}
                   alt=""
                   fill
                   sizes="(max-width:1024px) 100vw, 50vw"
-                  className="object-cover"
+                  className="object-cover object-[50%_30%]"
                 />
               ) : null}
             </div>
-            <div className="flex flex-col justify-center p-8 md:p-10">
-              <p className="text-sm font-semibold uppercase tracking-[0.14em] text-[var(--afd-accent)]">
+            <div className="flex flex-col justify-center p-5 sm:p-8 md:p-10">
+              <p className="afd-label text-[var(--afd-accent)]">
                 Histoire d’impact
               </p>
-              <h2 className="font-display mt-3 text-3xl font-semibold text-[var(--afd-ink)]">
-                {story.title}
-              </h2>
-              <p className="mt-4 text-base leading-relaxed text-[var(--afd-muted)]">
+              <h2 className="afd-h2 mt-3">{story.title}</h2>
+              <p className="mt-4 text-[length:var(--text-body)] leading-relaxed text-[var(--afd-muted)] text-pretty">
                 {story.excerpt}
               </p>
               {story.location ? (
@@ -72,7 +71,7 @@ export function ImpactStory({ story }: { story: FeaturedImpactStory }) {
                 <ArrowRight className="size-4" aria-hidden />
               </Link>
             </div>
-          </div>
+          </article>
         </FadeIn>
       </SiteContainer>
     </Section>

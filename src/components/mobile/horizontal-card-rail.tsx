@@ -1,9 +1,10 @@
 "use client";
 
-import { useRef, type ReactNode } from "react";
+import { Children, useRef, type ReactNode } from "react";
 import { visualEffects } from "@/config/visual-effects";
 import { useHorizontalScrollState } from "@/hooks/use-horizontal-scroll-state";
 import { cn } from "@/lib/utils";
+import { HorizontalRailItem } from "./horizontal-rail-item";
 import { HorizontalScrollIndicator } from "./horizontal-scroll-indicator";
 
 export function HorizontalCardRail({
@@ -12,19 +13,32 @@ export function HorizontalCardRail({
   itemClassName,
   label,
   showIndicator = true,
+  showControls,
   desktopClassName,
+  itemWidth,
+  gap,
+  align = "start",
+  featuredFirst = false,
 }: {
-  children: ReactNode[];
+  children: ReactNode[] | ReactNode;
   className?: string;
   itemClassName?: string;
   label: string;
   showIndicator?: boolean;
-  /** Classes grille desktop (md+). */
+  showControls?: boolean;
   desktopClassName?: string;
+  /** Classe largeur item mobile (override). */
+  itemWidth?: string;
+  gap?: string;
+  align?: "start" | "center";
+  /** Première carte un peu plus large (actions terrain). */
+  featuredFirst?: boolean;
 }) {
+  const items = Children.toArray(children);
   const scrollerRef = useRef<HTMLDivElement>(null);
   const enabled = visualEffects.mobileHorizontalRails.enabled;
-  const scroll = useHorizontalScrollState(scrollerRef, children.length);
+  const scroll = useHorizontalScrollState(scrollerRef, items.length);
+  const indicator = showControls ?? showIndicator;
 
   if (!enabled) {
     return (
@@ -34,7 +48,7 @@ export function HorizontalCardRail({
           className,
         )}
       >
-        {children}
+        {items}
       </div>
     );
   }
@@ -47,28 +61,32 @@ export function HorizontalCardRail({
         aria-label={label}
         tabIndex={0}
         className={cn(
-          "afd-h-rail flex gap-[var(--afd-rail-gap,1rem)] overflow-x-auto overscroll-x-contain pb-1",
-          "snap-x snap-mandatory scroll-px-4 px-4 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden",
+          "afd-h-rail flex overflow-x-auto overscroll-x-contain pb-1",
+          "snap-x snap-mandatory scroll-px-[var(--mobile-gutter)] px-[var(--mobile-gutter)]",
+          "[-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden",
           "md:grid md:gap-5 md:overflow-visible md:px-0 md:pb-0 md:snap-none",
           desktopClassName ?? "md:grid-cols-2 lg:grid-cols-3",
         )}
+        style={{ gap: gap ?? "var(--card-gap-mobile)" }}
       >
-        {children.map((child, index) => (
-          <div
+        {items.map((child, index) => (
+          <HorizontalRailItem
             key={index}
-            className={cn(
-              "w-[min(86vw,22.5rem)] shrink-0 snap-start",
-              "max-[360px]:w-[min(88vw,22.5rem)]",
-              "md:w-auto md:shrink md:snap-align-none",
-              itemClassName,
-            )}
+            featured={featuredFirst && index === 0}
+            widthClassName={
+              itemWidth ??
+              (align === "center"
+                ? "w-[min(82vw,22rem)] snap-center"
+                : "w-[min(84vw,22.5rem)] max-[360px]:w-[min(88vw,22.5rem)]")
+            }
+            className={itemClassName}
           >
             {child}
-          </div>
+          </HorizontalRailItem>
         ))}
       </div>
-      {showIndicator ? (
-        <div className="mt-3 px-4 md:hidden">
+      {indicator ? (
+        <div className="mt-3 px-[var(--mobile-gutter)] md:hidden">
           <HorizontalScrollIndicator
             label={label}
             canScrollPrev={scroll.canScrollPrev}

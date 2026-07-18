@@ -1,21 +1,24 @@
-import { cn } from "@/lib/utils";
 import type { ReactNode } from "react";
+import { cn } from "@/lib/utils";
 
-export function SiteContainer({
+export function ResponsiveSection({
   children,
   className,
+  id,
 }: {
   children: ReactNode;
   className?: string;
+  id?: string;
 }) {
   return (
-    <div
+    <section
+      id={id}
       className={cn(
-        "mx-auto w-full max-w-[var(--afd-container)] px-[var(--mobile-gutter,1rem)] sm:px-6 md:px-8 xl:px-12",
+        "py-[var(--section-space-mobile)] md:py-[var(--afd-section-y)]",
         className,
       )}
     >
       {children}
-    </div>
+    </section>
   );
 }

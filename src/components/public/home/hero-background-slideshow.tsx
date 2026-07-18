@@ -1,6 +1,12 @@
 "use client";
 
-import { useEffect, useRef, useState, type PointerEvent } from "react";
+import {
+  useEffect,
+  useRef,
+  useState,
+  type CSSProperties,
+  type PointerEvent,
+} from "react";
 import Image from "next/image";
 import {
   AnimatePresence,
@@ -148,8 +154,12 @@ export function HeroBackgroundSlideshow({
             fill
             priority
             sizes="100vw"
-            className="object-cover"
-            style={{ objectPosition: active.objectPosition }}
+            className="object-cover object-[65%_center] md:object-[58%_center] lg:[object-position:var(--hero-focal)]"
+            style={
+              {
+                "--hero-focal": active.objectPosition,
+              } as CSSProperties
+            }
           />
         </div>
       ) : (
@@ -201,8 +211,12 @@ export function HeroBackgroundSlideshow({
                   fill
                   priority={index === 0}
                   sizes="100vw"
-                  className="object-cover"
-                  style={{ objectPosition: active.objectPosition }}
+                  className="object-cover object-[65%_center] md:object-[58%_center] lg:[object-position:var(--hero-focal)]"
+                  style={
+                    {
+                      "--hero-focal": active.objectPosition,
+                    } as CSSProperties
+                  }
                 />
               </motion.div>
             </AnimatePresence>

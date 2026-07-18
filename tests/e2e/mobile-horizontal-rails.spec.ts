@@ -1,8 +1,16 @@
 import { expect, test } from "@playwright/test";
 
 test.describe("Rails horizontaux mobiles", () => {
-  test.use({ viewport: { width: 390, height: 844 } });
   test.describe.configure({ timeout: 60_000 });
+
+  test.beforeEach(async ({ page }) => {
+    await page.addInitScript(() => {
+      window.sessionStorage.setItem("afd_newsletter_seen_session", "true");
+      window.sessionStorage.setItem("afd_loader_seen", "true");
+      document.cookie =
+        "afd_newsletter_subscribed=true; path=/; max-age=31536000";
+    });
+  });
 
   test("accueil sans débordement horizontal global", async ({ page }) => {
     await page.goto("/", { waitUntil: "domcontentloaded" });
@@ -14,15 +22,15 @@ test.describe("Rails horizontaux mobiles", () => {
     expect(overflow).toBeTruthy();
   });
 
-  test("région domaines scrollable si présente", async ({ page }) => {
+  test("région domaines scrollable sur téléphone", async ({ page, viewport }) => {
+    test.skip((viewport?.width ?? 1440) >= 768, "Rail horizontal réservé au mobile");
+
     await page.goto("/", { waitUntil: "domcontentloaded" });
     const rail = page.getByRole("region", { name: /domaines d’intervention/i });
-    if ((await rail.count()) > 0) {
-      await expect(rail.first()).toBeVisible();
-      const hasOverflow = await rail
-        .first()
-        .evaluate((el) => el.scrollWidth > el.clientWidth - 1);
-      expect(hasOverflow).toBeTruthy();
-    }
+    await expect(rail).toBeVisible({ timeout: 15_000 });
+    const hasOverflow = await rail.evaluate(
+      (el) => el.scrollWidth > el.clientWidth - 1,
+    );
+    expect(hasOverflow).toBeTruthy();
   });
 });

@@ -20,7 +20,7 @@ function InstitutionalCard({
     <div
       className={cn(
         className ??
-          "w-full rounded-[16px] border border-[var(--afd-sky)]/50 bg-white p-5 text-[#10233f] shadow-[0_14px_36px_rgba(3,27,60,0.28)] sm:max-w-md lg:max-w-[14.5rem] lg:p-3.5",
+          "w-full rounded-[18px] border border-[var(--afd-sky)]/50 bg-white p-[1.125rem] text-[#10233f] shadow-[0_14px_36px_rgba(3,27,60,0.28)] sm:max-w-md sm:p-5 lg:max-w-[14.5rem] lg:rounded-[16px] lg:p-3.5",
         breathe && "afd-card-breathe",
       )}
     >
@@ -146,7 +146,7 @@ export function HomeHero() {
         />
       </div>
 
-      <SiteContainer className="pointer-events-none relative z-20 grid min-h-[min(92svh,640px)] content-end gap-5 py-8 pb-[max(2rem,env(safe-area-inset-bottom))] sm:min-h-[640px] sm:content-center sm:gap-6 sm:py-14 md:min-h-[640px] lg:min-h-[660px] lg:grid-cols-12 lg:content-center lg:gap-10 lg:py-0">
+      <SiteContainer className="pointer-events-none relative z-20 grid min-h-[min(100dvh,720px)] content-end gap-5 py-8 pb-[max(2rem,env(safe-area-inset-bottom))] max-[360px]:min-h-[620px] sm:min-h-[640px] sm:content-center sm:gap-6 sm:py-14 md:min-h-[640px] lg:min-h-[660px] lg:grid-cols-12 lg:content-center lg:gap-10 lg:py-0">
         <div className="pointer-events-auto min-w-0 lg:col-span-7 xl:col-span-7">
           <motion.span
             className="afd-label inline-flex max-w-full rounded-md border border-white/35 bg-[var(--afd-blue)] px-3 py-1.5 text-[11px] text-white shadow-[0_4px_16px_rgba(8,119,209,0.45)] sm:px-3.5"
@@ -175,21 +175,21 @@ export function HomeHero() {
           </motion.p>
 
           <motion.div
-            className="mt-6 flex flex-col gap-3 min-[400px]:flex-row min-[400px]:flex-wrap sm:mt-8"
+            className="mt-6 flex flex-col gap-3 min-[390px]:flex-row min-[390px]:flex-wrap sm:mt-8"
             initial={reduceMotion ? false : { opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.35, delay: 0.18 }}
           >
             <Link
               href={content.primaryCta.href}
-              className="afd-btn-text inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-lg bg-[var(--afd-blue)] px-5 py-3 text-white shadow-[0_8px_24px_rgba(8,119,209,0.55)] transition-colors duration-180 hover:bg-[var(--afd-blue-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--afd-sky)] focus-visible:ring-offset-2 focus-visible:ring-offset-[#031b3c] min-[400px]:w-auto"
+              className="afd-btn-text inline-flex min-h-[50px] w-full items-center justify-center gap-2 rounded-lg bg-[var(--afd-blue)] px-5 py-3 text-white shadow-[0_8px_24px_rgba(8,119,209,0.55)] transition-colors duration-180 hover:bg-[var(--afd-blue-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--afd-sky)] focus-visible:ring-offset-2 focus-visible:ring-offset-[#031b3c] min-[390px]:w-auto"
             >
               {content.primaryCta.label}
               <ArrowRight className="size-4 shrink-0" aria-hidden />
             </Link>
             <Link
               href={content.secondaryCta.href}
-              className="afd-btn-text inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-lg border-2 border-[var(--afd-sky)] bg-white px-5 py-3 text-[var(--afd-blue)] shadow-[0_8px_24px_rgba(255,255,255,0.28)] transition-colors duration-180 hover:bg-[#eaf6ff] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#031b3c] min-[400px]:w-auto"
+              className="afd-btn-text inline-flex min-h-[50px] w-full items-center justify-center gap-2 rounded-lg border-2 border-[var(--afd-sky)] bg-white px-5 py-3 text-[var(--afd-blue)] shadow-[0_8px_24px_rgba(255,255,255,0.28)] transition-colors duration-180 hover:bg-[#eaf6ff] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#031b3c] min-[390px]:w-auto"
             >
               <Handshake className="size-4 shrink-0" aria-hidden />
               {content.secondaryCta.label}

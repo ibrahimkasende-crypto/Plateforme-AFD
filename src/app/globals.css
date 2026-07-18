@@ -40,6 +40,16 @@
   --afd-mobile-card-w: min(86vw, 22.5rem);
   --afd-mobile-gutter: 1rem;
 
+  /* Tokens responsive adaptatif (spec mobile-first) */
+  --mobile-gutter: clamp(1rem, 4vw, 1.25rem);
+  --section-space-mobile: clamp(3.5rem, 12vw, 4.75rem);
+  --card-gap-mobile: clamp(0.875rem, 3vw, 1.125rem);
+  --text-hero: clamp(2.05rem, 9vw, 2.75rem);
+  --text-section: clamp(1.55rem, 7vw, 2.25rem);
+  --text-card-title: clamp(1.05rem, 4.5vw, 1.35rem);
+  --text-body: clamp(0.94rem, 2.8vw, 1.05rem);
+  --afd-rail-gap: var(--card-gap-mobile);
+
   --background: var(--afd-background);
   --foreground: var(--afd-text);
   color-scheme: light;
@@ -129,15 +139,21 @@ h3 {
   font-family: var(--font-heading), "Segoe UI", sans-serif;
   font-weight: 800;
   letter-spacing: -0.025em;
-  line-height: 1.1;
-  font-size: clamp(1.55rem, 7.2vw, 3.35rem);
+  line-height: 1.08;
+  font-size: var(--text-hero);
   max-width: 40rem;
+  text-wrap: balance;
 }
 
-@media (min-width: 640px) {
+@media (max-width: 359px) {
   .afd-h1-hero {
-    line-height: 1.08;
-    font-size: clamp(1.85rem, 5vw, 3.35rem);
+    font-size: clamp(1.85rem, 8.5vw, 2.125rem);
+  }
+}
+
+@media (min-width: 1024px) {
+  .afd-h1-hero {
+    font-size: clamp(2.25rem, 4vw, 3.35rem);
   }
 }
 
@@ -145,17 +161,19 @@ h3 {
   font-family: var(--font-heading), "Segoe UI", sans-serif;
   font-weight: 800;
   letter-spacing: -0.02em;
-  line-height: 1.2;
+  line-height: 1.15;
   color: var(--afd-navy);
-  font-size: clamp(1.55rem, 5vw, 2.25rem);
+  font-size: var(--text-section);
+  text-wrap: balance;
 }
 
 .afd-h3 {
   font-family: var(--font-heading), "Segoe UI", sans-serif;
   font-weight: 700;
   line-height: 1.25;
-  font-size: clamp(1.0625rem, 0.95rem + 0.4vw, 1.25rem);
+  font-size: var(--text-card-title);
   color: var(--afd-navy);
+  text-wrap: balance;
 }
 
 .afd-nav-link {
