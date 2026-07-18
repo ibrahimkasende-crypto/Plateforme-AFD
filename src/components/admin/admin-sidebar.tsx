@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -27,6 +28,7 @@ import {
 import { adminSidebarItems } from "@/config/admin-navigation";
 import type { AdminNavBadgeKey } from "@/config/admin-navigation";
 import { navItemAllowed } from "@/config/admin-nav-permissions";
+import { siteConfig } from "@/config/site";
 import { roleHasPermission } from "@/config/permissions";
 import type { Role } from "@/config/roles";
 import type { SidebarBadges } from "@/features/statistiques/types/dashboard";
@@ -152,12 +154,21 @@ export function AdminSidebar({ badges, role, className, onNavigate }: AdminSideb
     >
       <div className="border-b border-white/10 px-5 py-5">
         <div className="flex items-center gap-3">
-          <div className="flex size-11 items-center justify-center rounded-full bg-white text-sm font-bold text-[#0d254e]">
-            AFD
+          <div className="relative size-12 shrink-0 overflow-hidden rounded-full bg-white ring-2 ring-white/25">
+            <Image
+              src={siteConfig.logo.src}
+              alt={siteConfig.logo.alt}
+              width={48}
+              height={48}
+              className="size-full object-cover"
+              priority
+            />
           </div>
-          <div>
-            <p className="font-display text-base font-semibold leading-tight">AFD ASBL</p>
-            <p className="text-xs text-white/60">Administration</p>
+          <div className="min-w-0">
+            <p className="font-display text-base font-semibold leading-tight">
+              {siteConfig.shortName}
+            </p>
+            <p className="truncate text-xs text-white/60">Administration</p>
           </div>
         </div>
       </div>

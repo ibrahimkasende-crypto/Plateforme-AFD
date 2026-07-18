@@ -1,19 +1,28 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { motion, useReducedMotion } from "motion/react";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, Handshake, UsersRound } from "lucide-react";
 import { homeContent } from "@/config/home-content";
 import { SiteContainer } from "@/components/shared/SiteContainer";
+import { cn } from "@/lib/utils";
 
-function InstitutionalCard({ className }: { className?: string }) {
+function InstitutionalCard({
+  className,
+  breathe = false,
+}: {
+  className?: string;
+  breathe?: boolean;
+}) {
   return (
     <div
-      className={
+      className={cn(
         className ??
-        "w-full rounded-[16px] border border-white/40 bg-white/70 p-5 text-[#10233f] shadow-[0_12px_28px_rgba(3,27,60,0.18)] backdrop-blur-md sm:max-w-md lg:max-w-[14.5rem] lg:p-3.5"
-      }
+          "w-full rounded-[16px] border border-white/40 bg-white/70 p-5 text-[#10233f] shadow-[0_12px_28px_rgba(3,27,60,0.18)] backdrop-blur-md sm:max-w-md lg:max-w-[14.5rem] lg:p-3.5",
+        breathe && "afd-card-breathe",
+      )}
     >
       <div className="inline-flex size-9 items-center justify-center rounded-full bg-[#eaf5fd] text-[#0877d1] lg:size-8">
         <UsersRound className="size-4 lg:size-3.5" aria-hidden />
@@ -28,6 +37,56 @@ function InstitutionalCard({ className }: { className?: string }) {
         Fait institutionnel — distinct des indicateurs d’impact terrain.
       </p>
     </div>
+  );
+}
+
+function TypewriterTitle({
+  text,
+  reduceMotion,
+}: {
+  text: string;
+  reduceMotion: boolean | null;
+}) {
+  const [typedCount, setTypedCount] = useState(0);
+  const visibleCount = reduceMotion ? text.length : typedCount;
+
+  useEffect(() => {
+    if (reduceMotion) return;
+
+    let index = 0;
+    let intervalId: number | undefined;
+
+    const startDelay = window.setTimeout(() => {
+      intervalId = window.setInterval(() => {
+        index += 1;
+        setTypedCount(index);
+        if (index >= text.length && intervalId !== undefined) {
+          window.clearInterval(intervalId);
+        }
+      }, 55);
+    }, 350);
+
+    return () => {
+      window.clearTimeout(startDelay);
+      if (intervalId !== undefined) window.clearInterval(intervalId);
+    };
+  }, [text, reduceMotion]);
+
+  const done = visibleCount >= text.length;
+
+  return (
+    <h1
+      className="afd-h1-hero mt-4 max-w-full break-words text-white sm:mt-5"
+      aria-label={text}
+    >
+      <span aria-hidden="true">
+        {text.slice(0, visibleCount)}
+        {!done && !reduceMotion ? (
+          <span className="ml-0.5 inline-block h-[0.9em] w-[0.08em] translate-y-[0.08em] animate-pulse bg-white align-middle" />
+        ) : null}
+      </span>
+      <span className="sr-only">{text}</span>
+    </h1>
   );
 }
 
@@ -83,14 +142,11 @@ export function HomeHero() {
             {content.eyebrow}
           </motion.span>
 
-          <motion.h1
-            className="afd-h1-hero mt-4 max-w-full break-words text-white sm:mt-5"
-            initial={reduceMotion ? false : { opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.45, delay: 0.06 }}
-          >
-            {content.title}
-          </motion.h1>
+          <TypewriterTitle
+            key={content.title}
+            text={content.title}
+            reduceMotion={reduceMotion}
+          />
 
           <motion.p
             className="mt-4 max-w-[40rem] text-[15px] leading-[1.6] text-white/90 sm:mt-5 sm:text-base md:text-lg"
@@ -148,7 +204,7 @@ export function HomeHero() {
             transition={{ duration: 0.35, delay: 0.28 }}
             aria-label="Gouvernance institutionnelle"
           >
-            <InstitutionalCard />
+            <InstitutionalCard breathe={!reduceMotion} />
           </motion.div>
         </div>
 
@@ -160,7 +216,7 @@ export function HomeHero() {
           transition={{ duration: 0.45, delay: 0.28 }}
           aria-label="Gouvernance institutionnelle"
         >
-          <InstitutionalCard />
+          <InstitutionalCard breathe={!reduceMotion} />
         </motion.aside>
       </SiteContainer>
     </section>

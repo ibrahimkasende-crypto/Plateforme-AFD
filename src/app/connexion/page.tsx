@@ -22,7 +22,7 @@ export default function ConnexionPage() {
   return (
     <AuthShell
       title="Administration Plateforme-AFD"
-      subtitle="Espace réservé aux équipes AFD"
+      subtitle="Connexion sécurisée réservée aux administrateurs et équipes autorisées de l’AFD ASBL."
     >
       <Suspense fallback={<LoginFormFallback />}>
         <LoginForm />

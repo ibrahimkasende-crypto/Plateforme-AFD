@@ -60,13 +60,36 @@ export async function signIn(input: unknown): Promise<AuthActionResult> {
     });
 
     if (error || !data.user) {
+      const code = error?.code ?? error?.message ?? "unknown";
       await logAdminActivity("auth.login_denied", {
-        reason: "invalid_credentials",
+        reason: String(code),
         email: parsed.data.email.toLowerCase(),
       });
+
+      const lowered = (error?.message ?? "").toLowerCase();
+      if (
+        lowered.includes("email not confirmed") ||
+        error?.code === "email_not_confirmed"
+      ) {
+        return {
+          ok: false,
+          message:
+            "Votre e-mail n’est pas encore confirmé. Dans Supabase → Authentication → Users, ouvrez votre compte et confirmez l’e-mail (ou cochez « Auto Confirm »).",
+        };
+      }
+
+      // En développement : afficher le détail Supabase pour diagnostiquer.
+      if (process.env.NODE_ENV === "development" && error?.message) {
+        return {
+          ok: false,
+          message: `Échec Auth Supabase : ${error.message}. Vérifiez que le user est bien dans le projet ADF_BD (ndkcywqihtnuoydwicrq) et que Email/Password est activé.`,
+        };
+      }
+
       return {
         ok: false,
-        message: "Identifiants incorrects ou compte inaccessible.",
+        message:
+          "Identifiants incorrects ou compte inaccessible. Vérifiez l’e-mail exact et le mot de passe, ou réinitialisez-le dans Supabase Auth.",
       };
     }
 

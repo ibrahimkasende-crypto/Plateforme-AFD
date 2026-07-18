@@ -36,7 +36,6 @@ export const siteConfig = {
   social: {
     facebook: "",
     linkedin: "",
-    twitter: "",
     youtube: "",
     tiktok: "",
   },

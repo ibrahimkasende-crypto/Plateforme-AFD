@@ -1,6 +1,7 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 import type { Database } from "@/types/database.types";
+import { getSupabasePublicEnv } from "@/lib/supabase/env";
 
 function isAdminPath(pathname: string): boolean {
   return pathname === "/admin" || pathname.startsWith("/admin/");
@@ -23,10 +24,9 @@ function isAuthPage(pathname: string): boolean {
 export async function middleware(request: NextRequest) {
   let supabaseResponse = NextResponse.next({ request });
 
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const key = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
+  const env = getSupabasePublicEnv();
 
-  if (!url || !key) {
+  if (!env) {
     if (isAdminPath(request.nextUrl.pathname)) {
       const loginUrl = request.nextUrl.clone();
       loginUrl.pathname = "/connexion";
@@ -36,7 +36,7 @@ export async function middleware(request: NextRequest) {
     return supabaseResponse;
   }
 
-  const supabase = createServerClient<Database>(url, key, {
+  const supabase = createServerClient<Database>(env.url, env.key, {
     cookies: {
       getAll() {
         return request.cookies.getAll();

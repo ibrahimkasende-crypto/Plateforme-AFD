@@ -13,7 +13,6 @@ import {
 } from "lucide-react";
 import { FadeIn } from "@/components/motion/FadeIn";
 import { SiteContainer } from "@/components/shared/SiteContainer";
-import { homeContent } from "@/config/home-content";
 import type { PublicImpactStats } from "@/lib/queries/home";
 import { cn } from "@/lib/utils";
 
@@ -121,9 +120,6 @@ export function ImpactStatistics({ stats }: { stats: PublicImpactStats }) {
                 );
               })}
             </div>
-            <p className="mt-4 border-t border-[var(--afd-border)] pt-3 text-[11px] text-[var(--afd-muted)] sm:mt-5">
-              {homeContent.statsDisclaimer} Aucun chiffre inventé n’est affiché.
-            </p>
           </div>
         </FadeIn>
       </SiteContainer>

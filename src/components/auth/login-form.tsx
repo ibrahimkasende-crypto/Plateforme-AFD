@@ -61,8 +61,15 @@ export function LoginForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4" noValidate>
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-5" noValidate>
       <input type="hidden" {...register("next")} />
+
+      <div className="border-b border-slate-100 pb-4">
+        <p className="text-sm font-semibold text-[#0d254e]">Connexion</p>
+        <p className="mt-1 text-xs text-slate-500">
+          Utilisez vos identifiants administrateur AFD.
+        </p>
+      </div>
 
       {errorMessage ? (
         <div

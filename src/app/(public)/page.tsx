@@ -19,10 +19,10 @@ import {
   getFeaturedImpactStory,
   getFeaturedPrograms,
   getFeaturedProjects,
-  getInterventionZones,
   getLatestPublishedNews,
   getPublicImpactStats,
 } from "@/lib/queries/home";
+import { getPublicInterventionZones } from "@/lib/queries/intervention-zones";
 
 export const metadata: Metadata = {
   title: {
@@ -68,8 +68,8 @@ async function ProjectsBlock() {
 }
 
 async function ZonesBlock() {
-  const zones = await getInterventionZones();
-  return <InterventionZones zones={zones} />;
+  const bundle = await getPublicInterventionZones();
+  return <InterventionZones bundle={bundle} />;
 }
 
 async function ImpactNewsBlock() {

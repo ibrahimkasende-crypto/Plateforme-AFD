@@ -205,6 +205,24 @@ h3 {
   animation: afd-heart-breathe 1.4s ease-in-out infinite;
 }
 
+@keyframes afd-card-breathe {
+  0%,
+  100% {
+    transform: scale(1) translateY(0);
+    box-shadow: 0 12px 28px rgba(3, 27, 60, 0.18);
+  }
+  50% {
+    transform: scale(1.025) translateY(-2px);
+    box-shadow: 0 18px 36px rgba(3, 27, 60, 0.26);
+  }
+}
+
+.afd-card-breathe {
+  animation: afd-card-breathe 3.6s ease-in-out infinite;
+  transform-origin: center center;
+  will-change: transform, box-shadow;
+}
+
 .afd-ring-pulse {
   animation: afd-ring-pulse 1.6s ease-out infinite;
 }
@@ -285,6 +303,7 @@ html.afd-custom-cursor * {
 @media (prefers-reduced-motion: reduce) {
   .afd-drawer-panel,
   .afd-heart-breathe,
+  .afd-card-breathe,
   .afd-ring-pulse,
   .afd-partners-track,
   .afd-hero-media,

@@ -1,22 +1,19 @@
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
 import type { Database } from "@/types/database.types";
+import { getSupabasePublicEnv } from "@/lib/supabase/env";
 
 /**
  * Client serveur « sûr » pour les pages publiques.
  * Retourne `null` si Supabase n’est pas configuré — la page ne plante pas.
  */
 export async function createClientSafe() {
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const key = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
-
-  if (!url || !key) {
-    return null;
-  }
+  const env = getSupabasePublicEnv();
+  if (!env) return null;
 
   const cookieStore = await cookies();
 
-  return createServerClient<Database>(url, key, {
+  return createServerClient<Database>(env.url, env.key, {
     cookies: {
       getAll() {
         return cookieStore.getAll();
