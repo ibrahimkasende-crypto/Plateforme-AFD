@@ -15,6 +15,7 @@ import { HorizontalCardRail } from "@/components/mobile/horizontal-card-rail";
 import { FadeIn } from "@/components/motion/FadeIn";
 import { StaggerContainer } from "@/components/motion/stagger-container";
 import { StaggerItem } from "@/components/motion/stagger-item";
+import { CqCard } from "@/components/public/cards/cq-card";
 import { SiteContainer } from "@/components/shared/SiteContainer";
 import {
   formatImpactStatValue,
@@ -106,15 +107,18 @@ export function ImpactStatistics({ stats }: { stats: PublicImpactStats }) {
 
   return (
     <section
-      aria-label="Chiffres clés"
+      aria-labelledby="afd-impact-stats-heading"
       className="relative z-10 -mt-6 pb-2 sm:-mt-8 md:-mt-14"
     >
       <SiteContainer>
+        <h2 id="afd-impact-stats-heading" className="sr-only">
+          Chiffres clés
+        </h2>
         <FadeIn>
           <div className="rounded-[16px] border border-[var(--afd-border)] bg-[var(--afd-surface-elevated)] px-3 py-5 shadow-[0_14px_44px_rgba(16,35,63,0.1)] sm:rounded-[20px] sm:px-4 sm:py-6 md:px-6 md:py-7">
             <StaggerContainer>
               <HorizontalCardRail
-                label="Chiffres clés"
+                label="Indicateurs d’impact"
                 desktopClassName="md:grid-cols-3 xl:grid-cols-6 xl:gap-0"
                 itemClassName="w-[min(78vw,280px)] md:w-auto"
                 className="-mx-3 md:mx-0"
@@ -126,34 +130,36 @@ export function ImpactStatistics({ stats }: { stats: PublicImpactStats }) {
 
                   return (
                     <StaggerItem key={card.key}>
-                      <div
-                        className={cn(
-                          "flex h-full min-w-0 flex-col items-start gap-1.5 rounded-xl bg-[var(--afd-background)]/60 px-3.5 py-3.5 xl:rounded-none xl:bg-transparent xl:px-4 xl:py-1",
-                          index > 0 && "xl:border-l xl:border-[var(--afd-border)]",
-                        )}
-                      >
-                        <Icon
-                          className="size-4 text-[var(--afd-blue)] sm:size-5"
-                          aria-hidden
-                        />
-                        <p
+                      <CqCard className="h-full">
+                        <div
                           className={cn(
-                            "font-heading text-[22px] font-extrabold tracking-tight text-[var(--afd-navy)] sm:text-2xl md:text-[1.65rem]",
-                            numeric == null && "text-[var(--afd-muted)]",
-                            getImpactStatFormat(card.key) === "plus-de" &&
-                              "text-[1.15rem] sm:text-[1.35rem] md:text-[1.4rem]",
+                            "flex h-full min-w-0 flex-col items-start gap-1.5 rounded-xl bg-[var(--afd-background)]/60 px-3.5 py-4 @min-[240px]/card:py-3.5 xl:rounded-none xl:bg-transparent xl:px-4 xl:py-1",
+                            index > 0 && "xl:border-l xl:border-[var(--afd-border)]",
                           )}
                         >
-                          {numeric != null ? (
-                            <AnimatedNumber value={numeric} formatKey={card.key} />
-                          ) : (
-                            "À renseigner"
-                          )}
-                        </p>
-                        <p className="max-w-full text-[12px] leading-snug text-[var(--afd-muted)] sm:text-[13px]">
-                          {card.label}
-                        </p>
-                      </div>
+                          <Icon
+                            className="size-4 text-[var(--afd-blue)] @min-[240px]/card:size-5"
+                            aria-hidden
+                          />
+                          <p
+                            className={cn(
+                              "font-heading text-[1.5rem] font-extrabold tracking-tight text-[var(--afd-navy)] @min-[240px]/card:text-[1.65rem] sm:text-2xl md:text-[1.65rem]",
+                              numeric == null && "text-[var(--afd-muted)]",
+                              getImpactStatFormat(card.key) === "plus-de" &&
+                                "text-[1.15rem] sm:text-[1.35rem] md:text-[1.4rem]",
+                            )}
+                          >
+                            {numeric != null ? (
+                              <AnimatedNumber value={numeric} formatKey={card.key} />
+                            ) : (
+                              "À renseigner"
+                            )}
+                          </p>
+                          <p className="max-w-full text-[12px] leading-snug text-[var(--afd-muted)] @min-[240px]/card:text-[13px]">
+                            {card.label}
+                          </p>
+                        </div>
+                      </CqCard>
                     </StaggerItem>
                   );
                 })}

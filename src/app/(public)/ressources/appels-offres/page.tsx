@@ -60,7 +60,7 @@ export default async function AppelsOffresPage({ searchParams }: PageProps) {
           name="q"
           defaultValue={q}
           placeholder="Rechercher un appel d’offres"
-          className="afd-field min-w-[220px] flex-1"
+          className="afd-field min-w-0 w-full flex-1 sm:min-w-[12rem]"
         />
         <select name="statut" defaultValue={statut} className="afd-field">
           <option value="">Tous les statuts</option>

@@ -125,7 +125,7 @@ export function ImpactImageBanner() {
 
         <div
           ref={scrollerRef}
-          className="flex cursor-grab touch-pan-x gap-3 overflow-x-auto px-4 pb-1 select-none active:cursor-grabbing [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden sm:gap-4 sm:px-6 lg:px-0"
+          className="afd-h-rail flex cursor-grab touch-pan-x snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-1 select-none active:cursor-grabbing [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden sm:gap-4 sm:px-6 lg:snap-none lg:px-0"
           onPointerDown={onPointerDown}
           onPointerMove={onPointerMove}
           onPointerUp={onPointerUp}
@@ -134,13 +134,13 @@ export function ImpactImageBanner() {
           {loopSlides.map((slide, index) => (
             <figure
               key={`${slide.image.src}-${index}`}
-              className="relative h-[180px] w-[min(78vw,280px)] shrink-0 overflow-hidden rounded-[18px] border border-[var(--afd-blue)]/10 bg-[var(--afd-navy)] shadow-[0_8px_24px_rgba(6,38,83,0.08)] sm:h-[200px] sm:w-[300px] md:h-[220px] md:w-[340px]"
+              className="relative h-[168px] w-[min(84vw,300px)] shrink-0 snap-start overflow-hidden rounded-[16px] border border-[var(--afd-blue)]/10 bg-[var(--afd-navy)] shadow-[0_8px_24px_rgba(6,38,83,0.08)] sm:h-[200px] sm:w-[300px] sm:rounded-[18px] md:h-[220px] md:w-[340px]"
             >
               <Image
                 src={slide.image.src}
                 alt={slide.image.alt}
                 fill
-                sizes="340px"
+                sizes="(max-width:768px) 84vw, 340px"
                 className="pointer-events-none object-cover"
                 style={{ objectPosition: slide.image.objectPosition }}
                 draggable={false}

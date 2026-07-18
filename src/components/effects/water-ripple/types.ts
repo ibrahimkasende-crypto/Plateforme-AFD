@@ -5,6 +5,7 @@ export type WaterRippleUniforms = {
   uIntensity: { value: number };
   uRadius: { value: number };
   uStrength: { value: number };
+  uSkyBoost: { value: number };
 };
 
 export type WaterRippleProps = {

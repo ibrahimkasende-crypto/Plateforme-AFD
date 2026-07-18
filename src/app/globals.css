@@ -34,8 +34,11 @@
 
   /* Layout */
   --afd-container: 1360px;
-  --afd-section-y: clamp(3.5rem, 5.5vw, 7rem);
-  --afd-section-gap: clamp(1.5rem, 3vw, 2.75rem);
+  /* Mobile-first : sections plus compactes sur téléphone */
+  --afd-section-y: clamp(2.75rem, 7vw, 7rem);
+  --afd-section-gap: clamp(1.25rem, 3vw, 2.75rem);
+  --afd-mobile-card-w: min(86vw, 22.5rem);
+  --afd-mobile-gutter: 1rem;
 
   --background: var(--afd-background);
   --foreground: var(--afd-text);
@@ -126,9 +129,16 @@ h3 {
   font-family: var(--font-heading), "Segoe UI", sans-serif;
   font-weight: 800;
   letter-spacing: -0.025em;
-  line-height: 1.08;
-  font-size: clamp(1.85rem, 6.5vw, 3.35rem);
+  line-height: 1.1;
+  font-size: clamp(1.55rem, 7.2vw, 3.35rem);
   max-width: 40rem;
+}
+
+@media (min-width: 640px) {
+  .afd-h1-hero {
+    line-height: 1.08;
+    font-size: clamp(1.85rem, 5vw, 3.35rem);
+  }
 }
 
 .afd-h2 {
@@ -379,6 +389,23 @@ body {
 .afd-h-rail {
   touch-action: pan-x pinch-zoom;
   -webkit-overflow-scrolling: touch;
+}
+
+/* Conteneurs de cartes — container queries (Tailwind @min-[…]/card) */
+.afd-cq,
+.afd-cq-card {
+  container-type: inline-size;
+  container-name: afd-card;
+  min-width: 0;
+}
+
+/* PageHero mobile-first */
+.afd-page-hero-title {
+  font-family: var(--font-heading), "Segoe UI", sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  font-size: clamp(1.5rem, 6.5vw, 3rem);
 }
 
 /* L’effet liquide ne doit jamais capturer les interactions */

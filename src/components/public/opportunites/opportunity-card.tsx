@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ArrowRight, Briefcase, CalendarClock, MapPin } from "lucide-react";
+import { CqCard } from "@/components/public/cards/cq-card";
 import type { Opportunity } from "@/features/opportunites/types";
 import { cn } from "@/lib/utils";
 
@@ -28,9 +29,10 @@ export function OpportunityCard({
       : opportunity.type.charAt(0).toUpperCase() + opportunity.type.slice(1);
 
   return (
-    <article
+    <CqCard
+      as="article"
       className={cn(
-        "group flex h-full flex-col rounded-[20px] border border-[var(--afd-border)] bg-white p-5 shadow-[0_10px_28px_rgba(6,38,83,0.05)] transition hover:border-[var(--afd-blue)]/30 hover:shadow-[0_14px_34px_rgba(6,38,83,0.08)] sm:p-6",
+        "group flex h-full flex-col rounded-[18px] border border-[var(--afd-border)] bg-white p-4 shadow-[0_10px_28px_rgba(6,38,83,0.05)] transition hover:border-[var(--afd-blue)]/30 hover:shadow-[0_14px_34px_rgba(6,38,83,0.08)] @min-[260px]/card:rounded-[20px] @min-[260px]/card:p-5 @min-[320px]/card:p-6",
         className,
       )}
     >
@@ -88,6 +90,6 @@ export function OpportunityCard({
           aria-hidden
         />
       </Link>
-    </article>
+    </CqCard>
   );
 }

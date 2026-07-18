@@ -33,13 +33,13 @@ export function FeaturedProjects({
             description="Les projets actifs apparaîtront ici dès leur publication."
           />
         ) : (
-          <div className="grid gap-4 lg:grid-cols-5">
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-5">
             {primary ? (
-              <FadeIn className="lg:col-span-3">
+              <FadeIn className="md:col-span-2 lg:col-span-3">
                 <ProjectCard project={primary} featured />
               </FadeIn>
             ) : null}
-            <div className="grid gap-4 lg:col-span-2">
+            <div className="grid gap-4 md:col-span-2 lg:col-span-2">
               {rest.map((project, index) => (
                 <FadeIn key={project.id} delay={0.06 + index * 0.05}>
                   <ProjectCard project={project} />

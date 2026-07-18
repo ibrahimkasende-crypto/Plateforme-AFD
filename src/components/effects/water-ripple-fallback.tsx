@@ -33,12 +33,23 @@ export function WaterRippleFallback() {
       ctx2d.clearRect(0, 0, window.innerWidth, window.innerHeight);
       if (elapsed < decayMs && pointer.current.x > 0) {
         const progress = elapsed / decayMs;
-        const r = radius * (0.55 + progress * 0.55);
-        const alpha = (1 - progress) * 0.12;
+        const r = radius * (0.55 + progress * 0.65);
+        const alpha = (1 - progress) * 0.28;
         ctx2d.beginPath();
         ctx2d.arc(pointer.current.x, pointer.current.y, r, 0, Math.PI * 2);
-        ctx2d.strokeStyle = `rgba(255,255,255,${alpha})`;
-        ctx2d.lineWidth = 1.25;
+        ctx2d.strokeStyle = `rgba(96, 196, 245,${alpha})`;
+        ctx2d.lineWidth = 1.6;
+        ctx2d.stroke();
+        ctx2d.beginPath();
+        ctx2d.arc(
+          pointer.current.x,
+          pointer.current.y,
+          r * 0.62,
+          0,
+          Math.PI * 2,
+        );
+        ctx2d.strokeStyle = `rgba(160, 220, 250,${alpha * 0.55})`;
+        ctx2d.lineWidth = 1;
         ctx2d.stroke();
         raf = requestAnimationFrame(draw);
       } else {

@@ -38,13 +38,13 @@ export function LatestNews({ news }: { news: LatestNews[] }) {
             description="Les prochaines publications apparaîtront ici."
           />
         ) : (
-          <div className="grid gap-4 lg:grid-cols-5">
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-5">
             {primary ? (
-              <FadeIn className="lg:col-span-3">
+              <FadeIn className="md:col-span-2 lg:col-span-3">
                 <NewsCard item={primary} featured />
               </FadeIn>
             ) : null}
-            <div className="grid gap-4 lg:col-span-2">
+            <div className="grid gap-4 md:col-span-2 lg:col-span-2">
               {rest.map((item, index) => (
                 <FadeIn key={item.id} delay={0.05 * (index + 1)}>
                   <NewsCard item={item} />

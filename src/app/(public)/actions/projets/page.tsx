@@ -53,7 +53,7 @@ export default async function ProjetsPage({ searchParams }: PageProps) {
         placeholder="Rechercher un projet…"
         extraFields={
           statusOptions.length > 0 ? (
-            <label className="flex min-w-[160px] flex-col gap-1 text-xs font-medium text-[var(--afd-muted)]">
+            <label className="flex min-w-0 w-full flex-col gap-1 text-xs font-medium text-[var(--afd-muted)] sm:min-w-[10rem] sm:w-auto">
               Statut
               <select
                 name="status"

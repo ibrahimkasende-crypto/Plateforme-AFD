@@ -10,6 +10,7 @@ import type { WaterRippleProps } from "./types";
 type SceneProps = WaterRippleProps & {
   pointerRef: MutableRefObject<{ x: number; y: number; active: boolean }>;
   strengthRef: MutableRefObject<number>;
+  skyBoostRef: MutableRefObject<number>;
 };
 
 export function WaterRippleScene({
@@ -17,6 +18,7 @@ export function WaterRippleScene({
   radius,
   pointerRef,
   strengthRef,
+  skyBoostRef,
 }: SceneProps) {
   const material = useMemo(
     () => createWaterRippleMaterial(intensity, radius),
@@ -48,6 +50,7 @@ export function WaterRippleScene({
     mat.uniforms.uStrength.value = strengthRef.current;
     mat.uniforms.uIntensity.value = intensity;
     mat.uniforms.uRadius.value = radius;
+    mat.uniforms.uSkyBoost.value = skyBoostRef.current;
   });
 
   return (

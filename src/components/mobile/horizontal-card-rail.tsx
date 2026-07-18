@@ -28,21 +28,26 @@ export function HorizontalCardRail({
 
   if (!enabled) {
     return (
-      <div className={cn(desktopClassName ?? "grid gap-4 md:grid-cols-2 lg:grid-cols-3", className)}>
+      <div
+        className={cn(
+          desktopClassName ?? "grid gap-4 md:grid-cols-2 lg:grid-cols-3",
+          className,
+        )}
+      >
         {children}
       </div>
     );
   }
 
   return (
-    <div className={className}>
+    <div className={cn("@container/rail", className)}>
       <div
         ref={scrollerRef}
         role="region"
         aria-label={label}
         tabIndex={0}
         className={cn(
-          "afd-h-rail flex gap-4 overflow-x-auto overscroll-x-contain pb-1",
+          "afd-h-rail flex gap-[var(--afd-rail-gap,1rem)] overflow-x-auto overscroll-x-contain pb-1",
           "snap-x snap-mandatory scroll-px-4 px-4 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden",
           "md:grid md:gap-5 md:overflow-visible md:px-0 md:pb-0 md:snap-none",
           desktopClassName ?? "md:grid-cols-2 lg:grid-cols-3",
@@ -52,7 +57,9 @@ export function HorizontalCardRail({
           <div
             key={index}
             className={cn(
-              "w-[min(86vw,360px)] shrink-0 snap-start md:w-auto md:shrink md:snap-align-none",
+              "w-[min(86vw,22.5rem)] shrink-0 snap-start",
+              "max-[360px]:w-[min(88vw,22.5rem)]",
+              "md:w-auto md:shrink md:snap-align-none",
               itemClassName,
             )}
           >
@@ -61,7 +68,7 @@ export function HorizontalCardRail({
         ))}
       </div>
       {showIndicator ? (
-        <div className="px-4 md:hidden">
+        <div className="mt-3 px-4 md:hidden">
           <HorizontalScrollIndicator
             label={label}
             canScrollPrev={scroll.canScrollPrev}

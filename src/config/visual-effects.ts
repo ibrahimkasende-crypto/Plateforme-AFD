@@ -27,9 +27,9 @@ export const visualEffects: VisualEffectsConfig = {
   waterRipple: {
     enabled: envFlag("NEXT_PUBLIC_ENABLE_WATER_RIPPLE", true),
     minViewportWidth: 1024,
-    intensity: 0.22,
-    radius: 96,
-    decayMs: 720,
+    intensity: 0.52,
+    radius: 118,
+    decayMs: 880,
     maxDevicePixelRatio: 1.5,
     disabledRoutes: [
       "/admin",

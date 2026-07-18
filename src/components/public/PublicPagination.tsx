@@ -92,7 +92,7 @@ export function PublicSearchForm({
         className,
       )}
     >
-      <label className="flex min-w-[200px] flex-1 flex-col gap-1 text-xs font-medium text-[var(--afd-muted)]">
+      <label className="flex min-w-0 w-full flex-1 flex-col gap-1 text-xs font-medium text-[var(--afd-muted)] sm:min-w-[12rem]">
         Recherche
         <input
           type="search"

@@ -13,15 +13,15 @@ export function OrganizationIntroduction() {
   return (
     <Section id="presentation-afd" className="bg-[var(--afd-surface-elevated)]">
       <SiteContainer>
-        <div className="grid items-center gap-10 lg:grid-cols-12 lg:gap-16">
+        <div className="grid items-center gap-7 sm:gap-10 lg:grid-cols-12 lg:gap-16">
           <FadeIn className="relative lg:col-span-5">
-            <div className="relative overflow-hidden rounded-[1.35rem]">
-              <div className="relative aspect-[4/5]">
+            <div className="relative overflow-hidden rounded-[1.15rem] sm:rounded-[1.35rem]">
+              <div className="relative aspect-[16/11] sm:aspect-[4/5]">
                 <Image
                   src={content.image.src}
                   alt={content.image.alt}
                   fill
-                  sizes="(max-width: 1024px) 100vw, 40vw"
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 100vw, 40vw"
                   className="object-cover object-[28%_center]"
                 />
                 <div

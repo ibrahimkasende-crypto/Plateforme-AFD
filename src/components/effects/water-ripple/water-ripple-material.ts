@@ -20,6 +20,7 @@ export function createWaterRippleMaterial(
       uIntensity: { value: intensity },
       uRadius: { value: radius },
       uStrength: { value: 0 as number },
+      uSkyBoost: { value: 0 as number },
     },
     vertexShader: waterRippleVertexShader,
     fragmentShader: waterRippleFragmentShader,

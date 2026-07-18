@@ -2,6 +2,7 @@
 
 import { Canvas } from "@react-three/fiber";
 import { useEffect, useRef, useState } from "react";
+import { sampleSurfaceWhiteness } from "./sample-surface-whiteness";
 import type { WaterRippleProps } from "./types";
 import { WaterRippleScene } from "./water-ripple-scene";
 
@@ -16,7 +17,9 @@ export function WaterRippleCanvas({
 }: WaterRippleProps) {
   const pointerRef = useRef({ x: -9999, y: -9999, active: false });
   const strengthRef = useRef(0);
+  const skyBoostRef = useRef(0.35);
   const lastMoveRef = useRef(0);
+  const lastSampleRef = useRef(0);
   const [visible, setVisible] = useState(true);
 
   useEffect(() => {
@@ -34,9 +37,9 @@ export function WaterRippleCanvas({
     function tick() {
       const idle = performance.now() - lastMoveRef.current > decayMs;
       if (idle) {
-        strengthRef.current = Math.max(0, strengthRef.current - 0.035);
+        strengthRef.current = Math.max(0, strengthRef.current - 0.028);
       } else {
-        strengthRef.current = Math.min(1, strengthRef.current + 0.12);
+        strengthRef.current = Math.min(1, strengthRef.current + 0.16);
       }
 
       if (strengthRef.current > 0.001) {
@@ -64,6 +67,14 @@ export function WaterRippleCanvas({
       pointerRef.current.y = event.clientY;
       pointerRef.current.active = true;
       lastMoveRef.current = performance.now();
+
+      const now = performance.now();
+      if (now - lastSampleRef.current > 48) {
+        lastSampleRef.current = now;
+        const targetBoost = sampleSurfaceWhiteness(event.clientX, event.clientY);
+        skyBoostRef.current += (targetBoost - skyBoostRef.current) * 0.35;
+      }
+
       ensureLoop();
     }
 
@@ -111,6 +122,7 @@ export function WaterRippleCanvas({
           maxDevicePixelRatio={maxDevicePixelRatio}
           pointerRef={pointerRef}
           strengthRef={strengthRef}
+          skyBoostRef={skyBoostRef}
         />
       </Canvas>
     </div>

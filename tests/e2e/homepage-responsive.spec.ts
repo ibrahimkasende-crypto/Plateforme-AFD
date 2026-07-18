@@ -94,17 +94,20 @@ test.describe("Homepage responsive", () => {
   });
 
   test("statistiques et newsletter présents", async ({ page }) => {
-    const stats = page.getByLabel("Chiffres clés");
-    if (await stats.count()) {
-      await expect(stats).toBeVisible();
-    }
+    await expect(
+      page.getByRole("heading", { name: /^Chiffres clés$/i }),
+    ).toBeVisible();
+    await expect(
+      page.getByRole("region", { name: /indicateurs d’impact/i }),
+    ).toBeVisible();
 
     await expect(
       page.getByRole("heading", { name: /Restez informé de nos actions/i }),
     ).toBeVisible();
-    await expect(page.getByPlaceholder("Votre e-mail")).toBeVisible();
+    await expect(page.getByLabel(/Votre e-mail/i)).toBeVisible();
     await expect(
       page.getByRole("button", { name: /S’inscrire/i }).first(),
     ).toBeVisible();
   });
 });
+

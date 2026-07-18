@@ -3,6 +3,7 @@ import { Suspense } from "react";
 import { NewsletterGoogleReturn } from "@/components/newsletter/newsletter-google-return";
 import { HomeHero } from "@/components/public/home/home-hero";
 import { HomeSectionSkeleton } from "@/components/public/home/home-section-skeleton";
+import { FeaturedPrograms } from "@/components/public/home/featured-programs";
 import { ImpactAndNews } from "@/components/public/home/impact-and-news";
 import { ImpactStatistics } from "@/components/public/home/impact-statistics";
 import { InterventionPillars } from "@/components/public/home/intervention-pillars";
@@ -11,12 +12,14 @@ import { NewsletterSection } from "@/components/public/home/newsletter-section";
 import { OrganizationIntroduction } from "@/components/public/home/organization-introduction";
 import { OpenOpportunitiesSection } from "@/components/public/home/open-opportunities-section";
 import { PartnersSection } from "@/components/public/home/partners-section";
+import { SupportActionsSection } from "@/components/public/home/support-actions-section";
 import { SectionDivider } from "@/components/public/section-divider";
 import { homeContent } from "@/config/home-content";
 import { siteConfig } from "@/config/site";
 import {
   getActivePartners,
   getFeaturedImpactStory,
+  getFeaturedPrograms,
   getLatestPublishedNews,
   getPublicImpactStats,
 } from "@/lib/queries/home";
@@ -66,6 +69,11 @@ async function ImpactNewsBlock() {
     getLatestPublishedNews(),
   ]);
   return <ImpactAndNews story={story} news={news} />;
+}
+
+async function ProgramsBlock() {
+  const programs = await getFeaturedPrograms();
+  return <FeaturedPrograms programs={programs} />;
 }
 
 async function PartnersBlock() {
@@ -131,7 +139,17 @@ export default function HomePage() {
         <InterventionPillars />
       </Suspense>
 
-      <SectionDivider variant="wave-soft" from="#ffffff" to="var(--afd-surface)" />
+      <SectionDivider variant="line" className="my-2" />
+
+      <Suspense
+        fallback={
+          <HomeSectionSkeleton cards={4} className="bg-[var(--afd-background)]" />
+        }
+      >
+        <ProgramsBlock />
+      </Suspense>
+
+      <SectionDivider variant="wave-soft" from="var(--afd-background)" to="var(--afd-surface)" />
 
       <Suspense
         fallback={
@@ -160,6 +178,10 @@ export default function HomePage() {
       <SectionDivider variant="curve" from="var(--afd-surface)" to="#e8f3fc" />
 
       <NewsletterSection />
+
+      <SectionDivider variant="line" className="my-2" />
+
+      <SupportActionsSection />
 
       <Suspense
         fallback={

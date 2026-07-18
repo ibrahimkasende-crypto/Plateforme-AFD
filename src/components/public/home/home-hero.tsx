@@ -93,7 +93,10 @@ function TypewriterTitle({
       !reduceMotion && visibleCount >= start && visibleCount < end;
 
     return (
-      <span key={line} className="block whitespace-nowrap">
+      <span
+        key={line}
+        className="block whitespace-normal break-words sm:whitespace-nowrap"
+      >
         <span className="bg-gradient-to-br from-white via-[#e8f6ff] to-[var(--afd-sky)] bg-clip-text text-transparent drop-shadow-[0_2px_18px_rgba(3,27,60,0.45)]">
           {line.slice(0, localVisible)}
         </span>
@@ -143,7 +146,7 @@ export function HomeHero() {
         />
       </div>
 
-      <SiteContainer className="pointer-events-none relative z-20 grid min-h-[min(100svh,720px)] content-end gap-6 py-10 pb-[max(2.5rem,env(safe-area-inset-bottom))] sm:min-h-[640px] sm:content-center sm:py-14 md:min-h-[640px] lg:min-h-[660px] lg:grid-cols-12 lg:content-center lg:gap-10 lg:py-0">
+      <SiteContainer className="pointer-events-none relative z-20 grid min-h-[min(92svh,640px)] content-end gap-5 py-8 pb-[max(2rem,env(safe-area-inset-bottom))] sm:min-h-[640px] sm:content-center sm:gap-6 sm:py-14 md:min-h-[640px] lg:min-h-[660px] lg:grid-cols-12 lg:content-center lg:gap-10 lg:py-0">
         <div className="pointer-events-auto min-w-0 lg:col-span-7 xl:col-span-7">
           <motion.span
             className="afd-label inline-flex max-w-full rounded-md border border-white/35 bg-[var(--afd-blue)] px-3 py-1.5 text-[11px] text-white shadow-[0_4px_16px_rgba(8,119,209,0.45)] sm:px-3.5"

@@ -23,8 +23,13 @@ export function InterventionZones({
               Présents en République démocratique du Congo
             </h2>
             <p className="mt-3 max-w-xl text-[15px] leading-[1.7] text-[var(--afd-muted)] md:text-base">
-              Les 8 provinces où l’AFD est présente apparaissent en bleu. Survolez
-              une zone pour afficher les données à côté de la carte.
+              Les 8 provinces où l’AFD est présente apparaissent en bleu.{" "}
+              <span className="md:hidden">
+                Touchez une province pour afficher le détail sous la carte.
+              </span>
+              <span className="hidden md:inline">
+                Survolez une zone pour afficher les données à côté de la carte.
+              </span>
             </p>
             <Link
               href="/actions/zones-intervention"
