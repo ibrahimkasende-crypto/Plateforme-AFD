@@ -1,5 +1,8 @@
+"use client";
+
+import { useRef, type ReactNode } from "react";
+import { useElementSize } from "@/hooks/use-element-size";
 import { cn } from "@/lib/utils";
-import type { ReactNode } from "react";
 
 export function ChartCard({
   title,
@@ -16,6 +19,9 @@ export function ChartCard({
   bodyClassName?: string;
   action?: ReactNode;
 }) {
+  const bodyRef = useRef<HTMLDivElement>(null);
+  useElementSize(bodyRef);
+
   return (
     <div className={cn("admin-panel", className)}>
       <div className="mb-1 flex shrink-0 items-start justify-between gap-2">
@@ -29,7 +35,10 @@ export function ChartCard({
         </div>
         {action}
       </div>
-      <div className={cn("admin-panel__body relative", bodyClassName)}>
+      <div
+        ref={bodyRef}
+        className={cn("admin-panel__body relative min-h-0 min-w-0", bodyClassName)}
+      >
         {children}
       </div>
     </div>

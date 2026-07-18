@@ -31,10 +31,6 @@ import {
   ProjectStatusChart,
 } from "@/components/charts";
 import { EmptyState } from "@/components/shared/EmptyState";
-import {
-  ADMIN_DEMO_BADGE,
-  ADMIN_DEMO_NOTICE,
-} from "@/config/demo-data/admin-dashboard";
 import { useDashboardBundle } from "@/features/statistiques/hooks/use-dashboard-bundle";
 import { useDashboardFilters } from "@/features/statistiques/hooks/use-dashboard-filters";
 import type {
@@ -69,21 +65,21 @@ function SecondaryStatCard({ stat }: { stat: SecondaryStat }) {
   return (
     <Link
       href={stat.href}
-      className="admin-panel flex h-full flex-row items-center gap-3 !p-3 transition hover:border-[var(--admin-primary)]/40"
+      className="admin-panel flex h-full flex-row items-center gap-2.5 !p-2 transition hover:border-[var(--admin-primary)]/40"
     >
       <span
         className={cn(
-          "inline-flex size-10 shrink-0 items-center justify-center rounded-full text-white",
+          "inline-flex size-8 shrink-0 items-center justify-center rounded-full text-white",
           meta.bg,
         )}
       >
-        <Icon className="size-5" aria-hidden />
+        <Icon className="size-4" aria-hidden />
       </span>
       <span className="min-w-0">
-        <span className="block truncate text-[11px] font-medium text-[var(--admin-muted)]">
+        <span className="block line-clamp-2 text-[10.5px] font-medium leading-tight text-[var(--admin-muted)]">
           {stat.label}
         </span>
-        <span className="font-display text-[22px] font-extrabold leading-none text-[var(--admin-text)]">
+        <span className="font-display text-[18px] font-extrabold leading-none text-[var(--admin-text)]">
           {stat.formatted}
         </span>
       </span>
@@ -99,7 +95,15 @@ function DashboardContent({ initialData }: AdminDashboardViewProps) {
   );
   const bundle = data ?? initialData;
   const { summary, viewer } = bundle;
-  const isDemo = bundle.demoMode;
+  const isDemo = Boolean(bundle.presentationMode ?? bundle.demoMode);
+  const provinceProjects =
+    bundle.projectsByProvince.length > 0
+      ? bundle.projectsByProvince
+      : bundle.beneficiariesByProvince.map((row) => ({
+          name: row.name,
+          value: 0,
+          beneficiaries: row.value,
+        }));
 
   const kpiEntries = [
     {
@@ -148,16 +152,6 @@ function DashboardContent({ initialData }: AdminDashboardViewProps) {
       <p className="sr-only">{bundle.accessibleSummary}</p>
 
       <div className="relative col-span-full">
-        {isDemo ? (
-          <div className="absolute -top-0.5 right-2 z-10 hidden items-center gap-1.5 text-[10px] text-amber-800 xl:flex">
-            <span className="rounded bg-amber-100 px-1.5 py-0.5 font-semibold text-amber-900">
-              Mode démonstration
-            </span>
-            <span className="sr-only">
-              {ADMIN_DEMO_BADGE}. {ADMIN_DEMO_NOTICE}
-            </span>
-          </div>
-        ) : null}
         <AdminFilters
           filterOptions={bundle.filterOptions}
           summary={summary}
@@ -229,13 +223,13 @@ function DashboardContent({ initialData }: AdminDashboardViewProps) {
       </div>
 
       <ChartCard
-        title="Bénéficiaires par province"
+        title="Projets par province"
         className="col-span-3 max-xl:col-span-6 max-lg:col-span-full"
       >
-        {bundle.beneficiariesByProvince.length === 0 && !isDemo ? (
+        {provinceProjects.length === 0 && !isDemo ? (
           <EmptyState title="Aucune donnée provinciale" />
         ) : (
-          <AdminProvincePanel data={bundle.beneficiariesByProvince} />
+          <AdminProvincePanel data={provinceProjects} />
         )}
       </ChartCard>
 

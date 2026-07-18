@@ -6,9 +6,9 @@
 
 import type { DashboardBundle } from "@/features/statistiques/types/dashboard";
 
-export const ADMIN_DEMO_BADGE = "Mode démonstration";
+export const ADMIN_DEMO_BADGE = "Mode présentation";
 export const ADMIN_DEMO_NOTICE =
-  "Données de démonstration — non représentatives de l’impact réel de l’AFD.";
+  "Cet environnement utilise un jeu de données de présentation non officiel.";
 
 function kpi(
   label: string,
@@ -36,6 +36,7 @@ export const adminDashboardDemoBundle: Omit<
   badges: DashboardBundle["badges"];
 } = {
   demoMode: true,
+  presentationMode: true,
   summary: {
     demoMode: true,
     kpis: {
@@ -63,11 +64,21 @@ export const adminDashboardDemoBundle: Omit<
   ],
   projectsBySector: [
     { name: "Santé, nutrition et WASH", value: 32, percent: 25, color: "#0877d1" },
-    { name: "Protection, VBG et droits", value: 28, percent: 22, color: "#16a34a" },
+    { name: "Protection, VBG et droits des femmes", value: 28, percent: 22, color: "#16a34a" },
     { name: "Autonomisation économique", value: 22, percent: 17, color: "#f59e0b" },
     { name: "Éducation et leadership", value: 18, percent: 14, color: "#7c3aed" },
-    { name: "Sécurité alimentaire", value: 16, percent: 13, color: "#0d9488" },
-    { name: "Urgences et relèvement", value: 12, percent: 9, color: "#e11d48" },
+    { name: "Sécurité alimentaire et agriculture", value: 16, percent: 13, color: "#0d9488" },
+    { name: "Urgences, relèvement et cohésion sociale", value: 12, percent: 9, color: "#e11d48" },
+  ],
+  projectsByProvince: [
+    { name: "Kinshasa", value: 5, percent: 17, beneficiaries: 420, slug: "kinshasa" },
+    { name: "Nord-Kivu", value: 4, percent: 13, beneficiaries: 350, slug: "nord-kivu" },
+    { name: "Ituri", value: 4, percent: 13, beneficiaries: 310, slug: "ituri" },
+    { name: "Kwilu", value: 4, percent: 13, beneficiaries: 260, slug: "kwilu" },
+    { name: "Haut-Katanga", value: 4, percent: 13, beneficiaries: 230, slug: "haut-katanga" },
+    { name: "Tshopo", value: 3, percent: 10, beneficiaries: 180, slug: "tshopo" },
+    { name: "Kwango", value: 3, percent: 10, beneficiaries: 140, slug: "kwango" },
+    { name: "Tshuapa", value: 3, percent: 10, beneficiaries: 125, slug: "tshuapa" },
   ],
   topProjects: [
     {
@@ -227,18 +238,18 @@ export const adminDashboardDemoBundle: Omit<
     {
       id: "documents",
       label: "Documents téléchargés",
-      value: null,
-      formatted: "—",
+      value: 842,
+      formatted: "842",
       href: "/admin/mediatheque",
-      available: false,
+      available: true,
     },
     {
       id: "rapports",
       label: "Rapports générés",
-      value: null,
-      formatted: "—",
+      value: 126,
+      formatted: "126",
       href: "/admin/rapports",
-      available: false,
+      available: true,
     },
   ],
   filterOptions: {

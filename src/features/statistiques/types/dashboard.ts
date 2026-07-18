@@ -65,6 +65,15 @@ export type ProvinceBeneficiaries = {
   value: number;
 };
 
+export type ProvinceProjectsDatum = {
+  name: string;
+  value: number;
+  percent?: number;
+  activities?: number;
+  beneficiaries?: number;
+  slug?: string;
+};
+
 export type MonthlyActivityPoint = {
   label: string;
   formations: number;
@@ -123,8 +132,10 @@ export type DashboardBundle = {
   beneficiaryEvolution: BeneficiaryEvolutionPoint[];
   projectsByStatus: NamedCount[];
   projectsBySector: NamedCount[];
+  projectsByProvince: ProvinceProjectsDatum[];
   topProjects: TopProject[];
   beneficiariesByProvince: ProvinceBeneficiaries[];
+  presentationMode?: boolean;
   monthlyActivities: MonthlyActivityPoint[];
   budgetComparison: BudgetComparisonPoint[];
   alerts: DashboardAlert[];

@@ -40,21 +40,21 @@ test.describe("Dashboard admin — données affichées", () => {
     await expect(page.getByText(/projets par statut/i).first()).toBeVisible();
     await expect(page.getByText(/projets par secteur/i).first()).toBeVisible();
     await expect(
-      page.getByText(/bénéficiaires par province/i).first(),
+      page.getByText(/projets par province/i).first(),
     ).toBeVisible();
     await expect(
       page.getByText(/activités réalisées par mois/i).first(),
     ).toBeVisible();
   });
 
-  test("bandeau démo optionnel", async ({ page }) => {
-    const demoBadge = page.getByText(/mode démonstration/i);
+  test("badge mode présentation global optionnel", async ({ page }) => {
+    const demoBadge = page.getByText(/mode présentation/i);
     const count = await demoBadge.count();
     if (count > 0) {
       await expect(demoBadge.first()).toBeVisible();
       await expect(
-        page.getByText(/données de démonstration/i).first(),
-      ).toBeVisible();
+        page.getByText(/données de démonstration/i),
+      ).toHaveCount(0);
     }
   });
 

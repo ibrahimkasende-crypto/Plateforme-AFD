@@ -9,6 +9,8 @@
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "import:partner-logos": "tsx scripts/import-partner-logos-from-legacy-site.ts",
+    "seed:presentation": "npx tsx scripts/seed-presentation.ts",
+    "seed:presentation:clean": "npx tsx scripts/clean-presentation.ts",
     "test:e2e": "playwright test",
     "test:e2e:install": "playwright install chromium"
   },

@@ -1,11 +1,12 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { useState, type ReactNode } from "react";
+import { useState, type CSSProperties, type ReactNode } from "react";
 import { AdminHeader } from "@/components/admin/admin-header";
 import { AdminMobileSidebar } from "@/components/admin/admin-mobile-sidebar";
 import { AdminSidebar } from "@/components/admin/admin-sidebar";
 import type { AdminViewer, SidebarBadges } from "@/features/statistiques/types/dashboard";
+import { useAdminSidebarCollapsed } from "@/hooks/use-admin-sidebar-collapsed";
 import { cn } from "@/lib/utils";
 
 type AdminShellProps = {
@@ -13,6 +14,7 @@ type AdminShellProps = {
   badges: SidebarBadges;
   viewer: AdminViewer;
   pageTitle?: string;
+  presentationMode?: boolean;
 };
 
 export function AdminShell({
@@ -20,8 +22,10 @@ export function AdminShell({
   badges,
   viewer,
   pageTitle,
+  presentationMode = false,
 }: AdminShellProps) {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const { collapsed, toggle } = useAdminSidebarCollapsed(false);
   const pathname = usePathname();
   const isOverview = pathname === "/admin";
 
@@ -30,10 +34,24 @@ export function AdminShell({
       className={cn(
         "admin-shell min-h-screen",
         isOverview && "admin-shell--overview lg:min-h-0",
+        collapsed && "admin-shell--sidebar-collapsed",
       )}
+      data-sidebar-collapsed={collapsed ? "true" : "false"}
+      style={
+        {
+          "--admin-sidebar-current-width": collapsed
+            ? "var(--admin-sidebar-width-collapsed)"
+            : "var(--admin-sidebar-width)",
+        } as CSSProperties
+      }
     >
       <div className="hidden lg:fixed lg:inset-y-0 lg:z-40 lg:flex">
-        <AdminSidebar badges={badges} role={viewer.role} />
+        <AdminSidebar
+          badges={badges}
+          role={viewer.role}
+          collapsed={collapsed}
+          onToggleCollapsed={toggle}
+        />
       </div>
 
       <AdminMobileSidebar
@@ -45,7 +63,8 @@ export function AdminShell({
 
       <div
         className={cn(
-          "flex flex-col lg:pl-[var(--admin-sidebar-width)]",
+          "flex flex-col transition-[padding] duration-200 ease-out",
+          "lg:pl-[var(--admin-sidebar-current-width)]",
           isOverview ? "h-full min-h-0" : "min-h-screen",
         )}
       >
@@ -53,6 +72,7 @@ export function AdminShell({
           title={pageTitle}
           badges={badges}
           viewer={viewer}
+          presentationMode={presentationMode}
           onMenuClick={() => setMobileOpen(true)}
         />
         <main

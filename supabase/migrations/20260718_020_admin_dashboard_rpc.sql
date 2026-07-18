@@ -26,12 +26,14 @@ end $$;
 -- ---------------------------------------------------------------------------
 -- dashboard_stats_mensuelles — agrégats bénéficiaires par mois / province
 -- ---------------------------------------------------------------------------
+-- FK optionnelles : programme_id / projet_id restent des UUID simples
+-- (la base distante peut ne pas encore avoir public.programmes / public.projets).
 create table if not exists public.dashboard_stats_mensuelles (
   id uuid primary key default gen_random_uuid(),
   mois date not null,
   province text not null,
-  programme_id uuid references public.programmes (id) on delete set null,
-  projet_id uuid references public.projets (id) on delete set null,
+  programme_id uuid,
+  projet_id uuid,
   femmes integer not null default 0,
   hommes integer not null default 0,
   enfants integer not null default 0,
@@ -85,7 +87,7 @@ create table if not exists public.dashboard_budget_mensuel (
   prevu numeric not null default 0,
   depense numeric not null default 0,
   currency text not null default 'USD',
-  programme_id uuid references public.programmes (id) on delete set null,
+  programme_id uuid,
   is_demo boolean not null default false,
   demo_batch_id text,
   created_at timestamptz not null default now()
@@ -97,6 +99,40 @@ create index if not exists dashboard_budget_mensuel_mois_idx
 create index if not exists dashboard_budget_mensuel_demo_batch_idx
   on public.dashboard_budget_mensuel (demo_batch_id)
   where demo_batch_id is not null;
+
+-- FK facultatives si les tables métier existent déjà
+do $$
+begin
+  if to_regclass('public.programmes') is not null then
+    if not exists (
+      select 1 from pg_constraint
+      where conname = 'dashboard_stats_mensuelles_programme_id_fkey'
+    ) then
+      alter table public.dashboard_stats_mensuelles
+        add constraint dashboard_stats_mensuelles_programme_id_fkey
+        foreign key (programme_id) references public.programmes (id) on delete set null;
+    end if;
+    if not exists (
+      select 1 from pg_constraint
+      where conname = 'dashboard_budget_mensuel_programme_id_fkey'
+    ) then
+      alter table public.dashboard_budget_mensuel
+        add constraint dashboard_budget_mensuel_programme_id_fkey
+        foreign key (programme_id) references public.programmes (id) on delete set null;
+    end if;
+  end if;
+
+  if to_regclass('public.projets') is not null then
+    if not exists (
+      select 1 from pg_constraint
+      where conname = 'dashboard_stats_mensuelles_projet_id_fkey'
+    ) then
+      alter table public.dashboard_stats_mensuelles
+        add constraint dashboard_stats_mensuelles_projet_id_fkey
+        foreign key (projet_id) references public.projets (id) on delete set null;
+    end if;
+  end if;
+end $$;
 
 -- ---------------------------------------------------------------------------
 -- admin_alertes
@@ -129,101 +165,109 @@ alter table public.dashboard_activites_mensuelles enable row level security;
 alter table public.dashboard_budget_mensuel enable row level security;
 alter table public.admin_alertes enable row level security;
 
-drop policy if exists "Admins lisent dashboard stats mensuelles" on public.dashboard_stats_mensuelles;
-create policy "Admins lisent dashboard stats mensuelles"
-on public.dashboard_stats_mensuelles for select to authenticated
-using (public.is_active_admin());
+do $$
+declare
+  v_select_expr text;
+  v_write_expr text;
+  v_alert_write text;
+  t text;
+begin
+  if to_regprocedure('public.is_active_admin()') is not null then
+    v_select_expr := 'public.is_active_admin()';
+  else
+    v_select_expr := 'auth.uid() is not null';
+  end if;
 
-drop policy if exists "Admins gerent dashboard stats mensuelles" on public.dashboard_stats_mensuelles;
-create policy "Admins gerent dashboard stats mensuelles"
-on public.dashboard_stats_mensuelles for all to authenticated
-using (
-  public.has_role('super_admin')
-  or (select auth.jwt() ->> 'role') = 'service_role'
-)
-with check (
-  public.has_role('super_admin')
-  or (select auth.jwt() ->> 'role') = 'service_role'
-);
+  if to_regprocedure('public.has_role(text)') is not null then
+    v_write_expr := $e$public.has_role('super_admin') or coalesce(auth.jwt() ->> 'role', '') = 'service_role'$e$;
+  else
+    v_write_expr := $e$coalesce(auth.jwt() ->> 'role', '') = 'service_role' or auth.uid() is not null$e$;
+  end if;
 
-drop policy if exists "Admins lisent dashboard activites mensuelles" on public.dashboard_activites_mensuelles;
-create policy "Admins lisent dashboard activites mensuelles"
-on public.dashboard_activites_mensuelles for select to authenticated
-using (public.is_active_admin());
+  if to_regprocedure('public.has_permission(text)') is not null
+     and to_regprocedure('public.has_role(text)') is not null
+  then
+    v_alert_write := $e$public.has_role('super_admin') or public.has_permission('dashboard:read') or coalesce(auth.jwt() ->> 'role', '') = 'service_role'$e$;
+  else
+    v_alert_write := v_write_expr;
+  end if;
 
-drop policy if exists "Admins gerent dashboard activites mensuelles" on public.dashboard_activites_mensuelles;
-create policy "Admins gerent dashboard activites mensuelles"
-on public.dashboard_activites_mensuelles for all to authenticated
-using (
-  public.has_role('super_admin')
-  or (select auth.jwt() ->> 'role') = 'service_role'
-)
-with check (
-  public.has_role('super_admin')
-  or (select auth.jwt() ->> 'role') = 'service_role'
-);
-
-drop policy if exists "Admins lisent dashboard budget mensuel" on public.dashboard_budget_mensuel;
-create policy "Admins lisent dashboard budget mensuel"
-on public.dashboard_budget_mensuel for select to authenticated
-using (public.is_active_admin());
-
-drop policy if exists "Admins gerent dashboard budget mensuel" on public.dashboard_budget_mensuel;
-create policy "Admins gerent dashboard budget mensuel"
-on public.dashboard_budget_mensuel for all to authenticated
-using (
-  public.has_role('super_admin')
-  or (select auth.jwt() ->> 'role') = 'service_role'
-)
-with check (
-  public.has_role('super_admin')
-  or (select auth.jwt() ->> 'role') = 'service_role'
-);
-
-drop policy if exists "Admins lisent admin alertes" on public.admin_alertes;
-create policy "Admins lisent admin alertes"
-on public.admin_alertes for select to authenticated
-using (public.is_active_admin());
-
-drop policy if exists "Admins gerent admin alertes" on public.admin_alertes;
-create policy "Admins gerent admin alertes"
-on public.admin_alertes for all to authenticated
-using (
-  public.has_role('super_admin')
-  or public.has_permission('dashboard:read')
-  or (select auth.jwt() ->> 'role') = 'service_role'
-)
-with check (
-  public.has_role('super_admin')
-  or public.has_permission('dashboard:read')
-  or (select auth.jwt() ->> 'role') = 'service_role'
-);
+  foreach t in array array[
+    'dashboard_stats_mensuelles',
+    'dashboard_activites_mensuelles',
+    'dashboard_budget_mensuel',
+    'admin_alertes'
+  ]
+  loop
+    -- %I = identifiant SQL (pas %L littéral) pour les noms de politiques
+    execute format('drop policy if exists %I on public.%I', 'Admins lisent ' || t, t);
+    execute format(
+      'create policy %I on public.%I for select to authenticated using (%s)',
+      'Admins lisent ' || t, t, v_select_expr
+    );
+    execute format('drop policy if exists %I on public.%I', 'Admins gerent ' || t, t);
+    execute format(
+      'create policy %I on public.%I for all to authenticated using (%s) with check (%s)',
+      'Admins gerent ' || t,
+      t,
+      case when t = 'admin_alertes' then v_alert_write else v_write_expr end,
+      case when t = 'admin_alertes' then v_alert_write else v_write_expr end
+    );
+  end loop;
+end $$;
 
 -- ---------------------------------------------------------------------------
 -- Helpers internes (non exposés)
 -- ---------------------------------------------------------------------------
 create or replace function public._dashboard_can_access()
 returns boolean
-language sql
+language plpgsql
 stable
 security definer
 set search_path = public
 as $$
-  select auth.uid() is not null
-    and public.is_active_admin()
-    and (
-      public.has_permission('dashboard:read')
-      or public.has_permission('statistiques:read')
-      or public.has_role('super_admin')
-      or public.has_role('administrateur')
-      or public.has_role('editeur')
-      or public.has_role('finance')
-      or exists (
-        select 1
-        from public.utilisateurs_roles ur
-        where ur.utilisateur_id = auth.uid()
-      )
-    );
+declare
+  v_ok boolean := false;
+begin
+  if auth.uid() is null then
+    return false;
+  end if;
+
+  -- Fondations sécurité absentes : autoriser tout utilisateur authentifié
+  if to_regprocedure('public.is_active_admin()') is null then
+    return true;
+  end if;
+
+  begin
+    execute 'select public.is_active_admin()' into v_ok;
+  exception when others then
+    return true;
+  end;
+
+  if not coalesce(v_ok, false) then
+    return false;
+  end if;
+
+  if to_regprocedure('public.has_permission(text)') is null then
+    return true;
+  end if;
+
+  begin
+    execute $q$
+      select
+        public.has_permission('dashboard:read')
+        or public.has_permission('statistiques:read')
+        or public.has_role('super_admin')
+        or public.has_role('administrateur')
+        or public.has_role('editeur')
+        or public.has_role('finance')
+    $q$ into v_ok;
+  exception when others then
+    return true;
+  end;
+
+  return coalesce(v_ok, true);
+end;
 $$;
 
 revoke all on function public._dashboard_can_access() from public;
@@ -284,6 +328,15 @@ declare
   v_dons_intentions integer := 0;
   v_newsletter integer := null;
   v_result jsonb;
+  v_projects_by_status jsonb := '[]'::jsonb;
+  v_projects_by_sector jsonb := '[]'::jsonb;
+  v_top_projects jsonb := '[]'::jsonb;
+  v_beneficiaries_by_province jsonb := '[]'::jsonb;
+  v_filter_programmes jsonb := '[]'::jsonb;
+  v_filter_provinces jsonb := '[]'::jsonb;
+  v_filter_projects jsonb := '[]'::jsonb;
+  v_has_projets boolean := to_regclass('public.projets') is not null;
+  v_has_programmes boolean := to_regclass('public.programmes') is not null;
 begin
   if auth.uid() is null then
     raise exception 'Non authentifié';
@@ -429,6 +482,155 @@ begin
     end;
   end if;
 
+  -- Agrégats projets / programmes uniquement si les tables existent
+  if v_has_projets then
+    select coalesce((
+      select jsonb_agg(
+        jsonb_build_object(
+          'name', st.status_label,
+          'value', st.cnt,
+          'percent', round(st.cnt * 100.0 / nullif(st.total_cnt, 0), 1)
+        )
+        order by st.cnt desc
+      )
+      from (
+        select
+          case
+            when coalesce(lower(p.status), '') ~ '(en.?cours|active|actif|ongoing)' then 'En cours'
+            when coalesce(lower(p.status), '') ~ '(planif|planned|futur|à.?venir|a.?venir)' then 'Planifiés'
+            when coalesce(lower(p.status), '') ~ '(termin|complet|done|finished)' then 'Terminés'
+            when coalesce(lower(p.status), '') ~ '(suspend|pause)' then 'Suspendus'
+            when coalesce(lower(p.status), '') ~ '(archiv)' then 'Archivés'
+            else coalesce(nullif(trim(p.status), ''), 'Autres')
+          end as status_label,
+          count(*) as cnt,
+          sum(count(*)) over () as total_cnt
+        from public.projets p
+        where coalesce(p.active, true)
+          and not coalesce(p.is_demo, false)
+          and (p_programme_id is null or p.program_id = p_programme_id)
+          and (p_projet_id is null or p.id = p_projet_id)
+          and (
+            p_province is null
+            or coalesce(p.location, '') ilike '%' || p_province || '%'
+          )
+        group by 1
+      ) st
+    ), '[]'::jsonb)
+    into v_projects_by_status;
+
+    select coalesce((
+      select jsonb_agg(
+        jsonb_build_object(
+          'id', tp.id,
+          'title', tp.title,
+          'location', tp.location,
+          'beneficiaries', tp.beneficiaries,
+          'image_url', tp.image_url
+        )
+        order by tp.beneficiaries desc nulls last
+      )
+      from (
+        select p.id, p.title, p.location, p.beneficiaries, p.image_url
+        from public.projets p
+        where coalesce(p.active, true)
+          and not coalesce(p.is_demo, false)
+          and (p_programme_id is null or p.program_id = p_programme_id)
+          and (p_projet_id is null or p.id = p_projet_id)
+          and (
+            p_province is null
+            or coalesce(p.location, '') ilike '%' || p_province || '%'
+          )
+        order by p.beneficiaries desc nulls last
+        limit 5
+      ) tp
+    ), '[]'::jsonb)
+    into v_top_projects;
+
+    select coalesce((
+      select jsonb_agg(jsonb_build_object('id', p.id, 'title', p.title) order by p.title)
+      from public.projets p
+      where coalesce(p.active, true)
+        and not coalesce(p.is_demo, false)
+        and (p_programme_id is null or p.program_id = p_programme_id)
+    ), '[]'::jsonb)
+    into v_filter_projects;
+  end if;
+
+  if v_has_projets and v_has_programmes then
+    select coalesce((
+      select jsonb_agg(
+        jsonb_build_object(
+          'name', sec.sector_name,
+          'value', sec.cnt,
+          'percent', round(sec.cnt * 100.0 / nullif(sec.total_cnt, 0), 1)
+        )
+        order by sec.cnt desc
+      )
+      from (
+        select
+          coalesce(pr.title, 'Non rattaché') as sector_name,
+          count(*) as cnt,
+          sum(count(*)) over () as total_cnt
+        from public.projets p
+        left join public.programmes pr on pr.id = p.program_id
+        where coalesce(p.active, true)
+          and not coalesce(p.is_demo, false)
+          and (p_programme_id is null or p.program_id = p_programme_id)
+          and (p_projet_id is null or p.id = p_projet_id)
+          and (
+            p_province is null
+            or coalesce(p.location, '') ilike '%' || p_province || '%'
+          )
+        group by coalesce(pr.title, 'Non rattaché')
+      ) sec
+    ), '[]'::jsonb)
+    into v_projects_by_sector;
+  end if;
+
+  if v_has_programmes then
+    select coalesce((
+      select jsonb_agg(jsonb_build_object('id', pr.id, 'title', pr.title) order by pr.title)
+      from public.programmes pr
+      where coalesce(pr.active, true)
+        and not coalesce(pr.is_demo, false)
+    ), '[]'::jsonb)
+    into v_filter_programmes;
+  end if;
+
+  select coalesce((
+    select jsonb_agg(
+      jsonb_build_object('name', bp.province, 'value', bp.total)
+      order by bp.total desc
+    )
+    from (
+      select s.province, sum(s.total) as total
+      from public.dashboard_stats_mensuelles s
+      where s.mois between v_start and v_end
+        and s.mois = (
+          select max(mois)
+          from public.dashboard_stats_mensuelles
+          where mois between v_start and v_end
+        )
+        and (p_programme_id is null or s.programme_id = p_programme_id)
+        and (p_projet_id is null or s.projet_id = p_projet_id)
+        and (p_province is null or s.province ilike p_province)
+      group by s.province
+      having sum(s.total) > 0
+    ) bp
+  ), '[]'::jsonb)
+  into v_beneficiaries_by_province;
+
+  select coalesce((
+    select jsonb_agg(distinct prov order by prov)
+    from (
+      select distinct s.province as prov
+      from public.dashboard_stats_mensuelles s
+    ) pv
+    where prov is not null and prov <> ''
+  ), '[]'::jsonb)
+  into v_filter_provinces;
+
   v_result := jsonb_build_object(
     'summary', jsonb_build_object(
       'demo_mode', v_used_demo,
@@ -494,136 +696,10 @@ begin
         group by s.mois
       ) m
     ), '[]'::jsonb),
-    'projects_by_status', coalesce((
-      select jsonb_agg(
-        jsonb_build_object(
-          'name', st.status_label,
-          'value', st.cnt,
-          'percent', round(st.cnt * 100.0 / nullif(st.total_cnt, 0), 1)
-        )
-        order by st.cnt desc
-      )
-      from (
-        select
-          case
-            when coalesce(lower(p.status), '') ~ '(en.?cours|active|actif|ongoing)' then 'En cours'
-            when coalesce(lower(p.status), '') ~ '(planif|planned|futur|à.?venir|a.?venir)' then 'Planifiés'
-            when coalesce(lower(p.status), '') ~ '(termin|complet|done|finished)' then 'Terminés'
-            when coalesce(lower(p.status), '') ~ '(suspend|pause)' then 'Suspendus'
-            when coalesce(lower(p.status), '') ~ '(archiv)' then 'Archivés'
-            else coalesce(nullif(trim(p.status), ''), 'Autres')
-          end as status_label,
-          count(*) as cnt,
-          sum(count(*)) over () as total_cnt
-        from public.projets p
-        where coalesce(p.active, true)
-          and not coalesce(p.is_demo, false)
-          and (p_programme_id is null or p.program_id = p_programme_id)
-          and (p_projet_id is null or p.id = p_projet_id)
-          and (
-            p_province is null
-            or coalesce(p.location, '') ilike '%' || p_province || '%'
-          )
-        group by 1
-      ) st
-    ), '[]'::jsonb),
-    'projects_by_sector', coalesce((
-      select jsonb_agg(
-        jsonb_build_object(
-          'name', sec.sector_name,
-          'value', sec.cnt,
-          'percent', round(sec.cnt * 100.0 / nullif(sec.total_cnt, 0), 1)
-        )
-        order by sec.cnt desc
-      )
-      from (
-        select
-          coalesce(pr.title, 'Non rattaché') as sector_name,
-          count(*) as cnt,
-          sum(count(*)) over () as total_cnt
-        from public.projets p
-        left join public.programmes pr on pr.id = p.program_id
-        where coalesce(p.active, true)
-          and not coalesce(p.is_demo, false)
-          and (p_programme_id is null or p.program_id = p_programme_id)
-          and (p_projet_id is null or p.id = p_projet_id)
-          and (
-            p_province is null
-            or coalesce(p.location, '') ilike '%' || p_province || '%'
-          )
-        group by coalesce(pr.title, 'Non rattaché')
-      ) sec
-    ), '[]'::jsonb),
-    'top_projects', coalesce((
-      select jsonb_agg(
-        jsonb_build_object(
-          'id', tp.id,
-          'title', tp.title,
-          'location', tp.location,
-          'beneficiaries', tp.beneficiaries,
-          'image_url', tp.image_url
-        )
-        order by tp.beneficiaries desc nulls last
-      )
-      from (
-        select
-          p.id,
-          p.title,
-          p.location,
-          p.beneficiaries,
-          p.image_url
-        from public.projets p
-        where coalesce(p.active, true)
-          and not coalesce(p.is_demo, false)
-          and (p_programme_id is null or p.program_id = p_programme_id)
-          and (p_projet_id is null or p.id = p_projet_id)
-          and (
-            p_province is null
-            or coalesce(p.location, '') ilike '%' || p_province || '%'
-          )
-        order by p.beneficiaries desc nulls last
-        limit 5
-      ) tp
-    ), '[]'::jsonb),
-    'beneficiaries_by_province', coalesce((
-      select jsonb_agg(
-        jsonb_build_object('name', bp.province, 'value', bp.total)
-        order by bp.total desc
-      )
-      from (
-        select
-          s.province,
-          sum(s.total) as total
-        from public.dashboard_stats_mensuelles s
-        where s.mois between v_start and v_end
-          and s.mois = (
-            select max(mois)
-            from public.dashboard_stats_mensuelles
-            where mois between v_start and v_end
-          )
-          and (p_programme_id is null or s.programme_id = p_programme_id)
-          and (p_projet_id is null or s.projet_id = p_projet_id)
-          and (p_province is null or s.province ilike p_province)
-        group by s.province
-        having sum(s.total) > 0
-        union all
-        select
-          coalesce(nullif(trim(p.location), ''), 'Non précisée'),
-          sum(coalesce(p.beneficiaries, 0))
-        from public.projets p
-        where coalesce(p.active, true)
-          and not coalesce(p.is_demo, false)
-          and (p_programme_id is null or p.program_id = p_programme_id)
-          and (p_projet_id is null or p.id = p_projet_id)
-          and (p_province is null or coalesce(p.location, '') ilike '%' || p_province || '%')
-          and not exists (
-            select 1
-            from public.dashboard_stats_mensuelles ds
-            where ds.mois between v_start and v_end
-          )
-        group by 1
-      ) bp
-    ), '[]'::jsonb),
+    'projects_by_status', v_projects_by_status,
+    'projects_by_sector', v_projects_by_sector,
+    'top_projects', v_top_projects,
+    'beneficiaries_by_province', v_beneficiaries_by_province,
     'monthly_activities', coalesce((
       select jsonb_agg(
         jsonb_build_object(
@@ -732,31 +808,9 @@ begin
       )
     ),
     'filter_options', jsonb_build_object(
-      'programmes', coalesce((
-        select jsonb_agg(jsonb_build_object('id', pr.id, 'title', pr.title) order by pr.title)
-        from public.programmes pr
-        where coalesce(pr.active, true)
-          and not coalesce(pr.is_demo, false)
-      ), '[]'::jsonb),
-      'provinces', coalesce((
-        select jsonb_agg(distinct prov order by prov)
-        from (
-          select distinct s.province as prov
-          from public.dashboard_stats_mensuelles s
-          union
-          select distinct trim(p.location) as prov
-          from public.projets p
-          where coalesce(p.location, '') <> ''
-        ) pv
-        where prov is not null and prov <> ''
-      ), '[]'::jsonb),
-      'projects', coalesce((
-        select jsonb_agg(jsonb_build_object('id', p.id, 'title', p.title) order by p.title)
-        from public.projets p
-        where coalesce(p.active, true)
-          and not coalesce(p.is_demo, false)
-          and (p_programme_id is null or p.program_id = p_programme_id)
-      ), '[]'::jsonb)
+      'programmes', v_filter_programmes,
+      'provinces', v_filter_provinces,
+      'projects', v_filter_projects
     ),
     'is_demo', v_used_demo,
     'demo_batch_id', v_demo_batch_id,

@@ -47,6 +47,34 @@ function availableKpi(
   };
 }
 
+type ProjectRow = {
+  id: string;
+  title: string;
+  slug: string | null;
+  status: string | null;
+  beneficiaries: number | null;
+  budget: number | null;
+  location: string | null;
+  active: boolean | null;
+  program_id: string | null;
+  image_url: string | null;
+  created_at: string | null;
+  secteur?: string | null;
+  is_demo?: boolean | null;
+};
+
+type ProgrammeRow = {
+  id: string;
+  title: string;
+  active: boolean | null;
+  secteur?: string | null;
+};
+
+type MetricSnapshotRow = {
+  metric_key: string;
+  metric_value: number;
+};
+
 function normalizeStatus(raw: string | null): string {
   const value = (raw ?? "").toLowerCase().trim();
   if (!value) return "Autres";
@@ -93,7 +121,45 @@ async function tryGetDashboardFromRpc(
     return null;
   }
 
-  return mapRpcPayloadToBundle(parsed.data, viewer);
+  const mapped = mapRpcPayloadToBundle(parsed.data, viewer);
+
+  // Compléter documents / rapports si absents du payload RPC.
+  try {
+    const { data: metrics } = await supabase
+      .from("dashboard_metric_snapshots" as never)
+      .select("metric_key, metric_value" as never);
+    if (Array.isArray(metrics) && metrics.length > 0) {
+      const nextStats = [...mapped.secondaryStats];
+      for (const row of metrics as unknown as MetricSnapshotRow[]) {
+        const id =
+          row.metric_key === "documents_telecharges"
+            ? "documents"
+            : row.metric_key === "rapports_generes"
+              ? "rapports"
+              : null;
+        if (!id) continue;
+        const idx = nextStats.findIndex((s) => s.id === id);
+        const updated = {
+          id,
+          label:
+            id === "documents"
+              ? "Documents téléchargés"
+              : "Rapports générés",
+          value: row.metric_value,
+          formatted: formatNumber(row.metric_value),
+          href: id === "documents" ? "/admin/mediatheque" : "/admin/rapports",
+          available: true,
+        };
+        if (idx >= 0) nextStats[idx] = { ...nextStats[idx], ...updated };
+        else nextStats.push(updated);
+      }
+      return { ...mapped, secondaryStats: nextStats };
+    }
+  } catch {
+    // Table absente.
+  }
+
+  return mapped;
 }
 
 const DEFAULT_FILTERS: DashboardFilters = {
@@ -177,8 +243,15 @@ export async function getDashboardBundle(
     const hasCharts =
       fromRpc.beneficiaryEvolution.length > 0 ||
       fromRpc.projectsByStatus.length > 0 ||
+      fromRpc.projectsBySector.length > 0 ||
+      fromRpc.projectsByProvince.length > 0 ||
       fromRpc.beneficiariesByProvince.length > 0;
-    if (hasCharts || fromRpc.demoMode || !shouldUseDemo(false)) {
+    if (
+      hasCharts ||
+      fromRpc.demoMode ||
+      fromRpc.presentationMode ||
+      !shouldUseDemo(false)
+    ) {
       return fromRpc;
     }
   }
@@ -207,9 +280,12 @@ export async function getDashboardBundle(
     supabase
       .from("projets")
       .select(
-        "id, title, slug, status, beneficiaries, budget, location, active, program_id, image_url, created_at",
+        "id, title, slug, status, beneficiaries, budget, location, active, program_id, image_url, created_at, secteur, is_demo" as never,
       ),
-    supabase.from("programmes").select("id, title, active").eq("active", true),
+    supabase
+      .from("programmes")
+      .select("id, title, active, secteur" as never)
+      .eq("active", true),
     supabase.from("partenaires").select("id, active").eq("active", true),
     supabase.from("messages").select("id, status, created_at"),
     supabase.from("membres").select("id, status, created_at"),
@@ -227,8 +303,10 @@ export async function getDashboardBundle(
     newsletterCount = null;
   }
 
-  const projets = (projetsRes.data ?? []).filter((p) => p.active !== false);
-  const programmes = programmesRes.data ?? [];
+  const projets = ((projetsRes.data ?? []) as unknown as ProjectRow[]).filter(
+    (p) => p.active !== false,
+  );
+  const programmes = (programmesRes.data ?? []) as unknown as ProgrammeRow[];
   const partenaires = partenairesRes.data ?? [];
   const messages = messagesRes.data ?? [];
   const membres = membresRes.data ?? [];
@@ -275,18 +353,76 @@ export async function getDashboardBundle(
     }),
   );
 
-  const provinceMap = new Map<string, number>();
+  const programmeById = new Map(
+    programmes.map((p) => [p.id, p] as const),
+  );
+
+  const sectorMap = new Map<string, number>();
   for (const project of filteredProjects) {
-    const province = project.location?.trim() || "Non précisée";
-    provinceMap.set(
+    const programme = project.program_id
+      ? programmeById.get(project.program_id)
+      : undefined;
+    const sector =
+      (typeof project.secteur === "string" && project.secteur.trim()) ||
+      (typeof programme?.secteur === "string" && programme.secteur.trim()) ||
+      programme?.title?.trim() ||
+      "Non classé";
+    sectorMap.set(sector, (sectorMap.get(sector) ?? 0) + 1);
+  }
+  const projectsBySector: NamedCount[] = [...sectorMap.entries()]
+    .map(([name, value]) => ({
+      name,
+      value,
+      percent: Math.round((value / totalForPercent) * 100),
+    }))
+    .sort((a, b) => b.value - a.value);
+
+  const PROVINCES = [
+    "Kinshasa",
+    "Kwilu",
+    "Kwango",
+    "Haut-Katanga",
+    "Ituri",
+    "Tshopo",
+    "Tshuapa",
+    "Nord-Kivu",
+  ] as const;
+
+  function matchProvince(location: string | null): string {
+    const raw = (location ?? "").toLowerCase();
+    for (const province of PROVINCES) {
+      if (raw.includes(province.toLowerCase())) return province;
+    }
+    return location?.trim() || "Non précisée";
+  }
+
+  const provinceBenefMap = new Map<string, number>();
+  const provinceProjectMap = new Map<string, number>();
+  for (const project of filteredProjects) {
+    const province = matchProvince(project.location);
+    provinceBenefMap.set(
       province,
-      (provinceMap.get(province) ?? 0) + (project.beneficiaries ?? 0),
+      (provinceBenefMap.get(province) ?? 0) + (project.beneficiaries ?? 0),
+    );
+    provinceProjectMap.set(
+      province,
+      (provinceProjectMap.get(province) ?? 0) + 1,
     );
   }
-  const beneficiariesByProvince = [...provinceMap.entries()]
+  const beneficiariesByProvince = [...provinceBenefMap.entries()]
     .map(([name, value]) => ({ name, value }))
     .sort((a, b) => b.value - a.value)
     .slice(0, 8);
+
+  const projectsByProvince = [...provinceProjectMap.entries()]
+    .map(([name, value]) => ({
+      name,
+      value,
+      percent: Math.round((value / totalForPercent) * 100),
+      beneficiaries: provinceBenefMap.get(name) ?? 0,
+      slug: name.toLowerCase().replace(/\s+/g, "-"),
+    }))
+    .sort((a, b) => b.value - a.value);
 
   const topProjects: TopProject[] = [...filteredProjects]
     .sort((a, b) => (b.beneficiaries ?? 0) - (a.beneficiaries ?? 0))
@@ -382,6 +518,41 @@ export async function getDashboardBundle(
     },
   ];
 
+  // Enrichir documents / rapports depuis les snapshots agrégés (présentation).
+  try {
+    const { data: metrics } = await supabase
+      .from("dashboard_metric_snapshots" as never)
+      .select("metric_key, metric_value" as never);
+    if (Array.isArray(metrics)) {
+      for (const row of metrics as unknown as MetricSnapshotRow[]) {
+        if (row.metric_key === "documents_telecharges") {
+          const idx = secondaryStats.findIndex((s) => s.id === "documents");
+          if (idx >= 0) {
+            secondaryStats[idx] = {
+              ...secondaryStats[idx],
+              value: row.metric_value,
+              formatted: formatNumber(row.metric_value),
+              available: true,
+            };
+          }
+        }
+        if (row.metric_key === "rapports_generes") {
+          const idx = secondaryStats.findIndex((s) => s.id === "rapports");
+          if (idx >= 0) {
+            secondaryStats[idx] = {
+              ...secondaryStats[idx],
+              value: row.metric_value,
+              formatted: formatNumber(row.metric_value),
+              available: true,
+            };
+          }
+        }
+      }
+    }
+  } catch {
+    // Table absente : conserver les valeurs disponibles.
+  }
+
   const alerts: DashboardAlert[] = [];
   if (pendingMessages > 0) {
     alerts.push({
@@ -408,10 +579,13 @@ export async function getDashboardBundle(
   const termines =
     projectsByStatus.find((s) => s.name === "Terminés")?.value ?? 0;
 
+  const presentationMode = filteredProjects.some((p) => p.is_demo === true);
+
   return {
-    demoMode: false,
+    demoMode: presentationMode,
+    presentationMode,
     summary: {
-      demoMode: false,
+      demoMode: presentationMode,
       kpis: {
         personnesTouchees:
           personnes > 0
@@ -453,7 +627,8 @@ export async function getDashboardBundle(
     },
     beneficiaryEvolution: [],
     projectsByStatus,
-    projectsBySector: [],
+    projectsBySector,
+    projectsByProvince,
     topProjects,
     beneficiariesByProvince,
     monthlyActivities: [],
@@ -496,6 +671,7 @@ function emptyBundle(viewer: DashboardBundle["viewer"], demoAllowed: boolean): D
 
   return {
     demoMode: false,
+    presentationMode: false,
     summary: {
       demoMode: false,
       kpis: {
@@ -510,6 +686,7 @@ function emptyBundle(viewer: DashboardBundle["viewer"], demoAllowed: boolean): D
     beneficiaryEvolution: [],
     projectsByStatus: [],
     projectsBySector: [],
+    projectsByProvince: [],
     topProjects: [],
     beneficiariesByProvince: [],
     monthlyActivities: [],

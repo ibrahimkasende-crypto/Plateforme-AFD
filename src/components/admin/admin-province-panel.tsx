@@ -1,13 +1,15 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 import {
   RDC_MAP_VIEWBOX,
   RDC_PROVINCE_PATHS,
 } from "@/features/intervention-zones/data/rdc-province-paths";
 import { matchLocationToProvinceId } from "@/features/intervention-zones/utils/normalize-province";
-import type { ProvinceBeneficiaries } from "@/features/statistiques/types/dashboard";
+import type { ProvinceProjectsDatum } from "@/features/statistiques/types/dashboard";
+import { slugify } from "@/lib/slugify";
 
 const COVERED_IDS = new Set(
   [
@@ -34,24 +36,35 @@ function fillForValue(value: number, max: number): string {
 }
 
 type AdminProvincePanelProps = {
-  data: ProvinceBeneficiaries[];
+  data: ProvinceProjectsDatum[];
 };
 
 export function AdminProvincePanel({ data }: AdminProvincePanelProps) {
+  const router = useRouter();
   const [hovered, setHovered] = useState<string | null>(null);
 
   const byId = useMemo(() => {
-    const map = new Map<string, number>();
+    const map = new Map<string, ProvinceProjectsDatum>();
     for (const row of data) {
       const id = matchLocationToProvinceId(row.name);
       if (!id) continue;
-      map.set(id, (map.get(id) ?? 0) + row.value);
+      const prev = map.get(id);
+      if (!prev) {
+        map.set(id, row);
+        continue;
+      }
+      map.set(id, {
+        ...prev,
+        value: prev.value + row.value,
+        beneficiaries: (prev.beneficiaries ?? 0) + (row.beneficiaries ?? 0),
+        activities: (prev.activities ?? 0) + (row.activities ?? 0),
+      });
     }
     return map;
   }, [data]);
 
   const max = useMemo(
-    () => Math.max(1, ...[...byId.values()]),
+    () => Math.max(1, ...[...byId.values()].map((row) => row.value)),
     [byId],
   );
 
@@ -61,19 +74,22 @@ export function AdminProvincePanel({ data }: AdminProvincePanelProps) {
   );
 
   return (
-    <div className="flex h-full min-h-0 gap-2">
-      <div className="relative min-h-0 min-w-0 flex-[1.2]">
+    <div className="flex h-full min-h-0 gap-2" data-province-projects-panel>
+      <div className="relative min-h-0 min-w-0 flex-[1.15]">
         <svg
           viewBox={RDC_MAP_VIEWBOX}
           className="h-full w-full"
           role="img"
-          aria-label="Carte des bénéficiaires par province en RDC"
+          aria-label="Carte des projets par province en RDC"
+          data-rdc-map
         >
           {RDC_PROVINCE_PATHS.map((path) => {
-            const value = byId.get(path.id) ?? 0;
+            const row = byId.get(path.id);
+            const value = row?.value ?? 0;
             const covered = COVERED_IDS.has(path.id) || value > 0;
             const fill = covered ? fillForValue(value, max) : "#edf1f5";
             const isHover = hovered === path.id;
+            const slug = row?.slug ?? slugify(path.name);
 
             return (
               <path
@@ -82,13 +98,24 @@ export function AdminProvincePanel({ data }: AdminProvincePanelProps) {
                 fill={fill}
                 stroke={isHover ? "#07152f" : "#ffffff"}
                 strokeWidth={isHover ? 1.4 : 0.6}
-                className="transition-[fill,stroke-width] duration-200"
+                className={covered ? "cursor-pointer transition-[fill,stroke-width] duration-200" : "transition-[fill,stroke-width] duration-200"}
                 tabIndex={covered ? 0 : -1}
-                aria-label={`${path.name}: ${value.toLocaleString("fr-FR")} bénéficiaires`}
+                aria-label={`${path.name}: ${value} projet(s)`}
                 onMouseEnter={() => setHovered(path.id)}
                 onMouseLeave={() => setHovered(null)}
                 onFocus={() => setHovered(path.id)}
                 onBlur={() => setHovered(null)}
+                onClick={() => {
+                  if (!covered) return;
+                  router.push(`/admin/projets?province=${encodeURIComponent(slug)}`);
+                }}
+                onKeyDown={(event) => {
+                  if (!covered) return;
+                  if (event.key === "Enter" || event.key === " ") {
+                    event.preventDefault();
+                    router.push(`/admin/projets?province=${encodeURIComponent(slug)}`);
+                  }
+                }}
               />
             );
           })}
@@ -106,19 +133,29 @@ export function AdminProvincePanel({ data }: AdminProvincePanelProps) {
       </div>
 
       <ul className="min-h-0 min-w-0 flex-1 space-y-0.5 overflow-y-auto text-[11px]">
-        {ranked.map((row) => (
-          <li key={row.name}>
-            <Link
-              href={`/admin/zones-intervention?province=${encodeURIComponent(row.name)}`}
-              className="flex items-center justify-between gap-1 rounded px-1 py-0.5 hover:bg-slate-50"
-            >
-              <span className="truncate text-[var(--admin-text)]">{row.name}</span>
-              <span className="shrink-0 font-display font-bold text-[var(--admin-primary)]">
-                {row.value.toLocaleString("fr-FR")}
-              </span>
-            </Link>
-          </li>
-        ))}
+        {ranked.map((row) => {
+          const slug = row.slug ?? slugify(row.name);
+          return (
+            <li key={row.name}>
+              <Link
+                href={`/admin/projets?province=${encodeURIComponent(slug)}`}
+                className="flex items-center justify-between gap-1 rounded px-1 py-0.5 hover:bg-slate-50"
+              >
+                <span className="min-w-0 truncate text-[var(--admin-text)]">
+                  {row.name}
+                  {typeof row.percent === "number" ? (
+                    <span className="ml-1 text-[10px] text-[var(--admin-muted)]">
+                      {row.percent}%
+                    </span>
+                  ) : null}
+                </span>
+                <span className="shrink-0 font-display font-bold text-[var(--admin-primary)]">
+                  {row.value}
+                </span>
+              </Link>
+            </li>
+          );
+        })}
       </ul>
     </div>
   );

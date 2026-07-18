@@ -7,6 +7,7 @@ import { useCallback, useMemo, useState } from "react";
 import { AdminNotifications } from "@/components/admin/admin-notifications";
 import { AdminProfileMenu } from "@/components/admin/admin-profile-menu";
 import { AdminSearch } from "@/components/admin/admin-search";
+import { PresentationModeBadge } from "@/components/admin/presentation-mode-badge";
 import { adminSidebarItems } from "@/config/admin-navigation";
 import type { AdminViewer, SidebarBadges } from "@/features/statistiques/types/dashboard";
 import { cn } from "@/lib/utils";
@@ -16,6 +17,7 @@ type AdminHeaderProps = {
   badges: SidebarBadges;
   viewer: AdminViewer;
   onMenuClick: () => void;
+  presentationMode?: boolean;
 };
 
 export function AdminHeader({
@@ -23,6 +25,7 @@ export function AdminHeader({
   badges,
   viewer,
   onMenuClick,
+  presentationMode = false,
 }: AdminHeaderProps) {
   const pathname = usePathname();
   const [fullscreen, setFullscreen] = useState(false);
@@ -74,6 +77,7 @@ export function AdminHeader({
       </div>
 
       <div className="flex shrink-0 items-center gap-1 md:gap-2">
+        {presentationMode ? <PresentationModeBadge /> : null}
         <AdminNotifications count={badges.notifications} />
         <Link
           href="/admin/messages"

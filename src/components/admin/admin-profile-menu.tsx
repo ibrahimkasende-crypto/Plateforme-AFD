@@ -2,8 +2,9 @@
 
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import { ChevronDown, ExternalLink, KeyRound, LogOut } from "lucide-react";
+import { ChevronDown, Database, ExternalLink, KeyRound, LogOut } from "lucide-react";
 import { signOut } from "@/actions/auth";
+import { PresentationDataDialog } from "@/components/admin/presentation-data-dialog";
 import type { AdminViewer } from "@/features/statistiques/types/dashboard";
 
 type AdminProfileMenuProps = {
@@ -12,7 +13,9 @@ type AdminProfileMenuProps = {
 
 export function AdminProfileMenu({ viewer }: AdminProfileMenuProps) {
   const [open, setOpen] = useState(false);
+  const [presentationOpen, setPresentationOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
+  const isSuperAdmin = viewer.role === "super_admin";
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -51,7 +54,7 @@ export function AdminProfileMenu({ viewer }: AdminProfileMenuProps) {
       {open ? (
         <div
           role="menu"
-          className="absolute right-0 z-50 mt-2 w-52 overflow-hidden rounded-xl border border-slate-200 bg-white py-1 shadow-lg"
+          className="absolute right-0 z-50 mt-2 w-56 overflow-hidden rounded-xl border border-slate-200 bg-white py-1 shadow-lg"
         >
           <Link
             href="/"
@@ -62,6 +65,20 @@ export function AdminProfileMenu({ viewer }: AdminProfileMenuProps) {
             <ExternalLink className="size-4" aria-hidden />
             Voir le site
           </Link>
+          {isSuperAdmin ? (
+            <button
+              type="button"
+              role="menuitem"
+              className="flex w-full items-center gap-2 px-4 py-2.5 text-left text-sm text-slate-700 hover:bg-slate-50"
+              onClick={() => {
+                setOpen(false);
+                setPresentationOpen(true);
+              }}
+            >
+              <Database className="size-4" aria-hidden />
+              Gérer les données de présentation
+            </button>
+          ) : null}
           <Link
             href="/nouveau-mot-de-passe"
             role="menuitem"
@@ -84,6 +101,11 @@ export function AdminProfileMenu({ viewer }: AdminProfileMenuProps) {
           </form>
         </div>
       ) : null}
+
+      <PresentationDataDialog
+        open={presentationOpen}
+        onClose={() => setPresentationOpen(false)}
+      />
     </div>
   );
 }

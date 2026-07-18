@@ -79,37 +79,46 @@
   --admin-warning: #f5a300;
 
   --admin-header-height: 64px;
-  --admin-sidebar-width: 236px;
-  --admin-content-gap: 10px;
-  --admin-card-radius: 10px;
-  --admin-panel-padding: 12px;
-  --admin-filter-row-height: 42px;
-  --admin-kpi-row-height: 112px;
-  --admin-chart-row-one-height: minmax(210px, 1fr);
-  --admin-chart-row-two-height: minmax(205px, 1fr);
-  --admin-secondary-row-height: 100px;
+  --admin-sidebar-width: 228px;
+  --admin-sidebar-width-collapsed: 72px;
+  --admin-sidebar-current-width: var(--admin-sidebar-width);
+  --admin-content-gap: 7px;
+  --admin-card-radius: 9px;
+  --admin-panel-padding: 9px;
+  --admin-filter-row-height: 40px;
+  --admin-kpi-row-height: 88px;
+  --admin-chart-row-one-height: minmax(195px, 1fr);
+  --admin-chart-row-two-height: minmax(190px, 1fr);
+  --admin-secondary-row-height: 76px;
+  --dashboard-gap: 7px;
+  --dashboard-card-padding: 9px;
+  --dashboard-radius: 9px;
+  --dashboard-kpi-height: 88px;
+  --dashboard-secondary-height: 76px;
+  --dashboard-chart-title-size: 13px;
+  --dashboard-body-size: 11.5px;
 }
 
 /* Densité compacte — écrans larges mais moins hauts */
 @media (max-height: 899px) and (min-width: 1280px) {
   :root {
-    --admin-content-gap: 7px;
-    --admin-panel-padding: 9px;
-    --admin-kpi-row-height: 94px;
-    --admin-secondary-row-height: 82px;
-    --admin-filter-row-height: 38px;
-    --admin-chart-row-one-height: minmax(180px, 1fr);
-    --admin-chart-row-two-height: minmax(170px, 1fr);
+    --admin-content-gap: 6px;
+    --admin-panel-padding: 8px;
+    --admin-kpi-row-height: 82px;
+    --admin-secondary-row-height: 72px;
+    --admin-filter-row-height: 36px;
+    --admin-chart-row-one-height: minmax(168px, 1fr);
+    --admin-chart-row-two-height: minmax(160px, 1fr);
   }
 }
 
 /* Ultra-compact 1366×768 */
 @media (max-height: 800px) and (min-width: 1280px) {
   :root {
-    --admin-content-gap: 6px;
-    --admin-panel-padding: 8px;
-    --admin-kpi-row-height: 86px;
-    --admin-secondary-row-height: 74px;
+    --admin-content-gap: 5px;
+    --admin-panel-padding: 7px;
+    --admin-kpi-row-height: 76px;
+    --admin-secondary-row-height: 68px;
     --admin-header-height: 56px;
   }
 }
@@ -168,12 +177,42 @@
 
 .admin-panel__title {
   font-family: var(--font-heading), Manrope, sans-serif;
-  font-size: 14px;
+  font-size: var(--dashboard-chart-title-size, 13px);
   font-weight: 700;
   color: var(--admin-text);
   line-height: 1.2;
-  margin: 0 0 6px;
+  margin: 0 0 4px;
   flex-shrink: 0;
+}
+
+@keyframes afd-nebula {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+    opacity: 0.85;
+  }
+  50% {
+    transform: translate3d(2%, -1.5%, 0) scale(1.04);
+    opacity: 1;
+  }
+}
+
+@keyframes afd-logo-breathe {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.025);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .motion-safe\:animate-\[afd-logo-breathe_4\.5s_ease-in-out_infinite\],
+  .animate-\[afd-nebula_18s_ease-in-out_infinite\],
+  .animate-\[afd-nebula_22s_ease-in-out_infinite_reverse\] {
+    animation: none !important;
+  }
 }
 
 .admin-panel__body {

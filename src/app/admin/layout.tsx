@@ -19,15 +19,21 @@ export default async function AdminLayout({
   const session = await requireAdmin();
 
   let badges: SidebarBadges = EMPTY_BADGES;
+  let presentationMode = false;
   try {
     const bundle = await getDashboardBundle();
     badges = bundle.badges;
+    presentationMode = Boolean(bundle.presentationMode ?? bundle.demoMode);
   } catch {
     // Conserver des badges vides si le chargement échoue.
   }
 
   return (
-    <AdminShell badges={badges} viewer={session.viewer}>
+    <AdminShell
+      badges={badges}
+      viewer={session.viewer}
+      presentationMode={presentationMode}
+    >
       {children}
     </AdminShell>
   );

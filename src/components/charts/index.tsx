@@ -7,6 +7,7 @@ export {
 export { BeneficiaryEvolutionChart } from "@/components/charts/beneficiary-evolution-chart";
 export { ProjectStatusChart } from "@/components/charts/project-status-chart";
 export { ProjectSectorChart } from "@/components/charts/project-sector-chart";
+export { ProjectProvinceChart } from "@/components/charts/project-province-chart";
 export { BeneficiariesByProvinceChart } from "@/components/charts/beneficiaries-by-province-chart";
 export { MonthlyActivitiesChart } from "@/components/charts/monthly-activities-chart";
 export { BudgetComparisonChart } from "@/components/charts/budget-comparison-chart";

@@ -10,6 +10,7 @@ import type {
   MonthlyActivityPoint,
   NamedCount,
   ProvinceBeneficiaries,
+  ProvinceProjectsDatum,
   SecondaryStat,
   TopProject,
 } from "@/features/statistiques/types/dashboard";
@@ -125,6 +126,17 @@ export function mapRpcPayloadToBundle(
     }),
   );
 
+  const projectsByProvince: ProvinceProjectsDatum[] = (
+    payload.projects_by_province ?? []
+  ).map((row) => ({
+    name: asString(row.name),
+    value: asNumber(row.value),
+    percent: typeof row.percent === "number" ? row.percent : undefined,
+    activities: asNumber(row.activities),
+    beneficiaries: asNumber(row.beneficiaries),
+    slug: asString(row.slug, asString(row.name).toLowerCase().replace(/\s+/g, "-")),
+  }));
+
   const topProjects: TopProject[] = (payload.top_projects ?? []).map((row) => ({
     id: asString(row.id),
     title: asString(row.title),
@@ -199,7 +211,11 @@ export function mapRpcPayloadToBundle(
     }),
   );
 
-  const demoMode = Boolean(payload.is_demo || payload.summary?.demo_mode);
+  const demoMode = Boolean(
+    payload.presentation_mode ||
+      payload.is_demo ||
+      payload.summary?.demo_mode,
+  );
 
   const personnes = mapKpi(
     kpisRaw.personnes_touchees ?? kpisRaw.personnesTouchees,
@@ -231,6 +247,7 @@ export function mapRpcPayloadToBundle(
 
   return {
     demoMode,
+    presentationMode: demoMode,
     summary: {
       demoMode,
       kpis: {
@@ -253,6 +270,7 @@ export function mapRpcPayloadToBundle(
     beneficiaryEvolution,
     projectsByStatus,
     projectsBySector,
+    projectsByProvince,
     topProjects,
     beneficiariesByProvince,
     monthlyActivities,

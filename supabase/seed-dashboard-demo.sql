@@ -3,11 +3,26 @@
 --
 -- ⚠️  NE PAS exécuter automatiquement en production.
 --     Réservé aux environnements de développement / recette manuelle.
+--
+-- PRÉREQUIS OBLIGATOIRE :
+--   exécuter d'abord la migration
+--   supabase/migrations/20260718_020_admin_dashboard_rpc.sql
+--   (crée dashboard_stats_mensuelles, dashboard_activites_mensuelles,
+--    dashboard_budget_mensuel, admin_alertes et la RPC get_admin_dashboard)
 
 do $$
 declare
   v_batch text := 'afd-dashboard-demo-2026-07';
 begin
+  if to_regclass('public.dashboard_stats_mensuelles') is null
+     or to_regclass('public.dashboard_activites_mensuelles') is null
+     or to_regclass('public.dashboard_budget_mensuel') is null
+     or to_regclass('public.admin_alertes') is null
+  then
+    raise exception
+      'Tables dashboard absentes. Exécutez d''abord la migration 20260718_020_admin_dashboard_rpc.sql, puis relancez ce seed.';
+  end if;
+
   -- Purge idempotente du lot
   delete from public.dashboard_stats_mensuelles where demo_batch_id = v_batch;
   delete from public.dashboard_activites_mensuelles where demo_batch_id = v_batch;

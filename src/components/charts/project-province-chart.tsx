@@ -12,19 +12,19 @@ import {
   YAxis,
 } from "recharts";
 import { AFD_CHART_COLORS } from "@/components/charts/chart-colors";
-import type { NamedCount } from "@/features/statistiques/types/dashboard";
+import type { ProvinceProjectsDatum } from "@/features/statistiques/types/dashboard";
 import { slugify } from "@/lib/slugify";
 
-type ProjectSectorChartProps = {
-  data: NamedCount[];
+type ProjectProvinceChartProps = {
+  data: ProvinceProjectsDatum[];
 };
 
 type TipProps = {
   active?: boolean;
-  payload?: Array<{ payload: NamedCount }>;
+  payload?: Array<{ payload: ProvinceProjectsDatum }>;
 };
 
-function SectorTooltip({ active, payload }: TipProps) {
+function ProvinceTooltip({ active, payload }: TipProps) {
   if (!active || !payload?.[0]) return null;
   const row = payload[0].payload;
   return (
@@ -34,11 +34,21 @@ function SectorTooltip({ active, payload }: TipProps) {
         {row.value} projet{row.value > 1 ? "s" : ""}
         {typeof row.percent === "number" ? ` · ${row.percent} %` : ""}
       </p>
+      {typeof row.beneficiaries === "number" ? (
+        <p className="text-[var(--admin-muted)]">
+          {row.beneficiaries.toLocaleString("fr-FR")} bénéficiaires
+        </p>
+      ) : null}
+      {typeof row.activities === "number" ? (
+        <p className="text-[var(--admin-muted)]">
+          {row.activities} activité{row.activities > 1 ? "s" : ""}
+        </p>
+      ) : null}
     </div>
   );
 }
 
-export function ProjectSectorChart({ data }: ProjectSectorChartProps) {
+export function ProjectProvinceChart({ data }: ProjectProvinceChartProps) {
   const router = useRouter();
 
   return (
@@ -46,17 +56,17 @@ export function ProjectSectorChart({ data }: ProjectSectorChartProps) {
       <BarChart
         data={data}
         layout="vertical"
-        margin={{ top: 2, right: 10, left: 0, bottom: 2 }}
+        margin={{ top: 2, right: 8, left: 0, bottom: 2 }}
       >
         <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" horizontal={false} />
         <XAxis type="number" allowDecimals={false} tick={{ fontSize: 10, fill: "#667085" }} />
         <YAxis
           type="category"
           dataKey="name"
-          width={118}
-          tick={{ fontSize: 9.5, fill: "#667085" }}
+          width={86}
+          tick={{ fontSize: 10, fill: "#667085" }}
         />
-        <Tooltip content={<SectorTooltip />} />
+        <Tooltip content={<ProvinceTooltip />} />
         <Bar
           dataKey="value"
           name="Projets"
@@ -65,18 +75,17 @@ export function ProjectSectorChart({ data }: ProjectSectorChartProps) {
           onClick={(entry) => {
             const payload =
               entry && typeof entry === "object" && "payload" in entry
-                ? (entry.payload as NamedCount)
+                ? (entry.payload as ProvinceProjectsDatum)
                 : null;
-            const name = payload?.name;
-            if (!name) return;
-            const slug = slugify(name);
-            router.push(`/admin/projets?secteur=${encodeURIComponent(slug)}`);
+            const slug = payload?.slug || (payload?.name ? slugify(payload.name) : null);
+            if (!slug) return;
+            router.push(`/admin/projets?province=${encodeURIComponent(slug)}`);
           }}
         >
           {data.map((entry, index) => (
             <Cell
               key={entry.name}
-              fill={entry.color ?? AFD_CHART_COLORS[index % AFD_CHART_COLORS.length]}
+              fill={AFD_CHART_COLORS[index % AFD_CHART_COLORS.length]}
             />
           ))}
         </Bar>
