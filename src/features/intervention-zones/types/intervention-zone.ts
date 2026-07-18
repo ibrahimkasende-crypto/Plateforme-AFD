@@ -30,6 +30,8 @@ export type InterventionZonesSummary = {
 export type InterventionZonesBundle = {
   provinces: InterventionProvince[];
   summary: InterventionZonesSummary;
-  source: "supabase" | "unavailable";
+  source: "supabase" | "unavailable" | "demo";
   hasPublishedLocations: boolean;
+  /** True uniquement lorsque des valeurs de démonstration sont affichées. */
+  isDemo: boolean;
 };

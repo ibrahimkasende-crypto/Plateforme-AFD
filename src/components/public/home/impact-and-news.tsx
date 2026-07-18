@@ -5,6 +5,7 @@ import { FadeIn } from "@/components/motion/FadeIn";
 import { EmptyState } from "@/components/shared/EmptyState";
 import { Section } from "@/components/shared/Section";
 import { SiteContainer } from "@/components/shared/SiteContainer";
+import { afdImages } from "@/config/afd-images";
 import type { FeaturedImpactStory, LatestNews } from "@/lib/queries/home";
 import { cn } from "@/lib/utils";
 
@@ -112,14 +113,36 @@ function ImpactStoryCard({
 }) {
   if (!story) {
     return (
-      <div className="rounded-[16px] border border-dashed border-[var(--afd-border)] bg-[var(--afd-light-blue)] p-5 sm:rounded-[20px] sm:p-6">
-        <p className="afd-label text-[var(--afd-blue)]">Développement</p>
-        <p className="afd-h3 mt-3">Histoire d’impact — placeholder</p>
-        <p className="mt-2 text-sm text-[var(--afd-muted)]">
-          Aucune histoire publiée. Section masquée en production
-          {isDev ? " (visible ici en développement)" : ""}.
-        </p>
-      </div>
+      <FadeIn>
+        <article className="flex w-full max-w-full flex-col overflow-hidden rounded-[16px] bg-[var(--afd-navy)] text-white sm:rounded-[20px]">
+          <div className="relative aspect-[4/3] max-h-[280px] bg-[var(--afd-dark-navy)] sm:aspect-[4/5] sm:max-h-[420px]">
+            <Image
+              src={afdImages.histoireImpact.src}
+              alt={afdImages.histoireImpact.alt}
+              fill
+              sizes="(max-width:1024px) 100vw, 40vw"
+              className="object-cover"
+              style={{ objectPosition: afdImages.histoireImpact.objectPosition }}
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-[var(--afd-navy)] via-[var(--afd-navy)]/40 to-transparent" />
+          </div>
+          <div className="space-y-3 p-5 sm:p-6 md:p-7">
+            <p className="afd-label text-white/70">Histoire d’impact</p>
+            <h3 className="font-heading text-lg font-bold leading-snug sm:text-xl">
+              Parcours documentés à venir
+            </h3>
+            <p className="text-[15px] leading-relaxed text-white/85">
+              Découvrez prochainement les parcours et transformations documentés
+              dans le cadre des actions de l’AFD.
+            </p>
+            {isDev ? (
+              <p className="text-xs text-white/55">
+                Image illustrative — autorisation de publication à vérifier.
+              </p>
+            ) : null}
+          </div>
+        </article>
+      </FadeIn>
     );
   }
 

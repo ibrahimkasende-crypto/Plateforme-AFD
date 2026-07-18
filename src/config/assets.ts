@@ -8,10 +8,17 @@ export const assets = {
   },
   home: {
     hero: "/assets/home/Femmes_AFD.png",
-    presentation: "/assets/home/presentation-afd.png",
+    presentation: "/assets/home/presentation_afd.png",
   },
   programmes: {
     directory: "/assets/programmes",
+    /** Visuels de secours lorsque `image_url` n’est pas encore renseigné. */
+    fallbacks: [
+      "/images/afd/programmes/autonomisation-economique.webp",
+      "/images/afd/programmes/sante-nutrition.webp",
+      "/images/afd/programmes/wash.webp",
+      "/images/afd/programmes/protection-droits-femmes.webp",
+    ],
   },
   projets: {
     directory: "/assets/projets",

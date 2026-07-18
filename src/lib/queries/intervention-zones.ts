@@ -1,3 +1,7 @@
+import {
+  DEMO_INTERVENTION_ZONES,
+  isDemoContentEnabled,
+} from "@/config/demo-data/intervention-zones";
 import { RDC_PROVINCE_PATHS } from "@/features/intervention-zones/data/rdc-province-paths";
 import type {
   InterventionProvince,
@@ -39,13 +43,69 @@ function buildEmptyBundle(
     },
     source,
     hasPublishedLocations: false,
+    isDemo: false,
+  };
+}
+
+function buildDemoBundle(): InterventionZonesBundle {
+  const byId = new Map(
+    RDC_PROVINCE_PATHS.map((province) => [
+      province.id,
+      emptyProvince(province),
+    ]),
+  );
+
+  for (const demo of DEMO_INTERVENTION_ZONES) {
+    const province = byId.get(demo.svgId);
+    if (!province) continue;
+    province.active = true;
+    province.projectCount = demo.projects;
+    province.beneficiaries = demo.beneficiaries;
+    province.sectors = [...demo.sectors];
+    province.programmes = [
+      {
+        id: `demo-${demo.svgId}`,
+        title: demo.programmePrincipal,
+        slug: "demo",
+      },
+    ];
+    province.intensity = computeIntensity(demo.projects);
+  }
+
+  const provinces = [...byId.values()].sort((a, b) =>
+    a.name.localeCompare(b.name, "fr"),
+  );
+  const active = provinces.filter((province) => province.active);
+  const totalProjects = active.reduce((sum, p) => sum + p.projectCount, 0);
+  const totalBeneficiaries = active.reduce(
+    (sum, p) => sum + (p.beneficiaries ?? 0),
+    0,
+  );
+  const allSectors = new Set(active.flatMap((p) => p.sectors));
+
+  return {
+    provinces,
+    summary: {
+      activeProvinces: active.length,
+      totalProjects,
+      totalBeneficiaries,
+      totalSectors: allSectors.size,
+      totalProgrammes: active.length,
+    },
+    source: "demo",
+    hasPublishedLocations: true,
+    isDemo: true,
   };
 }
 
 export async function getPublicInterventionZones(): Promise<InterventionZonesBundle> {
   try {
     const supabase = await createClientSafe();
-    if (!supabase) return buildEmptyBundle("unavailable");
+    if (!supabase) {
+      return isDemoContentEnabled()
+        ? buildDemoBundle()
+        : buildEmptyBundle("unavailable");
+    }
 
     const { data: projects, error } = await supabase
       .from("projets")
@@ -158,6 +218,10 @@ export async function getPublicInterventionZones(): Promise<InterventionZonesBun
       active.flatMap((province) => province.programmes.map((p) => p.id)),
     );
 
+    if (active.length === 0 && isDemoContentEnabled()) {
+      return buildDemoBundle();
+    }
+
     return {
       provinces,
       summary: {
@@ -169,8 +233,11 @@ export async function getPublicInterventionZones(): Promise<InterventionZonesBun
       },
       source: "supabase",
       hasPublishedLocations: active.length > 0,
+      isDemo: false,
     };
   } catch {
-    return buildEmptyBundle("unavailable");
+    return isDemoContentEnabled()
+      ? buildDemoBundle()
+      : buildEmptyBundle("unavailable");
   }
 }

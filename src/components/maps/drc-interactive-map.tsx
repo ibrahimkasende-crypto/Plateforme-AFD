@@ -233,7 +233,14 @@ export function DrcInteractiveMap({
             {summaryText}
           </p>
 
-          {!bundle.hasPublishedLocations ? (
+          {bundle.isDemo ? (
+            <p className="rounded-xl border border-amber-300 bg-amber-50 px-3 py-2.5 text-[13px] font-medium text-amber-900">
+              Données de démonstration — ces valeurs ne sont pas des statistiques
+              officielles de l’AFD.
+            </p>
+          ) : null}
+
+          {!bundle.hasPublishedLocations && !bundle.isDemo ? (
             <p className="rounded-xl border border-[var(--afd-border)] bg-[var(--afd-light-blue)]/60 px-3 py-2.5 text-[13px] text-[var(--afd-muted)]">
               Les données d’intervention par province seront affichées dès leur
               publication par l’AFD.

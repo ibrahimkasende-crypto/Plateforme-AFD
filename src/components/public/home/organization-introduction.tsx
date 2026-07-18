@@ -22,7 +22,7 @@ export function OrganizationIntroduction() {
                   alt={content.image.alt}
                   fill
                   sizes="(max-width: 1024px) 100vw, 40vw"
-                  className="object-cover"
+                  className="object-cover object-[28%_center]"
                 />
                 <div
                   aria-hidden

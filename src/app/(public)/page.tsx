@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import { FeaturedPrograms } from "@/components/public/home/featured-programs";
 import { FeaturedProjects } from "@/components/public/home/featured-projects";
+import { FieldActions } from "@/components/public/home/field-actions";
 import { HomeHero } from "@/components/public/home/home-hero";
 import { HomeSectionSkeleton } from "@/components/public/home/home-section-skeleton";
 import { ImpactAndNews } from "@/components/public/home/impact-and-news";
@@ -135,6 +136,8 @@ export default function HomePage() {
       >
         <ProgramsBlock />
       </Suspense>
+
+      <FieldActions />
 
       <Suspense fallback={<HomeSectionSkeleton cards={3} />}>
         <ProjectsBlock />
