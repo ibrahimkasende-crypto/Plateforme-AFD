@@ -1,6 +1,7 @@
 import { createClient } from "@supabase/supabase-js";
 import { unstable_cache } from "next/cache";
 import {
+  LEGACY_PARTNER_LOGO_BY_ID,
   LEGACY_PARTNERS,
   type LegacyPartnerRecord,
 } from "@/config/legacy-partners";
@@ -19,6 +20,10 @@ export type PublicPartner = {
   description: string | null;
   order: number | null;
 };
+
+function resolveLogoUrl(id: string, logoUrl: string | null): string | null {
+  return LEGACY_PARTNER_LOGO_BY_ID[id] ?? logoUrl;
+}
 
 function fromLegacy(record: LegacyPartnerRecord): PublicPartner {
   return {
@@ -76,7 +81,7 @@ async function fetchActivePublicPartners(): Promise<PublicPartner[]> {
         name: row.name,
         acronyme: null,
         slug: null,
-        logo_url: row.logo_url,
+        logo_url: resolveLogoUrl(row.id, row.logo_url),
         category: row.category,
         website_url: null,
         description: null,
@@ -93,7 +98,7 @@ async function fetchActivePublicPartners(): Promise<PublicPartner[]> {
       name: row.name,
       acronyme: row.acronyme ?? null,
       slug: row.slug ?? null,
-      logo_url: row.logo_url,
+      logo_url: resolveLogoUrl(row.id, row.logo_url),
       category: row.category,
       website_url: row.website_url ?? null,
       description: row.description ?? null,
@@ -105,9 +110,9 @@ async function fetchActivePublicPartners(): Promise<PublicPartner[]> {
 }
 
 export async function getActivePublicPartners(): Promise<PublicPartner[]> {
-  return unstable_cache(fetchActivePublicPartners, ["partenaires-public"], {
+  return unstable_cache(fetchActivePublicPartners, ["partenaires-public-v2"], {
     tags: ["partenaires"],
-    revalidate: 300,
+    revalidate: 60,
   })();
 }
 

@@ -8,14 +8,26 @@ import {
   Users,
   type LucideIcon,
 } from "lucide-react";
+import { CmsPageShell } from "@/components/public/CmsPageShell";
 import { PublicPageShell } from "@/components/public/PublicPageShell";
 import { institutionalContent } from "@/config/institutional-content";
+import { siteConfig } from "@/config/site";
+import { getPublishedPageByRoute } from "@/lib/queries/public/pages";
 
-export const metadata: Metadata = {
-  title: "Mission, vision et valeurs",
-  description:
-    "Fondements stratégiques de l’Alliance des Femmes pour le Développement — mission, vision et valeurs institutionnelles.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const cms = await getPublishedPageByRoute(
+    "/qui-sommes-nous/mission-vision-valeurs",
+  );
+  return {
+    title: cms?.titre || "Mission, vision et valeurs",
+    description:
+      cms?.description_seo ||
+      "Fondements stratégiques de l’Alliance des Femmes pour le Développement — mission, vision et valeurs institutionnelles.",
+    alternates: {
+      canonical: `${siteConfig.url}/qui-sommes-nous/mission-vision-valeurs`,
+    },
+  };
+}
 
 const valueIcons: Record<string, LucideIcon> = {
   HeartHandshake,
@@ -25,7 +37,23 @@ const valueIcons: Record<string, LucideIcon> = {
   HandHeart,
 };
 
-export default function MissionVisionValeursPage() {
+export default async function MissionVisionValeursPage() {
+  const cms = await getPublishedPageByRoute(
+    "/qui-sommes-nous/mission-vision-valeurs",
+  );
+  if (cms) {
+    return (
+      <CmsPageShell
+        cms={cms}
+        breadcrumbs={[
+          { label: "Accueil", href: "/" },
+          { label: "Qui sommes-nous", href: "/qui-sommes-nous" },
+          { label: cms.titre },
+        ]}
+      />
+    );
+  }
+
   const { mission, vision, values, pillars } = institutionalContent;
 
   return (

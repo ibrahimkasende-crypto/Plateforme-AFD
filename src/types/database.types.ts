@@ -926,6 +926,214 @@ export type Database = {
         Update: Partial<Database["public"]["Tables"]["categories_documents"]["Insert"]>
         Relationships: []
       }
+      histoires_impact: {
+        Row: import("@/features/impact/types").HistoireImpact
+        Insert: Partial<import("@/features/impact/types").HistoireImpact>
+        Update: Partial<import("@/features/impact/types").HistoireImpact>
+        Relationships: []
+      }
+      temoignages: {
+        Row: import("@/features/impact/types").Temoignage
+        Insert: Partial<import("@/features/impact/types").Temoignage>
+        Update: Partial<import("@/features/impact/types").Temoignage>
+        Relationships: []
+      }
+      appels_offres: {
+        Row: import("@/features/appels-offres/types").AppelOffre
+        Insert: Partial<import("@/features/appels-offres/types").AppelOffre>
+        Update: Partial<import("@/features/appels-offres/types").AppelOffre>
+        Relationships: []
+      }
+      appels_offres_documents: {
+        Row: import("@/features/appels-offres/types").AppelOffreDocument
+        Insert: Partial<import("@/features/appels-offres/types").AppelOffreDocument>
+        Update: Partial<import("@/features/appels-offres/types").AppelOffreDocument>
+        Relationships: []
+      }
+      pages: {
+        Row: {
+          id: string
+          route: string
+          titre: string
+          slug: string | null
+          surtitre: string | null
+          resume: string | null
+          description_seo: string | null
+          image_og_media_id: string | null
+          statut: string
+          publie: boolean
+          published_at: string | null
+          created_at: string
+          updated_at: string
+          deleted_at: string | null
+        }
+        Insert: {
+          id?: string
+          route: string
+          titre: string
+          slug?: string | null
+          surtitre?: string | null
+          resume?: string | null
+          description_seo?: string | null
+          image_og_media_id?: string | null
+          statut?: string
+          publie?: boolean
+          published_at?: string | null
+          created_at?: string
+          updated_at?: string
+          deleted_at?: string | null
+        }
+        Update: Partial<Database["public"]["Tables"]["pages"]["Insert"]>
+        Relationships: []
+      }
+      sections_pages: {
+        Row: {
+          id: string
+          page_id: string
+          type_section: string
+          titre: string | null
+          sous_titre: string | null
+          contenu: string | null
+          media_id: string | null
+          ordre: number
+          active: boolean
+          configuration: Json
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          page_id: string
+          type_section?: string
+          titre?: string | null
+          sous_titre?: string | null
+          contenu?: string | null
+          media_id?: string | null
+          ordre?: number
+          active?: boolean
+          configuration?: Json
+          created_at?: string
+          updated_at?: string
+        }
+        Update: Partial<Database["public"]["Tables"]["sections_pages"]["Insert"]>
+        Relationships: []
+      }
+      agents_terrain: {
+        Row: {
+          id: string
+          user_id: string | null
+          matricule: string | null
+          full_name: string
+          fonction: string | null
+          telephone: string | null
+          province: string | null
+          territoire: string | null
+          programme_id: string | null
+          projet_id: string | null
+          superviseur_id: string | null
+          actif: boolean
+          disponibilite: string | null
+          date_affectation: string | null
+          notes_internes: string | null
+          created_at: string
+          updated_at: string
+          deleted_at: string | null
+        }
+        Insert: {
+          id?: string
+          user_id?: string | null
+          matricule?: string | null
+          full_name: string
+          fonction?: string | null
+          telephone?: string | null
+          province?: string | null
+          territoire?: string | null
+          programme_id?: string | null
+          projet_id?: string | null
+          superviseur_id?: string | null
+          actif?: boolean
+          disponibilite?: string | null
+          date_affectation?: string | null
+          notes_internes?: string | null
+          created_at?: string
+          updated_at?: string
+          deleted_at?: string | null
+        }
+        Update: Partial<Database["public"]["Tables"]["agents_terrain"]["Insert"]>
+        Relationships: []
+      }
+      enquetes: {
+        Row: import("@/features/enquetes/types").Enquete
+        Insert: Partial<import("@/features/enquetes/types").Enquete>
+        Update: Partial<import("@/features/enquetes/types").Enquete>
+        Relationships: []
+      }
+      questions_enquete: {
+        Row: import("@/features/enquetes/types").QuestionEnquete
+        Insert: Partial<import("@/features/enquetes/types").QuestionEnquete>
+        Update: Partial<import("@/features/enquetes/types").QuestionEnquete>
+        Relationships: []
+      }
+      options_questions: {
+        Row: import("@/features/enquetes/types").OptionQuestion
+        Insert: Partial<import("@/features/enquetes/types").OptionQuestion>
+        Update: Partial<import("@/features/enquetes/types").OptionQuestion>
+        Relationships: []
+      }
+      reponses_enquete: {
+        Row: {
+          id: string
+          enquete_id: string
+          agent_id: string | null
+          projet_id: string | null
+          province: string | null
+          repondant_anonyme: boolean
+          statut: string
+          consentement: boolean
+          localisation: Json | null
+          submitted_at: string | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          enquete_id: string
+          agent_id?: string | null
+          projet_id?: string | null
+          province?: string | null
+          repondant_anonyme?: boolean
+          statut?: string
+          consentement?: boolean
+          localisation?: Json | null
+          submitted_at?: string | null
+          created_at?: string
+        }
+        Update: Partial<Database["public"]["Tables"]["reponses_enquete"]["Insert"]>
+        Relationships: []
+      }
+      reponses_questions: {
+        Row: {
+          id: string
+          reponse_enquete_id: string
+          question_id: string
+          valeur_texte: string | null
+          valeur_nombre: number | null
+          valeur_json: Json | null
+          fichier_path: string | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          reponse_enquete_id: string
+          question_id: string
+          valeur_texte?: string | null
+          valeur_nombre?: number | null
+          valeur_json?: Json | null
+          fichier_path?: string | null
+          created_at?: string
+        }
+        Update: Partial<Database["public"]["Tables"]["reponses_questions"]["Insert"]>
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

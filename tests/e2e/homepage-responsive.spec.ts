@@ -44,9 +44,6 @@ test.describe("Homepage responsive", () => {
     await expect(
       page.getByRole("heading", { name: /domaines d’intervention/i }),
     ).toBeVisible();
-    await expect(
-      page.getByRole("heading", { name: /programmes prioritaires/i }),
-    ).toBeVisible();
     await expect(page.getByRole("contentinfo")).toBeVisible();
   });
 

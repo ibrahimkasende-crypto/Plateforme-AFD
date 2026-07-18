@@ -8,6 +8,12 @@ import { useForm } from "react-hook-form";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { z } from "zod";
 import { signIn } from "@/actions/auth";
+import {
+  errorClassName,
+  fieldClassName,
+  labelClassName,
+  submitClassName,
+} from "@/components/ui/form-styles";
 
 const loginSchema = z.object({
   email: z.string().trim().email("Adresse e-mail invalide").max(200),
@@ -16,9 +22,6 @@ const loginSchema = z.object({
 });
 
 type LoginFormValues = z.infer<typeof loginSchema>;
-
-const inputClassName =
-  "min-h-12 w-full rounded-lg border border-slate-200 px-3 text-base text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2563eb]";
 
 export function LoginForm() {
   const searchParams = useSearchParams();
@@ -83,7 +86,7 @@ export function LoginForm() {
       <div>
         <label
           htmlFor="login-email"
-          className="mb-1 block text-sm font-semibold text-[#0d254e]"
+          className={labelClassName}
         >
           Adresse e-mail
         </label>
@@ -91,12 +94,12 @@ export function LoginForm() {
           id="login-email"
           type="email"
           autoComplete="email"
-          className={inputClassName}
+          className={fieldClassName}
           disabled={pending}
           {...register("email")}
         />
         {errors.email ? (
-          <p className="mt-1 text-sm text-red-600">{errors.email.message}</p>
+          <p className={errorClassName}>{errors.email.message}</p>
         ) : null}
       </div>
 
@@ -104,7 +107,7 @@ export function LoginForm() {
         <div className="mb-1 flex items-center justify-between">
           <label
             htmlFor="login-password"
-            className="block text-sm font-semibold text-[#0d254e]"
+            className={labelClassName}
           >
             Mot de passe
           </label>
@@ -120,7 +123,7 @@ export function LoginForm() {
             id="login-password"
             type={showPassword ? "text" : "password"}
             autoComplete="current-password"
-            className={`${inputClassName} pr-11`}
+            className={`${fieldClassName} pr-11`}
             disabled={pending}
             {...register("password")}
           />
@@ -140,14 +143,14 @@ export function LoginForm() {
           </button>
         </div>
         {errors.password ? (
-          <p className="mt-1 text-sm text-red-600">{errors.password.message}</p>
+          <p className={errorClassName}>{errors.password.message}</p>
         ) : null}
       </div>
 
       <button
         type="submit"
         disabled={pending}
-        className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-lg bg-[#2563eb] text-sm font-semibold text-white transition hover:bg-[#1d4ed8] disabled:cursor-not-allowed disabled:opacity-60"
+        className={`${submitClassName} w-full gap-2`}
       >
         {pending ? (
           <>

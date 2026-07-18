@@ -6,6 +6,17 @@ import { useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
+import {
+  checkboxClassName,
+  errorClassName,
+  fieldClassName,
+  formClassName,
+  formShellClassName,
+  labelClassName,
+  selectClassName,
+  submitClassName,
+  textareaClassName,
+} from "@/components/ui/form-styles";
 import { submitMembershipAction } from "@/features/adhesions/actions/submit-membership";
 
 const formSchema = z.object({
@@ -82,7 +93,8 @@ export function MembershipForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4" noValidate>
+    <div className={formShellClassName}>
+    <form onSubmit={handleSubmit(onSubmit)} className={formClassName} noValidate>
       <div className="sr-only" aria-hidden>
         <label htmlFor="membership-website">Site web</label>
         <input id="membership-website" type="text" tabIndex={-1} autoComplete="off" {...register("website")} />
@@ -90,53 +102,53 @@ export function MembershipForm() {
 
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
-          <label htmlFor="membership-name" className="mb-1 block text-sm font-semibold text-[var(--afd-ink)]">
+          <label htmlFor="membership-name" className={labelClassName}>
             Nom complet
           </label>
           <input
             id="membership-name"
             type="text"
-            className="min-h-12 w-full rounded-lg border border-[var(--afd-border)] px-3 text-base focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--afd-blue)]"
+            className={fieldClassName}
             {...register("full_name")}
           />
-          {errors.full_name ? <p className="mt-1 text-sm text-[var(--afd-error)]">{errors.full_name.message}</p> : null}
+          {errors.full_name ? <p className={errorClassName}>{errors.full_name.message}</p> : null}
         </div>
 
         <div>
-          <label htmlFor="membership-email" className="mb-1 block text-sm font-semibold text-[var(--afd-ink)]">
+          <label htmlFor="membership-email" className={labelClassName}>
             E-mail
           </label>
           <input
             id="membership-email"
             type="email"
-            className="min-h-12 w-full rounded-lg border border-[var(--afd-border)] px-3 text-base focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--afd-blue)]"
+            className={fieldClassName}
             {...register("email")}
           />
-          {errors.email ? <p className="mt-1 text-sm text-[var(--afd-error)]">{errors.email.message}</p> : null}
+          {errors.email ? <p className={errorClassName}>{errors.email.message}</p> : null}
         </div>
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
-          <label htmlFor="membership-phone" className="mb-1 block text-sm font-semibold text-[var(--afd-ink)]">
+          <label htmlFor="membership-phone" className={labelClassName}>
             Téléphone
           </label>
           <input
             id="membership-phone"
             type="tel"
-            className="min-h-12 w-full rounded-lg border border-[var(--afd-border)] px-3 text-base focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--afd-blue)]"
+            className={fieldClassName}
             {...register("phone")}
           />
-          {errors.phone ? <p className="mt-1 text-sm text-[var(--afd-error)]">{errors.phone.message}</p> : null}
+          {errors.phone ? <p className={errorClassName}>{errors.phone.message}</p> : null}
         </div>
 
         <div>
-          <label htmlFor="membership-gender" className="mb-1 block text-sm font-semibold text-[var(--afd-ink)]">
+          <label htmlFor="membership-gender" className={labelClassName}>
             Genre
           </label>
           <select
             id="membership-gender"
-            className="min-h-12 w-full rounded-lg border border-[var(--afd-border)] bg-[var(--afd-background)] px-3 text-base focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--afd-blue)]"
+            className={selectClassName}
             {...register("gender")}
           >
             <option value="">Sélectionner</option>
@@ -146,30 +158,30 @@ export function MembershipForm() {
               </option>
             ))}
           </select>
-          {errors.gender ? <p className="mt-1 text-sm text-[var(--afd-error)]">{errors.gender.message}</p> : null}
+          {errors.gender ? <p className={errorClassName}>{errors.gender.message}</p> : null}
         </div>
       </div>
 
       <div>
-        <label htmlFor="membership-address" className="mb-1 block text-sm font-semibold text-[var(--afd-ink)]">
+        <label htmlFor="membership-address" className={labelClassName}>
           Adresse
         </label>
         <input
           id="membership-address"
           type="text"
-          className="min-h-12 w-full rounded-lg border border-[var(--afd-border)] px-3 text-base focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--afd-blue)]"
+          className={fieldClassName}
           {...register("address")}
         />
-        {errors.address ? <p className="mt-1 text-sm text-[var(--afd-error)]">{errors.address.message}</p> : null}
+        {errors.address ? <p className={errorClassName}>{errors.address.message}</p> : null}
       </div>
 
       <div>
-        <label htmlFor="membership-type" className="mb-1 block text-sm font-semibold text-[var(--afd-ink)]">
+        <label htmlFor="membership-type" className={labelClassName}>
           Type de membre
         </label>
         <select
           id="membership-type"
-          className="min-h-12 w-full rounded-lg border border-[var(--afd-border)] bg-[var(--afd-background)] px-3 text-base focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--afd-blue)]"
+          className={selectClassName}
           {...register("member_type")}
         >
           <option value="">Sélectionner</option>
@@ -179,24 +191,24 @@ export function MembershipForm() {
             </option>
           ))}
         </select>
-        {errors.member_type ? <p className="mt-1 text-sm text-[var(--afd-error)]">{errors.member_type.message}</p> : null}
+        {errors.member_type ? <p className={errorClassName}>{errors.member_type.message}</p> : null}
       </div>
 
       <div>
-        <label htmlFor="membership-motivation" className="mb-1 block text-sm font-semibold text-[var(--afd-ink)]">
+        <label htmlFor="membership-motivation" className={labelClassName}>
           Motivation
         </label>
         <textarea
           id="membership-motivation"
           rows={5}
-          className="min-h-32 w-full rounded-lg border border-[var(--afd-border)] px-3 py-3 text-base focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--afd-blue)]"
+          className={textareaClassName}
           {...register("motivation")}
         />
-        {errors.motivation ? <p className="mt-1 text-sm text-[var(--afd-error)]">{errors.motivation.message}</p> : null}
+        {errors.motivation ? <p className={errorClassName}>{errors.motivation.message}</p> : null}
       </div>
 
       <label className="flex items-start gap-3 text-sm leading-relaxed text-[var(--afd-muted)]">
-        <input type="checkbox" className="mt-0.5 size-5 shrink-0 rounded border-[var(--afd-border)]" {...register("consent")} />
+        <input type="checkbox" className={checkboxClassName} {...register("consent")} />
         <span>
           J’accepte que l’AFD traite mes données pour examiner ma demande d’adhésion.{" "}
           <Link href="/politique-confidentialite" className="font-semibold text-[var(--afd-blue)] underline-offset-2 hover:underline">
@@ -204,15 +216,16 @@ export function MembershipForm() {
           </Link>
         </span>
       </label>
-      {errors.consent ? <p className="text-sm text-[var(--afd-error)]">{errors.consent.message}</p> : null}
+      {errors.consent ? <p className={errorClassName}>{errors.consent.message}</p> : null}
 
       <button
         type="submit"
         disabled={pending}
-        className="inline-flex min-h-12 items-center justify-center rounded-lg bg-[var(--afd-orange)] px-6 text-base font-bold text-white transition hover:bg-[var(--afd-orange-hover)] disabled:opacity-60"
+        className={submitClassName}
       >
         {pending ? "Envoi en cours…" : "Soumettre ma demande"}
       </button>
     </form>
+    </div>
   );
 }

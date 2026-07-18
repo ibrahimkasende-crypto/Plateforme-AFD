@@ -5,14 +5,19 @@ import { cn } from "@/lib/utils";
 type PartnersGridProps = {
   partners: PublicPartner[];
   className?: string;
-  /** Variante mobile : scroll horizontal avec snap */
-  mobileScroll?: boolean;
+  /** Bandeau défilement automatique (accueil) */
+  autoScroll?: boolean;
+  size?: "md" | "lg";
+  /** Blocs blancs vides sans logos */
+  emptyBlocks?: boolean;
 };
 
 export function PartnersGrid({
   partners,
   className,
-  mobileScroll = true,
+  autoScroll = false,
+  size = "md",
+  emptyBlocks = false,
 }: PartnersGridProps) {
   if (partners.length === 0) {
     return (
@@ -28,32 +33,57 @@ export function PartnersGrid({
     );
   }
 
-  return (
-    <div className={cn("w-full", className)}>
-      {mobileScroll ? (
-        <div className="flex snap-x snap-mandatory gap-3 overflow-x-auto pb-2 md:hidden [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-          {partners.map((partner) => (
+  if (autoScroll) {
+    const loop = [...partners, ...partners];
+
+    return (
+      <div className={cn("relative w-full overflow-hidden", className)}>
+        <div
+          className="pointer-events-none absolute inset-y-0 left-0 z-10 w-10 bg-gradient-to-r from-white to-transparent sm:w-16"
+          aria-hidden
+        />
+        <div
+          className="pointer-events-none absolute inset-y-0 right-0 z-10 w-10 bg-gradient-to-l from-white to-transparent sm:w-16"
+          aria-hidden
+        />
+        <div
+          className="afd-partners-track flex w-max gap-6 sm:gap-8 md:gap-10"
+          role="list"
+          aria-label="Logos des partenaires"
+        >
+          {loop.map((partner, index) => (
             <div
-              key={partner.id}
-              className="w-[46%] min-w-[46%] shrink-0 snap-start"
+              key={`${partner.id}-${index}`}
+              role="listitem"
+              className="w-[11.5rem] min-w-[11.5rem] shrink-0 sm:w-[13.5rem] sm:min-w-[13.5rem] md:w-[15rem] md:min-w-[15rem]"
             >
-              <PartnerLogoCard partner={partner} />
+              <PartnerLogoCard
+                partner={partner}
+                size={size}
+                empty={emptyBlocks}
+              />
             </div>
           ))}
         </div>
-      ) : null}
-
-      <div
-        className={cn(
-          "grid gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6",
-          mobileScroll && "hidden md:grid",
-          !mobileScroll && "grid-cols-2",
-        )}
-      >
-        {partners.map((partner) => (
-          <PartnerLogoCard key={partner.id} partner={partner} />
-        ))}
       </div>
+    );
+  }
+
+  return (
+    <div
+      className={cn(
+        "grid grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-5 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4",
+        className,
+      )}
+    >
+      {partners.map((partner) => (
+        <PartnerLogoCard
+          key={partner.id}
+          partner={partner}
+          size={size}
+          empty={emptyBlocks}
+        />
+      ))}
     </div>
   );
 }

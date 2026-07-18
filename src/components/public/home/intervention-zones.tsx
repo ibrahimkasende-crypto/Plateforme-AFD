@@ -23,8 +23,8 @@ export function InterventionZones({
               Présents en République démocratique du Congo
             </h2>
             <p className="mt-3 max-w-xl text-[15px] leading-[1.7] text-[var(--afd-muted)] md:text-base">
-              Explorez la carte des provinces. Les zones actives correspondent
-              aux localisations des projets publiés par l’AFD.
+              Les 8 provinces où l’AFD est présente apparaissent en bleu. Survolez
+              une zone pour afficher les données à côté de la carte.
             </p>
             <Link
               href="/actions/zones-intervention"

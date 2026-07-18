@@ -81,7 +81,7 @@ export default async function PartenairesPage({
         ) : null}
 
         <div className="mt-10">
-          <PartnersGrid partners={filtered} mobileScroll={false} />
+          <PartnersGrid partners={filtered} size="lg" />
         </div>
 
         {filtered.length > 0 ? (

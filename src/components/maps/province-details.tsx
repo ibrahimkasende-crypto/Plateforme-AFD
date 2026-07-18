@@ -9,10 +9,15 @@ export function ProvinceDetails({
   province,
   className,
   compact = false,
+  mode = "idle",
+  isDemo = false,
 }: {
   province: InterventionProvince | null;
   className?: string;
   compact?: boolean;
+  /** idle = rien ; hover = aperçu au survol ; selected = sélection */
+  mode?: "idle" | "hover" | "selected";
+  isDemo?: boolean;
 }) {
   if (!province) {
     return (
@@ -23,30 +28,46 @@ export function ProvinceDetails({
         )}
       >
         <p className="text-sm text-[var(--afd-muted)]">
-          Sélectionnez une province sur la carte ou dans la liste pour afficher
-          ses données publiées.
+          Survolez une province bleue sur la carte pour voir ses données. Cliquez
+          pour la sélectionner.
         </p>
       </div>
     );
   }
 
   const format = new Intl.NumberFormat("fr-FR");
+  const modeLabel =
+    mode === "hover"
+      ? "Aperçu au survol"
+      : mode === "selected"
+        ? "Province sélectionnée"
+        : "Province";
 
   return (
     <div
       className={cn(
-        "rounded-2xl border border-[var(--afd-border)] bg-white p-5 shadow-[0_8px_24px_rgba(3,27,60,0.06)]",
+        "rounded-2xl border bg-white p-5 shadow-[0_8px_24px_rgba(3,27,60,0.06)]",
+        province.active
+          ? "border-[var(--afd-blue)]/35 ring-1 ring-[var(--afd-blue)]/15"
+          : "border-[var(--afd-border)]",
         className,
       )}
       aria-live="polite"
     >
       <div className="flex items-start gap-3">
-        <span className="inline-flex size-10 shrink-0 items-center justify-center rounded-xl bg-[var(--afd-blue)]/10 text-[var(--afd-blue)]">
+        <span
+          className={cn(
+            "inline-flex size-10 shrink-0 items-center justify-center rounded-xl",
+            province.active
+              ? "bg-[var(--afd-blue)] text-white"
+              : "bg-[var(--afd-blue)]/10 text-[var(--afd-blue)]",
+          )}
+        >
           <MapPinned className="size-5" aria-hidden />
         </span>
         <div className="min-w-0">
           <p className="text-[11px] font-semibold tracking-wide text-[var(--afd-blue)] uppercase">
-            Province
+            {modeLabel}
           </p>
           <h3 className="font-heading text-lg font-bold text-[var(--afd-navy)]">
             {province.name}
@@ -61,26 +82,43 @@ export function ProvinceDetails({
 
       {!province.active ? (
         <p className="mt-4 text-sm text-[var(--afd-muted)]">
-          Aucune intervention publiée pour cette province.
+          L’AFD n’a pas encore de présence publiée dans cette province.
         </p>
       ) : (
         <div className="mt-4 space-y-3 text-sm">
-          <p className="text-[var(--afd-text)]">
-            <span className="font-semibold">{province.projectCount}</span> projet
-            {province.projectCount > 1 ? "s" : ""} publié
-            {province.projectCount > 1 ? "s" : ""}
-            {province.activityCount != null
-              ? ` · ${province.activityCount} activité${province.activityCount > 1 ? "s" : ""}`
-              : ""}
-            {province.beneficiaries != null && province.beneficiaries > 0
-              ? ` · ${format.format(province.beneficiaries)} bénéficiaires`
-              : ""}
-          </p>
+          <dl className="grid grid-cols-3 gap-2">
+            <div className="rounded-xl bg-[var(--afd-light-blue)]/70 px-2.5 py-2">
+              <dt className="text-[10px] font-semibold tracking-wide text-[var(--afd-muted)] uppercase">
+                Projets
+              </dt>
+              <dd className="font-heading text-lg font-extrabold text-[var(--afd-navy)]">
+                {province.projectCount}
+              </dd>
+            </div>
+            <div className="rounded-xl bg-[var(--afd-light-blue)]/70 px-2.5 py-2">
+              <dt className="text-[10px] font-semibold tracking-wide text-[var(--afd-muted)] uppercase">
+                Activités
+              </dt>
+              <dd className="font-heading text-lg font-extrabold text-[var(--afd-navy)]">
+                {province.activityCount ?? "—"}
+              </dd>
+            </div>
+            <div className="rounded-xl bg-[var(--afd-light-blue)]/70 px-2.5 py-2">
+              <dt className="text-[10px] font-semibold tracking-wide text-[var(--afd-muted)] uppercase">
+                Bénéficiaires
+              </dt>
+              <dd className="font-heading text-lg font-extrabold text-[var(--afd-navy)]">
+                {province.beneficiaries != null && province.beneficiaries > 0
+                  ? format.format(province.beneficiaries)
+                  : "—"}
+              </dd>
+            </div>
+          </dl>
 
           {province.sectors.length > 0 ? (
             <div>
               <p className="text-xs font-semibold tracking-wide text-[var(--afd-muted)] uppercase">
-                Domaines / programmes
+                Domaines
               </p>
               <ul className="mt-1.5 flex flex-wrap gap-1.5">
                 {province.sectors.map((sector) => (
@@ -93,6 +131,12 @@ export function ProvinceDetails({
                 ))}
               </ul>
             </div>
+          ) : null}
+
+          {isDemo ? (
+            <p className="text-[12px] text-amber-800">
+              Données simples de démonstration — à remplacer plus tard.
+            </p>
           ) : null}
 
           {!compact && province.projects.length > 0 ? (

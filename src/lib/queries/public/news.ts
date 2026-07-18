@@ -135,28 +135,11 @@ export async function getPublishedNews(params: {
     return data.map(fromRow);
   });
 
-  if (fromDb.length > 0) {
-    const { count } = await withClient({ count: fromDb.length }, async (supabase) => {
-      let query = supabase
-        .from("actualites")
-        .select("id", { count: "exact", head: true })
-        .eq("published", true);
-      query = applyTextSearch(query, q, ["title", "excerpt", "content"]);
-      if (params.category?.trim()) {
-        query = query.eq("category", params.category.trim());
-      }
-      const { count: total, error } = await query;
-      if (error) return { count: fromDb.length };
-      return { count: total ?? fromDb.length };
-    });
+  let combined = mergeWithoutDuplicates(fromDb, migrated);
 
-    return buildPaginatedResult(fromDb, count, page, pageSize);
-  }
-
-  let fallback = migrated;
   if (q) {
     const needle = q.toLowerCase();
-    fallback = fallback.filter(
+    combined = combined.filter(
       (item) =>
         item.title.toLowerCase().includes(needle) ||
         item.excerpt.toLowerCase().includes(needle) ||
@@ -165,13 +148,19 @@ export async function getPublishedNews(params: {
   }
   if (params.category?.trim()) {
     const category = params.category.trim().toLowerCase();
-    fallback = fallback.filter(
+    combined = combined.filter(
       (item) => item.category?.toLowerCase() === category,
     );
   }
 
-  const slice = fallback.slice(from, to + 1);
-  return buildPaginatedResult(slice, fallback.length, page, pageSize);
+  combined.sort((a, b) => {
+    const da = a.published_at ? Date.parse(a.published_at) : 0;
+    const db = b.published_at ? Date.parse(b.published_at) : 0;
+    return db - da;
+  });
+
+  const slice = combined.slice(from, to + 1);
+  return buildPaginatedResult(slice, combined.length, page, pageSize);
 }
 
 export async function getFeaturedNews(limit = 3): Promise<PublicNewsItem[]> {
@@ -183,15 +172,21 @@ export async function getFeaturedNews(limit = 3): Promise<PublicNewsItem[]> {
       )
       .eq("published", true)
       .order("published_at", { ascending: false })
-      .limit(limit);
+      .limit(Math.max(limit, 6));
 
     if (error || !data) return [];
     return data.map(fromRow);
   });
 
-  if (fromDb.length > 0) return fromDb;
+  const migrated = getMigratedNewsArticles().map(fromMigrated);
+  // Priorité aux sujets institutionnels migrés, puis compléments Supabase.
+  const merged = mergeWithoutDuplicates(migrated, fromDb).sort((a, b) => {
+    const da = a.published_at ? Date.parse(a.published_at) : 0;
+    const db = b.published_at ? Date.parse(b.published_at) : 0;
+    return db - da;
+  });
 
-  return getMigratedNewsArticles().slice(0, limit).map(fromMigrated);
+  return merged.slice(0, limit);
 }
 
 export async function getNewsBySlug(

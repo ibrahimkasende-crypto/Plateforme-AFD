@@ -11,7 +11,6 @@ import { NewsletterSection } from "@/components/public/home/newsletter-section";
 import { OrganizationIntroduction } from "@/components/public/home/organization-introduction";
 import { OpenOpportunitiesSection } from "@/components/public/home/open-opportunities-section";
 import { PartnersSection } from "@/components/public/home/partners-section";
-import { SupportActions } from "@/components/public/home/support-actions";
 import { homeContent } from "@/config/home-content";
 import { siteConfig } from "@/config/site";
 import {
@@ -156,8 +155,6 @@ export default function HomePage() {
       >
         <PartnersBlock />
       </Suspense>
-
-      <SupportActions />
     </>
   );
 }

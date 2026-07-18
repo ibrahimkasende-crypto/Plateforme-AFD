@@ -1,6 +1,7 @@
+import type { ReactNode } from "react";
+import { SecondaryPageBack } from "@/components/public/secondary-page-back";
 import { SiteContainer } from "./SiteContainer";
 import { cn } from "@/lib/utils";
-import type { ReactNode } from "react";
 
 export function PageHero({
   title,
@@ -8,12 +9,19 @@ export function PageHero({
   eyebrow,
   actions,
   className,
+  backHref = "/",
+  backLabel = "Retour",
+  showBack = false,
 }: {
   title: string;
   description?: string;
   eyebrow?: string;
   actions?: ReactNode;
   className?: string;
+  backHref?: string;
+  backLabel?: string;
+  /** Afficher le retour + cœur animé (pages secondaires publiques). */
+  showBack?: boolean;
 }) {
   return (
     <div
@@ -31,6 +39,9 @@ export function PageHero({
         }}
       />
       <SiteContainer className="relative py-14 md:py-20">
+        {showBack ? (
+          <SecondaryPageBack href={backHref} label={backLabel} variant="hero" />
+        ) : null}
         {eyebrow ? (
           <p className="mb-3 text-sm font-semibold uppercase tracking-[0.16em] text-[var(--afd-gold)]">
             {eyebrow}

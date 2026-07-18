@@ -16,7 +16,8 @@ export function intensityFill(intensity: ProvinceIntensity): string {
     case "low":
       return "#3ba3e6";
     default:
-      return "#e4edf5";
+      /* Provinces hors couverture AFD — neutre, peu saturé */
+      return "#edf1f5";
   }
 }
 
@@ -26,7 +27,8 @@ export function intensityStroke(
   hovered: boolean,
 ): string {
   if (selected) return "#031b3c";
+  if (hovered && intensity !== "none") return "#e99308";
   if (hovered) return "#062653";
-  if (intensity === "none") return "#0877d1";
+  if (intensity === "none") return "#b7c5d4";
   return "#ffffff";
 }

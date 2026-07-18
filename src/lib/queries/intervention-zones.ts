@@ -119,7 +119,9 @@ export async function getPublicInterventionZones(): Promise<InterventionZonesBun
       .eq("active", true);
 
     if (error || !projects) {
-      return buildEmptyBundle("unavailable");
+      return isDemoContentEnabled()
+        ? buildDemoBundle()
+        : buildEmptyBundle("unavailable");
     }
 
     const programIds = [

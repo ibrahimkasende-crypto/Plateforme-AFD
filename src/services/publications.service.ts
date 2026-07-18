@@ -29,6 +29,20 @@ export const PUBLICATION_MODULES: readonly PublicationModule[] = [
     statusLabel: "Impact",
   },
   {
+    slug: "temoignages",
+    title: "Témoignages",
+    description: "Citations publiées avec consentement explicite.",
+    href: "/admin/publications/temoignages",
+    statusLabel: "Impact",
+  },
+  {
+    slug: "pages",
+    title: "Pages institutionnelles",
+    description: "Titres, sections et SEO des pages publiques.",
+    href: "/admin/publications/pages",
+    statusLabel: "CMS",
+  },
+  {
     slug: "zones-intervention",
     title: "Zones d’intervention",
     description: "Provinces couvertes et données cartographiques.",

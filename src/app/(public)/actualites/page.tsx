@@ -41,7 +41,7 @@ export default async function ActualitesPage({ searchParams }: PageProps) {
     <PublicPageShell
       eyebrow="Actualités"
       title="Actualités"
-      description="Suivez les actions, événements et annonces de l’AFD."
+      description="Dernières nouvelles — restez informés des actions de l’AFD sur le terrain."
       breadcrumbs={[
         { label: "Accueil", href: "/" },
         { label: "Actualités" },

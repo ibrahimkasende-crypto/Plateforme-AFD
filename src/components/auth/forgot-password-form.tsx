@@ -1,5 +1,12 @@
 "use client";
 
+import {
+  errorClassName,
+  fieldClassName,
+  labelClassName,
+  submitClassName,
+} from "@/components/ui/form-styles";
+
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { useState, useTransition } from "react";
@@ -13,9 +20,6 @@ const forgotPasswordSchema = z.object({
 });
 
 type ForgotPasswordFormValues = z.infer<typeof forgotPasswordSchema>;
-
-const inputClassName =
-  "min-h-12 w-full rounded-lg border border-slate-200 px-3 text-base text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2563eb]";
 
 export function ForgotPasswordForm() {
   const [pending, startTransition] = useTransition();
@@ -73,7 +77,7 @@ export function ForgotPasswordForm() {
             id="forgot-email"
             type="email"
             autoComplete="email"
-            className={inputClassName}
+            className={fieldClassName}
             disabled={pending}
             {...register("email")}
           />

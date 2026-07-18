@@ -50,7 +50,7 @@ export const institutionalContent = {
       year: "2024",
       title: "Structuration institutionnelle",
       description:
-        "Mise en place des domaines d’intervention et des orientations stratégiques : autonomisation économique, protection et VBG, santé maternelle, WASH, éducation, urgences.",
+        "Mise en place des domaines d’intervention et des orientations stratégiques : autonomisation économique, protection et VBG, santé maternelle, WASH, leadership et gouvernance communautaire, femmes dans la réponse humanitaire et d’urgence.",
     },
     {
       year: "2024+",

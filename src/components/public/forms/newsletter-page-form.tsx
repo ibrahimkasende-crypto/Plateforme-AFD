@@ -6,11 +6,21 @@ import { useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
+import { NewsletterGoogleButton } from "@/components/newsletter/newsletter-google-button";
+import {
+  checkboxClassName,
+  errorClassName,
+  fieldClassName,
+  formClassName,
+  formShellClassName,
+  labelClassName,
+  submitClassName,
+} from "@/components/ui/form-styles";
 import { homeContent } from "@/config/home-content";
 import { subscribeNewsletterAction } from "@/features/newsletter/actions/subscribe";
+import { markNewsletterSubscribed } from "@/lib/newsletter/client-storage";
 
 const formSchema = z.object({
-  name: z.string().trim().max(100).optional(),
   email: z.string().trim().email("Adresse e-mail invalide"),
   interests: z.array(z.string()).optional(),
   consent: z.boolean().refine((value) => value === true, {
@@ -33,7 +43,6 @@ export function NewsletterPageForm() {
   } = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: "",
       email: "",
       interests: [],
       consent: false,
@@ -42,6 +51,7 @@ export function NewsletterPageForm() {
   });
 
   const selectedInterests = watch("interests") ?? [];
+  const consentChecked = watch("consent");
 
   function toggleInterest(id: string) {
     const next = selectedInterests.includes(id)
@@ -54,7 +64,6 @@ export function NewsletterPageForm() {
     startTransition(async () => {
       const result = await subscribeNewsletterAction({
         email: values.email,
-        firstName: values.name || undefined,
         preferences: values.interests ?? [],
         consent: true,
         website: values.website,
@@ -66,13 +75,15 @@ export function NewsletterPageForm() {
         return;
       }
 
+      markNewsletterSubscribed();
       toast.success(result.message);
       reset();
     });
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4" noValidate>
+    <div className={formShellClassName}>
+    <form onSubmit={handleSubmit(onSubmit)} className={formClassName} noValidate>
       <div className="sr-only" aria-hidden>
         <label htmlFor="newsletter-website">Site web</label>
         <input
@@ -84,40 +95,34 @@ export function NewsletterPageForm() {
         />
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-2">
-        <div>
-          <label
-            htmlFor="newsletter-name"
-            className="mb-1 block text-sm font-semibold text-[var(--afd-ink)]"
-          >
-            Prénom ou nom{" "}
-            <span className="font-normal text-[var(--afd-muted)]">(facultatif)</span>
-          </label>
-          <input
-            id="newsletter-name"
-            type="text"
-            className="min-h-12 w-full rounded-lg border border-[var(--afd-border)] px-3 text-base focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--afd-blue)]"
-            {...register("name")}
-          />
-        </div>
+      <NewsletterGoogleButton
+        consentChecked={Boolean(consentChecked)}
+        disabled={pending}
+        returnPath="/ressources/newsletter"
+      />
 
-        <div>
-          <label
-            htmlFor="newsletter-email"
-            className="mb-1 block text-sm font-semibold text-[var(--afd-ink)]"
-          >
-            E-mail
-          </label>
-          <input
-            id="newsletter-email"
-            type="email"
-            className="min-h-12 w-full rounded-lg border border-[var(--afd-border)] px-3 text-base focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--afd-blue)]"
-            {...register("email")}
-          />
-          {errors.email ? (
-            <p className="mt-1 text-sm text-[var(--afd-error)]">{errors.email.message}</p>
-          ) : null}
-        </div>
+      <div className="flex items-center gap-3 text-[11px] font-semibold uppercase tracking-wide text-[var(--afd-muted)]">
+        <span className="h-px flex-1 bg-[var(--afd-border)]" />
+        ou
+        <span className="h-px flex-1 bg-[var(--afd-border)]" />
+      </div>
+
+      <div>
+        <label
+          htmlFor="newsletter-email"
+          className={labelClassName}
+        >
+          E-mail
+        </label>
+        <input
+          id="newsletter-email"
+          type="email"
+          className={fieldClassName}
+          {...register("email")}
+        />
+        {errors.email ? (
+          <p className={errorClassName}>{errors.email.message}</p>
+        ) : null}
       </div>
 
       <fieldset className="space-y-3">
@@ -129,11 +134,11 @@ export function NewsletterPageForm() {
           {homeContent.newsletter.interests.map((interest) => (
             <label
               key={interest.id}
-              className="flex cursor-pointer items-center gap-3 rounded-lg border border-[var(--afd-border)] px-3 py-2.5 text-sm text-[var(--afd-ink)] transition hover:border-[var(--afd-blue)]/40"
+              className="afd-interest-chip"
             >
               <input
                 type="checkbox"
-                className="size-4 shrink-0 rounded border-[var(--afd-border)]"
+                className={checkboxClassName}
                 checked={selectedInterests.includes(interest.id)}
                 onChange={() => toggleInterest(interest.id)}
               />
@@ -146,7 +151,7 @@ export function NewsletterPageForm() {
       <label className="flex items-start gap-3 text-sm leading-relaxed text-[var(--afd-muted)]">
         <input
           type="checkbox"
-          className="mt-0.5 size-5 shrink-0 rounded border-[var(--afd-border)]"
+          className={checkboxClassName}
           {...register("consent")}
         />
         <span>
@@ -160,16 +165,17 @@ export function NewsletterPageForm() {
         </span>
       </label>
       {errors.consent ? (
-        <p className="text-sm text-[var(--afd-error)]">{errors.consent.message}</p>
+        <p className={errorClassName}>{errors.consent.message}</p>
       ) : null}
 
       <button
         type="submit"
         disabled={pending}
-        className="inline-flex min-h-12 items-center justify-center rounded-lg bg-[var(--afd-orange)] px-6 text-base font-bold text-white transition hover:bg-[var(--afd-orange-hover)] disabled:opacity-60"
+        className={submitClassName}
       >
         {pending ? "Inscription…" : "S’inscrire à la newsletter"}
       </button>
     </form>
+    </div>
   );
 }

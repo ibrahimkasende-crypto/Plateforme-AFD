@@ -9,7 +9,7 @@ import { getPublishedInterventionDomains } from "@/lib/queries/public/interventi
 export const metadata: Metadata = {
   title: "Domaines d’intervention",
   description:
-    "Les six domaines d’intervention de l’Alliance des Femmes pour le Développement : autonomisation économique, protection et VBG, santé maternelle, WASH, éducation, urgences.",
+    "Les six domaines d’intervention de l’Alliance des Femmes pour le Développement : autonomisation économique, protection et VBG, santé maternelle, WASH, leadership et gouvernance communautaire, femmes dans la réponse humanitaire et d’urgence.",
   alternates: { canonical: `${siteConfig.url}/actions/domaines-intervention` },
   openGraph: {
     title: "Domaines d’intervention | AFD ASBL",

@@ -1,17 +1,27 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { ChevronDown } from "lucide-react";
+import { CmsPageShell } from "@/components/public/CmsPageShell";
 import { PublicPageShell } from "@/components/public/PublicPageShell";
 import {
   institutionalContent,
   type OrganigrammeNode,
 } from "@/config/institutional-content";
+import { siteConfig } from "@/config/site";
+import { getPublishedPageByRoute } from "@/lib/queries/public/pages";
 
-export const metadata: Metadata = {
-  title: "Organigramme",
-  description:
-    "Structure organisationnelle de l’Alliance des Femmes pour le Développement.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const cms = await getPublishedPageByRoute("/qui-sommes-nous/organigramme");
+  return {
+    title: cms?.titre || "Organigramme",
+    description:
+      cms?.description_seo ||
+      "Structure organisationnelle de l’Alliance des Femmes pour le Développement.",
+    alternates: {
+      canonical: `${siteConfig.url}/qui-sommes-nous/organigramme`,
+    },
+  };
+}
 
 function OrganigrammeBranch({
   node,
@@ -50,7 +60,21 @@ function OrganigrammeBranch({
   );
 }
 
-export default function OrganigrammePage() {
+export default async function OrganigrammePage() {
+  const cms = await getPublishedPageByRoute("/qui-sommes-nous/organigramme");
+  if (cms) {
+    return (
+      <CmsPageShell
+        cms={cms}
+        breadcrumbs={[
+          { label: "Accueil", href: "/" },
+          { label: "Qui sommes-nous", href: "/qui-sommes-nous" },
+          { label: cms.titre },
+        ]}
+      />
+    );
+  }
+
   const { organigramme } = institutionalContent;
 
   return (

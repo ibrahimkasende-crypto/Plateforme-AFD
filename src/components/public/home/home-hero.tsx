@@ -2,9 +2,9 @@
 
 import { useEffect, useState } from "react";
 import { motion, useReducedMotion } from "motion/react";
-import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, Handshake, UsersRound } from "lucide-react";
+import { HeroBackgroundSlideshow } from "@/components/public/home/hero-background-slideshow";
 import { homeContent } from "@/config/home-content";
 import { SiteContainer } from "@/components/shared/SiteContainer";
 import { cn } from "@/lib/utils";
@@ -20,7 +20,7 @@ function InstitutionalCard({
     <div
       className={cn(
         className ??
-          "w-full rounded-[16px] border border-white/40 bg-white/70 p-5 text-[#10233f] shadow-[0_12px_28px_rgba(3,27,60,0.18)] backdrop-blur-md sm:max-w-md lg:max-w-[14.5rem] lg:p-3.5",
+          "w-full rounded-[16px] border border-[var(--afd-sky)]/50 bg-white p-5 text-[#10233f] shadow-[0_14px_36px_rgba(3,27,60,0.28)] sm:max-w-md lg:max-w-[14.5rem] lg:p-3.5",
         breathe && "afd-card-breathe",
       )}
     >
@@ -42,13 +42,16 @@ function InstitutionalCard({
 
 function TypewriterTitle({
   text,
+  lines,
   reduceMotion,
 }: {
   text: string;
+  lines: readonly string[];
   reduceMotion: boolean | null;
 }) {
+  const stream = lines.join("\n");
   const [typedCount, setTypedCount] = useState(0);
-  const visibleCount = reduceMotion ? text.length : typedCount;
+  const visibleCount = reduceMotion ? stream.length : typedCount;
 
   useEffect(() => {
     if (reduceMotion) return;
@@ -60,7 +63,7 @@ function TypewriterTitle({
       intervalId = window.setInterval(() => {
         index += 1;
         setTypedCount(index);
-        if (index >= text.length && intervalId !== undefined) {
+        if (index >= stream.length && intervalId !== undefined) {
           window.clearInterval(intervalId);
         }
       }, 55);
@@ -70,21 +73,43 @@ function TypewriterTitle({
       window.clearTimeout(startDelay);
       if (intervalId !== undefined) window.clearInterval(intervalId);
     };
-  }, [text, reduceMotion]);
+  }, [stream, reduceMotion]);
 
-  const done = visibleCount >= text.length;
+  const lineStarts = lines.reduce<number[]>((starts, line, lineIndex) => {
+    if (lineIndex === 0) return [0];
+    const previous = lines[lineIndex - 1]!;
+    const previousStart = starts[lineIndex - 1]!;
+    return [...starts, previousStart + previous.length + 1];
+  }, []);
+
+  const renderedLines = lines.map((line, lineIndex) => {
+    const start = lineStarts[lineIndex] ?? 0;
+    const end = start + line.length;
+    const localVisible = Math.max(
+      0,
+      Math.min(line.length, visibleCount - start),
+    );
+    const showCaret =
+      !reduceMotion && visibleCount >= start && visibleCount < end;
+
+    return (
+      <span key={line} className="block whitespace-nowrap">
+        <span className="bg-gradient-to-br from-white via-[#e8f6ff] to-[var(--afd-sky)] bg-clip-text text-transparent drop-shadow-[0_2px_18px_rgba(3,27,60,0.45)]">
+          {line.slice(0, localVisible)}
+        </span>
+        {showCaret ? (
+          <span className="ml-0.5 inline-block h-[0.9em] w-[0.08em] translate-y-[0.08em] animate-pulse bg-[var(--afd-sky)] align-middle" />
+        ) : null}
+      </span>
+    );
+  });
 
   return (
     <h1
-      className="afd-h1-hero mt-4 max-w-full break-words text-white sm:mt-5"
+      className="afd-h1-hero mt-4 max-w-full sm:mt-5"
       aria-label={text}
     >
-      <span aria-hidden="true">
-        {text.slice(0, visibleCount)}
-        {!done && !reduceMotion ? (
-          <span className="ml-0.5 inline-block h-[0.9em] w-[0.08em] translate-y-[0.08em] animate-pulse bg-white align-middle" />
-        ) : null}
-      </span>
+      <span aria-hidden="true">{renderedLines}</span>
       <span className="sr-only">{text}</span>
     </h1>
   );
@@ -96,45 +121,32 @@ export function HomeHero() {
 
   return (
     <section className="relative isolate overflow-hidden bg-[#031b3c] text-white">
-      <div className="absolute inset-0">
-        <div
-          className={
-            reduceMotion ? "absolute inset-0" : "afd-hero-media absolute inset-0"
-          }
-        >
-          <Image
-            src={content.image.src}
-            alt={content.image.alt}
-            fill
-            priority
-            sizes="100vw"
-            className="object-cover object-[70%_center] md:object-[68%_center] lg:object-center"
-          />
-        </div>
+      <div className="absolute inset-0 z-0">
+        <HeroBackgroundSlideshow />
         <div
           className={
             reduceMotion
-              ? "pointer-events-none absolute -left-[20%] top-0 hidden h-full w-[58%] bg-[radial-gradient(ellipse_at_30%_50%,rgba(8,119,209,0.42),transparent_68%)] lg:block"
-              : "afd-hero-glow pointer-events-none absolute -left-[20%] top-0 hidden h-full w-[58%] bg-[radial-gradient(ellipse_at_30%_50%,rgba(8,119,209,0.45),transparent_68%)] lg:block"
+              ? "pointer-events-none absolute -left-[20%] top-0 hidden h-full w-[58%] bg-[radial-gradient(ellipse_at_30%_50%,rgba(8,119,209,0.38),transparent_68%)] lg:block"
+              : "afd-hero-glow pointer-events-none absolute -left-[20%] top-0 hidden h-full w-[58%] bg-[radial-gradient(ellipse_at_30%_50%,rgba(8,119,209,0.4),transparent_68%)] lg:block"
           }
           aria-hidden
         />
-        {/* Mobile: overlay fort en bas / gauche pour la lisibilité */}
+        {/* Mobile: contraste net sans voile gris */}
         <div
-          className="absolute inset-0 bg-[linear-gradient(180deg,rgba(3,27,60,0.35)_0%,rgba(3,27,60,0.55)_38%,rgba(3,27,60,0.88)_100%)] lg:hidden"
+          className="absolute inset-0 z-[1] bg-[linear-gradient(180deg,rgba(3,27,60,0.28)_0%,rgba(6,45,95,0.45)_40%,rgba(3,27,60,0.92)_100%)] lg:hidden"
           aria-hidden
         />
-        {/* Desktop: flou bleu à gauche, droite plus claire */}
+        {/* Desktop: panneau gauche plus net (navy → ciel), droite ouverte */}
         <div
-          className="absolute inset-0 hidden bg-[linear-gradient(90deg,rgba(3,27,60,0.82)_0%,rgba(6,45,95,0.62)_28%,rgba(8,90,170,0.28)_52%,rgba(6,38,83,0.08)_72%,rgba(6,38,83,0.02)_100%)] lg:block"
+          className="absolute inset-0 z-[1] hidden bg-[linear-gradient(90deg,rgba(3,27,60,0.88)_0%,rgba(6,55,110,0.72)_26%,rgba(8,119,209,0.32)_48%,rgba(59,163,230,0.08)_68%,transparent_100%)] lg:block"
           aria-hidden
         />
       </div>
 
-      <SiteContainer className="relative grid min-h-[min(100svh,720px)] content-end gap-6 py-10 pb-[max(2.5rem,env(safe-area-inset-bottom))] sm:min-h-[640px] sm:content-center sm:py-14 md:min-h-[640px] lg:min-h-[660px] lg:grid-cols-12 lg:content-center lg:gap-10 lg:py-0">
-        <div className="min-w-0 lg:col-span-7 xl:col-span-7">
+      <SiteContainer className="pointer-events-none relative z-20 grid min-h-[min(100svh,720px)] content-end gap-6 py-10 pb-[max(2.5rem,env(safe-area-inset-bottom))] sm:min-h-[640px] sm:content-center sm:py-14 md:min-h-[640px] lg:min-h-[660px] lg:grid-cols-12 lg:content-center lg:gap-10 lg:py-0">
+        <div className="pointer-events-auto min-w-0 lg:col-span-7 xl:col-span-7">
           <motion.span
-            className="afd-label inline-flex max-w-full rounded-md bg-[var(--afd-blue)] px-3 py-1.5 text-[11px] text-white sm:px-3.5"
+            className="afd-label inline-flex max-w-full rounded-md border border-white/35 bg-[var(--afd-blue)] px-3 py-1.5 text-[11px] text-white shadow-[0_4px_16px_rgba(8,119,209,0.45)] sm:px-3.5"
             initial={reduceMotion ? false : { opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.35 }}
@@ -143,13 +155,15 @@ export function HomeHero() {
           </motion.span>
 
           <TypewriterTitle
-            key={content.title}
+            key={content.titleLines.join("|")}
             text={content.title}
+            lines={content.titleLines}
             reduceMotion={reduceMotion}
           />
 
           <motion.p
-            className="mt-4 max-w-[40rem] text-[15px] leading-[1.6] text-white/90 sm:mt-5 sm:text-base md:text-lg"
+            className="mt-4 max-w-[40rem] text-[15px] font-medium leading-[1.65] text-[#eaf6ff] sm:mt-5 sm:text-base md:text-lg"
+            style={{ textShadow: "0 1px 12px rgba(3,27,60,0.55)" }}
             initial={reduceMotion ? false : { opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, delay: 0.12 }}
@@ -165,14 +179,14 @@ export function HomeHero() {
           >
             <Link
               href={content.primaryCta.href}
-              className="afd-btn-text inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-lg bg-[var(--afd-blue)] px-5 py-3 text-white transition-colors duration-180 hover:bg-[var(--afd-blue-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white min-[400px]:w-auto"
+              className="afd-btn-text inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-lg bg-[var(--afd-blue)] px-5 py-3 text-white shadow-[0_8px_24px_rgba(8,119,209,0.55)] transition-colors duration-180 hover:bg-[var(--afd-blue-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--afd-sky)] focus-visible:ring-offset-2 focus-visible:ring-offset-[#031b3c] min-[400px]:w-auto"
             >
               {content.primaryCta.label}
               <ArrowRight className="size-4 shrink-0" aria-hidden />
             </Link>
             <Link
               href={content.secondaryCta.href}
-              className="afd-btn-text inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-lg border border-white/90 bg-white px-5 py-3 text-[#062653] shadow-sm transition-colors duration-180 hover:bg-white/92 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white min-[400px]:w-auto"
+              className="afd-btn-text inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-lg border-2 border-[var(--afd-sky)] bg-white px-5 py-3 text-[var(--afd-blue)] shadow-[0_8px_24px_rgba(255,255,255,0.28)] transition-colors duration-180 hover:bg-[#eaf6ff] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#031b3c] min-[400px]:w-auto"
             >
               <Handshake className="size-4 shrink-0" aria-hidden />
               {content.secondaryCta.label}
@@ -180,7 +194,8 @@ export function HomeHero() {
           </motion.div>
 
           <motion.ul
-            className="mt-5 flex flex-wrap gap-x-4 gap-y-2 text-[13px] text-white/75 sm:mt-7 sm:gap-x-5"
+            className="mt-5 flex flex-wrap gap-x-4 gap-y-2 text-[13px] font-medium text-[#c8e9fc] sm:mt-7 sm:gap-x-5"
+            style={{ textShadow: "0 1px 10px rgba(3,27,60,0.5)" }}
             initial={reduceMotion ? false : { opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.35, delay: 0.24 }}
@@ -188,7 +203,7 @@ export function HomeHero() {
             {content.trustItems.map((item) => (
               <li key={item} className="inline-flex max-w-full items-center gap-2">
                 <span
-                  className="size-1.5 shrink-0 rounded-full bg-[var(--afd-orange)]"
+                  className="size-1.5 shrink-0 rounded-full bg-[var(--afd-sky)] shadow-[0_0_8px_rgba(59,163,230,0.8)]"
                   aria-hidden
                 />
                 <span className="min-w-0">{item}</span>
@@ -210,7 +225,7 @@ export function HomeHero() {
 
         {/* Carte 80 % — desktop, bas à droite */}
         <motion.aside
-          className="hidden lg:col-span-5 lg:flex lg:items-end lg:justify-end lg:pb-16 xl:col-span-5 xl:pb-20"
+          className="pointer-events-auto hidden lg:col-span-5 lg:flex lg:items-end lg:justify-end lg:pb-16 xl:col-span-5 xl:pb-20"
           initial={reduceMotion ? false : { opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.45, delay: 0.28 }}

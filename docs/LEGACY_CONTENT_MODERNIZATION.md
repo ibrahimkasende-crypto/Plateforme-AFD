@@ -15,8 +15,8 @@ Titres et slugs normalisés côté Plateforme-AFD ; design ancien non repris.
 2. Protection, VBG et droits des femmes  
 3. Santé maternelle et infantile  
 4. Eau, hygiène et assainissement — WASH  
-5. Éducation des femmes et des filles  
-6. Urgences et assistance aux populations déplacées  
+5. Femmes, leadership et gouvernance communautaire  
+6. Femmes dans la réponse humanitaire et d’urgence  
 
 ## 4. Actualités migrées
 

@@ -1,30 +1,22 @@
-"use client";
-
-import { useId, useState } from "react";
+import Image from "next/image";
+import Link from "next/link";
 import {
+  ArrowRight,
   Briefcase,
-  ChevronDown,
   Droplets,
-  GraduationCap,
   HeartPulse,
   LifeBuoy,
   Shield,
+  Users,
   type LucideIcon,
 } from "lucide-react";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible";
-import { InterventionDomainContent } from "@/components/public/interventions/intervention-domain-content";
 import type { InterventionDomain } from "@/config/intervention-domains";
-import { cn } from "@/lib/utils";
 
 const iconMap: Record<string, LucideIcon> = {
   HeartPulse,
   Shield,
   Briefcase,
-  GraduationCap,
+  Users,
   Droplets,
   LifeBuoy,
 };
@@ -32,54 +24,48 @@ const iconMap: Record<string, LucideIcon> = {
 type Props = {
   domain: InterventionDomain;
   index: number;
-  /** Sur mobile : un seul domaine ouvert à la fois. */
-  open?: boolean;
-  onOpenChange?: (open: boolean) => void;
-  uncontrolled?: boolean;
 };
 
-export function InterventionDomainCard({
-  domain,
-  index,
-  open: controlledOpen,
-  onOpenChange,
-  uncontrolled = false,
-}: Props) {
-  const reactId = useId();
-  const contentId = `domain-content-${domain.slug}-${reactId}`;
-  const [internalOpen, setInternalOpen] = useState(false);
-  const open = uncontrolled ? internalOpen : Boolean(controlledOpen);
-  const setOpen = uncontrolled
-    ? setInternalOpen
-    : (value: boolean) => onOpenChange?.(value);
-
+export function InterventionDomainCard({ domain, index }: Props) {
   const Icon = iconMap[domain.icon] ?? HeartPulse;
   const numberLabel = String(index + 1).padStart(2, "0");
+  const href = `/actions/domaines-intervention/${domain.slug}`;
 
   return (
-    <Collapsible open={open} onOpenChange={setOpen} className="h-full">
-      <article
-        className={cn(
-          "flex h-full flex-col rounded-[20px] border bg-white p-6 shadow-[0_8px_28px_rgba(6,38,83,0.04)] transition-[border-color,box-shadow] duration-250 sm:p-7 md:p-8",
-          open
-            ? "border-[var(--afd-blue)]/45 shadow-[0_12px_32px_rgba(6,38,83,0.08)]"
-            : "border-[var(--afd-blue)]/15",
-        )}
-      >
-        <div className="flex items-start justify-between gap-3">
-          <div className="inline-flex size-12 shrink-0 items-center justify-center rounded-2xl bg-[var(--afd-blue)]/10 text-[var(--afd-blue)]">
-            <Icon className="size-5" aria-hidden />
+    <article className="group flex h-full flex-col overflow-hidden rounded-[20px] border border-[var(--afd-blue)]/15 bg-white shadow-[0_8px_28px_rgba(6,38,83,0.04)] transition duration-250 hover:border-[var(--afd-blue)]/40 hover:shadow-[0_14px_36px_rgba(6,38,83,0.08)]">
+      <Link href={href} className="relative block aspect-[16/10] bg-[var(--afd-light-blue)]">
+        {domain.imageSrc ? (
+          <Image
+            src={domain.imageSrc}
+            alt={domain.imageAlt}
+            fill
+            sizes="(max-width:768px) 100vw, (max-width:1024px) 50vw, 33vw"
+            className="object-cover transition duration-300 group-hover:scale-[1.03]"
+          />
+        ) : (
+          <div className="absolute inset-0 flex items-center justify-center text-xs text-[var(--afd-muted)]">
+            Image à venir
           </div>
-          <span
-            className="font-heading text-sm font-bold tracking-[0.08em] text-[#062653]/35"
-            aria-hidden
-          >
-            {numberLabel}
-          </span>
-        </div>
+        )}
+        <span
+          className="absolute left-3 top-3 inline-flex size-10 items-center justify-center rounded-xl bg-white/95 text-[var(--afd-blue)] shadow-sm backdrop-blur-sm"
+          aria-hidden
+        >
+          <Icon className="size-5" />
+        </span>
+        <span
+          className="absolute right-3 top-3 rounded-md bg-[var(--afd-navy)]/80 px-2 py-1 font-heading text-[11px] font-bold tracking-[0.08em] text-white"
+          aria-hidden
+        >
+          {numberLabel}
+        </span>
+      </Link>
 
-        <h3 className="font-heading mt-5 text-[19px] font-extrabold leading-[1.25] text-[#062653] sm:text-[21px]">
-          {domain.title}
+      <div className="flex flex-1 flex-col p-5 sm:p-6 md:p-7">
+        <h3 className="font-heading text-[19px] font-extrabold leading-[1.25] text-[#062653] sm:text-[21px]">
+          <Link href={href} className="hover:underline">
+            {domain.title}
+          </Link>
         </h3>
 
         <p className="mt-3 line-clamp-3 flex-1 text-[15px] leading-[1.7] text-[#5F6F83] sm:text-[16px]">
@@ -97,33 +83,14 @@ export function InterventionDomainCard({
           ))}
         </div>
 
-        <CollapsibleTrigger asChild>
-          <button
-            type="button"
-            className="afd-btn-secondary mt-6 inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl border border-[var(--afd-blue)]/20 bg-[var(--afd-blue)]/5 px-4 text-sm font-bold text-[var(--afd-blue)] transition duration-200 hover:border-[var(--afd-orange)]/40 hover:bg-[var(--afd-orange)]/10 hover:text-[var(--afd-orange)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--afd-blue)] sm:w-auto"
-            aria-expanded={open}
-            aria-controls={contentId}
-          >
-            {open ? "Réduire" : "Lire la suite"}
-            <ChevronDown
-              className={cn(
-                "size-4 transition-transform duration-250 motion-reduce:transition-none",
-                open && "rotate-180",
-              )}
-              aria-hidden
-            />
-          </button>
-        </CollapsibleTrigger>
-
-        <CollapsibleContent
-          id={contentId}
-          className="overflow-hidden data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down"
+        <Link
+          href={href}
+          className="mt-6 inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl bg-[var(--afd-orange)] px-4 text-sm font-bold text-white transition hover:opacity-95 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--afd-orange)] sm:w-auto sm:justify-start"
         >
-          <div className="pt-2">
-            <InterventionDomainContent domain={domain} />
-          </div>
-        </CollapsibleContent>
-      </article>
-    </Collapsible>
+          Lire la suite
+          <ArrowRight className="size-4" aria-hidden />
+        </Link>
+      </div>
+    </article>
   );
 }

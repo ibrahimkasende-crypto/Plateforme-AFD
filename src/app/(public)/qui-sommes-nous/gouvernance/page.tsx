@@ -1,16 +1,40 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { Building2, Users } from "lucide-react";
+import { CmsPageShell } from "@/components/public/CmsPageShell";
 import { PublicPageShell } from "@/components/public/PublicPageShell";
 import { institutionalContent } from "@/config/institutional-content";
+import { siteConfig } from "@/config/site";
+import { getPublishedPageByRoute } from "@/lib/queries/public/pages";
 
-export const metadata: Metadata = {
-  title: "Gouvernance",
-  description:
-    "Instances de direction et départements de l’Alliance des Femmes pour le Développement.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const cms = await getPublishedPageByRoute("/qui-sommes-nous/gouvernance");
+  return {
+    title: cms?.titre || "Gouvernance",
+    description:
+      cms?.description_seo ||
+      "Instances de direction et départements de l’Alliance des Femmes pour le Développement.",
+    alternates: {
+      canonical: `${siteConfig.url}/qui-sommes-nous/gouvernance`,
+    },
+  };
+}
 
-export default function GouvernancePage() {
+export default async function GouvernancePage() {
+  const cms = await getPublishedPageByRoute("/qui-sommes-nous/gouvernance");
+  if (cms) {
+    return (
+      <CmsPageShell
+        cms={cms}
+        breadcrumbs={[
+          { label: "Accueil", href: "/" },
+          { label: "Qui sommes-nous", href: "/qui-sommes-nous" },
+          { label: cms.titre },
+        ]}
+      />
+    );
+  }
+
   const { governance, identity } = institutionalContent;
 
   return (

@@ -1,5 +1,15 @@
 "use client";
 
+import {
+  checkboxClassName,
+  errorClassName,
+  fieldClassName,
+  fileClassName,
+  formShellClassName,
+  submitClassName,
+  textareaClassName,
+} from "@/components/ui/form-styles";
+
 import { useMemo, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { z } from "zod";
@@ -197,7 +207,7 @@ export function ApplicationWizard({
   }
 
   return (
-    <div className="rounded-[22px] border border-[var(--afd-border)] bg-white p-5 shadow-sm sm:p-7">
+    <div className={formShellClassName}>
       <div className="mb-6">
         <p className="text-sm font-semibold text-[var(--afd-navy)]">
           {opportunityTitle}
@@ -249,7 +259,7 @@ export function ApplicationWizard({
               <input
                 value={values[key]}
                 onChange={(event) => update(key, event.target.value)}
-                className="min-h-11 w-full rounded-xl border border-[var(--afd-border)] px-3"
+                className={fieldClassName}
                 type={key === "email" ? "email" : "text"}
               />
             </label>
@@ -266,7 +276,7 @@ export function ApplicationWizard({
             <input
               value={values.niveau_etudes}
               onChange={(event) => update("niveau_etudes", event.target.value)}
-              className="min-h-11 w-full rounded-xl border border-[var(--afd-border)] px-3"
+              className={fieldClassName}
             />
           </label>
           <label className="block text-sm">
@@ -276,7 +286,7 @@ export function ApplicationWizard({
             <input
               value={values.experience}
               onChange={(event) => update("experience", event.target.value)}
-              className="min-h-11 w-full rounded-xl border border-[var(--afd-border)] px-3"
+              className={fieldClassName}
             />
           </label>
           <label className="block text-sm">
@@ -287,7 +297,7 @@ export function ApplicationWizard({
               value={values.competences}
               onChange={(event) => update("competences", event.target.value)}
               rows={4}
-              className="w-full rounded-xl border border-[var(--afd-border)] px-3 py-2"
+              className={textareaClassName}
             />
           </label>
         </div>
@@ -305,7 +315,7 @@ export function ApplicationWizard({
                 update("lettreMotivation", event.target.value)
               }
               rows={7}
-              className="w-full rounded-xl border border-[var(--afd-border)] px-3 py-2"
+              className={textareaClassName}
             />
           </label>
           <label className="block text-sm">
@@ -315,7 +325,7 @@ export function ApplicationWizard({
             <input
               value={values.disponibilite}
               onChange={(event) => update("disponibilite", event.target.value)}
-              className="min-h-11 w-full rounded-xl border border-[var(--afd-border)] px-3"
+              className={fieldClassName}
             />
           </label>
         </div>
@@ -331,7 +341,7 @@ export function ApplicationWizard({
               type="file"
               accept=".pdf,.docx,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
               onChange={(event) => setCv(event.target.files?.[0] ?? null)}
-              className="block w-full text-sm"
+              className={fileClassName}
             />
           </label>
           <label className="block text-sm">
@@ -342,7 +352,7 @@ export function ApplicationWizard({
               type="file"
               accept=".pdf,.docx,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
               onChange={(event) => setLettre(event.target.files?.[0] ?? null)}
-              className="block w-full text-sm"
+              className={fileClassName}
             />
           </label>
         </div>

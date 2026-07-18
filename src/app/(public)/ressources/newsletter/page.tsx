@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { Mail } from "lucide-react";
+import { NewsletterGoogleReturn } from "@/components/newsletter/newsletter-google-return";
 import { NewsletterPageForm } from "@/components/public/forms/newsletter-page-form";
 import { PublicPageShell } from "@/components/public/PublicPageShell";
 import { homeContent } from "@/config/home-content";
@@ -24,6 +26,9 @@ export default function NewsletterPage() {
         { label: "Newsletter" },
       ]}
     >
+      <Suspense fallback={null}>
+        <NewsletterGoogleReturn />
+      </Suspense>
       <div className="mx-auto max-w-2xl">
         <div className="mb-8 flex items-center gap-3">
           <div className="inline-flex size-11 items-center justify-center rounded-full bg-[var(--afd-orange)]/10 text-[var(--afd-orange)]">

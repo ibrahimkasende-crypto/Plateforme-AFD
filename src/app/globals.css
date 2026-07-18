@@ -126,9 +126,9 @@ h3 {
   font-family: var(--font-heading), "Segoe UI", sans-serif;
   font-weight: 800;
   letter-spacing: -0.025em;
-  line-height: 1.1;
-  font-size: clamp(2.125rem, 8vw, 4rem);
-  max-width: 44rem;
+  line-height: 1.08;
+  font-size: clamp(1.85rem, 6.5vw, 3.35rem);
+  max-width: 40rem;
 }
 
 .afd-h2 {
@@ -159,6 +159,58 @@ h3 {
   font-weight: 700;
 }
 
+/* Formulaires publics — style unifié */
+.afd-form-shell {
+  position: relative;
+  overflow: hidden;
+}
+
+.afd-form-shell::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 3px;
+  background: linear-gradient(
+    90deg,
+    var(--afd-blue),
+    var(--afd-gold),
+    var(--afd-orange)
+  );
+}
+
+.afd-field:disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+
+.afd-interest-chip {
+  display: flex;
+  cursor: pointer;
+  align-items: center;
+  gap: 0.75rem;
+  border-radius: 0.75rem;
+  border: 1px solid var(--afd-border);
+  background: #f7fbff;
+  padding: 0.7rem 0.85rem;
+  font-size: 0.875rem;
+  color: var(--afd-ink);
+  transition:
+    border-color 180ms ease,
+    background-color 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.afd-interest-chip:hover {
+  border-color: color-mix(in srgb, var(--afd-blue) 40%, var(--afd-border));
+  background: #fff;
+}
+
+.afd-interest-chip:has(input:checked) {
+  border-color: color-mix(in srgb, var(--afd-blue) 55%, var(--afd-border));
+  background: color-mix(in srgb, var(--afd-blue) 8%, #fff);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--afd-blue) 20%, transparent);
+}
+
 @keyframes afd-drawer-in {
   from {
     transform: translateX(100%);
@@ -178,12 +230,30 @@ h3 {
   0%,
   100% {
     transform: scale(1);
-    opacity: 0.85;
+  }
+  40% {
+    transform: scale(1.14);
+  }
+  55% {
+    transform: scale(1.05);
+  }
+  70% {
+    transform: scale(1.12);
+  }
+}
+
+@keyframes afd-donate-float {
+  0%,
+  100% {
+    transform: translateY(0);
   }
   50% {
-    transform: scale(1.08);
-    opacity: 1;
+    transform: translateY(-4px);
   }
+}
+
+.afd-donate-float {
+  animation: afd-donate-float 2.8s ease-in-out infinite;
 }
 
 @keyframes afd-ring-pulse {
@@ -202,7 +272,7 @@ h3 {
 }
 
 .afd-heart-breathe {
-  animation: afd-heart-breathe 1.4s ease-in-out infinite;
+  animation: afd-heart-breathe 1.15s ease-in-out infinite;
 }
 
 @keyframes afd-card-breathe {
@@ -237,7 +307,8 @@ h3 {
 }
 
 .afd-partners-track {
-  animation: afd-partners-scroll 32s linear infinite;
+  animation: afd-partners-scroll 40s linear infinite;
+  will-change: transform;
 }
 
 .afd-partners-track:hover {
@@ -276,6 +347,15 @@ h3 {
 .afd-hero-glow {
   animation: afd-hero-glow 12s ease-in-out infinite;
   will-change: opacity, transform;
+}
+
+@keyframes afd-hero-slide-progress {
+  from {
+    width: 0%;
+  }
+  to {
+    width: 100%;
+  }
 }
 
 @media (max-width: 1023px) {
@@ -333,6 +413,7 @@ html.afd-custom-cursor * {
 @media (prefers-reduced-motion: reduce) {
   .afd-drawer-panel,
   .afd-heart-breathe,
+  .afd-donate-float,
   .afd-card-breathe,
   .afd-ring-pulse,
   .afd-partners-track,
@@ -341,6 +422,15 @@ html.afd-custom-cursor * {
   .animate-collapsible-down,
   .animate-collapsible-up {
     animation: none;
+  }
+
+  @keyframes afd-hero-slide-progress {
+    from {
+      width: 100%;
+    }
+    to {
+      width: 100%;
+    }
   }
 
   html.afd-custom-cursor,

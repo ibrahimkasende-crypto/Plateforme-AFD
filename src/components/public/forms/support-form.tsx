@@ -6,6 +6,17 @@ import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
+import {
+  checkboxClassName,
+  errorClassName,
+  fieldClassName,
+  formClassName,
+  formShellClassName,
+  labelClassName,
+  selectClassName,
+  submitClassName,
+  textareaClassName,
+} from "@/components/ui/form-styles";
 import { siteConfig, type AllowedCurrency, type SupportType } from "@/config/site";
 import { createDonationIntentAction } from "@/features/dons/actions/create-donation-intent";
 
@@ -113,7 +124,8 @@ export function SupportForm() {
         </div>
       ) : null}
 
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4" noValidate>
+      <div className={formShellClassName}>
+      <form onSubmit={handleSubmit(onSubmit)} className={formClassName} noValidate>
         <div className="sr-only" aria-hidden>
           <label htmlFor="support-website">Site web</label>
           <input
@@ -129,18 +141,18 @@ export function SupportForm() {
           <div>
             <label
               htmlFor="support-name"
-              className="mb-1 block text-sm font-semibold text-[var(--afd-ink)]"
+              className={labelClassName}
             >
               Nom complet
             </label>
             <input
               id="support-name"
               type="text"
-              className="min-h-12 w-full rounded-lg border border-[var(--afd-border)] px-3 text-base focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--afd-blue)]"
+              className={fieldClassName}
               {...register("donor_name")}
             />
             {errors.donor_name ? (
-              <p className="mt-1 text-sm text-[var(--afd-error)]">
+              <p className={errorClassName}>
                 {errors.donor_name.message}
               </p>
             ) : null}
@@ -149,18 +161,18 @@ export function SupportForm() {
           <div>
             <label
               htmlFor="support-email"
-              className="mb-1 block text-sm font-semibold text-[var(--afd-ink)]"
+              className={labelClassName}
             >
               E-mail
             </label>
             <input
               id="support-email"
               type="email"
-              className="min-h-12 w-full rounded-lg border border-[var(--afd-border)] px-3 text-base focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--afd-blue)]"
+              className={fieldClassName}
               {...register("donor_email")}
             />
             {errors.donor_email ? (
-              <p className="mt-1 text-sm text-[var(--afd-error)]">
+              <p className={errorClassName}>
                 {errors.donor_email.message}
               </p>
             ) : null}
@@ -170,14 +182,14 @@ export function SupportForm() {
         <div>
           <label
             htmlFor="support-phone"
-            className="mb-1 block text-sm font-semibold text-[var(--afd-ink)]"
+            className={labelClassName}
           >
             Téléphone <span className="font-normal text-[var(--afd-muted)]">(facultatif)</span>
           </label>
           <input
             id="support-phone"
             type="tel"
-            className="min-h-12 w-full rounded-lg border border-[var(--afd-border)] px-3 text-base focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--afd-blue)]"
+            className={fieldClassName}
             {...register("donor_phone")}
           />
         </div>
@@ -185,7 +197,7 @@ export function SupportForm() {
         <div>
           <label
             htmlFor="support-type"
-            className="mb-1 block text-sm font-semibold text-[var(--afd-ink)]"
+            className={labelClassName}
           >
             Type de soutien
           </label>
@@ -202,7 +214,7 @@ export function SupportForm() {
             ))}
           </select>
           {errors.support_type ? (
-            <p className="mt-1 text-sm text-[var(--afd-error)]">
+            <p className={errorClassName}>
               {errors.support_type.message}
             </p>
           ) : null}
@@ -212,7 +224,7 @@ export function SupportForm() {
           <div>
             <label
               htmlFor="support-amount"
-              className="mb-1 block text-sm font-semibold text-[var(--afd-ink)]"
+              className={labelClassName}
             >
               Montant
             </label>
@@ -221,11 +233,11 @@ export function SupportForm() {
               type="number"
               min="1"
               step="0.01"
-              className="min-h-12 w-full rounded-lg border border-[var(--afd-border)] px-3 text-base focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--afd-blue)]"
+              className={fieldClassName}
               {...register("amount")}
             />
             {errors.amount ? (
-              <p className="mt-1 text-sm text-[var(--afd-error)]">
+              <p className={errorClassName}>
                 {errors.amount.message}
               </p>
             ) : null}
@@ -234,7 +246,7 @@ export function SupportForm() {
           <div>
             <label
               htmlFor="support-currency"
-              className="mb-1 block text-sm font-semibold text-[var(--afd-ink)]"
+              className={labelClassName}
             >
               Devise
             </label>
@@ -255,7 +267,7 @@ export function SupportForm() {
         <div>
           <label
             htmlFor="support-message"
-            className="mb-1 block text-sm font-semibold text-[var(--afd-ink)]"
+            className={labelClassName}
           >
             Message <span className="font-normal text-[var(--afd-muted)]">(facultatif)</span>
           </label>
@@ -270,7 +282,7 @@ export function SupportForm() {
         <label className="flex items-start gap-3 text-sm leading-relaxed text-[var(--afd-muted)]">
           <input
             type="checkbox"
-            className="mt-0.5 size-5 shrink-0 rounded border-[var(--afd-border)]"
+            className={checkboxClassName}
             {...register("consent")}
           />
           <span>
@@ -284,17 +296,18 @@ export function SupportForm() {
           </span>
         </label>
         {errors.consent ? (
-          <p className="text-sm text-[var(--afd-error)]">{errors.consent.message}</p>
+          <p className={errorClassName}>{errors.consent.message}</p>
         ) : null}
 
         <button
           type="submit"
           disabled={pending}
-          className="inline-flex min-h-12 items-center justify-center rounded-lg bg-[var(--afd-orange)] px-6 text-base font-bold text-white transition hover:bg-[var(--afd-orange-hover)] disabled:opacity-60"
+          className={submitClassName}
         >
           {pending ? "Enregistrement…" : "Enregistrer mon intention de soutien"}
         </button>
       </form>
+      </div>
     </div>
   );
 }

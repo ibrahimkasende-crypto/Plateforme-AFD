@@ -96,91 +96,91 @@ insert into public.partenaires (
   'MINISTERE DE LA SANTE PUBLIQUE, HYGIENE ET PREVOYANCE SOCIALE',
   null,
   'ministere-de-la-sante-publique-hygiene-et-prevoyance-sociale',
-  '/images/afd/partenaires/ministere-de-la-sante-publique-hygiene-et-prevoyance-sociale.png',
+  '/images/afd/partenaires/01-ministere-de-la-sante-publique-hygiene-et-prevoyance-sociale.png',
   'gouvernement', 1, true, true, null, null,
   'https://afd-rdc.org/', now(), now()
 ),
 (
   '1c2acb41-c94d-460e-8d3d-6152c383cd58',
   'CHWID', 'CHWID', 'chwid',
-  '/images/afd/partenaires/chwid.png',
+  '/images/afd/partenaires/02-chwid.png',
   'international', 2, true, true, null, null,
   'https://afd-rdc.org/', now(), now()
 ),
 (
   'e7b13e31-0713-45ea-8d3b-f57004814c09',
   'CARITAS', 'CARITAS', 'caritas',
-  '/images/afd/partenaires/caritas.png',
+  '/images/afd/partenaires/03-caritas.png',
   'international', 3, true, true, null, null,
   'https://afd-rdc.org/', now(), now()
 ),
 (
   'e8e880a3-9231-428c-8fe2-808b4fee5691',
   'ROJAF', 'ROJAF', 'rojaf',
-  '/images/afd/partenaires/rojaf.png',
+  '/images/afd/partenaires/04-rojaf.png',
   'ong', 4, true, true, null, null,
   'https://afd-rdc.org/', now(), now()
 ),
 (
   '287ee040-9586-49d8-bbf8-9ca2dbc16eb6',
   'CASAMED', 'CASAMED', 'casamed',
-  '/images/afd/partenaires/casamed.png',
+  '/images/afd/partenaires/05-casamed.png',
   'ong', 5, true, true, null, null,
   'https://afd-rdc.org/', now(), now()
 ),
 (
   '1fa6f63c-7472-4406-9a18-51f44e73c99a',
   'IMPACT SANTE AFRIQUE', null, 'impact-sante-afrique',
-  '/images/afd/partenaires/impact-sante-afrique.png',
+  '/images/afd/partenaires/06-impact-sante-afrique.png',
   'international', 6, true, true, null, null,
   'https://afd-rdc.org/', now(), now()
 ),
 (
   'e513d056-8cca-4a37-8e3c-140ae32c81fa',
   'CS4ME', 'CS4ME', 'cs4me',
-  '/images/afd/partenaires/cs4me.png',
+  '/images/afd/partenaires/07-cs4me.png',
   'ong', 7, true, true, null, null,
   'https://afd-rdc.org/', now(), now()
 ),
 (
   '6fa930fb-f968-4933-a872-be3ee585559c',
   'UAF', 'UAF', 'uaf',
-  '/images/afd/partenaires/uaf.png',
+  '/images/afd/partenaires/08-uaf.png',
   'international', 8, true, true, null, null,
   'https://afd-rdc.org/', now(), now()
 ),
 (
   '83201d07-3ad8-4698-abc3-36253a5c3c01',
   'RACOJ', 'RACOJ', 'racoj',
-  '/images/afd/partenaires/racoj.png',
+  '/images/afd/partenaires/09-racoj.png',
   'ong', 9, true, true, null, null,
   'https://afd-rdc.org/', now(), now()
 ),
 (
   '5735e51b-f31c-46b2-b479-0296166d961b',
   'PSDS', 'PSDS', 'psds',
-  '/images/afd/partenaires/psds.png',
+  '/images/afd/partenaires/10-psds.png',
   'ong', 10, true, true, null, null,
   'https://afd-rdc.org/', now(), now()
 ),
 (
   '375bf99d-5cd9-49f0-b1fd-036d47061c99',
   'ALLEVIATE', 'ALLEVIATE', 'alleviate',
-  '/images/afd/partenaires/alleviate.png',
+  '/images/afd/partenaires/11-alleviate.png',
   'international', 11, true, true, null, null,
   'https://afd-rdc.org/', now(), now()
 ),
 (
   '6e2ee100-6149-4656-9d68-19db8d9b9cf0',
   'PNSR', 'PNSR', 'pnsr',
-  '/images/afd/partenaires/pnsr.png',
+  '/images/afd/partenaires/12-pnsr.png',
   'ong', 12, true, true, null, null,
   'https://afd-rdc.org/', now(), now()
 ),
 (
   '11ef7127-9483-4055-a261-e2dab8c40b40',
   'SI JEUNESSE SAVAIT', null, 'si-jeunesse-savait',
-  '/images/afd/partenaires/si-jeunesse-savait.png',
+  '/images/afd/partenaires/13-si-jeunesse-savait.png',
   'ong', 13, true, true, null, null,
   'https://afd-rdc.org/', now(), now()
 )
@@ -188,7 +188,7 @@ on conflict (id) do update set
   name = excluded.name,
   acronyme = excluded.acronyme,
   slug = excluded.slug,
-  logo_url = coalesce(public.partenaires.logo_url, excluded.logo_url),
+  logo_url = excluded.logo_url,
   category = excluded.category,
   "order" = excluded."order",
   active = true,

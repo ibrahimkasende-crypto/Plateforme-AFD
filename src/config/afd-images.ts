@@ -22,6 +22,37 @@ export const afdImages = {
     source: "Banque d’images officielle AFD",
     consentStatus: "to-review",
   },
+  /** Fonds hero scrollables / diaporama — dossier public/images/afd/home */
+  homeHeroSlides: [
+    {
+      src: encodeURI("/images/afd/home/Femmes_AFD.png"),
+      alt: "Femmes de l’Alliance des Femmes pour le Développement.",
+      objectPosition: "50% 30%",
+      source: "Banque d’images officielle AFD",
+      consentStatus: "to-review" as const,
+    },
+    {
+      src: encodeURI("/images/afd/home/hero_2.jpg"),
+      alt: "Femmes et communautés accompagnées par l’AFD.",
+      objectPosition: "55% center",
+      source: "Banque d’images officielle AFD",
+      consentStatus: "to-review" as const,
+    },
+    {
+      src: encodeURI("/images/afd/home/hero_3.jpg"),
+      alt: "Action de l’AFD sur le terrain.",
+      objectPosition: "50% 40%",
+      source: "Banque d’images officielle AFD",
+      consentStatus: "to-review" as const,
+    },
+    {
+      src: "/images/afd/home/hero_4.webp",
+      alt: "Présence institutionnelle de l’AFD auprès des communautés.",
+      objectPosition: "62% center",
+      source: "Banque d’images officielle AFD",
+      consentStatus: "to-review" as const,
+    },
+  ],
   programmes: {
     autonomisation: {
       src: encodeURI("/images/afd/programmes/autonomisation-economique.jpg"),
@@ -97,22 +128,22 @@ export const afdImages = {
   ],
   actualites: [
     {
-      src: encodeURI("/images/afd/actualites/Urgence a Ituri.jpg"),
-      alt: "Illustration d’une activité communautaire AFD.",
+      src: encodeURI("/images/afd/actualites/Amelioration de la sante.jpg"),
+      alt: "Illustration liée aux actions de santé et de prévention de l’AFD.",
       objectPosition: "50% 40%",
       source: "Banque d’images officielle AFD",
       consentStatus: "to-review" as const,
     },
     {
-      src: encodeURI("/images/afd/actualites/Expension AFD.jpg"),
-      alt: "Illustration d’une séance de sensibilisation.",
+      src: encodeURI("/images/afd/actualites/Urgence a Ituri.jpg"),
+      alt: "Illustration liée à l’urgence humanitaire en Ituri.",
       objectPosition: "50% 45%",
       source: "Banque d’images officielle AFD",
       consentStatus: "to-review" as const,
     },
     {
-      src: encodeURI("/images/afd/actualites/Amelioration de la sante.jpg"),
-      alt: "Illustration d’une rencontre institutionnelle.",
+      src: encodeURI("/images/afd/actualites/Expension AFD.jpg"),
+      alt: "Illustration liée au maillage territorial de l’AFD.",
       objectPosition: "50% 40%",
       source: "Banque d’images officielle AFD",
       consentStatus: "to-review" as const,
@@ -125,6 +156,36 @@ export const afdImages = {
     source: "Banque d’images officielle AFD",
     consentStatus: "to-review",
   },
+  impactGallery: [
+    {
+      src: encodeURI("/images/afd/impact/DSC_1226.jpg"),
+      alt: "Image d’une activité AFD sur le terrain.",
+      objectPosition: "50% 40%",
+      source: "Banque d’images officielle AFD",
+      consentStatus: "to-review" as const,
+    },
+    {
+      src: encodeURI("/images/afd/impact/DSC_1245.jpg"),
+      alt: "Image d’une activité AFD sur le terrain.",
+      objectPosition: "50% 40%",
+      source: "Banque d’images officielle AFD",
+      consentStatus: "to-review" as const,
+    },
+    {
+      src: encodeURI("/images/afd/impact/DSC_1457.jpg"),
+      alt: "Image d’une activité AFD sur le terrain.",
+      objectPosition: "50% 40%",
+      source: "Banque d’images officielle AFD",
+      consentStatus: "to-review" as const,
+    },
+    {
+      src: encodeURI("/images/afd/impact/DSC_1810.jpg"),
+      alt: "Image d’une activité AFD sur le terrain.",
+      objectPosition: "50% 40%",
+      source: "Banque d’images officielle AFD",
+      consentStatus: "to-review" as const,
+    },
+  ],
 } as const;
 
 export const programmeFallbackImages = [

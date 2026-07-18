@@ -1,7 +1,9 @@
 import { expect, test } from "@playwright/test";
 
 test.describe("Domaines d’intervention", () => {
-  test("affiche les six domaines et permet d’ouvrir/fermer", async ({ page }) => {
+  test("affiche les six domaines avec image et lien vers la page dédiée", async ({
+    page,
+  }) => {
     await page.goto("/actions/domaines-intervention");
     await page.keyboard.press("Escape");
 
@@ -13,22 +15,23 @@ test.describe("Domaines d’intervention", () => {
     await expect(page.getByText(/Protection, VBG/i).first()).toBeVisible();
     await expect(page.getByText(/Santé maternelle/i).first()).toBeVisible();
     await expect(page.getByText(/WASH/i).first()).toBeVisible();
-    await expect(page.getByText(/Éducation des femmes/i).first()).toBeVisible();
-    await expect(page.getByText(/populations déplacées/i).first()).toBeVisible();
+    await expect(
+      page.getByText(/Femmes, leadership et gouvernance/i).first(),
+    ).toBeVisible();
+    await expect(
+      page.getByText(/Femmes dans la réponse humanitaire/i).first(),
+    ).toBeVisible();
 
-    const toggles = page.getByRole("button", { name: /Lire la suite|Réduire/ });
-    await expect(toggles).toHaveCount(6);
+    const links = page.getByRole("link", { name: "Lire la suite" });
+    await expect(links).toHaveCount(6);
 
-    const firstCard = page.locator("article").first();
-    const toggle = firstCard.getByRole("button", { name: /Lire la suite|Réduire/ });
-    await toggle.evaluate((el: HTMLElement) => el.click());
-
-    await expect(firstCard.getByText("Enjeu")).toBeVisible({ timeout: 10000 });
-    await expect(firstCard.getByText("Notre réponse")).toBeVisible();
-    await expect(toggle).toHaveAttribute("aria-expanded", "true");
-
-    await toggle.evaluate((el: HTMLElement) => el.click());
-    await expect(toggle).toHaveAttribute("aria-expanded", "false");
+    await links.first().click();
+    await expect(page).toHaveURL(/\/actions\/domaines-intervention\/autonomisation-economique/);
+    await expect(
+      page.getByRole("heading", { name: /Autonomisation économique/i }),
+    ).toBeVisible();
+    await expect(page.getByText("Enjeu").first()).toBeVisible();
+    await expect(page.getByText("Notre réponse").first()).toBeVisible();
   });
 
   test("page domaines responsive sans débordement", async ({ page }) => {

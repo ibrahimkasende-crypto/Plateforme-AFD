@@ -9,44 +9,37 @@ async function dismissNewsletterIfPresent(page: import("@playwright/test").Page)
 }
 
 test.describe("Section actualités", () => {
-  test("affiche les actualités migrées ou publiées sur l’accueil", async ({
-    page,
-  }) => {
+  test("affiche les trois actualités publiées sur l’accueil", async ({ page }) => {
     await page.goto("/");
     await dismissNewsletterIfPresent(page);
+
     await expect(
-      page.getByRole("heading", { name: /dernières actualités/i }),
+      page.getByRole("heading", { name: /dernières nouvelles/i }),
     ).toBeVisible({ timeout: 15000 });
 
-    const titles = [
-      /actions contre les VBG/i,
-      /formation entrepreneuriale/i,
-      /mortalité maternelle/i,
-    ];
+    await expect(
+      page.getByText(/Restez informés de nos actions sur le terrain/i),
+    ).toBeVisible();
 
-    const visibleCount = await Promise.all(
-      titles.map(async (title) => page.getByRole("heading", { name: title }).count()),
-    ).then((counts) => counts.reduce((sum, n) => sum + n, 0));
+    await expect(
+      page.getByRole("heading", {
+        name: /Lutte contre Ebola/i,
+      }).first(),
+    ).toBeVisible();
+    await expect(
+      page.getByRole("heading", { name: /Urgence en Ituri/i }).first(),
+    ).toBeVisible();
+    await expect(
+      page.getByRole("heading", { name: /maillage territorial/i }).first(),
+    ).toBeVisible();
 
-    expect(visibleCount).toBeGreaterThan(0);
-
-    const summaryButton = page.getByRole("button", { name: "Lire le résumé" }).first();
-    if (await summaryButton.count()) {
-      await summaryButton.scrollIntoViewIfNeeded();
-      await dismissNewsletterIfPresent(page);
-      await summaryButton.click({ force: true });
-      await expect(
-        page.getByRole("link", { name: /Ouvrir l.article complet/i }).first(),
-      ).toBeVisible();
-      await page.getByRole("button", { name: "Réduire" }).first().click({ force: true });
-    }
+    await expect(page.getByRole("link", { name: "Tout voir" }).first()).toBeVisible();
   });
 
-  test("page /actualites liste sans dates inventées obligatoires", async ({
-    page,
-  }) => {
+  test("page /actualites liste les articles", async ({ page }) => {
     await page.goto("/actualites");
     await dismissNewsletterIfPresent(page);
     await expect(page.getByRole("heading", { name: "Actualités" })).toBeVisible();
+    await expect(page.getByText(/Lutte contre Ebola/i).first()).toBeVisible();
   });
 });

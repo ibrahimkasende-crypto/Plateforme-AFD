@@ -1,5 +1,12 @@
 "use client";
 
+import {
+  errorClassName,
+  fieldClassName,
+  labelClassName,
+  submitClassName,
+} from "@/components/ui/form-styles";
+
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { useState, useTransition } from "react";
@@ -25,9 +32,6 @@ const resetPasswordSchema = z
   });
 
 type ResetPasswordFormValues = z.infer<typeof resetPasswordSchema>;
-
-const inputClassName =
-  "min-h-12 w-full rounded-lg border border-slate-200 px-3 text-base text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2563eb]";
 
 export function ResetPasswordForm() {
   const [pending, startTransition] = useTransition();
@@ -103,7 +107,7 @@ export function ResetPasswordForm() {
             id="reset-password"
             type={showPassword ? "text" : "password"}
             autoComplete="new-password"
-            className={`${inputClassName} pr-11`}
+            className={`${fieldClassName} pr-11`}
             disabled={pending}
             {...register("password")}
           />
@@ -139,7 +143,7 @@ export function ResetPasswordForm() {
             id="reset-confirm-password"
             type={showConfirm ? "text" : "password"}
             autoComplete="new-password"
-            className={`${inputClassName} pr-11`}
+            className={`${fieldClassName} pr-11`}
             disabled={pending}
             {...register("confirmPassword")}
           />

@@ -6,20 +6,25 @@ import { cn } from "@/lib/utils";
 export function ProvinceList({
   provinces,
   selectedId,
+  hoveredId = null,
   onSelect,
   filter = "all",
   className,
 }: {
   provinces: InterventionProvince[];
   selectedId: string | null;
+  hoveredId?: string | null;
   onSelect: (id: string) => void;
   filter?: "all" | "active";
   className?: string;
 }) {
-  const items =
+  const items = (
     filter === "active"
       ? provinces.filter((province) => province.active)
-      : provinces;
+      : provinces
+  )
+    .slice()
+    .sort((a, b) => Number(b.active) - Number(a.active) || a.name.localeCompare(b.name, "fr"));
 
   return (
     <div className={cn("min-w-0", className)}>
@@ -33,6 +38,7 @@ export function ProvinceList({
       >
         {items.map((province) => {
           const selected = selectedId === province.id;
+          const hovered = hoveredId === province.id;
           return (
             <li key={province.id}>
               <button
@@ -44,12 +50,27 @@ export function ProvinceList({
                   "flex w-full min-h-10 items-center justify-between gap-3 rounded-lg px-3 py-2 text-left text-sm transition duration-200",
                   selected
                     ? "bg-[var(--afd-blue)] text-white"
-                    : "bg-white text-[var(--afd-text)] hover:bg-[var(--afd-light-blue)]",
+                    : hovered
+                      ? "bg-[var(--afd-light-blue)] text-[var(--afd-navy)] ring-1 ring-[var(--afd-blue)]/30"
+                      : province.active
+                        ? "bg-[#eaf5fd] text-[var(--afd-text)] hover:bg-[var(--afd-light-blue)]"
+                        : "bg-white text-[var(--afd-text)] hover:bg-[var(--afd-light-blue)]",
                   "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--afd-blue)]",
                 )}
               >
-                <span className="min-w-0 truncate font-medium">
-                  {province.name}
+                <span className="flex min-w-0 items-center gap-2 truncate font-medium">
+                  <span
+                    className={cn(
+                      "size-2 shrink-0 rounded-full",
+                      selected
+                        ? "bg-white"
+                        : province.active
+                          ? "bg-[var(--afd-blue)]"
+                          : "bg-[#c5d0db]",
+                    )}
+                    aria-hidden
+                  />
+                  <span className="truncate">{province.name}</span>
                 </span>
                 <span
                   className={cn(

@@ -1,5 +1,6 @@
 import { AppEntryExperience } from "@/components/shared/app-entry-loader";
 import { AfdCursor } from "@/components/shared/afd-cursor";
+import { FloatingDonateButton } from "@/components/public/floating-donate-button";
 import { SiteFooter } from "@/components/public/site-footer";
 import { SiteHeader } from "@/components/public/site-header";
 import type { ReactNode } from "react";
@@ -19,6 +20,7 @@ export default function PublicLayout({ children }: { children: ReactNode }) {
         {children}
       </main>
       <SiteFooter />
+      <FloatingDonateButton />
       <AppEntryExperience />
     </div>
   );

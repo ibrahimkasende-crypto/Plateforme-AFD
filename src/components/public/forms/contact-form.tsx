@@ -6,6 +6,16 @@ import { useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
+import {
+  checkboxClassName,
+  errorClassName,
+  fieldClassName,
+  formClassName,
+  formShellClassName,
+  labelClassName,
+  submitClassName,
+  textareaClassName,
+} from "@/components/ui/form-styles";
 import { submitContactAction } from "@/features/contact/actions/submit-contact";
 
 const formSchema = z.object({
@@ -60,96 +70,114 @@ export function ContactForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4" noValidate>
-      <div className="sr-only" aria-hidden>
-        <label htmlFor="contact-website">Site web</label>
-        <input id="contact-website" type="text" tabIndex={-1} autoComplete="off" {...register("website")} />
-      </div>
-
-      <div className="grid gap-4 sm:grid-cols-2">
-        <div>
-          <label htmlFor="contact-name" className="mb-1 block text-sm font-semibold text-[var(--afd-ink)]">
-            Nom complet
-          </label>
+    <div className={formShellClassName}>
+      <form onSubmit={handleSubmit(onSubmit)} className={formClassName} noValidate>
+        <div className="sr-only" aria-hidden>
+          <label htmlFor="contact-website">Site web</label>
           <input
-            id="contact-name"
+            id="contact-website"
             type="text"
-            className="min-h-12 w-full rounded-lg border border-[var(--afd-border)] px-3 text-base focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--afd-blue)]"
-            {...register("name")}
+            tabIndex={-1}
+            autoComplete="off"
+            {...register("website")}
           />
-          {errors.name ? <p className="mt-1 text-sm text-[var(--afd-error)]">{errors.name.message}</p> : null}
+        </div>
+
+        <div className="grid gap-5 sm:grid-cols-2">
+          <div>
+            <label htmlFor="contact-name" className={labelClassName}>
+              Nom complet
+            </label>
+            <input
+              id="contact-name"
+              type="text"
+              className={fieldClassName}
+              {...register("name")}
+            />
+            {errors.name ? (
+              <p className={errorClassName}>{errors.name.message}</p>
+            ) : null}
+          </div>
+
+          <div>
+            <label htmlFor="contact-email" className={labelClassName}>
+              E-mail
+            </label>
+            <input
+              id="contact-email"
+              type="email"
+              className={fieldClassName}
+              {...register("email")}
+            />
+            {errors.email ? (
+              <p className={errorClassName}>{errors.email.message}</p>
+            ) : null}
+          </div>
         </div>
 
         <div>
-          <label htmlFor="contact-email" className="mb-1 block text-sm font-semibold text-[var(--afd-ink)]">
-            E-mail
+          <label htmlFor="contact-phone" className={labelClassName}>
+            Téléphone{" "}
+            <span className="font-normal text-[var(--afd-muted)]">(facultatif)</span>
           </label>
           <input
-            id="contact-email"
-            type="email"
-            className="min-h-12 w-full rounded-lg border border-[var(--afd-border)] px-3 text-base focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--afd-blue)]"
-            {...register("email")}
+            id="contact-phone"
+            type="tel"
+            className={fieldClassName}
+            {...register("phone")}
           />
-          {errors.email ? <p className="mt-1 text-sm text-[var(--afd-error)]">{errors.email.message}</p> : null}
         </div>
-      </div>
 
-      <div>
-        <label htmlFor="contact-phone" className="mb-1 block text-sm font-semibold text-[var(--afd-ink)]">
-          Téléphone <span className="font-normal text-[var(--afd-muted)]">(facultatif)</span>
+        <div>
+          <label htmlFor="contact-subject" className={labelClassName}>
+            Sujet
+          </label>
+          <input
+            id="contact-subject"
+            type="text"
+            className={fieldClassName}
+            {...register("subject")}
+          />
+          {errors.subject ? (
+            <p className={errorClassName}>{errors.subject.message}</p>
+          ) : null}
+        </div>
+
+        <div>
+          <label htmlFor="contact-message" className={labelClassName}>
+            Message
+          </label>
+          <textarea
+            id="contact-message"
+            rows={6}
+            className={textareaClassName}
+            {...register("message")}
+          />
+          {errors.message ? (
+            <p className={errorClassName}>{errors.message.message}</p>
+          ) : null}
+        </div>
+
+        <label className="flex items-start gap-3 text-sm leading-relaxed text-[var(--afd-muted)]">
+          <input type="checkbox" className={checkboxClassName} {...register("consent")} />
+          <span>
+            J’accepte que l’AFD traite mes données pour répondre à ma demande.{" "}
+            <Link
+              href="/politique-confidentialite"
+              className="font-semibold text-[var(--afd-blue)] underline-offset-2 hover:underline"
+            >
+              Politique de confidentialité
+            </Link>
+          </span>
         </label>
-        <input
-          id="contact-phone"
-          type="tel"
-          className="min-h-12 w-full rounded-lg border border-[var(--afd-border)] px-3 text-base focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--afd-blue)]"
-          {...register("phone")}
-        />
-      </div>
+        {errors.consent ? (
+          <p className={errorClassName}>{errors.consent.message}</p>
+        ) : null}
 
-      <div>
-        <label htmlFor="contact-subject" className="mb-1 block text-sm font-semibold text-[var(--afd-ink)]">
-          Sujet
-        </label>
-        <input
-          id="contact-subject"
-          type="text"
-          className="min-h-12 w-full rounded-lg border border-[var(--afd-border)] px-3 text-base focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--afd-blue)]"
-          {...register("subject")}
-        />
-        {errors.subject ? <p className="mt-1 text-sm text-[var(--afd-error)]">{errors.subject.message}</p> : null}
-      </div>
-
-      <div>
-        <label htmlFor="contact-message" className="mb-1 block text-sm font-semibold text-[var(--afd-ink)]">
-          Message
-        </label>
-        <textarea
-          id="contact-message"
-          rows={6}
-          className="min-h-32 w-full rounded-lg border border-[var(--afd-border)] px-3 py-3 text-base focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--afd-blue)]"
-          {...register("message")}
-        />
-        {errors.message ? <p className="mt-1 text-sm text-[var(--afd-error)]">{errors.message.message}</p> : null}
-      </div>
-
-      <label className="flex items-start gap-3 text-sm leading-relaxed text-[var(--afd-muted)]">
-        <input type="checkbox" className="mt-0.5 size-5 shrink-0 rounded border-[var(--afd-border)]" {...register("consent")} />
-        <span>
-          J’accepte que l’AFD traite mes données pour répondre à ma demande.{" "}
-          <Link href="/politique-confidentialite" className="font-semibold text-[var(--afd-blue)] underline-offset-2 hover:underline">
-            Politique de confidentialité
-          </Link>
-        </span>
-      </label>
-      {errors.consent ? <p className="text-sm text-[var(--afd-error)]">{errors.consent.message}</p> : null}
-
-      <button
-        type="submit"
-        disabled={pending}
-        className="inline-flex min-h-12 items-center justify-center rounded-lg bg-[var(--afd-orange)] px-6 text-base font-bold text-white transition hover:bg-[var(--afd-orange-hover)] disabled:opacity-60"
-      >
-        {pending ? "Envoi en cours…" : "Envoyer le message"}
-      </button>
-    </form>
+        <button type="submit" disabled={pending} className={submitClassName}>
+          {pending ? "Envoi en cours…" : "Envoyer le message"}
+        </button>
+      </form>
+    </div>
   );
 }

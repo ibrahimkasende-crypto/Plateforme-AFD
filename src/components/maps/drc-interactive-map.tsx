@@ -6,8 +6,6 @@ import {
   useMemo,
   useState,
   useSyncExternalStore,
-  type FocusEvent,
-  type PointerEvent,
 } from "react";
 import { useReducedMotion } from "motion/react";
 import { RDC_MAP_VIEWBOX, RDC_PROVINCE_PATHS } from "@/features/intervention-zones/data/rdc-province-paths";
@@ -21,14 +19,7 @@ import {
 } from "@/features/intervention-zones/utils/intensity";
 import { ProvinceDetails } from "@/components/maps/province-details";
 import { ProvinceList } from "@/components/maps/province-list";
-import { ProvinceTooltip } from "@/components/maps/province-tooltip";
 import { cn } from "@/lib/utils";
-
-type TooltipState = {
-  provinceId: string;
-  x: number;
-  y: number;
-};
 
 export function DrcInteractiveMap({
   bundle,
@@ -56,47 +47,36 @@ export function DrcInteractiveMap({
   const [userSelectedId, setUserSelectedId] = useState<string | null>(null);
   const selectedId = userSelectedId ?? initialProvinceId;
   const [hoveredId, setHoveredId] = useState<string | null>(null);
-  const [tooltip, setTooltip] = useState<TooltipState | null>(null);
   const isCoarsePointer = useSyncExternalStore(
     subscribeCoarsePointer,
     getCoarsePointerSnapshot,
     () => false,
   );
 
-  const selected = selectedId ? (provincesById.get(selectedId) ?? null) : null;
-  const tooltipProvince = tooltip
-    ? (provincesById.get(tooltip.provinceId) ?? null)
-    : null;
+  /** Priorité au survol pour le panneau latéral, sinon la sélection */
+  const previewId = hoveredId ?? selectedId;
+  const preview = previewId ? (provincesById.get(previewId) ?? null) : null;
+  const panelMode =
+    hoveredId != null ? "hover" : selectedId != null ? "selected" : "idle";
 
   const selectProvince = useCallback((id: string) => {
     setUserSelectedId(id);
   }, []);
 
-  const onProvinceFocus = useCallback(
-    (id: string, event: FocusEvent<SVGPathElement>) => {
-      setHoveredId(id);
-      const rect = event.currentTarget.getBoundingClientRect();
-      setTooltip({
-        provinceId: id,
-        x: rect.left + rect.width / 2,
-        y: rect.top,
-      });
-    },
-    [],
-  );
+  const onProvinceFocus = useCallback((id: string) => {
+    setHoveredId(id);
+  }, []);
 
   const onProvincePointerMove = useCallback(
-    (id: string, event: PointerEvent<SVGPathElement>) => {
+    (id: string) => {
       if (isCoarsePointer) return;
       setHoveredId(id);
-      setTooltip({ provinceId: id, x: event.clientX, y: event.clientY });
     },
     [isCoarsePointer],
   );
 
   const clearHover = useCallback(() => {
     setHoveredId(null);
-    setTooltip(null);
   }, []);
 
   const format = new Intl.NumberFormat("fr-FR");
@@ -151,7 +131,13 @@ export function DrcInteractiveMap({
                 isSelected,
                 isHovered,
               );
-              const strokeWidth = isSelected ? 2.2 : isHovered ? 1.6 : 0.7;
+              const strokeWidth = isSelected
+                ? 2.4
+                : isHovered
+                  ? 2
+                  : province.active
+                    ? 1.1
+                    : 0.65;
 
               return (
                 <path
@@ -162,8 +148,8 @@ export function DrcInteractiveMap({
                   role="button"
                   aria-label={`${province.name}${
                     province.active
-                      ? `, ${province.projectCount} projet${province.projectCount > 1 ? "s" : ""}`
-                      : ", aucune intervention publiée"
+                      ? `, présence AFD, ${province.projectCount} projet${province.projectCount > 1 ? "s" : ""}`
+                      : ", hors couverture AFD actuelle"
                   }`}
                   aria-pressed={isSelected}
                   fill={fill}
@@ -171,18 +157,19 @@ export function DrcInteractiveMap({
                   strokeWidth={strokeWidth}
                   className={cn(
                     "outline-none focus-visible:stroke-[var(--afd-orange)] focus-visible:stroke-[2.4]",
-                    province.active ? "cursor-pointer" : "cursor-default",
-                    !reduceMotion && "transition-[fill,stroke,stroke-width,transform] duration-200",
-                    !reduceMotion && isHovered && !isSelected && "translate-y-[-1px]",
+                    "cursor-pointer",
+                    !reduceMotion &&
+                      "transition-[fill,stroke,stroke-width,transform,filter] duration-200",
+                    !reduceMotion &&
+                      isHovered &&
+                      !isSelected &&
+                      "translate-y-[-1px]",
+                    province.active && !isSelected && "drop-shadow-sm",
                   )}
-                  onPointerEnter={(event) =>
-                    onProvincePointerMove(path.id, event)
-                  }
-                  onPointerMove={(event) =>
-                    onProvincePointerMove(path.id, event)
-                  }
+                  onPointerEnter={() => onProvincePointerMove(path.id)}
+                  onPointerMove={() => onProvincePointerMove(path.id)}
                   onPointerLeave={clearHover}
-                  onFocus={(event) => onProvinceFocus(path.id, event)}
+                  onFocus={() => onProvinceFocus(path.id)}
                   onBlur={clearHover}
                   onClick={() => selectProvince(path.id)}
                   onKeyDown={(event) => {
@@ -195,8 +182,25 @@ export function DrcInteractiveMap({
               );
             })}
           </svg>
-          <p className="mt-2 text-center text-[11px] text-[var(--afd-muted)]">
-            Carte SVG — Simplemaps.com (usage libre commercial)
+          <div className="mt-3 flex flex-wrap items-center justify-center gap-x-4 gap-y-1.5 text-[11px] text-[var(--afd-muted)]">
+            <span className="inline-flex items-center gap-1.5">
+              <span
+                className="size-2.5 rounded-sm bg-[var(--afd-blue)]"
+                aria-hidden
+              />
+              Présence AFD (8 provinces)
+            </span>
+            <span className="inline-flex items-center gap-1.5">
+              <span
+                className="size-2.5 rounded-sm border border-[#b7c5d4] bg-[#edf1f5]"
+                aria-hidden
+              />
+              Autres provinces
+            </span>
+          </div>
+          <p className="mt-1.5 text-center text-[11px] text-[var(--afd-muted)]">
+            Survolez une zone bleue pour voir les données à droite · Carte SVG —
+            Simplemaps.com
           </p>
         </div>
 
@@ -248,27 +252,21 @@ export function DrcInteractiveMap({
           ) : null}
 
           <ProvinceDetails
-            province={selected}
+            province={preview}
             compact={variant === "home"}
+            mode={panelMode}
+            isDemo={bundle.isDemo}
           />
 
           <ProvinceList
             provinces={bundle.provinces}
             selectedId={selectedId}
+            hoveredId={hoveredId}
             onSelect={selectProvince}
             filter={variant === "home" ? "all" : "all"}
           />
         </div>
       </div>
-
-      {!isCoarsePointer ? (
-        <ProvinceTooltip
-          province={tooltipProvince}
-          x={tooltip?.x ?? 0}
-          y={tooltip?.y ?? 0}
-          visible={Boolean(tooltip)}
-        />
-      ) : null}
     </div>
   );
 }

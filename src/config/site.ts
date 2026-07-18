@@ -39,10 +39,15 @@ export const siteConfig = {
     address: "République démocratique du Congo",
   },
   social: {
-    facebook: "",
-    linkedin: "",
-    youtube: "",
-    tiktok: "",
+    facebook: process.env.NEXT_PUBLIC_SOCIAL_FACEBOOK ?? "",
+    /** Présence LinkedIn officielle de l’AFD ASBL (page organisation). */
+    linkedin:
+      process.env.NEXT_PUBLIC_SOCIAL_LINKEDIN ??
+      "https://www.linkedin.com/company/alliance-des-femmes-pour-le-developpement-afd",
+    youtube: process.env.NEXT_PUBLIC_SOCIAL_YOUTUBE ?? "",
+    tiktok: process.env.NEXT_PUBLIC_SOCIAL_TIKTOK ?? "",
+    /** Ex. https://wa.me/243XXXXXXXXX */
+    whatsapp: process.env.NEXT_PUBLIC_SOCIAL_WHATSAPP ?? "",
   },
   currencies: ["CDF", "USD", "EUR"] as const,
   defaultCurrency: "USD" as const,

@@ -1,16 +1,44 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { FileText, LifeBuoy, Shield } from "lucide-react";
+import { CmsPageShell } from "@/components/public/CmsPageShell";
 import { PublicPageShell } from "@/components/public/PublicPageShell";
 import { institutionalContent } from "@/config/institutional-content";
+import { siteConfig } from "@/config/site";
+import { getPublishedPageByRoute } from "@/lib/queries/public/pages";
 
-export const metadata: Metadata = {
-  title: "Politiques et engagements",
-  description:
-    "Cadre éthique, politiques institutionnelles et engagements de l’Alliance des Femmes pour le Développement.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const cms = await getPublishedPageByRoute(
+    "/qui-sommes-nous/politiques-engagements",
+  );
+  return {
+    title: cms?.titre || "Politiques et engagements",
+    description:
+      cms?.description_seo ||
+      "Cadre éthique, politiques institutionnelles et engagements de l’Alliance des Femmes pour le Développement.",
+    alternates: {
+      canonical: `${siteConfig.url}/qui-sommes-nous/politiques-engagements`,
+    },
+  };
+}
 
-export default function PolitiquesEngagementsPage() {
+export default async function PolitiquesEngagementsPage() {
+  const cms = await getPublishedPageByRoute(
+    "/qui-sommes-nous/politiques-engagements",
+  );
+  if (cms) {
+    return (
+      <CmsPageShell
+        cms={cms}
+        breadcrumbs={[
+          { label: "Accueil", href: "/" },
+          { label: "Qui sommes-nous", href: "/qui-sommes-nous" },
+          { label: cms.titre },
+        ]}
+      />
+    );
+  }
+
   const { policies, urgences } = institutionalContent;
 
   return (
