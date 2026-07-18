@@ -25,8 +25,13 @@ export const siteConfig = {
   routes: {
     home: "/",
     adhesion: "/adhesion",
+    rejoindreEquipe: "/rejoindre-equipe",
     soutenir: "/soutenir",
     contact: "/contact",
+  },
+  features: {
+    spontaneousApplications:
+      process.env.NEXT_PUBLIC_ENABLE_SPONTANEOUS_APPLICATIONS === "true",
   },
   contact: {
     email: "contact@afd-rdc.org",

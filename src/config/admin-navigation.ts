@@ -50,6 +50,9 @@ export const adminSidebarItems: AdminNavItem[] = [
   },
   { label: "Partenaires", href: "/admin/partenaires", icon: "Handshake" },
   { label: "Équipe et RH", href: "/admin/equipe", icon: "UsersRound" },
+  { label: "Opportunités", href: "/admin/opportunites", icon: "Briefcase" },
+  { label: "Candidatures", href: "/admin/candidatures", icon: "FileText" },
+  { label: "Documents", href: "/admin/documents", icon: "FolderKanban" },
   { label: "Rapports", href: "/admin/rapports", icon: "FileText" },
   {
     label: "Utilisateurs et rôles",

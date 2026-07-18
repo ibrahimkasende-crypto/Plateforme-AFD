@@ -7,7 +7,7 @@ import { institutionalContent } from "@/config/institutional-content";
 export const metadata: Metadata = {
   title: "Notre histoire",
   description:
-    "Parcours et jalons de l’Alliance des Femmes pour le Développement depuis sa création en 2024.",
+    "Parcours et jalons de l’Alliance des Femmes pour le Développement depuis sa création en 2019.",
 };
 
 export default function HistoirePage() {

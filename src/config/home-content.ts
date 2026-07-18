@@ -7,12 +7,12 @@ export const homeContent = {
     title:
       "Des femmes engagées pour des communautés plus fortes et résilientes.",
     description:
-      "Depuis 2024, l’Alliance des Femmes pour le Développement agit aux côtés des communautés vulnérables à travers des réponses humanitaires et des solutions durables, inclusives et participatives.",
+      "Depuis 2019, l’Alliance des Femmes pour le Développement agit aux côtés des communautés vulnérables à travers des réponses humanitaires et des solutions durables, inclusives et participatives.",
     primaryCta: { label: "Découvrir nos actions", href: "/actions" },
     secondaryCta: { label: "Devenir partenaire", href: "/contact" },
     trustItems: [
       "ONG nationale congolaise",
-      "Créée en 2024",
+      "Créée en 2019",
       "Portée par les femmes et les jeunes",
     ] as const,
     institutionalNote:
@@ -29,7 +29,7 @@ export const homeContent = {
     eyebrow: "À propos de l’AFD",
     title: "Une ONG nationale au service des communautés",
     paragraphs: [
-      "Créée en 2024, l’Alliance des Femmes pour le Développement est une ONG nationale congolaise qui accompagne les communautés vulnérables à travers des réponses humanitaires et des programmes de développement durables, inclusifs et participatifs.",
+      "Créée en 2019, l’Alliance des Femmes pour le Développement est une ONG nationale congolaise qui accompagne les communautés vulnérables à travers des réponses humanitaires et des programmes de développement durables, inclusifs et participatifs.",
       "Portée principalement par les femmes et les jeunes, l’AFD agit pour un développement construit à partir des communautés, dans lequel les femmes participent pleinement aux décisions et à la transformation de leur environnement.",
     ] as const,
     highlights: [
@@ -42,9 +42,9 @@ export const homeContent = {
     cta: { label: "En savoir plus", href: "/qui-sommes-nous" },
     image: {
       src: assets.home.presentation,
-      alt: "Visuel institutionnel AFD — à remplacer par une photographie authentique d’activité",
-      caption: "Visuel temporaire en attendant une photographie de terrain validée",
-      isTemporary: true,
+      alt: "Présentation de l’Alliance des Femmes pour le Développement",
+      caption: "L’AFD auprès des communautés",
+      isTemporary: false,
     },
   },
   values: [
@@ -209,8 +209,19 @@ export const homeContent = {
     },
   ] as const,
   statsDisclaimer: "Données validées par l’équipe AFD.",
+  /** Chiffres institutionnels validés pour le bloc d’impact public. */
+  publishedImpactStats: {
+    personnesAccompagnees: 4944,
+    projetsRealises: 8,
+    provincesCouvertes: 8,
+    /** Pourcentage de femmes et jeunes filles parmi les bénéficiaires. */
+    femmesAccompagnees: 75,
+    partenairesActifs: 14,
+    /** Affiché comme « Plus de 70 ». */
+    activitesRealisees: 70,
+  },
   organization: {
-    foundedYear: 2024,
+    foundedYear: 2019,
     legalName: siteConfig.name,
     shortName: siteConfig.shortName,
     country: siteConfig.country,

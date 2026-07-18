@@ -18,7 +18,7 @@ import { siteConfig } from "@/config/site";
 export const metadata: Metadata = {
   title: "Présentation de l’AFD",
   description:
-    "Découvrez l’Alliance des Femmes pour le Développement — ONG nationale congolaise créée en 2024, portée par les femmes et les jeunes.",
+    "Découvrez l’Alliance des Femmes pour le Développement — ONG nationale congolaise créée en 2019, portée par les femmes et les jeunes.",
 };
 
 const pillarIcons = {

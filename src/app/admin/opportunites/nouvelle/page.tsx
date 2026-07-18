@@ -1,0 +1,7 @@
+import { requirePermission } from "@/lib/auth/require-permission";
+import { saveOpportunity } from "@/features/opportunites/actions/manage-opportunity";
+
+export default async function NouvelleOpportunitePage() {
+  await requirePermission("opportunites:write");
+  return <main className="max-w-2xl p-6"><h1 className="mb-6 text-2xl font-bold">Nouvelle opportunité</h1><form action={saveOpportunity} className="space-y-4"><input required name="titre" placeholder="Titre" className="w-full rounded border p-3" /><input required name="slug" placeholder="slug-de-l-offre" className="w-full rounded border p-3" /><input required name="type" placeholder="Type" defaultValue="emploi" className="w-full rounded border p-3" /><input name="localisation" placeholder="Localisation" className="w-full rounded border p-3" /><textarea required name="description" minLength={20} placeholder="Description" className="min-h-40 w-full rounded border p-3" /><select name="statut" defaultValue="brouillon" className="w-full rounded border p-3"><option value="brouillon">Brouillon</option><option value="ouverte">Ouverte</option><option value="bientot_cloturee">Bientôt clôturée</option><option value="cloturee">Clôturée</option><option value="suspendue">Suspendue</option><option value="pourvue">Pourvue</option></select><label><input name="publie" type="checkbox" /> Publier</label><button className="block rounded bg-[var(--afd-blue)] px-4 py-2 text-white">Enregistrer</button></form></main>;
+}

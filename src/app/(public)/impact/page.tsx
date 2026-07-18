@@ -15,6 +15,7 @@ import { PublicPageShell } from "@/components/public/PublicPageShell";
 import { StatCard } from "@/components/shared/StatCard";
 import { homeContent } from "@/config/home-content";
 import { siteConfig } from "@/config/site";
+import { formatImpactStatValue } from "@/lib/format-impact-stat";
 import { getPublicImpactStats } from "@/lib/queries/home";
 import type { PublicImpactStats } from "@/lib/queries/home";
 
@@ -33,7 +34,11 @@ const statCards: {
   { key: "personnesAccompagnees", label: "Personnes accompagnées", icon: Users },
   { key: "projetsRealises", label: "Projets réalisés", icon: FolderKanban },
   { key: "provincesCouvertes", label: "Provinces d’intervention", icon: MapPinned },
-  { key: "femmesAccompagnees", label: "Femmes et filles bénéficiaires", icon: UsersRound },
+  {
+    key: "femmesAccompagnees",
+    label: "Femmes et jeunes filles bénéficiaires",
+    icon: UsersRound,
+  },
   { key: "partenairesActifs", label: "Partenaires actifs", icon: Handshake },
   { key: "activitesRealisees", label: "Activités réalisées", icon: Activity },
 ];
@@ -91,7 +96,7 @@ export default async function ImpactPage() {
                 <StatCard
                   key={card.key}
                   label={card.label}
-                  value={new Intl.NumberFormat("fr-FR").format(value)}
+                  value={formatImpactStatValue(card.key, value)}
                   icon={card.icon}
                 />
               );

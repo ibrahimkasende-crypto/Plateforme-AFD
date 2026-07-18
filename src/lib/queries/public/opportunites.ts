@@ -1,19 +1,60 @@
-import { emptyPaginatedResult, type PaginatedResult } from "./client";
+import type { Opportunity } from "@/features/opportunites/types";
+import {
+  applyTextSearch,
+  buildPaginatedResult,
+  DEFAULT_PAGE_SIZE,
+  emptyPaginatedResult,
+  sanitizeSearchQuery,
+  withClient,
+  type PaginatedResult,
+} from "./client";
 
-/**
- * Opportunités publiques (emploi, stage, volontariat…).
- * Table dédiée absente : aucune offre inventée.
- */
+export type OpportunityFilters = {
+  type?: string;
+  localisation?: string;
+  q?: string;
+  page?: number;
+  pageSize?: number;
+};
+
 export async function getPublishedOpportunities(
-  page = 1,
-  pageSize = 12,
-): Promise<PaginatedResult<never>> {
-  return emptyPaginatedResult(page, pageSize);
+  filters: OpportunityFilters = {},
+): Promise<PaginatedResult<Opportunity>> {
+  const page = Math.max(1, filters.page ?? 1);
+  const pageSize = Math.min(48, Math.max(1, filters.pageSize ?? DEFAULT_PAGE_SIZE));
+  const from = (page - 1) * pageSize;
+  const to = from + pageSize - 1;
+  const q = sanitizeSearchQuery(filters.q);
+
+  return withClient(emptyPaginatedResult<Opportunity>(page, pageSize), async (supabase) => {
+    let query = supabase
+      .from("opportunites")
+      .select("*", { count: "exact" })
+      .eq("publie", true)
+      .is("deleted_at", null)
+      .in("statut", ["ouverte", "bientot_cloturee", "cloturee", "suspendue", "pourvue"]);
+    query = applyTextSearch(query, q, ["titre", "description", "departement"]);
+    if (filters.type?.trim()) query = query.eq("type", filters.type.trim());
+    if (filters.localisation?.trim()) query = query.eq("localisation", filters.localisation.trim());
+    const { data, error, count } = await query
+      .order("date_publication", { ascending: false })
+      .range(from, to);
+    return error || !data
+      ? emptyPaginatedResult<Opportunity>(page, pageSize)
+      : buildPaginatedResult(data, count, page, pageSize);
+  });
 }
 
-export async function getOpportunityBySlug(
-  slug: string,
-): Promise<null> {
-  void slug;
-  return null;
+export async function getOpportunityBySlug(slug: string): Promise<Opportunity | null> {
+  return withClient(null, async (supabase) => {
+    const { data, error } = await supabase
+      .from("opportunites")
+      .select("*")
+      .eq("slug", slug)
+      .eq("publie", true)
+      .is("deleted_at", null)
+      .in("statut", ["ouverte", "bientot_cloturee", "cloturee", "suspendue", "pourvue"])
+      .maybeSingle();
+    return error || !data ? null : data;
+  });
 }

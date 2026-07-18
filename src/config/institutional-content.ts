@@ -41,7 +41,7 @@ export const institutionalContent = {
   pillars: homeContent.pillars,
   timeline: [
     {
-      year: "2024",
+      year: "2019",
       title: "Création de l’AFD",
       description:
         "Fondation de l’Alliance des Femmes pour le Développement en tant qu’ONG nationale congolaise, portée par les femmes et les jeunes.",

@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { FileText } from "lucide-react";
 import { PublicPageShell } from "@/components/public/PublicPageShell";
 import { EmptyState } from "@/components/shared/EmptyState";
 import { siteConfig } from "@/config/site";
-import { getPublishedDocuments } from "@/lib/queries/public/medias";
+import { DocumentCard } from "@/components/public/documents/document-card";
+import { DocumentFilters } from "@/components/public/documents/document-filters";
+import { getPublishedDocuments } from "@/lib/queries/public/documents";
 
 export const metadata: Metadata = {
   title: "Documents",
@@ -13,19 +14,9 @@ export const metadata: Metadata = {
   alternates: { canonical: `${siteConfig.url}/ressources/documents` },
 };
 
-function formatDate(value: string | null): string | null {
-  if (!value) return null;
-  const date = new Date(value);
-  if (Number.isNaN(date.getTime())) return null;
-  return new Intl.DateTimeFormat("fr-FR", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  }).format(date);
-}
-
-export default async function DocumentsPage() {
-  const documents = await getPublishedDocuments();
+export default async function DocumentsPage({ searchParams }: { searchParams: Promise<{ type?: string; q?: string }> }) {
+  const { type, q } = await searchParams;
+  const documents = await getPublishedDocuments({ type, q });
 
   return (
     <PublicPageShell
@@ -38,6 +29,7 @@ export default async function DocumentsPage() {
         { label: "Documents" },
       ]}
     >
+      <DocumentFilters type={type} q={q} />
       {documents.length === 0 ? (
         <EmptyState
           title="Aucun document publié"
@@ -52,39 +44,7 @@ export default async function DocumentsPage() {
           }
         />
       ) : (
-        <ul className="space-y-3">
-          {documents.map((doc) => {
-            const date = formatDate(doc.created_at);
-            return (
-              <li
-                key={doc.id}
-                className="flex items-start gap-4 rounded-2xl border border-[var(--afd-border)] bg-[var(--afd-surface)] p-5"
-              >
-                <FileText
-                  className="mt-0.5 size-5 shrink-0 text-[var(--afd-accent)]"
-                  aria-hidden
-                />
-                <div className="min-w-0 flex-1">
-                  <h2 className="font-semibold text-[var(--afd-ink)]">{doc.title}</h2>
-                  {doc.description ? (
-                    <p className="mt-1 text-sm text-[var(--afd-muted)]">{doc.description}</p>
-                  ) : null}
-                  {date ? (
-                    <p className="mt-1 text-xs text-[var(--afd-muted)]">Publié le {date}</p>
-                  ) : null}
-                </div>
-                <a
-                  href={doc.media_url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="shrink-0 text-sm font-semibold text-[var(--afd-blue)] hover:underline"
-                >
-                  Télécharger
-                </a>
-              </li>
-            );
-          })}
-        </ul>
+        <ul className="space-y-3">{documents.map((document) => <li key={document.id}><DocumentCard document={document} /></li>)}</ul>
       )}
     </PublicPageShell>
   );

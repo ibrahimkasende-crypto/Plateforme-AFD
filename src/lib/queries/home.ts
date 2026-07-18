@@ -1,3 +1,4 @@
+import { homeContent } from "@/config/home-content";
 import { createClientSafe } from "@/lib/supabase/safe";
 import type { Database } from "@/types/database.types";
 
@@ -13,7 +14,7 @@ export type PublicImpactStats = {
   provincesCouvertes: number | null;
   partenairesActifs: number | null;
   activitesRealisees: number | null;
-  source: "supabase" | "unavailable";
+  source: "published" | "supabase" | "unavailable";
   missing: string[];
 };
 
@@ -84,72 +85,18 @@ async function withClient<T>(
 }
 
 export async function getPublicImpactStats(): Promise<PublicImpactStats> {
-  const missing = [
-    "femmesAccompagnees",
-    "activitesRealisees",
-  ];
+  const published = homeContent.publishedImpactStats;
 
-  return withClient<PublicImpactStats>(
-    {
-      personnesAccompagnees: null,
-      femmesAccompagnees: null,
-      projetsRealises: null,
-      provincesCouvertes: null,
-      partenairesActifs: null,
-      activitesRealisees: null,
-      source: "unavailable",
-      missing: [
-        ...missing,
-        "personnesAccompagnees",
-        "projetsRealises",
-        "provincesCouvertes",
-        "partenairesActifs",
-      ],
-    },
-    async (supabase) => {
-      const [projetsRes, partenairesRes] = await Promise.all([
-        supabase
-          .from("projets")
-          .select("beneficiaries, location, status, active")
-          .eq("active", true),
-        supabase.from("partenaires").select("id").eq("active", true),
-      ]);
-
-      const projets = projetsRes.data ?? [];
-      const partenaires = partenairesRes.data ?? [];
-
-      const personnes = projets.reduce((sum, project) => {
-        return sum + (project.beneficiaries ?? 0);
-      }, 0);
-
-      const locations = new Set(
-        projets
-          .map((project) => project.location?.trim())
-          .filter((value): value is string => Boolean(value)),
-      );
-
-      const completed = projets.filter((project) =>
-        ["completed", "terminé", "termine", "achevé", "acheve"].includes(
-          (project.status ?? "").toLowerCase(),
-        ),
-      );
-
-      const nextMissing = [...missing];
-      if (personnes === 0) nextMissing.push("personnesAccompagnees");
-
-      return {
-        personnesAccompagnees: personnes > 0 ? personnes : null,
-        femmesAccompagnees: null,
-        projetsRealises:
-          completed.length > 0 ? completed.length : projets.length || null,
-        provincesCouvertes: locations.size > 0 ? locations.size : null,
-        partenairesActifs: partenaires.length > 0 ? partenaires.length : null,
-        activitesRealisees: null,
-        source: "supabase" as const,
-        missing: nextMissing,
-      };
-    },
-  );
+  return {
+    personnesAccompagnees: published.personnesAccompagnees,
+    femmesAccompagnees: published.femmesAccompagnees,
+    projetsRealises: published.projetsRealises,
+    provincesCouvertes: published.provincesCouvertes,
+    partenairesActifs: published.partenairesActifs,
+    activitesRealisees: published.activitesRealisees,
+    source: "published",
+    missing: [],
+  };
 }
 
 export async function getFeaturedPrograms(): Promise<FeaturedProgram[]> {

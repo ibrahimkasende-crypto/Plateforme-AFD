@@ -163,7 +163,7 @@ export const publicNavigation: PublicNavItem[] = [
 export const publicCtas = [
   {
     label: "Nous rejoindre",
-    href: "/adhesion",
+    href: "/rejoindre-equipe",
     variant: "secondary" as const,
     icon: "user" as const,
   },
@@ -184,7 +184,7 @@ export const footerLinks = {
     },
   ],
   quick: [
-    { label: "Nous rejoindre", href: "/adhesion" },
+    { label: "Rejoindre l’équipe", href: "/rejoindre-equipe" },
     { label: "Devenir partenaire", href: "/partenariat" },
     { label: "Soutenir l’AFD", href: "/soutenir" },
     { label: "Newsletter", href: "/ressources/newsletter" },

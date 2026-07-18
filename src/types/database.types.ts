@@ -782,6 +782,42 @@ export type Database = {
         }
         Relationships: []
       }
+      opportunites: {
+        Row: import("@/features/opportunites/types").Opportunity
+        Insert: Partial<import("@/features/opportunites/types").Opportunity>
+        Update: Partial<import("@/features/opportunites/types").Opportunity>
+        Relationships: []
+      }
+      candidatures: {
+        Row: { id: string; opportunite_id: string | null; est_spontanee: boolean; prenom: string; nom: string; email: string; telephone: string | null; localisation: string | null; lettre_motivation: string; cv_storage_path: string | null; statut: string; consentement: boolean; metadata: Json; created_at: string; updated_at: string; deleted_at: string | null }
+        Insert: { id?: string; opportunite_id?: string | null; est_spontanee?: boolean; prenom: string; nom: string; email: string; telephone?: string | null; localisation?: string | null; lettre_motivation: string; cv_storage_path?: string | null; statut?: string; consentement: boolean; metadata?: Json; created_at?: string; updated_at?: string; deleted_at?: string | null }
+        Update: Partial<Database["public"]["Tables"]["candidatures"]["Insert"]>
+        Relationships: []
+      }
+      documents: {
+        Row: import("@/features/documents/types").DocumentCentre
+        Insert: Partial<import("@/features/documents/types").DocumentCentre>
+        Update: Partial<import("@/features/documents/types").DocumentCentre>
+        Relationships: []
+      }
+      documents_candidature: {
+        Row: { id: string; candidature_id: string; nom_fichier: string; chemin_storage: string; type_mime: string | null; taille_octets: number | null; created_at: string }
+        Insert: { id?: string; candidature_id: string; nom_fichier: string; chemin_storage: string; type_mime?: string | null; taille_octets?: number | null; created_at?: string }
+        Update: Partial<Database["public"]["Tables"]["documents_candidature"]["Insert"]>
+        Relationships: []
+      }
+      telechargements_documents: {
+        Row: { id: string; document_id: string; telecharge_at: string; metadata: Json }
+        Insert: { id?: string; document_id: string; telecharge_at?: string; metadata?: Json }
+        Update: Partial<Database["public"]["Tables"]["telechargements_documents"]["Insert"]>
+        Relationships: []
+      }
+      categories_documents: {
+        Row: { id: string; nom: string; slug: string; description: string | null; created_at: string }
+        Insert: { id?: string; nom: string; slug: string; description?: string | null; created_at?: string }
+        Update: Partial<Database["public"]["Tables"]["categories_documents"]["Insert"]>
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

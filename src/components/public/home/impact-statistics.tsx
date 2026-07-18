@@ -13,14 +13,25 @@ import {
 } from "lucide-react";
 import { FadeIn } from "@/components/motion/FadeIn";
 import { SiteContainer } from "@/components/shared/SiteContainer";
+import {
+  formatImpactStatValue,
+  getImpactStatFormat,
+} from "@/lib/format-impact-stat";
 import type { PublicImpactStats } from "@/lib/queries/home";
 import { cn } from "@/lib/utils";
 
-function AnimatedNumber({ value }: { value: number }) {
+function AnimatedNumber({
+  value,
+  formatKey,
+}: {
+  value: number;
+  formatKey: string;
+}) {
   const reduceMotion = useReducedMotion();
   const ref = useRef<HTMLSpanElement>(null);
   const inView = useInView(ref, { once: true, margin: "-40px" });
   const [display, setDisplay] = useState(0);
+  const format = getImpactStatFormat(formatKey);
 
   useEffect(() => {
     if (!inView) return;
@@ -47,31 +58,46 @@ function AnimatedNumber({ value }: { value: number }) {
     return () => cancelAnimationFrame(frame);
   }, [inView, reduceMotion, value]);
 
+  if (format === "plus-de") {
+    return (
+      <span ref={ref}>
+        {inView ? formatImpactStatValue(formatKey, display || value) : "Plus de 0"}
+      </span>
+    );
+  }
+
+  if (format === "percent") {
+    return (
+      <span ref={ref}>
+        {new Intl.NumberFormat("fr-FR").format(display)}&nbsp;%
+      </span>
+    );
+  }
+
   return (
     <span ref={ref}>{new Intl.NumberFormat("fr-FR").format(display)}</span>
   );
 }
 
 const cards: {
-  key: keyof PublicImpactStats;
+  key: keyof Omit<PublicImpactStats, "source" | "missing">;
   label: string;
   icon: LucideIcon;
 }[] = [
   { key: "personnesAccompagnees", label: "Personnes accompagnées", icon: Users },
   { key: "projetsRealises", label: "Projets réalisés", icon: FolderKanban },
   { key: "provincesCouvertes", label: "Provinces d’intervention", icon: MapPinned },
-  { key: "femmesAccompagnees", label: "Femmes et filles bénéficiaires", icon: UsersRound },
+  {
+    key: "femmesAccompagnees",
+    label: "Femmes et jeunes filles bénéficiaires",
+    icon: UsersRound,
+  },
   { key: "partenairesActifs", label: "Partenaires actifs", icon: Handshake },
   { key: "activitesRealisees", label: "Activités réalisées", icon: Activity },
 ];
 
 export function ImpactStatistics({ stats }: { stats: PublicImpactStats }) {
-  const isDev = process.env.NODE_ENV === "development";
-  const visibleCards = cards.filter((card) => {
-    const value = stats[card.key];
-    if (typeof value === "number") return true;
-    return isDev;
-  });
+  const visibleCards = cards.filter((card) => typeof stats[card.key] === "number");
 
   if (visibleCards.length === 0) return null;
 
@@ -105,10 +131,12 @@ export function ImpactStatistics({ stats }: { stats: PublicImpactStats }) {
                       className={cn(
                         "font-heading text-[22px] font-extrabold tracking-tight text-[var(--afd-navy)] sm:text-2xl md:text-[1.65rem]",
                         numeric == null && "text-[var(--afd-muted)]",
+                        getImpactStatFormat(card.key) === "plus-de" &&
+                          "text-[1.15rem] sm:text-[1.35rem] md:text-[1.4rem]",
                       )}
                     >
                       {numeric != null ? (
-                        <AnimatedNumber value={numeric} />
+                        <AnimatedNumber value={numeric} formatKey={card.key} />
                       ) : (
                         "À renseigner"
                       )}
