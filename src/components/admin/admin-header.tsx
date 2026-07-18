@@ -2,13 +2,19 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Maximize2, Menu, MessageSquare, Minimize2 } from "lucide-react";
+import {
+  Maximize2,
+  Menu,
+  MessageSquare,
+  Minimize2,
+  Settings,
+} from "lucide-react";
 import { useCallback, useMemo, useState } from "react";
 import { AdminNotifications } from "@/components/admin/admin-notifications";
 import { AdminProfileMenu } from "@/components/admin/admin-profile-menu";
 import { AdminSearch } from "@/components/admin/admin-search";
 import { PresentationModeBadge } from "@/components/admin/presentation-mode-badge";
-import { adminSidebarItems } from "@/config/admin-navigation";
+import { resolveAdminNavTitle } from "@/config/admin-navigation";
 import type { AdminViewer, SidebarBadges } from "@/features/statistiques/types/dashboard";
 import { cn } from "@/lib/utils";
 
@@ -18,6 +24,7 @@ type AdminHeaderProps = {
   viewer: AdminViewer;
   onMenuClick: () => void;
   presentationMode?: boolean;
+  canManageSettings?: boolean;
 };
 
 export function AdminHeader({
@@ -26,18 +33,14 @@ export function AdminHeader({
   viewer,
   onMenuClick,
   presentationMode = false,
+  canManageSettings = false,
 }: AdminHeaderProps) {
   const pathname = usePathname();
   const [fullscreen, setFullscreen] = useState(false);
 
   const resolvedTitle = useMemo(() => {
     if (title) return title;
-    const match = adminSidebarItems.find((item) =>
-      item.href === "/admin"
-        ? pathname === "/admin"
-        : pathname === item.href || pathname.startsWith(`${item.href}/`),
-    );
-    return match?.label ?? "Administration";
+    return resolveAdminNavTitle(pathname);
   }, [pathname, title]);
 
   const toggleFullscreen = useCallback(async () => {
@@ -97,6 +100,16 @@ export function AdminHeader({
             </span>
           ) : null}
         </Link>
+        {canManageSettings ? (
+          <Link
+            href="/admin/parametres"
+            className="inline-flex size-10 items-center justify-center rounded-xl text-slate-600 transition hover:bg-slate-100"
+            aria-label="Paramètres"
+            title="Paramètres"
+          >
+            <Settings className="size-5" aria-hidden />
+          </Link>
+        ) : null}
         <button
           type="button"
           onClick={toggleFullscreen}

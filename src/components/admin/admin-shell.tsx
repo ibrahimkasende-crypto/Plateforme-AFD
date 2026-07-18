@@ -1,10 +1,11 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { useState, type CSSProperties, type ReactNode } from "react";
+import { useMemo, useState, type CSSProperties, type ReactNode } from "react";
 import { AdminHeader } from "@/components/admin/admin-header";
 import { AdminMobileSidebar } from "@/components/admin/admin-mobile-sidebar";
 import { AdminSidebar } from "@/components/admin/admin-sidebar";
+import { roleHasPermission } from "@/config/permissions";
 import type { AdminViewer, SidebarBadges } from "@/features/statistiques/types/dashboard";
 import { useAdminSidebarCollapsed } from "@/hooks/use-admin-sidebar-collapsed";
 import { cn } from "@/lib/utils";
@@ -28,6 +29,11 @@ export function AdminShell({
   const { collapsed, toggle } = useAdminSidebarCollapsed(false);
   const pathname = usePathname();
   const isOverview = pathname === "/admin";
+
+  const canManageSettings = useMemo(
+    () => roleHasPermission(viewer.role, "parametres:manage"),
+    [viewer.role],
+  );
 
   return (
     <div
@@ -73,6 +79,7 @@ export function AdminShell({
           badges={badges}
           viewer={viewer}
           presentationMode={presentationMode}
+          canManageSettings={canManageSettings}
           onMenuClick={() => setMobileOpen(true)}
         />
         <main

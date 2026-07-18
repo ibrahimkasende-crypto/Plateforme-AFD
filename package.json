@@ -11,6 +11,8 @@
     "import:partner-logos": "tsx scripts/import-partner-logos-from-legacy-site.ts",
     "seed:presentation": "npx tsx scripts/seed-presentation.ts",
     "seed:presentation:clean": "npx tsx scripts/clean-presentation.ts",
+    "seed:complete-admin": "npx tsx scripts/seed-complete-admin-presentation.ts",
+    "seed:complete-admin:clean": "npx tsx scripts/clean-complete-admin-presentation.ts",
     "test:e2e": "playwright test",
     "test:e2e:install": "playwright install chromium"
   },

@@ -1,15 +1,7 @@
-import { ModulePlaceholder } from "@/components/shared/ModulePlaceholder";
+import { redirect } from "next/navigation";
+import { requirePermission } from "@/lib/auth/require-permission";
 
-export default function Page() {
-  return (
-    <ModulePlaceholder
-      title="Statistiques"
-      description="Tableaux de bord analytiques."
-      breadcrumbs={[
-        { label: "Admin", href: "/admin" },
-        { label: "Statistiques" },
-      ]}
-      eyebrow="Administration"
-    />
-  );
+export default async function AdminStatistiquesPage() {
+  await requirePermission("statistiques:read");
+  redirect("/admin");
 }

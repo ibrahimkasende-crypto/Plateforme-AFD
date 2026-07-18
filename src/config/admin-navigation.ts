@@ -1,3 +1,5 @@
+import type { Permission } from "@/config/permissions";
+
 export type AdminNavBadgeKey =
   | "newsletter"
   | "messages"
@@ -7,132 +9,150 @@ export type AdminNavBadgeKey =
 export type AdminNavItem = {
   label: string;
   href: string;
-  icon?: string;
   badgeKey?: AdminNavBadgeKey;
 };
 
-export type AdminNavGroup = {
+export type AdminNavGroupDef = {
+  id: string;
   label: string;
+  icon: string;
   items: AdminNavItem[];
+  /** Lien direct sans sous-éléments (ex. tableau de bord). */
+  href?: string;
+  permissionGate?: Permission | Permission[];
 };
 
-/** Menu plat aligné sur la maquette administrative AFD. */
-export const adminSidebarItems: AdminNavItem[] = [
-  { label: "Tableau de bord", href: "/admin", icon: "LayoutDashboard" },
-  { label: "Programmes", href: "/admin/programmes", icon: "FolderKanban" },
-  { label: "Projets", href: "/admin/projets", icon: "Briefcase" },
-  { label: "Activités", href: "/admin/activites", icon: "ListChecks" },
-  { label: "Bénéficiaires", href: "/admin/beneficiaires", icon: "Users" },
+export const adminNavGroups: AdminNavGroupDef[] = [
   {
-    label: "Indicateurs et résultats",
-    href: "/admin/indicateurs",
+    id: "dashboard",
+    label: "Tableau de bord",
+    icon: "LayoutDashboard",
+    href: "/admin",
+    items: [],
+  },
+  {
+    id: "operations",
+    label: "Opérations",
+    icon: "FolderKanban",
+    items: [
+      { label: "Programmes", href: "/admin/programmes" },
+      { label: "Projets", href: "/admin/projets" },
+      { label: "Activités", href: "/admin/activites" },
+      { label: "Zones d'intervention", href: "/admin/zones-intervention" },
+      { label: "Urgences", href: "/admin/urgences" },
+      { label: "Clusters", href: "/admin/clusters" },
+    ],
+  },
+  {
+    id: "suivi-impact",
+    label: "Suivi et impact",
     icon: "Target",
+    items: [
+      { label: "Bénéficiaires", href: "/admin/beneficiaires" },
+      { label: "Indicateurs et résultats", href: "/admin/indicateurs" },
+      { label: "Enquêtes", href: "/admin/enquetes" },
+      { label: "Histoires d'impact", href: "/admin/histoires-impact" },
+      { label: "Témoignages", href: "/admin/temoignages" },
+    ],
   },
-  { label: "Finances", href: "/admin/finances", icon: "Wallet" },
   {
-    label: "Carte des interventions",
-    href: "/admin/zones-intervention",
-    icon: "Map",
-  },
-  {
-    label: "Studio de publication",
-    href: "/admin/publications",
+    id: "communication",
+    label: "Communication",
     icon: "Newspaper",
-  },
-  { label: "Actualités", href: "/admin/actualites", icon: "Newspaper" },
-  { label: "Médiathèque", href: "/admin/mediatheque", icon: "Images" },
-  {
-    label: "Newsletter",
-    href: "/admin/newsletter",
-    icon: "Mail",
-    badgeKey: "newsletter",
+    items: [
+      { label: "Actualités", href: "/admin/actualites" },
+      { label: "Médiathèque", href: "/admin/mediatheque" },
+      { label: "Newsletter", href: "/admin/newsletter", badgeKey: "newsletter" },
+      { label: "Pages publiques", href: "/admin/publications/pages" },
+    ],
   },
   {
-    label: "Demandes et messages",
-    href: "/admin/messages",
+    id: "engagement",
+    label: "Engagement",
     icon: "MessageSquare",
-    badgeKey: "messages",
+    items: [
+      { label: "Messages", href: "/admin/messages", badgeKey: "messages" },
+      { label: "Adhésions", href: "/admin/adhesions", badgeKey: "adhesions" },
+      { label: "Partenariats", href: "/admin/partenariats" },
+      { label: "Dons", href: "/admin/dons" },
+      { label: "Opportunités", href: "/admin/opportunites" },
+      { label: "Candidatures", href: "/admin/candidatures" },
+      { label: "Appels d'offres", href: "/admin/appels-offres" },
+    ],
   },
-  { label: "Partenaires", href: "/admin/partenaires", icon: "Handshake" },
-  { label: "Équipe et RH", href: "/admin/equipe", icon: "UsersRound" },
-  { label: "Opportunités", href: "/admin/opportunites", icon: "Briefcase" },
-  { label: "Enquêtes", href: "/admin/enquetes", icon: "ListChecks" },
-  { label: "Agents terrain", href: "/admin/agents", icon: "Users" },
-  { label: "Candidatures", href: "/admin/candidatures", icon: "FileText" },
-  { label: "Documents", href: "/admin/documents", icon: "FolderKanban" },
-  { label: "Rapports", href: "/admin/rapports", icon: "FileText" },
   {
-    label: "Utilisateurs et rôles",
-    href: "/admin/utilisateurs",
+    id: "organisation",
+    label: "Organisation",
+    icon: "UsersRound",
+    items: [
+      { label: "Partenaires", href: "/admin/partenaires" },
+      { label: "Équipe et RH", href: "/admin/equipe" },
+      { label: "Utilisateurs et rôles", href: "/admin/utilisateurs" },
+      { label: "Agents terrain", href: "/admin/agents" },
+    ],
+  },
+  {
+    id: "finances",
+    label: "Finances",
+    icon: "Wallet",
+    permissionGate: "finances:read",
+    items: [
+      { label: "Vue d'ensemble", href: "/admin/finances" },
+      { label: "Budgets", href: "/admin/finances/budgets" },
+      { label: "Dépenses", href: "/admin/finances/depenses" },
+      { label: "Transactions", href: "/admin/finances/transactions" },
+    ],
+  },
+  {
+    id: "rapports-documents",
+    label: "Rapports et documents",
+    icon: "FileText",
+    items: [
+      { label: "Rapports", href: "/admin/rapports" },
+      { label: "Documents", href: "/admin/documents" },
+      { label: "Générateur", href: "/admin/rapports/nouveau" },
+      { label: "Exports", href: "/admin/exports" },
+    ],
+  },
+  {
+    id: "administration",
+    label: "Administration",
     icon: "Shield",
-  },
-  { label: "Paramètres", href: "/admin/parametres", icon: "Settings" },
-  {
-    label: "Journal d’activité",
-    href: "/admin/journal-activite",
-    icon: "ScrollText",
+    permissionGate: ["journal:read", "parametres:manage", "utilisateurs:write"],
+    items: [
+      { label: "Journal d'activité", href: "/admin/journal-activite" },
+      { label: "Sécurité", href: "/admin/securite" },
+      { label: "Sauvegardes", href: "/admin/sauvegardes" },
+      { label: "Santé du système", href: "/admin/systeme" },
+    ],
   },
 ];
 
-/** Navigation groupée (modules détaillés / sous-pages). */
-export const adminNavigation: AdminNavGroup[] = [
-  {
-    label: "Principal",
-    items: adminSidebarItems,
-  },
-  {
-    label: "Finances détaillées",
-    items: [
-      {
-        label: "Intentions de dons",
-        href: "/admin/dons/intentions",
-        icon: "HeartHandshake",
-      },
-      {
-        label: "Transactions",
-        href: "/admin/dons/transactions",
-        icon: "CreditCard",
-      },
-      {
-        label: "Remboursements",
-        href: "/admin/dons/remboursements",
-        icon: "RotateCcw",
-      },
-    ],
-  },
-  {
-    label: "Newsletter",
-    items: [
-      {
-        label: "Abonnés",
-        href: "/admin/newsletter/abonnes",
-        icon: "UserRound",
-      },
-      {
-        label: "Campagnes",
-        href: "/admin/newsletter/campagnes",
-        icon: "Send",
-      },
-    ],
-  },
-  {
-    label: "Rapports",
-    items: [
-      {
-        label: "Nouveau rapport",
-        href: "/admin/rapports/nouveau",
-        icon: "FilePlus",
-      },
-      {
-        label: "Modèles",
-        href: "/admin/rapports/modeles",
-        icon: "Files",
-      },
-      {
-        label: "Historique",
-        href: "/admin/rapports/historique",
-        icon: "History",
-      },
-    ],
-  },
-];
+/** Liste plate dérivée des groupes — résolution de titre dans l'en-tête admin. */
+export const adminSidebarItems: AdminNavItem[] = adminNavGroups.flatMap((group) => {
+  if (group.href) {
+    return [{ label: group.label, href: group.href }];
+  }
+  return group.items;
+});
+
+export function resolveAdminNavTitle(pathname: string): string {
+  const sorted = [...adminSidebarItems].sort((a, b) => b.href.length - a.href.length);
+  const match = sorted.find((item) =>
+    item.href === "/admin"
+      ? pathname === "/admin"
+      : pathname === item.href || pathname.startsWith(`${item.href}/`),
+  );
+  return match?.label ?? "Administration";
+}
+
+export function navGroupAllowed(
+  group: AdminNavGroupDef,
+  has: (permission: Permission) => boolean,
+): boolean {
+  if (!group.permissionGate) return true;
+  if (Array.isArray(group.permissionGate)) {
+    return group.permissionGate.some((permission) => has(permission));
+  }
+  return has(group.permissionGate);
+}

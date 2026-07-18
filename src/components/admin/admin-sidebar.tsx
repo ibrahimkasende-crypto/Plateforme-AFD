@@ -3,35 +3,29 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useMemo, useState } from "react";
+import { useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
 import {
-  Briefcase,
   ChevronDown,
-  ChevronRight,
   ExternalLink,
   FileText,
   FolderKanban,
-  Handshake,
-  Images,
   LayoutDashboard,
-  ListChecks,
-  Mail,
-  Map as MapIcon,
   MessageSquare,
   Newspaper,
   PanelLeftClose,
-  PanelLeftOpen,
-  ScrollText,
-  Settings,
   Shield,
   Target,
-  Users,
   UsersRound,
   Wallet,
   type LucideIcon,
 } from "lucide-react";
-import { adminSidebarItems } from "@/config/admin-navigation";
-import type { AdminNavBadgeKey, AdminNavItem } from "@/config/admin-navigation";
+import {
+  adminNavGroups,
+  navGroupAllowed,
+  type AdminNavBadgeKey,
+  type AdminNavGroupDef,
+  type AdminNavItem,
+} from "@/config/admin-navigation";
 import { navItemAllowed } from "@/config/admin-nav-permissions";
 import { siteConfig } from "@/config/site";
 import { roleHasPermission } from "@/config/permissions";
@@ -42,80 +36,19 @@ import { cn } from "@/lib/utils";
 export const adminNavIconMap: Record<string, LucideIcon> = {
   LayoutDashboard,
   FolderKanban,
-  Briefcase,
-  ListChecks,
-  Users,
   Target,
-  Wallet,
-  Map: MapIcon,
   Newspaper,
-  Images,
-  Mail,
   MessageSquare,
-  Handshake,
   UsersRound,
+  Wallet,
   FileText,
   Shield,
-  Settings,
-  ScrollText,
 };
-
-type NavGroup = {
-  id: string;
-  label: string;
-  hrefs: string[];
-};
-
-const NAV_GROUPS: NavGroup[] = [
-  {
-    id: "actions",
-    label: "Gestion des actions",
-    hrefs: [
-      "/admin/programmes",
-      "/admin/projets",
-      "/admin/activites",
-      "/admin/beneficiaires",
-      "/admin/indicateurs",
-    ],
-  },
-  {
-    id: "com",
-    label: "Communication",
-    hrefs: ["/admin/actualites", "/admin/mediatheque", "/admin/newsletter"],
-  },
-  {
-    id: "org",
-    label: "Organisation",
-    hrefs: ["/admin/partenaires", "/admin/equipe"],
-  },
-  {
-    id: "admin",
-    label: "Administration",
-    hrefs: [
-      "/admin/rapports",
-      "/admin/utilisateurs",
-      "/admin/parametres",
-      "/admin/journal-activite",
-    ],
-  },
-];
-
-const PINNED_HREFS = new Set([
-  "/admin",
-  "/admin/finances",
-  "/admin/zones-intervention",
-  "/admin/publications",
-  "/admin/messages",
-  "/admin/opportunites",
-  "/admin/enquetes",
-  "/admin/agents",
-  "/admin/candidatures",
-  "/admin/documents",
-]);
 
 function badgeClassName(key: AdminNavBadgeKey): string {
   if (key === "newsletter") return "bg-[var(--admin-green)] text-white";
   if (key === "messages") return "bg-[var(--admin-red)] text-white";
+  if (key === "adhesions") return "bg-[var(--admin-primary)] text-white";
   return "bg-[var(--admin-primary)] text-white";
 }
 
@@ -132,25 +65,39 @@ function isNavActive(pathname: string, href: string): boolean {
   return pathname === href || pathname.startsWith(`${href}/`);
 }
 
-function filterSidebarItems(role: Role) {
-  const has = (permission: Parameters<typeof roleHasPermission>[1]) =>
-    roleHasPermission(role, permission);
-  return adminSidebarItems.filter((item) => navItemAllowed(item.href, has));
+function groupHasActiveItem(pathname: string, group: AdminNavGroupDef): boolean {
+  if (group.href) return isNavActive(pathname, group.href);
+  return group.items.some((item) => isNavActive(pathname, item.href));
 }
 
-function NavLinkRow({
+function filterNavGroups(role: Role) {
+  const has = (permission: Parameters<typeof roleHasPermission>[1]) =>
+    roleHasPermission(role, permission);
+
+  return adminNavGroups
+    .filter((group) => navGroupAllowed(group, has))
+    .map((group) => {
+      if (group.href) return group;
+      const items = group.items.filter((item) => navItemAllowed(item.href, has));
+      return { ...group, items };
+    })
+    .filter((group) => group.href || group.items.length > 0);
+}
+
+function NavItemLink({
   item,
   badges,
   collapsed,
+  indented = true,
   onNavigate,
 }: {
   item: AdminNavItem;
   badges: SidebarBadges;
-  collapsed: boolean;
+  collapsed?: boolean;
+  indented?: boolean;
   onNavigate?: () => void;
 }) {
   const pathname = usePathname();
-  const Icon = item.icon ? adminNavIconMap[item.icon] : undefined;
   const active = isNavActive(pathname, item.href);
   const count = resolveBadge(item.badgeKey, badges);
 
@@ -160,9 +107,68 @@ function NavLinkRow({
         href={item.href}
         onClick={onNavigate}
         title={collapsed ? item.label : undefined}
-        aria-label={collapsed ? item.label : undefined}
+        aria-current={active ? "page" : undefined}
         className={cn(
-          "group relative flex h-[36px] items-center rounded-[8px] text-[13px] transition-colors",
+          "group relative flex h-9 items-center rounded-lg text-[13px] transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white",
+          collapsed ? "justify-center px-0" : cn("gap-2 px-2.5", indented && "pl-3"),
+          active
+            ? "bg-[var(--admin-sidebar-active)] font-medium text-white"
+            : "text-[var(--admin-sidebar-muted)] hover:bg-white/10 hover:text-white",
+        )}
+      >
+        <span
+          className={cn(
+            "flex-1 truncate",
+            collapsed && "sr-only",
+          )}
+        >
+          {item.label}
+        </span>
+        {!collapsed && count !== null && count > 0 ? (
+          <span
+            className={cn(
+              "inline-flex min-w-[18px] shrink-0 items-center justify-center rounded-full px-1 py-0.5 text-[9px] font-semibold",
+              badgeClassName(item.badgeKey ?? "notifications"),
+            )}
+          >
+            {count > 99 ? "99+" : count}
+          </span>
+        ) : null}
+        {collapsed ? (
+          <span className="pointer-events-none absolute left-full z-50 ml-2 hidden whitespace-nowrap rounded-md bg-[#07152f] px-2 py-1 text-[11px] text-white shadow-lg group-hover:block group-focus-visible:block">
+            {item.label}
+            {count !== null && count > 0 ? ` (${count})` : ""}
+          </span>
+        ) : null}
+      </Link>
+    </li>
+  );
+}
+
+function TopLevelNavLink({
+  group,
+  collapsed,
+  onNavigate,
+}: {
+  group: AdminNavGroupDef;
+  collapsed: boolean;
+  onNavigate?: () => void;
+}) {
+  const pathname = usePathname();
+  const href = group.href!;
+  const Icon = adminNavIconMap[group.icon];
+  const active = isNavActive(pathname, href);
+
+  return (
+    <div className="mb-2.5">
+      <Link
+        href={href}
+        onClick={onNavigate}
+        title={collapsed ? group.label : undefined}
+        aria-current={active ? "page" : undefined}
+        aria-label={group.label}
+        className={cn(
+          "group relative flex h-9 items-center rounded-lg text-[13px] transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white",
           collapsed ? "justify-center px-0" : "gap-2.5 px-2.5",
           active
             ? "bg-[var(--admin-sidebar-active)] font-medium text-white"
@@ -172,37 +178,198 @@ function NavLinkRow({
         {Icon ? (
           <Icon className="size-[17px] shrink-0" strokeWidth={1.75} aria-hidden />
         ) : null}
-        <span
-          className={cn(
-            "flex-1 truncate transition-opacity duration-200",
-            collapsed ? "sr-only opacity-0" : "opacity-100",
-          )}
-        >
-          {item.label}
-        </span>
-        {!collapsed && count !== null && count > 0 ? (
-          <span
-            className={cn(
-              "inline-flex min-w-[18px] items-center justify-center rounded-full px-1 py-0.5 text-[9px] font-semibold",
-              badgeClassName(item.badgeKey ?? "notifications"),
-            )}
-          >
-            {count > 99 ? "99+" : count}
-          </span>
-        ) : null}
-        {!collapsed && (count === null || count <= 0) ? (
-          <ChevronRight className="size-3 shrink-0 opacity-35" aria-hidden />
-        ) : null}
-        {collapsed && count !== null && count > 0 ? (
-          <span className="absolute right-1 top-1 size-1.5 rounded-full bg-[var(--admin-red)]" />
-        ) : null}
+        <span className={cn("truncate", collapsed && "sr-only")}>{group.label}</span>
         {collapsed ? (
           <span className="pointer-events-none absolute left-full z-50 ml-2 hidden whitespace-nowrap rounded-md bg-[#07152f] px-2 py-1 text-[11px] text-white shadow-lg group-hover:block group-focus-visible:block">
-            {item.label}
+            {group.label}
           </span>
         ) : null}
       </Link>
-    </li>
+    </div>
+  );
+}
+
+function NavGroupAccordion({
+  group,
+  badges,
+  collapsed,
+  open,
+  onOpenChange,
+  onNavigate,
+  onExpandSidebar,
+  flyoutOpen,
+  onFlyoutOpenChange,
+}: {
+  group: AdminNavGroupDef;
+  badges: SidebarBadges;
+  collapsed: boolean;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  onNavigate?: () => void;
+  onExpandSidebar?: () => void;
+  flyoutOpen: boolean;
+  onFlyoutOpenChange: (open: boolean) => void;
+}) {
+  const pathname = usePathname();
+  const panelId = useId();
+  const flyoutRef = useRef<HTMLDivElement>(null);
+  const Icon = adminNavIconMap[group.icon];
+  const active = groupHasActiveItem(pathname, group);
+  const groupBadgeCount = group.items.reduce((sum, item) => {
+    const count = resolveBadge(item.badgeKey, badges);
+    return sum + (count && count > 0 ? count : 0);
+  }, 0);
+
+  const handleCollapsedClick = useCallback(() => {
+    onFlyoutOpenChange(!flyoutOpen);
+  }, [flyoutOpen, onFlyoutOpenChange]);
+
+  useEffect(() => {
+    if (!flyoutOpen || collapsed) return;
+    onFlyoutOpenChange(false);
+  }, [collapsed, flyoutOpen, onFlyoutOpenChange]);
+
+  useEffect(() => {
+    if (!flyoutOpen) return;
+    function onPointerDown(event: MouseEvent) {
+      if (!flyoutRef.current?.contains(event.target as Node)) {
+        onFlyoutOpenChange(false);
+      }
+    }
+    function onKeyDown(event: KeyboardEvent) {
+      if (event.key === "Escape") onFlyoutOpenChange(false);
+    }
+    document.addEventListener("mousedown", onPointerDown);
+    document.addEventListener("keydown", onKeyDown);
+    return () => {
+      document.removeEventListener("mousedown", onPointerDown);
+      document.removeEventListener("keydown", onKeyDown);
+    };
+  }, [flyoutOpen, onFlyoutOpenChange]);
+
+  if (collapsed) {
+    return (
+      <div ref={flyoutRef} className="relative">
+        <button
+          type="button"
+          title={group.label}
+          aria-label={group.label}
+          aria-expanded={flyoutOpen}
+          aria-haspopup="true"
+          onClick={handleCollapsedClick}
+          onDoubleClick={onExpandSidebar}
+          className={cn(
+            "relative flex h-10 w-full items-center justify-center rounded-lg transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white",
+            active || flyoutOpen
+              ? "bg-[var(--admin-sidebar-active)] text-white"
+              : "text-[var(--admin-sidebar-muted)] hover:bg-white/10 hover:text-white",
+          )}
+        >
+          {Icon ? (
+            <Icon className="size-[17px] shrink-0" strokeWidth={1.75} aria-hidden />
+          ) : null}
+          {groupBadgeCount > 0 ? (
+            <span className="absolute right-1.5 top-1.5 size-1.5 rounded-full bg-[var(--admin-red)]" />
+          ) : null}
+        </button>
+        {flyoutOpen ? (
+          <div
+            role="menu"
+            aria-label={group.label}
+            className="absolute left-full top-0 z-50 ml-2 min-w-[196px] rounded-lg border border-white/10 bg-[#07152f] py-1.5 shadow-xl"
+          >
+            <p className="px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.08em] text-white/60">
+              {group.label}
+            </p>
+            <ul className="space-y-0.5 px-1.5">
+              {group.items.map((item) => {
+                const itemActive = isNavActive(pathname, item.href);
+                const count = resolveBadge(item.badgeKey, badges);
+                return (
+                  <li key={item.href}>
+                    <Link
+                      href={item.href}
+                      role="menuitem"
+                      onClick={() => {
+                        onFlyoutOpenChange(false);
+                        onNavigate?.();
+                      }}
+                      aria-current={itemActive ? "page" : undefined}
+                      className={cn(
+                        "flex h-9 items-center justify-between gap-2 rounded-md px-2.5 text-[13px] transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white",
+                        itemActive
+                          ? "bg-[var(--admin-sidebar-active)] font-medium text-white"
+                          : "text-white/80 hover:bg-white/10 hover:text-white",
+                      )}
+                    >
+                      <span className="truncate">{item.label}</span>
+                      {count !== null && count > 0 ? (
+                        <span
+                          className={cn(
+                            "inline-flex min-w-[18px] items-center justify-center rounded-full px-1 py-0.5 text-[9px] font-semibold",
+                            badgeClassName(item.badgeKey ?? "notifications"),
+                          )}
+                        >
+                          {count > 99 ? "99+" : count}
+                        </span>
+                      ) : null}
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        ) : null}
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-0.5">
+      <button
+        type="button"
+        id={`${panelId}-trigger`}
+        aria-expanded={open}
+        aria-controls={panelId}
+        onClick={() => onOpenChange(!open)}
+        className={cn(
+          "flex h-10 w-full items-center gap-2.5 rounded-lg px-2.5 text-left text-[13px] font-medium transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white",
+          active
+            ? "text-white"
+            : "text-[var(--admin-sidebar-muted)] hover:bg-white/10 hover:text-white",
+        )}
+      >
+        {Icon ? (
+          <Icon className="size-[17px] shrink-0" strokeWidth={1.75} aria-hidden />
+        ) : null}
+        <span className="flex-1 truncate">{group.label}</span>
+        <ChevronDown
+          className={cn(
+            "size-4 shrink-0 opacity-70 transition-transform duration-200",
+            open ? "rotate-0" : "-rotate-90",
+          )}
+          aria-hidden
+        />
+      </button>
+      <div
+        id={panelId}
+        role="region"
+        aria-labelledby={`${panelId}-trigger`}
+        hidden={!open}
+        className={cn(!open && "hidden")}
+      >
+        <ul className="space-y-0.5 pb-1">
+          {group.items.map((item) => (
+            <NavItemLink
+              key={item.href}
+              item={item}
+              badges={badges}
+              onNavigate={onNavigate}
+            />
+          ))}
+        </ul>
+      </div>
+    </div>
   );
 }
 
@@ -211,6 +378,7 @@ type AdminSidebarNavProps = {
   role: Role;
   collapsed?: boolean;
   onNavigate?: () => void;
+  onExpandSidebar?: () => void;
   className?: string;
 };
 
@@ -219,85 +387,73 @@ export function AdminSidebarNav({
   role,
   collapsed = false,
   onNavigate,
+  onExpandSidebar,
   className,
 }: AdminSidebarNavProps) {
   const pathname = usePathname();
-  const items = filterSidebarItems(role);
-  const byHref = useMemo(
-    () => new Map(items.map((item) => [item.href, item])),
-    [items],
-  );
+  const groups = useMemo(() => filterNavGroups(role), [role]);
 
-  const pinned = items.filter((item) => PINNED_HREFS.has(item.href));
   const [openGroups, setOpenGroups] = useState<Record<string, boolean>>(() => {
     const initial: Record<string, boolean> = {};
-    for (const group of NAV_GROUPS) {
-      initial[group.id] = group.hrefs.some((href) => isNavActive(pathname, href));
+    for (const group of groups) {
+      if (!group.href) {
+        initial[group.id] = groupHasActiveItem(pathname, group);
+      }
     }
     return initial;
   });
+  const [openFlyoutGroupId, setOpenFlyoutGroupId] = useState<string | null>(null);
+
+  // Ouvre automatiquement le groupe actif sans setState dans un effect :
+  // fusion dérivée au rendu (le toggle utilisateur reste prioritaire via openGroups).
+  const resolvedOpenGroups = useMemo(() => {
+    const next = { ...openGroups };
+    for (const group of groups) {
+      if (!group.href && groupHasActiveItem(pathname, group) && next[group.id] === undefined) {
+        next[group.id] = true;
+      }
+    }
+    return next;
+  }, [openGroups, groups, pathname]);
 
   return (
     <nav
-      className={cn("min-h-0 flex-1 overflow-y-auto px-2 py-1.5", className)}
+      className={cn("min-h-0 flex-1 overflow-y-auto px-2 py-2", className)}
       aria-label="Navigation admin"
     >
-      <ul className="space-y-[3px]">
-        {pinned.map((item) => (
-          <NavLinkRow
-            key={item.href}
-            item={item}
-            badges={badges}
-            collapsed={collapsed}
-            onNavigate={onNavigate}
-          />
-        ))}
-      </ul>
+      <div className="space-y-2.5">
+        {groups.map((group) => {
+          if (group.href) {
+            return (
+              <TopLevelNavLink
+                key={group.id}
+                group={group}
+                collapsed={collapsed}
+                onNavigate={onNavigate}
+              />
+            );
+          }
 
-      {NAV_GROUPS.map((group) => {
-        const groupItems = group.hrefs
-          .map((href) => byHref.get(href))
-          .filter((item): item is AdminNavItem => Boolean(item));
-        if (groupItems.length === 0) return null;
-        const open = collapsed ? true : (openGroups[group.id] ?? true);
-
-        return (
-          <div key={group.id} className="mt-2">
-            {!collapsed ? (
-              <button
-                type="button"
-                className="mb-0.5 flex h-7 w-full items-center justify-between rounded-md px-2 text-[10px] font-semibold uppercase tracking-[0.08em] text-[var(--admin-sidebar-muted)]/80 hover:bg-white/5"
-                aria-expanded={open}
-                onClick={() =>
-                  setOpenGroups((prev) => ({ ...prev, [group.id]: !open }))
-                }
-              >
-                <span>{group.label}</span>
-                <ChevronDown
-                  className={cn(
-                    "size-3.5 transition-transform duration-200",
-                    open ? "rotate-0" : "-rotate-90",
-                  )}
-                  aria-hidden
-                />
-              </button>
-            ) : null}
-            {open ? (
-              <ul className="space-y-[3px]">
-                {groupItems.map((item) => (
-                  <NavLinkRow
-                    key={item.href}
-                    item={item}
-                    badges={badges}
-                    collapsed={collapsed}
-                    onNavigate={onNavigate}
-                  />
-                ))}
-              </ul>
-            ) : null}
-          </div>
-        );
-      })}
+          return (
+            <NavGroupAccordion
+              key={group.id}
+              group={group}
+              badges={badges}
+              collapsed={collapsed}
+              open={resolvedOpenGroups[group.id] ?? false}
+              onOpenChange={(next) =>
+                setOpenGroups((prev) => ({ ...prev, [group.id]: next }))
+              }
+              onNavigate={onNavigate}
+              onExpandSidebar={onExpandSidebar}
+              flyoutOpen={openFlyoutGroupId === group.id}
+              onFlyoutOpenChange={(next) =>
+                setOpenFlyoutGroupId(next ? group.id : null)
+              }
+            />
+          );
+        })}
+      </div>
     </nav>
   );
 }
@@ -319,6 +475,10 @@ export function AdminSidebar({
   collapsed = false,
   onToggleCollapsed,
 }: AdminSidebarProps) {
+  const expandSidebar = useCallback(() => {
+    if (collapsed) onToggleCollapsed?.();
+  }, [collapsed, onToggleCollapsed]);
+
   return (
     <aside
       data-admin-sidebar
@@ -377,11 +537,6 @@ export function AdminSidebar({
               <PanelLeftClose className="size-4" aria-hidden />
             </button>
           ) : null}
-          {collapsed && onToggleCollapsed ? (
-            <span className="sr-only">
-              <PanelLeftOpen />
-            </span>
-          ) : null}
         </div>
       </div>
 
@@ -390,6 +545,7 @@ export function AdminSidebar({
         role={role}
         collapsed={collapsed}
         onNavigate={onNavigate}
+        onExpandSidebar={expandSidebar}
       />
 
       <div className="mt-auto shrink-0 border-t border-white/10 p-2.5">
@@ -400,7 +556,7 @@ export function AdminSidebar({
           title={collapsed ? "Voir le site public" : undefined}
           aria-label="Voir le site public"
           className={cn(
-            "inline-flex h-[40px] w-full items-center justify-center gap-1.5 rounded-md bg-[var(--admin-primary)] text-[12px] font-semibold text-white transition hover:bg-[var(--admin-primary-dark)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white",
+            "inline-flex h-10 w-full items-center justify-center gap-1.5 rounded-md bg-[var(--admin-primary)] text-[12px] font-semibold text-white transition hover:bg-[var(--admin-primary-dark)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white",
             collapsed && "px-0",
           )}
         >

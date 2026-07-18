@@ -32,3 +32,8 @@ export async function getAdminProjet(id: string): Promise<Projet | null> {
     return null;
   }
 }
+
+export async function getProjetOptions(): Promise<Array<{ id: string; title: string }>> {
+  const items = await getAdminProjets();
+  return items.map((p) => ({ id: p.id, title: p.title }));
+}
