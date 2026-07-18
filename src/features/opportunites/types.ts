@@ -46,6 +46,11 @@ export type ApplicationInput = {
   email: string;
   telephone?: string;
   localisation?: string;
+  pays?: string;
+  ville?: string;
+  niveau_etudes?: string;
+  experience?: string;
+  domaine_souhaite?: string;
   lettreMotivation: string;
   consentement: boolean;
 };

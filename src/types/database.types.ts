@@ -789,8 +789,8 @@ export type Database = {
         Relationships: []
       }
       candidatures: {
-        Row: { id: string; opportunite_id: string | null; est_spontanee: boolean; prenom: string; nom: string; email: string; telephone: string | null; localisation: string | null; lettre_motivation: string; cv_storage_path: string | null; statut: string; consentement: boolean; metadata: Json; created_at: string; updated_at: string; deleted_at: string | null }
-        Insert: { id?: string; opportunite_id?: string | null; est_spontanee?: boolean; prenom: string; nom: string; email: string; telephone?: string | null; localisation?: string | null; lettre_motivation: string; cv_storage_path?: string | null; statut?: string; consentement: boolean; metadata?: Json; created_at?: string; updated_at?: string; deleted_at?: string | null }
+        Row: { id: string; opportunite_id: string | null; est_spontanee: boolean; prenom: string; nom: string; email: string; telephone: string | null; localisation: string | null; pays: string | null; ville: string | null; niveau_etudes: string | null; experience: string | null; domaine_souhaite: string | null; lettre_motivation: string; cv_storage_path: string | null; lettre_storage_path: string | null; note_interne: string | null; statut: string; consentement: boolean; metadata: Json; created_at: string; updated_at: string; deleted_at: string | null }
+        Insert: { id?: string; opportunite_id?: string | null; est_spontanee?: boolean; prenom: string; nom: string; email: string; telephone?: string | null; localisation?: string | null; pays?: string | null; ville?: string | null; niveau_etudes?: string | null; experience?: string | null; domaine_souhaite?: string | null; lettre_motivation: string; cv_storage_path?: string | null; lettre_storage_path?: string | null; note_interne?: string | null; statut?: string; consentement: boolean; metadata?: Json; created_at?: string; updated_at?: string; deleted_at?: string | null }
         Update: Partial<Database["public"]["Tables"]["candidatures"]["Insert"]>
         Relationships: []
       }

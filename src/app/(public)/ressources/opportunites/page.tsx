@@ -5,6 +5,7 @@ import { EmptyState } from "@/components/shared/EmptyState";
 import { siteConfig } from "@/config/site";
 import { OpportunityCard } from "@/components/public/opportunites/opportunity-card";
 import { OpportunityFilters } from "@/components/public/opportunites/opportunity-filters";
+import { PublicPagination } from "@/components/public/PublicPagination";
 import { getPublishedOpportunities } from "@/lib/queries/public/opportunites";
 import { parsePage, parseQuery } from "@/lib/queries/public/client";
 
@@ -20,9 +21,14 @@ type PageProps = { searchParams: Promise<Record<string, string | string[] | unde
 export default async function OpportunitesPage({ searchParams }: PageProps) {
   const params = await searchParams;
   const type = parseQuery(params.type);
+  const departement = parseQuery(params.departement);
   const localisation = parseQuery(params.localisation);
+  const modeTravail = parseQuery(params.mode_travail);
+  const statut = parseQuery(params.statut);
   const q = parseQuery(params.q);
-  const result = await getPublishedOpportunities({ type, localisation, q, page: parsePage(params.page) });
+  const sort = parseQuery(params.sort) === "date_limite" ? "date_limite" : "date_publication";
+  const order = parseQuery(params.order) === "asc" ? "asc" : "desc";
+  const result = await getPublishedOpportunities({ type, departement, localisation, mode_travail: modeTravail, statut, q, sort, order, page: parsePage(params.page) });
   return (
     <PublicPageShell
       eyebrow="Ressources"
@@ -34,19 +40,17 @@ export default async function OpportunitesPage({ searchParams }: PageProps) {
         { label: "Opportunités" },
       ]}
     >
-      <OpportunityFilters type={type} localisation={localisation} q={q} />
+      <OpportunityFilters type={type} departement={departement} localisation={localisation} modeTravail={modeTravail} statut={statut} q={q} sort={sort} order={order} />
       {result.items.length === 0 ? <EmptyState
         title="Aucune opportunité publiée"
-        description="Il n’y a pas d’offre de stage, de mission ou de collaboration publiée actuellement. Pour exprimer votre intérêt ou proposer votre candidature spontanée, contactez l’équipe AFD."
+        description="Aucune opportunité n’est actuellement ouverte. Vous pouvez consulter régulièrement cette page ou vous inscrire à la newsletter."
         action={
-          <Link
-            href="/contact"
-            className="inline-flex min-h-10 items-center rounded-lg bg-[var(--afd-blue)] px-4 text-sm font-semibold text-white"
-          >
-            Nous contacter
-          </Link>
+          <div className="flex flex-wrap gap-3">
+            <Link href="/ressources/newsletter" className="inline-flex min-h-10 items-center rounded-lg bg-[var(--afd-blue)] px-4 text-sm font-semibold text-white">S’inscrire à la newsletter</Link>
+            <Link href="/rejoindre-equipe" className="inline-flex min-h-10 items-center rounded-lg border border-[var(--afd-blue)] px-4 text-sm font-semibold text-[var(--afd-blue)]">Rejoindre l’équipe</Link>
+          </div>
         }
-      /> : <div className="grid gap-5 md:grid-cols-2">{result.items.map((opportunity) => <OpportunityCard key={opportunity.id} opportunity={opportunity} />)}</div>}
+      /> : <><div className="grid gap-5 md:grid-cols-2">{result.items.map((opportunity) => <OpportunityCard key={opportunity.id} opportunity={opportunity} />)}</div><PublicPagination page={result.page} totalPages={result.totalPages} basePath="/ressources/opportunites" searchParams={{ type, departement, localisation, mode_travail: modeTravail, statut, q, sort, order }} /></>}
     </PublicPageShell>
   );
 }

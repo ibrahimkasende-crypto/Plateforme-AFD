@@ -5,6 +5,8 @@ import { User } from "lucide-react";
 import { PublicPageShell } from "@/components/public/PublicPageShell";
 import { EmptyState } from "@/components/shared/EmptyState";
 import { getActiveTeamMembers } from "@/lib/queries/public/equipe";
+import { getPublishedOpportunities } from "@/lib/queries/public/opportunites";
+import { siteConfig } from "@/config/site";
 
 export const metadata: Metadata = {
   title: "Équipe",
@@ -14,6 +16,7 @@ export const metadata: Metadata = {
 
 export default async function EquipePage() {
   const members = await getActiveTeamMembers();
+  const opportunities = await getPublishedOpportunities({ statut: "ouverte", pageSize: 1 });
 
   return (
     <PublicPageShell
@@ -76,6 +79,11 @@ export default async function EquipePage() {
           ))}
         </div>
       )}
+      <section className="mt-12 rounded-2xl bg-[var(--afd-blue)] p-7 text-white">
+        <h2 className="font-display text-2xl font-semibold">Rejoignez l’équipe AFD</h2>
+        {opportunities.total > 0 ? <p className="mt-2">{opportunities.total} opportunité{opportunities.total > 1 ? "s" : ""} ouverte{opportunities.total > 1 ? "s" : ""} actuellement.</p> : <p className="mt-2">Consultez les opportunités de collaboration avec l’AFD.</p>}
+        <div className="mt-5 flex flex-wrap gap-3"><Link href="/ressources/opportunites" className="rounded-lg bg-white px-4 py-2 font-semibold text-[var(--afd-blue)]">Voir les opportunités</Link>{siteConfig.features.spontaneousApplications ? <Link href="/rejoindre-equipe" className="rounded-lg border border-white px-4 py-2 font-semibold">Candidature spontanée</Link> : null}</div>
+      </section>
     </PublicPageShell>
   );
 }

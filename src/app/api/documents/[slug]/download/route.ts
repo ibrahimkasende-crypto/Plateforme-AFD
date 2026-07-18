@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { createClientSafe } from "@/lib/supabase/safe";
 
 export async function GET(
-  _: Request,
+  request: Request,
   { params }: { params: Promise<{ slug: string }> },
 ) {
   const { slug } = await params;
@@ -22,10 +22,11 @@ export async function GET(
     .download(document.fichier_storage_path);
   if (downloadError || !file) return NextResponse.json({ error: "Fichier indisponible" }, { status: 404 });
   const filename = document.nom_fichier?.replace(/["\r\n]/g, "") || "document";
+  const inline = new URL(request.url).searchParams.get("inline") === "1";
   return new NextResponse(file, {
     headers: {
       "Content-Type": file.type || "application/octet-stream",
-      "Content-Disposition": `attachment; filename="${filename}"`,
+      "Content-Disposition": `${inline ? "inline" : "attachment"}; filename="${filename}"`,
       "Cache-Control": "public, max-age=3600",
     },
   });

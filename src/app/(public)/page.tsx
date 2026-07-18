@@ -11,6 +11,7 @@ import { InterventionPillars } from "@/components/public/home/intervention-pilla
 import { InterventionZones } from "@/components/public/home/intervention-zones";
 import { NewsletterSection } from "@/components/public/home/newsletter-section";
 import { OrganizationIntroduction } from "@/components/public/home/organization-introduction";
+import { OpenOpportunities } from "@/components/public/home/open-opportunities";
 import { PartnersSection } from "@/components/public/home/partners-section";
 import { SupportActions } from "@/components/public/home/support-actions";
 import { homeContent } from "@/config/home-content";
@@ -166,6 +167,9 @@ export default function HomePage() {
       </Suspense>
 
       <SupportActions />
+      <Suspense fallback={null}>
+        <OpenOpportunities />
+      </Suspense>
     </>
   );
 }
