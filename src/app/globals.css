@@ -53,6 +53,134 @@
   --background: var(--afd-background);
   --foreground: var(--afd-text);
   color-scheme: light;
+
+  /* Tokens dashboard administrateur (maquette 1536×1024) */
+  --admin-primary: #0865d8;
+  --admin-primary-dark: #034ea2;
+  --admin-navy: #07152f;
+  --admin-sidebar: #01265d;
+  --admin-sidebar-top: #011a57;
+  --admin-sidebar-bottom: #01265d;
+  --admin-sidebar-active: #0865d8;
+  --admin-sidebar-text: #ffffff;
+  --admin-sidebar-muted: #d7e6ff;
+  --admin-background: #f7f9fc;
+  --admin-card: #ffffff;
+  --admin-border: #e0e6ef;
+  --admin-text: #0c1733;
+  --admin-muted: #667085;
+  --admin-blue: #0865d8;
+  --admin-green: #2caf45;
+  --admin-orange: #fb8c00;
+  --admin-purple: #8a48d2;
+  --admin-teal: #0eb4a4;
+  --admin-gold: #f0aa00;
+  --admin-red: #e84c3d;
+  --admin-warning: #f5a300;
+
+  --admin-header-height: 64px;
+  --admin-sidebar-width: 236px;
+  --admin-content-gap: 10px;
+  --admin-card-radius: 10px;
+  --admin-panel-padding: 12px;
+  --admin-filter-row-height: 42px;
+  --admin-kpi-row-height: 112px;
+  --admin-chart-row-one-height: minmax(210px, 1fr);
+  --admin-chart-row-two-height: minmax(205px, 1fr);
+  --admin-secondary-row-height: 100px;
+}
+
+/* Densité compacte — écrans larges mais moins hauts */
+@media (max-height: 899px) and (min-width: 1280px) {
+  :root {
+    --admin-content-gap: 7px;
+    --admin-panel-padding: 9px;
+    --admin-kpi-row-height: 94px;
+    --admin-secondary-row-height: 82px;
+    --admin-filter-row-height: 38px;
+    --admin-chart-row-one-height: minmax(180px, 1fr);
+    --admin-chart-row-two-height: minmax(170px, 1fr);
+  }
+}
+
+/* Ultra-compact 1366×768 */
+@media (max-height: 800px) and (min-width: 1280px) {
+  :root {
+    --admin-content-gap: 6px;
+    --admin-panel-padding: 8px;
+    --admin-kpi-row-height: 86px;
+    --admin-secondary-row-height: 74px;
+    --admin-header-height: 56px;
+  }
+}
+
+.admin-shell {
+  --admin-bg: var(--admin-background);
+  background: var(--admin-background);
+  color: var(--admin-text);
+}
+
+.admin-shell--overview {
+  height: 100dvh;
+  max-height: 100dvh;
+  overflow: hidden;
+}
+
+.admin-shell--overview .admin-main--overview {
+  height: calc(100dvh - var(--admin-header-height));
+  min-height: 0;
+  overflow: hidden;
+  padding: var(--admin-content-gap);
+}
+
+.admin-dashboard-overview {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  grid-template-rows:
+    var(--admin-filter-row-height)
+    var(--admin-kpi-row-height)
+    var(--admin-chart-row-one-height)
+    var(--admin-chart-row-two-height)
+    var(--admin-secondary-row-height);
+  gap: var(--admin-content-gap);
+  height: 100%;
+  min-height: 0;
+  min-width: 0;
+}
+
+.admin-dashboard-overview > * {
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.admin-panel {
+  border: 1px solid var(--admin-border);
+  border-radius: var(--admin-card-radius);
+  background: var(--admin-card);
+  padding: var(--admin-panel-padding);
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.admin-panel__title {
+  font-family: var(--font-heading), Manrope, sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--admin-text);
+  line-height: 1.2;
+  margin: 0 0 6px;
+  flex-shrink: 0;
+}
+
+.admin-panel__body {
+  flex: 1 1 auto;
+  min-height: 0;
+  min-width: 0;
+  overflow: hidden;
 }
 
 .dark {

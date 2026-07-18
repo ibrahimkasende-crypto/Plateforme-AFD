@@ -1,10 +1,12 @@
 "use client";
 
+import { usePathname } from "next/navigation";
 import { useState, type ReactNode } from "react";
 import { AdminHeader } from "@/components/admin/admin-header";
 import { AdminMobileSidebar } from "@/components/admin/admin-mobile-sidebar";
 import { AdminSidebar } from "@/components/admin/admin-sidebar";
 import type { AdminViewer, SidebarBadges } from "@/features/statistiques/types/dashboard";
+import { cn } from "@/lib/utils";
 
 type AdminShellProps = {
   children: ReactNode;
@@ -20,10 +22,17 @@ export function AdminShell({
   pageTitle,
 }: AdminShellProps) {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const pathname = usePathname();
+  const isOverview = pathname === "/admin";
 
   return (
-    <div className="min-h-screen bg-[#f0f2f5]">
-      <div className="hidden lg:fixed lg:inset-y-0 lg:flex">
+    <div
+      className={cn(
+        "admin-shell min-h-screen",
+        isOverview && "admin-shell--overview lg:min-h-0",
+      )}
+    >
+      <div className="hidden lg:fixed lg:inset-y-0 lg:z-40 lg:flex">
         <AdminSidebar badges={badges} role={viewer.role} />
       </div>
 
@@ -34,14 +43,28 @@ export function AdminShell({
         role={viewer.role}
       />
 
-      <div className="flex min-h-screen flex-col lg:pl-[260px]">
+      <div
+        className={cn(
+          "flex flex-col lg:pl-[var(--admin-sidebar-width)]",
+          isOverview ? "h-full min-h-0" : "min-h-screen",
+        )}
+      >
         <AdminHeader
           title={pageTitle}
           badges={badges}
           viewer={viewer}
           onMenuClick={() => setMobileOpen(true)}
         />
-        <main className="flex-1 p-4 md:p-6">{children}</main>
+        <main
+          className={cn(
+            "flex-1 min-h-0",
+            isOverview
+              ? "admin-main--overview"
+              : "overflow-auto p-4 md:p-6",
+          )}
+        >
+          {children}
+        </main>
       </div>
     </div>
   );

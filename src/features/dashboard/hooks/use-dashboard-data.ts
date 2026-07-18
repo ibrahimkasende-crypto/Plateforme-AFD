@@ -7,24 +7,29 @@ import type {
   DashboardFilters,
 } from "@/features/statistiques/types/dashboard";
 
-export function dashboardBundleQueryKey(filters: DashboardFilters) {
+export function adminDashboardQueryKey(filters: DashboardFilters) {
+  const { dateStart, dateEnd } = {
+    dateStart: filters.from ?? filters.period,
+    dateEnd: filters.to ?? filters.period,
+  };
+
   return [
     "admin-dashboard",
-    filters.period,
-    filters.from,
-    filters.to,
+    dateStart,
+    dateEnd,
     filters.programmeId,
     filters.province,
     filters.projectId,
+    filters.period,
   ] as const;
 }
 
-export function useDashboardBundle(
+export function useDashboardData(
   initialData: DashboardBundle,
   filters: DashboardFilters,
 ) {
   return useQuery({
-    queryKey: dashboardBundleQueryKey(filters),
+    queryKey: adminDashboardQueryKey(filters),
     queryFn: () => getDashboardBundleAction(filters),
     initialData,
     staleTime: 30_000,

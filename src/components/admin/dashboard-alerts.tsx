@@ -23,20 +23,29 @@ const levelStyles = {
 
 type DashboardAlertsProps = {
   alerts: DashboardAlert[];
+  compact?: boolean;
 };
 
-export function DashboardAlerts({ alerts }: DashboardAlertsProps) {
+export function DashboardAlerts({
+  alerts,
+  compact = false,
+}: DashboardAlertsProps) {
   if (alerts.length === 0) {
     return (
-      <p className="rounded-xl border border-dashed border-slate-200 px-4 py-8 text-center text-sm text-slate-500">
+      <p
+        className={cn(
+          "rounded-lg border border-dashed border-slate-200 text-center text-[var(--admin-muted)]",
+          compact ? "px-2 py-4 text-[11px]" : "px-4 py-8 text-sm",
+        )}
+      >
         Aucune alerte pour le moment.
       </p>
     );
   }
 
   return (
-    <ul className="space-y-3">
-      {alerts.map((alert) => {
+    <ul className={compact ? "space-y-1.5" : "space-y-3"}>
+      {alerts.slice(0, compact ? 4 : undefined).map((alert) => {
         const style = levelStyles[alert.level];
         const Icon = style.Icon;
         return (
@@ -44,18 +53,33 @@ export function DashboardAlerts({ alerts }: DashboardAlertsProps) {
             <Link
               href={alert.href}
               className={cn(
-                "flex items-start gap-3 rounded-xl border px-4 py-3 transition hover:opacity-90",
+                "flex items-start gap-2 rounded-lg border transition hover:opacity-90",
+                compact ? "px-2 py-1.5" : "gap-3 px-4 py-3",
                 style.container,
               )}
             >
-              <Icon className={cn("mt-0.5 size-4 shrink-0", style.icon)} aria-hidden />
+              <Icon
+                className={cn(
+                  "mt-0.5 shrink-0",
+                  compact ? "size-3.5" : "size-4",
+                  style.icon,
+                )}
+                aria-hidden
+              />
               <span className="min-w-0 flex-1">
-                <span className="block text-sm font-medium text-slate-900">
+                <span
+                  className={cn(
+                    "block font-medium text-slate-900",
+                    compact ? "line-clamp-2 text-[11px] leading-snug" : "text-sm",
+                  )}
+                >
                   {alert.message}
                 </span>
-                <span className="mt-0.5 block text-xs text-slate-600">
-                  {alert.dateLabel}
-                </span>
+                {!compact ? (
+                  <span className="mt-0.5 block text-xs text-slate-600">
+                    {alert.dateLabel}
+                  </span>
+                ) : null}
               </span>
             </Link>
           </li>

@@ -54,17 +54,17 @@ export function AdminHeader({
   const messageCount = badges.messages;
 
   return (
-    <header className="sticky top-0 z-30 flex h-[72px] items-center gap-4 border-b border-slate-200 bg-white px-4 md:px-6">
-      <div className="flex min-w-0 flex-1 items-center gap-3">
+    <header className="sticky top-0 z-30 flex h-[var(--admin-header-height)] shrink-0 items-center gap-3 border-b border-[var(--admin-border)] bg-white px-3 md:px-4">
+      <div className="flex min-w-0 flex-1 items-center gap-2.5">
         <button
           type="button"
           onClick={onMenuClick}
-          className="inline-flex size-10 items-center justify-center rounded-xl text-slate-700 hover:bg-slate-100 lg:hidden"
+          className="inline-flex size-10 items-center justify-center rounded-lg text-[var(--admin-text)] hover:bg-slate-100 lg:hidden"
           aria-label="Ouvrir le menu"
         >
           <Menu className="size-5" />
         </button>
-        <h1 className="truncate font-display text-lg font-semibold text-slate-900 md:text-xl">
+        <h1 className="truncate font-display text-[22px] font-extrabold leading-none text-[var(--admin-text)] md:text-[24px]">
           {resolvedTitle}
         </h1>
       </div>

@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import {
   Cell,
   Label,
@@ -16,7 +17,18 @@ type ProjectStatusChartProps = {
   data: NamedCount[];
 };
 
+function statusToQuery(name: string): string {
+  const value = name.toLowerCase();
+  if (value.includes("cours")) return "actif";
+  if (value.includes("planif")) return "planifie";
+  if (value.includes("termin")) return "termine";
+  if (value.includes("suspend")) return "suspendu";
+  if (value.includes("archiv")) return "archive";
+  return encodeURIComponent(name.toLowerCase());
+}
+
 export function ProjectStatusChart({ data }: ProjectStatusChartProps) {
+  const router = useRouter();
   const total = data.reduce((sum, item) => sum + item.value, 0);
 
   return (
@@ -26,10 +38,19 @@ export function ProjectStatusChart({ data }: ProjectStatusChartProps) {
           data={data}
           dataKey="value"
           nameKey="name"
-          innerRadius={58}
-          outerRadius={88}
+          innerRadius="48%"
+          outerRadius="72%"
           paddingAngle={2}
           label={false}
+          style={{ cursor: "pointer" }}
+          onClick={(entry) => {
+            const name =
+              entry && typeof entry === "object" && "name" in entry
+                ? String(entry.name)
+                : null;
+            if (!name) return;
+            router.push(`/admin/projets?statut=${statusToQuery(name)}`);
+          }}
         >
           {data.map((entry, index) => (
             <Cell
@@ -43,11 +64,23 @@ export function ProjectStatusChart({ data }: ProjectStatusChartProps) {
               const { cx, cy } = viewBox;
               return (
                 <text x={cx} y={cy} textAnchor="middle" dominantBaseline="middle">
-                  <tspan x={cx} y={(cy ?? 0) - 4} fill="#0f172a" fontSize={24} fontWeight={600}>
+                  <tspan
+                    x={cx}
+                    y={(cy ?? 0) - 2}
+                    fill="var(--admin-text)"
+                    fontSize={20}
+                    fontWeight={800}
+                    fontFamily="var(--font-heading), Manrope, sans-serif"
+                  >
                     {total}
                   </tspan>
-                  <tspan x={cx} y={(cy ?? 0) + 16} fill="#64748b" fontSize={12}>
-                    projets
+                  <tspan
+                    x={cx}
+                    y={(cy ?? 0) + 14}
+                    fill="var(--admin-muted)"
+                    fontSize={11}
+                  >
+                    Projets
                   </tspan>
                 </text>
               );
@@ -56,7 +89,13 @@ export function ProjectStatusChart({ data }: ProjectStatusChartProps) {
           />
         </Pie>
         <Tooltip />
-        <Legend />
+        <Legend
+          verticalAlign="middle"
+          align="right"
+          layout="vertical"
+          iconType="circle"
+          wrapperStyle={{ fontSize: 11, paddingLeft: 4 }}
+        />
       </PieChart>
     </ResponsiveContainer>
   );

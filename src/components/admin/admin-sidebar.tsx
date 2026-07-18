@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   Briefcase,
+  ChevronRight,
   ExternalLink,
   FileText,
   FolderKanban,
@@ -28,6 +29,7 @@ import {
 import { adminSidebarItems } from "@/config/admin-navigation";
 import type { AdminNavBadgeKey } from "@/config/admin-navigation";
 import { navItemAllowed } from "@/config/admin-nav-permissions";
+import { assets } from "@/config/assets";
 import { siteConfig } from "@/config/site";
 import { roleHasPermission } from "@/config/permissions";
 import type { Role } from "@/config/roles";
@@ -56,9 +58,9 @@ export const adminNavIconMap: Record<string, LucideIcon> = {
 };
 
 function badgeClassName(key: AdminNavBadgeKey): string {
-  if (key === "newsletter") return "bg-[#16a34a] text-white";
-  if (key === "messages") return "bg-red-500 text-white";
-  return "bg-[#2563eb] text-white";
+  if (key === "newsletter") return "bg-[var(--admin-green)] text-white";
+  if (key === "messages") return "bg-[var(--admin-red)] text-white";
+  return "bg-[var(--admin-primary)] text-white";
 }
 
 function resolveBadge(
@@ -97,8 +99,11 @@ export function AdminSidebarNav({
   const items = filterSidebarItems(role);
 
   return (
-    <nav className={cn("flex-1 overflow-y-auto px-3 py-4", className)} aria-label="Navigation admin">
-      <ul className="space-y-1">
+    <nav
+      className={cn("min-h-0 flex-1 overflow-y-auto px-2.5 py-2", className)}
+      aria-label="Navigation admin"
+    >
+      <ul className="space-y-0.5">
         {items.map((item) => {
           const Icon = item.icon ? adminNavIconMap[item.icon] : undefined;
           const active = isNavActive(pathname, item.href);
@@ -110,24 +115,31 @@ export function AdminSidebarNav({
                 href={item.href}
                 onClick={onNavigate}
                 className={cn(
-                  "flex min-h-11 items-center gap-3 rounded-xl px-3 py-2.5 text-sm transition-colors",
+                  "flex h-9 items-center gap-2.5 rounded-md px-2.5 text-[13px] transition-colors",
                   active
-                    ? "bg-[#2563eb] font-medium text-white"
-                    : "text-white/85 hover:bg-white/10 hover:text-white",
+                    ? "bg-[var(--admin-sidebar-active)] font-medium text-white"
+                    : "text-[var(--admin-sidebar-muted)] hover:bg-white/10 hover:text-white",
                 )}
               >
-                {Icon ? <Icon className="size-[18px] shrink-0" aria-hidden /> : null}
+                {Icon ? (
+                  <Icon className="size-[18px] shrink-0" strokeWidth={1.75} aria-hidden />
+                ) : null}
                 <span className="flex-1 truncate">{item.label}</span>
                 {count !== null && count > 0 ? (
                   <span
                     className={cn(
-                      "inline-flex min-w-5 items-center justify-center rounded-full px-1.5 py-0.5 text-[11px] font-semibold",
+                      "inline-flex min-w-5 items-center justify-center rounded-full px-1.5 py-0.5 text-[10px] font-semibold",
                       badgeClassName(item.badgeKey ?? "notifications"),
                     )}
                   >
                     {count > 99 ? "99+" : count}
                   </span>
-                ) : null}
+                ) : (
+                  <ChevronRight
+                    className="size-3.5 shrink-0 opacity-40"
+                    aria-hidden
+                  />
+                )}
               </Link>
             </li>
           );
@@ -148,47 +160,64 @@ export function AdminSidebar({ badges, role, className, onNavigate }: AdminSideb
   return (
     <aside
       className={cn(
-        "flex h-full w-[260px] shrink-0 flex-col bg-[#0d254e] text-white",
+        "flex h-full w-[var(--admin-sidebar-width)] shrink-0 flex-col text-[var(--admin-sidebar-text)]",
         className,
       )}
+      style={{
+        background:
+          "linear-gradient(180deg, var(--admin-sidebar-top) 0%, var(--admin-sidebar-bottom) 100%)",
+      }}
     >
-      <div className="border-b border-white/10 px-5 py-5">
-        <div className="flex items-center gap-3">
-          <div className="relative size-12 shrink-0 overflow-hidden rounded-full bg-white ring-2 ring-white/25">
+      <div className="shrink-0 border-b border-white/10 px-3.5 py-3">
+        <div className="flex items-center gap-2.5">
+          <div className="relative size-10 shrink-0 overflow-hidden rounded-full bg-white ring-2 ring-white/20">
             <Image
               src={siteConfig.logo.src}
               alt={siteConfig.logo.alt}
-              width={48}
-              height={48}
+              width={40}
+              height={40}
               className="size-full object-cover"
               priority
             />
           </div>
           <div className="min-w-0">
-            <p className="font-display text-base font-semibold leading-tight">
+            <p className="font-display text-[14px] font-bold leading-tight">
               {siteConfig.shortName}
             </p>
-            <p className="truncate text-xs text-white/60">Administration</p>
+            <p className="mt-0.5 line-clamp-2 text-[10px] leading-snug text-[var(--admin-sidebar-muted)]">
+              Alliance des Femmes pour le Développement
+            </p>
           </div>
         </div>
       </div>
 
       <AdminSidebarNav badges={badges} role={role} onNavigate={onNavigate} />
 
-      <div className="mt-auto border-t border-white/10 px-4 py-4">
-        <div className="rounded-xl bg-white/5 px-3 py-3 text-xs text-white/70">
-          <p className="font-medium text-white/90">Plateforme institutionnelle</p>
-          <p className="mt-1 leading-relaxed">
-            Gestion des programmes, projets et indicateurs d&apos;impact AFD.
-          </p>
+      <div className="mt-auto shrink-0 border-t border-white/10 px-3 py-2.5">
+        <div className="overflow-hidden rounded-lg bg-white/5">
+          <div className="relative h-12 w-full">
+            <Image
+              src={assets.home.presentation}
+              alt=""
+              fill
+              className="object-cover opacity-90"
+              sizes="220px"
+            />
+          </div>
+          <div className="px-2.5 py-2">
+            <p className="text-[10px] font-semibold text-white">AFD ASBL</p>
+            <p className="mt-0.5 line-clamp-2 text-[10px] leading-snug text-[var(--admin-sidebar-muted)]">
+              Réinventer l&apos;avenir de chaque voix et le leadership des femmes
+            </p>
+            <Link
+              href="/"
+              className="mt-2 inline-flex h-8 w-full items-center justify-center gap-1.5 rounded-md bg-[var(--admin-primary)] text-[11px] font-semibold text-white transition hover:bg-[var(--admin-primary-dark)]"
+            >
+              <ExternalLink className="size-3.5" aria-hidden />
+              Voir le site public
+            </Link>
+          </div>
         </div>
-        <Link
-          href="/"
-          className="mt-3 inline-flex items-center gap-2 text-sm text-white/80 transition hover:text-white"
-        >
-          <ExternalLink className="size-4" aria-hidden />
-          Voir le site public
-        </Link>
       </div>
     </aside>
   );

@@ -42,5 +42,9 @@ export default defineConfig({
       name: "desktop-1440",
       use: { viewport: { width: 1440, height: 900 } },
     },
+    {
+      name: "desktop-1536",
+      use: { viewport: { width: 1536, height: 1024 } },
+    },
   ],
 });

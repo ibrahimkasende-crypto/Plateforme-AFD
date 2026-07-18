@@ -1,70 +1,96 @@
 "use client";
 
-import { ArrowDownRight, ArrowUpRight, HelpCircle, type LucideIcon } from "lucide-react";
+import Link from "next/link";
+import {
+  ArrowDownRight,
+  ArrowUpRight,
+  HelpCircle,
+  type LucideIcon,
+} from "lucide-react";
 import type { KpiValue } from "@/features/statistiques/types/dashboard";
 import { cn } from "@/lib/utils";
 
 type DashboardKpiCardProps = {
   kpi: KpiValue;
   icon: LucideIcon;
-  iconClassName?: string;
+  iconBgClassName?: string;
+  href?: string;
 };
 
 export function DashboardKpiCard({
   kpi,
   icon: Icon,
-  iconClassName,
+  iconBgClassName = "bg-[var(--admin-blue)]",
+  href,
 }: DashboardKpiCardProps) {
   const variation = kpi.variationPct;
   const positive = variation !== null && variation >= 0;
 
-  return (
-    <article className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-      <div className="flex items-start justify-between gap-3">
+  const content = (
+    <>
+      <div className="flex items-start justify-between gap-2">
         <div
           className={cn(
-            "inline-flex size-11 items-center justify-center rounded-full bg-[#0877d1]/10 text-[#0877d1]",
-            iconClassName,
+            "inline-flex size-11 shrink-0 items-center justify-center rounded-full text-white sm:size-12",
+            iconBgClassName,
           )}
         >
-          <Icon className="size-5" aria-hidden />
+          <Icon className="size-6" strokeWidth={2} aria-hidden />
         </div>
         {!kpi.available && kpi.tooltip ? (
-          <span title={kpi.tooltip} className="text-slate-400">
-            <HelpCircle className="size-4" aria-hidden />
+          <span title={kpi.tooltip} className="text-[var(--admin-muted)]">
+            <HelpCircle className="size-3.5" aria-hidden />
             <span className="sr-only">{kpi.tooltip}</span>
           </span>
         ) : null}
       </div>
 
-      <p className="mt-4 text-sm text-slate-600">{kpi.label}</p>
-      <p className="mt-1 font-display text-2xl font-semibold text-slate-900">
+      <p className="mt-2 text-[12px] font-medium leading-tight text-[var(--admin-muted)]">
+        {kpi.label}
+      </p>
+      <p className="mt-0.5 font-display text-[26px] font-extrabold leading-none tracking-tight text-[var(--admin-text)] sm:text-[28px]">
         {kpi.formatted}
       </p>
 
       {kpi.available && variation !== null ? (
         <p
           className={cn(
-            "mt-2 inline-flex items-center gap-1 text-sm font-medium",
-            positive ? "text-[#16a34a]" : "text-red-600",
+            "mt-1.5 inline-flex items-center gap-0.5 text-[11px] font-bold",
+            positive ? "text-[var(--admin-green)]" : "text-[var(--admin-red)]",
           )}
         >
           {positive ? (
-            <ArrowUpRight className="size-4" aria-hidden />
+            <ArrowUpRight className="size-3.5" aria-hidden />
           ) : (
-            <ArrowDownRight className="size-4" aria-hidden />
+            <ArrowDownRight className="size-3.5" aria-hidden />
           )}
+          {positive ? "+" : "−"}
           {Math.abs(variation).toLocaleString("fr-FR", {
             maximumFractionDigits: 1,
           })}
           %
-          <span className="font-normal text-slate-500">vs période préc.</span>
+          <span className="ml-0.5 font-medium text-[var(--admin-muted)]">
+            vs préc.
+          </span>
         </p>
       ) : !kpi.available ? (
-        <p className="mt-2 text-xs text-slate-500" title={kpi.tooltip}>
+        <p className="mt-1.5 text-[11px] text-[var(--admin-muted)]" title={kpi.tooltip}>
           {kpi.tooltip ?? "Non disponible"}
         </p>
       ) : null}
-    </article>
+    </>
   );
+
+  const className =
+    "admin-panel block h-full transition hover:border-[var(--admin-primary)]/40 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--admin-primary)]";
+
+  if (href) {
+    return (
+      <Link href={href} className={className} aria-label={`${kpi.label}: ${kpi.formatted}`}>
+        {content}
+      </Link>
+    );
+  }
+
+  return <article className={className}>{content}</article>;
 }

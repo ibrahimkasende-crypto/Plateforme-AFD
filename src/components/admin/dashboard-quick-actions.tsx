@@ -11,51 +11,67 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-const actionClassName =
-  "inline-flex items-center justify-center gap-2 rounded-xl bg-[#2563eb] px-4 py-2.5 text-sm font-medium text-white transition hover:bg-[#1d4ed8]";
+const actions = [
+  {
+    href: "/admin/projets/nouveau",
+    label: "Ajouter un projet",
+    icon: Plus,
+  },
+  {
+    href: "/admin/activites/nouvelle",
+    label: "Ajouter une activité",
+    icon: ListChecks,
+  },
+  {
+    href: "/admin/beneficiaires/nouveau",
+    label: "Ajouter un bénéficiaire",
+    icon: UserPlus,
+  },
+  {
+    href: "/admin/rapports/nouveau",
+    label: "Générer un rapport",
+    icon: FileText,
+  },
+  {
+    href: "/admin/newsletter/campagnes/nouvelle",
+    label: "Envoyer une newsletter",
+    icon: Send,
+  },
+] as const;
 
 type DashboardQuickActionsProps = {
   className?: string;
+  compact?: boolean;
 };
 
-export function DashboardQuickActions({ className }: DashboardQuickActionsProps) {
+export function DashboardQuickActions({
+  className,
+  compact = false,
+}: DashboardQuickActionsProps) {
   return (
-    <div className={cn("space-y-3", className)}>
-      <Link href="/admin/projets/nouveau" className={cn(actionClassName, "w-full")}>
-        <Plus className="size-4" aria-hidden />
-        Ajouter un projet
-      </Link>
-      <Link href="/admin/activites/nouveau" className={cn(actionClassName, "w-full")}>
-        <ListChecks className="size-4" aria-hidden />
-        Ajouter une activité
-      </Link>
+    <div className={cn(compact ? "space-y-1.5" : "space-y-3", className)}>
+      {actions.map(({ href, label, icon: Icon }) => (
+        <Link
+          key={href}
+          href={href}
+          className={cn(
+            "inline-flex w-full items-center justify-center gap-2 rounded-md bg-[var(--admin-primary)] font-semibold text-white transition hover:bg-[var(--admin-primary-dark)]",
+            compact ? "h-8 px-2 text-[11px]" : "h-10 px-4 text-sm",
+          )}
+        >
+          <Icon className={compact ? "size-3.5" : "size-4"} aria-hidden />
+          {label}
+        </Link>
+      ))}
       <Link
-        href="/admin/beneficiaires/nouveau"
-        className={cn(actionClassName, "w-full")}
+        href="/admin/parametres?customize=dashboard"
+        className={cn(
+          "inline-flex w-full items-center justify-center gap-1.5 font-medium text-[var(--admin-primary)] hover:underline",
+          compact ? "h-7 text-[11px]" : "text-sm",
+        )}
       >
-        <UserPlus className="size-4" aria-hidden />
-        Ajouter un bénéficiaire
-      </Link>
-      <Link
-        href="/admin/rapports/nouveau"
-        className="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-medium text-slate-800 transition hover:bg-slate-50"
-      >
-        <FileText className="size-4" aria-hidden />
-        Générer un rapport
-      </Link>
-      <Link
-        href="/admin/newsletter/campagnes/nouveau"
-        className="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-medium text-slate-800 transition hover:bg-slate-50"
-      >
-        <Send className="size-4" aria-hidden />
-        Envoyer une newsletter
-      </Link>
-      <Link
-        href="/admin/parametres"
-        className="inline-flex items-center gap-2 text-sm text-[#2563eb] hover:underline"
-      >
-        <Palette className="size-4" aria-hidden />
-        Personnaliser
+        <Palette className="size-3.5" aria-hidden />
+        Personnaliser le tableau de bord
       </Link>
     </div>
   );

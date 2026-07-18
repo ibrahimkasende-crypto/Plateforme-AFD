@@ -1,4 +1,7 @@
 import { adminDashboardDemoBundle } from "@/config/demo-data/admin-dashboard";
+import { adminDashboardRpcSchema } from "@/features/dashboard/schemas/admin-dashboard-rpc";
+import { resolveDashboardDateRange } from "@/features/dashboard/utils/dashboard-period";
+import { mapRpcPayloadToBundle } from "@/features/dashboard/utils/map-rpc-payload";
 import { getAdminViewer } from "@/lib/auth/admin-session";
 import { createClientSafe } from "@/lib/supabase/safe";
 import type {
@@ -56,10 +59,41 @@ function normalizeStatus(raw: string | null): string {
 }
 
 function shouldUseDemo(hasMeaningfulData: boolean): boolean {
-  if (process.env.NODE_ENV === "production") return false;
+  if (process.env.NEXT_PUBLIC_ENABLE_ADMIN_DEMO_DATA === "false") return false;
   if (process.env.NEXT_PUBLIC_AFD_ADMIN_DEMO === "false") return false;
+  if (process.env.NEXT_PUBLIC_ENABLE_ADMIN_DEMO_DATA === "true") return true;
   if (process.env.NEXT_PUBLIC_AFD_ADMIN_DEMO === "true") return true;
+  if (process.env.NODE_ENV === "production") return false;
   return !hasMeaningfulData;
+}
+
+async function tryGetDashboardFromRpc(
+  filters: DashboardFilters,
+  viewer: DashboardBundle["viewer"],
+): Promise<DashboardBundle | null> {
+  const supabase = await createClientSafe();
+  if (!supabase) return null;
+
+  const { dateStart, dateEnd } = resolveDashboardDateRange(filters);
+
+  const { data, error } = await supabase.rpc("get_admin_dashboard" as never, {
+    p_date_start: dateStart,
+    p_date_end: dateEnd,
+    p_programme_id: filters.programmeId,
+    p_province: filters.province,
+    p_projet_id: filters.projectId,
+  } as never);
+
+  if (error || data == null) {
+    return null;
+  }
+
+  const parsed = adminDashboardRpcSchema.safeParse(data);
+  if (!parsed.success) {
+    return null;
+  }
+
+  return mapRpcPayloadToBundle(parsed.data, viewer);
 }
 
 const DEFAULT_FILTERS: DashboardFilters = {
@@ -133,10 +167,20 @@ export async function getDashboardSecondaryStats(
 export async function getDashboardBundle(
   filters: DashboardFilters = DEFAULT_FILTERS,
 ): Promise<DashboardBundle> {
-  void filters;
   const viewer = await getAdminViewer();
   if (!viewer) {
     throw new Error("Admin session required");
+  }
+
+  const fromRpc = await tryGetDashboardFromRpc(filters, viewer);
+  if (fromRpc) {
+    const hasCharts =
+      fromRpc.beneficiaryEvolution.length > 0 ||
+      fromRpc.projectsByStatus.length > 0 ||
+      fromRpc.beneficiariesByProvince.length > 0;
+    if (hasCharts || fromRpc.demoMode || !shouldUseDemo(false)) {
+      return fromRpc;
+    }
   }
 
   const supabase = await createClientSafe();
