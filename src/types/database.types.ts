@@ -402,33 +402,141 @@ export type Database = {
         }
         Relationships: []
       }
+      medias: {
+        Row: {
+          id: string
+          bucket: string
+          storage_path: string
+          filename: string
+          original_filename: string | null
+          mime_type: string | null
+          size_bytes: number | null
+          width: number | null
+          height: number | null
+          alt_text: string | null
+          caption: string | null
+          credit: string | null
+          consent_status: string
+          visibility: string
+          content_hash: string | null
+          resource_type: string | null
+          resource_id: string | null
+          source_url: string | null
+          created_by: string | null
+          created_at: string
+          updated_at: string
+          deleted_at: string | null
+        }
+        Insert: {
+          id?: string
+          bucket: string
+          storage_path: string
+          filename: string
+          original_filename?: string | null
+          mime_type?: string | null
+          size_bytes?: number | null
+          width?: number | null
+          height?: number | null
+          alt_text?: string | null
+          caption?: string | null
+          credit?: string | null
+          consent_status?: string
+          visibility?: string
+          content_hash?: string | null
+          resource_type?: string | null
+          resource_id?: string | null
+          source_url?: string | null
+          created_by?: string | null
+          created_at?: string
+          updated_at?: string
+          deleted_at?: string | null
+        }
+        Update: {
+          id?: string
+          bucket?: string
+          storage_path?: string
+          filename?: string
+          original_filename?: string | null
+          mime_type?: string | null
+          size_bytes?: number | null
+          width?: number | null
+          height?: number | null
+          alt_text?: string | null
+          caption?: string | null
+          credit?: string | null
+          consent_status?: string
+          visibility?: string
+          content_hash?: string | null
+          resource_type?: string | null
+          resource_id?: string | null
+          source_url?: string | null
+          created_by?: string | null
+          created_at?: string
+          updated_at?: string
+          deleted_at?: string | null
+        }
+        Relationships: []
+      }
       partenaires: {
         Row: {
           active: boolean | null
+          acronyme: string | null
           category: string | null
           created_at: string | null
+          deleted_at: string | null
+          description: string | null
           id: string
+          logo_media_id: string | null
           logo_url: string | null
+          mise_en_avant: boolean | null
           name: string
           order: number | null
+          publie: boolean | null
+          slug: string | null
+          source_imported_at: string | null
+          source_url: string | null
+          updated_at: string | null
+          website_url: string | null
         }
         Insert: {
           active?: boolean | null
+          acronyme?: string | null
           category?: string | null
           created_at?: string | null
+          deleted_at?: string | null
+          description?: string | null
           id?: string
+          logo_media_id?: string | null
           logo_url?: string | null
+          mise_en_avant?: boolean | null
           name: string
           order?: number | null
+          publie?: boolean | null
+          slug?: string | null
+          source_imported_at?: string | null
+          source_url?: string | null
+          updated_at?: string | null
+          website_url?: string | null
         }
         Update: {
           active?: boolean | null
+          acronyme?: string | null
           category?: string | null
           created_at?: string | null
+          deleted_at?: string | null
+          description?: string | null
           id?: string
+          logo_media_id?: string | null
           logo_url?: string | null
+          mise_en_avant?: boolean | null
           name?: string
           order?: number | null
+          publie?: boolean | null
+          slug?: string | null
+          source_imported_at?: string | null
+          source_url?: string | null
+          updated_at?: string | null
+          website_url?: string | null
         }
         Relationships: []
       }

@@ -1,10 +1,6 @@
-import {
-  getActivePartners,
-  type ActivePartner,
-} from "@/lib/queries/home";
-
-export type { ActivePartner };
-
-export async function getPublishedPartners(): Promise<ActivePartner[]> {
-  return getActivePartners();
-}
+export {
+  getActivePublicPartners,
+  getActivePublicPartners as getPublishedPartners,
+  type PublicPartner,
+  type PublicPartner as ActivePartner,
+} from "@/lib/queries/partenaires";

@@ -5,7 +5,6 @@ import type { Database } from "@/types/database.types";
 type Programme = Database["public"]["Tables"]["programmes"]["Row"];
 type Projet = Database["public"]["Tables"]["projets"]["Row"];
 type Actualite = Database["public"]["Tables"]["actualites"]["Row"];
-type Partenaire = Database["public"]["Tables"]["partenaires"]["Row"];
 
 export type PublicImpactStats = {
   personnesAccompagnees: number | null;
@@ -49,10 +48,7 @@ export type LatestNews = Pick<
   | "published_at"
 >;
 
-export type ActivePartner = Pick<
-  Partenaire,
-  "id" | "name" | "logo_url" | "category"
->;
+export type { PublicPartner as ActivePartner } from "@/lib/queries/partenaires";
 
 export type InterventionZone = {
   label: string;
@@ -181,17 +177,9 @@ export async function getLatestPublishedNews(): Promise<LatestNews[]> {
   }));
 }
 
-export async function getActivePartners(): Promise<ActivePartner[]> {
-  return withClient([], async (supabase) => {
-    const { data, error } = await supabase
-      .from("partenaires")
-      .select("id, name, logo_url, category")
-      .eq("active", true)
-      .order("order", { ascending: true });
-
-    if (error || !data) return [];
-    return data;
-  });
+export async function getActivePartners() {
+  const { getActivePublicPartners } = await import("@/lib/queries/partenaires");
+  return getActivePublicPartners();
 }
 
 export async function getInterventionZones(): Promise<InterventionZone[]> {

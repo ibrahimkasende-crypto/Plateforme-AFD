@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
+    "import:partner-logos": "tsx scripts/import-partner-logos-from-legacy-site.ts",
     "test:e2e": "playwright test",
     "test:e2e:install": "playwright install chromium"
   },

@@ -31,7 +31,7 @@ export const assets = {
     directory: "/assets/actualites",
   },
   partenaires: {
-    directory: "/assets/partenaires",
+    directory: "/images/afd/partenaires",
   },
   mediatheque: {
     directory: "/assets/mediatheque",

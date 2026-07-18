@@ -7,6 +7,12 @@ export const homeContent = {
     eyebrow: "ONG nationale congolaise",
     title:
       "Des femmes engagées pour des communautés plus fortes et résilientes.",
+    /** Coupures volontaires — exactement 3 lignes dans le hero */
+    titleLines: [
+      "Des femmes engagées",
+      "pour des communautés",
+      "plus fortes et résilientes.",
+    ] as const,
     description:
       "Depuis 2019, l’Alliance des Femmes pour le Développement agit aux côtés des communautés vulnérables à travers des réponses humanitaires et des solutions durables, inclusives et participatives.",
     primaryCta: { label: "Découvrir nos actions", href: "/actions" },
@@ -151,7 +157,7 @@ export const homeContent = {
     provincesCouvertes: 8,
     /** Pourcentage de femmes et jeunes filles parmi les bénéficiaires. */
     femmesAccompagnees: 75,
-    partenairesActifs: 14,
+    partenairesActifs: 13,
     /** Affiché comme « Plus de 70 ». */
     activitesRealisees: 70,
   },

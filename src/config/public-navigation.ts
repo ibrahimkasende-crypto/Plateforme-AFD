@@ -185,6 +185,7 @@ export const footerLinks = {
   ],
   quick: [
     { label: "Rejoindre l’équipe", href: "/rejoindre-equipe" },
+    { label: "Nos partenaires", href: "/partenaires" },
     { label: "Devenir partenaire", href: "/partenariat" },
     { label: "Soutenir l’AFD", href: "/soutenir" },
     { label: "Newsletter", href: "/ressources/newsletter" },
