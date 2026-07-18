@@ -4,8 +4,11 @@ export type InterventionProvince = {
   id: string;
   code: string;
   name: string;
+  /** Ville ou territoire principal affiché (distinct du nom de province). */
+  mainLocality?: string | null;
   active: boolean;
   projectCount: number;
+  activityCount?: number | null;
   beneficiaries: number | null;
   sectors: string[];
   programmes: Array<{ id: string; title: string; slug: string }>;

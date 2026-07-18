@@ -1,4 +1,5 @@
 import { assets } from "@/config/assets";
+import { FALLBACK_INTERVENTION_DOMAINS } from "@/config/intervention-domains";
 import { siteConfig } from "@/config/site";
 
 export const homeContent = {
@@ -79,82 +80,16 @@ export const homeContent = {
       icon: "HandHeart",
     },
   ] as const,
-  pillars: [
-    {
-      id: "sante-wash",
-      title: "Santé, Nutrition et WASH",
-      description:
-        "Soins communautaires, nutrition et accès à l’eau, l’hygiène et l’assainissement.",
-      topics: [
-        "Santé communautaire et primaire",
-        "Nutrition",
-        "Eau, hygiène et assainissement",
-      ],
-      icon: "HeartPulse",
-      featured: true,
-    },
-    {
-      id: "protection",
-      title: "Protection, VBG et droits des femmes",
-      description:
-        "Protection de l’enfant, prévention des VBG et lutte contre l’exploitation.",
-      topics: [
-        "Protection de l’enfant",
-        "Lutte contre les VBG",
-        "Protection contre l’exploitation et les abus sexuels",
-      ],
-      icon: "Shield",
-      featured: false,
-    },
-    {
-      id: "economie",
-      title: "Autonomisation économique",
-      description:
-        "Entrepreneuriat, coopératives et activités génératrices de revenus.",
-      topics: [
-        "Autonomisation financière des femmes",
-        "Entrepreneuriat",
-        "Coopératives et AGR",
-      ],
-      icon: "Briefcase",
-      featured: false,
-    },
-    {
-      id: "education",
-      title: "Éducation et leadership",
-      description:
-        "Éducation, alphabétisation et participation des femmes aux décisions.",
-      topics: ["Éducation", "Alphabétisation", "Leadership des femmes"],
-      icon: "GraduationCap",
-      featured: false,
-    },
-    {
-      id: "alimentaire",
-      title: "Sécurité alimentaire et agriculture",
-      description:
-        "Agriculture durable, pêche, élevage et moyens de subsistance.",
-      topics: [
-        "Sécurité alimentaire",
-        "Agriculture durable",
-        "Pêche et élevage",
-      ],
-      icon: "Sprout",
-      featured: false,
-    },
-    {
-      id: "urgences",
-      title: "Urgences, cohésion et redevabilité",
-      description:
-        "Réponses d’urgence, relèvement, Cash for Work et engagement communautaire.",
-      topics: [
-        "Réponse humanitaire d’urgence",
-        "Relèvement et Cash for Work",
-        "Cohésion sociale et redevabilité",
-      ],
-      icon: "LifeBuoy",
-      featured: true,
-    },
-  ] as const,
+  /** Aligné sur les six domaines officiels (secours local / footer / pages institutionnelles). */
+  pillars: FALLBACK_INTERVENTION_DOMAINS.map((domain) => ({
+    id: domain.id,
+    title: domain.title,
+    description: domain.summary,
+    topics: domain.topics,
+    icon: domain.icon,
+    featured: domain.featured,
+    slug: domain.slug,
+  })),
   newsletter: {
     title: "Restez informé de nos actions",
     description:

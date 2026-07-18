@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
-import { PublicEntityCard } from "@/components/public/PublicEntityCard";
 import {
   PublicPagination,
   PublicSearchForm,
 } from "@/components/public/PublicPagination";
+import { NewsGrid } from "@/components/public/news/news-grid";
 import { PublicPageShell } from "@/components/public/PublicPageShell";
 import { EmptyState } from "@/components/shared/EmptyState";
 import { siteConfig } from "@/config/site";
-import { getPublishedNews } from "@/lib/queries/public/actualites";
+import { getPublishedNews } from "@/lib/queries/public/news";
 import { parsePage, parseQuery } from "@/lib/queries/public/client";
 
 export const metadata: Metadata = {
@@ -15,28 +15,27 @@ export const metadata: Metadata = {
   description:
     "Actualités et communiqués de l’Alliance des Femmes pour le Développement en République démocratique du Congo.",
   alternates: { canonical: `${siteConfig.url}/actualites` },
+  openGraph: {
+    title: "Actualités | AFD ASBL",
+    description:
+      "Suivez les actions et annonces de l’Alliance des Femmes pour le Développement.",
+    url: `${siteConfig.url}/actualites`,
+    siteName: siteConfig.appName,
+    locale: "fr_CD",
+    type: "website",
+  },
 };
 
 type PageProps = {
-  searchParams: Promise<{ q?: string; page?: string }>;
+  searchParams: Promise<{ q?: string; page?: string; categorie?: string }>;
 };
-
-function formatDate(value: string | null): string | null {
-  if (!value) return null;
-  const date = new Date(value);
-  if (Number.isNaN(date.getTime())) return null;
-  return new Intl.DateTimeFormat("fr-FR", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  }).format(date);
-}
 
 export default async function ActualitesPage({ searchParams }: PageProps) {
   const params = await searchParams;
   const q = parseQuery(params.q);
   const page = parsePage(params.page);
-  const result = await getPublishedNews({ q, page });
+  const category = params.categorie?.trim() || undefined;
+  const result = await getPublishedNews({ q, page, category });
 
   return (
     <PublicPageShell
@@ -65,32 +64,19 @@ export default async function ActualitesPage({ searchParams }: PageProps) {
         />
       ) : (
         <>
-          <p className="mb-4 text-sm text-[var(--afd-muted)]">
+          <p className="mb-6 text-sm text-[var(--afd-muted)]">
             {result.total} article{result.total > 1 ? "s" : ""} trouvé
             {result.total > 1 ? "s" : ""}
           </p>
-          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {result.items.map((article) => {
-              const date = formatDate(article.published_at);
-              const meta = [article.category, date].filter(Boolean).join(" · ");
-
-              return (
-                <PublicEntityCard
-                  key={article.id}
-                  title={article.title}
-                  description={article.excerpt}
-                  href={`/actualites/${article.slug}`}
-                  imageUrl={article.image_url}
-                  meta={meta || undefined}
-                />
-              );
-            })}
-          </div>
+          <NewsGrid items={result.items} featured expandablePreview={false} />
           <PublicPagination
             page={result.page}
             totalPages={result.totalPages}
             basePath="/actualites"
-            searchParams={{ q: q || undefined }}
+            searchParams={{
+              q: q || undefined,
+              categorie: category,
+            }}
           />
         </>
       )}

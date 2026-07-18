@@ -34,6 +34,11 @@ export const adminSidebarItems: AdminNavItem[] = [
     href: "/admin/zones-intervention",
     icon: "Map",
   },
+  {
+    label: "Studio de publication",
+    href: "/admin/publications",
+    icon: "Newspaper",
+  },
   { label: "Actualités", href: "/admin/actualites", icon: "Newspaper" },
   { label: "Médiathèque", href: "/admin/mediatheque", icon: "Images" },
   {

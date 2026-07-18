@@ -2,31 +2,25 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { FadeIn } from "@/components/motion/FadeIn";
+import { HomeNewsComposition } from "@/components/public/news/news-grid";
 import { EmptyState } from "@/components/shared/EmptyState";
 import { Section } from "@/components/shared/Section";
 import { SiteContainer } from "@/components/shared/SiteContainer";
 import { afdImages } from "@/config/afd-images";
-import type { FeaturedImpactStory, LatestNews } from "@/lib/queries/home";
+import type { FeaturedImpactStory } from "@/lib/queries/home";
+import { getFeaturedNews } from "@/lib/queries/public/news";
 import { cn } from "@/lib/utils";
 
-function formatDate(value: string | null) {
-  if (!value) return null;
-  return new Intl.DateTimeFormat("fr-FR", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  }).format(new Date(value));
-}
-
-export function ImpactAndNews({
+export async function ImpactAndNews({
   story,
-  news,
 }: {
   story: FeaturedImpactStory;
-  news: LatestNews[];
+  /** Conservé pour compatibilité avec l’appelant homepage (ignoré — source unique getFeaturedNews). */
+  news?: unknown;
 }) {
   const isDev = process.env.NODE_ENV === "development";
   const showStory = Boolean(story) || isDev;
+  const news = await getFeaturedNews(3);
 
   return (
     <Section className="bg-[var(--afd-surface-elevated)]">
@@ -41,7 +35,9 @@ export function ImpactAndNews({
             <div className="min-w-0 lg:col-span-5">
               <FadeIn>
                 <div className="h-1 w-10 rounded-full bg-[var(--afd-blue)]" aria-hidden />
-                <h2 className="afd-h2 mt-4">Histoire d’impact</h2>
+                <h2 className="font-heading mt-4 text-[27px] font-extrabold leading-[1.15] text-[#062653] sm:text-[34px]">
+                  Histoire d’impact
+                </h2>
               </FadeIn>
               <div className="mt-6">
                 <ImpactStoryCard story={story} isDev={isDev} />
@@ -61,7 +57,9 @@ export function ImpactAndNews({
               <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
                 <div>
                   <div className="h-1 w-10 rounded-full bg-[var(--afd-blue)]" aria-hidden />
-                  <h2 className="afd-h2 mt-4">Actualités récentes</h2>
+                  <h2 className="font-heading mt-4 text-[27px] font-extrabold leading-[1.15] text-[#062653] sm:text-[34px] lg:text-[40px]">
+                    Dernières actualités
+                  </h2>
                 </div>
                 <Link
                   href="/actualites"
@@ -80,13 +78,7 @@ export function ImpactAndNews({
                   description="Les prochaines publications apparaîtront ici."
                 />
               ) : (
-                <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
-                  {news.slice(0, 3).map((item, index) => (
-                    <FadeIn key={item.id} delay={0.04 * index} className="min-w-0">
-                      <NewsCard item={item} />
-                    </FadeIn>
-                  ))}
-                </div>
+                <HomeNewsComposition items={news} />
               )}
             </div>
 
@@ -182,48 +174,5 @@ function ImpactStoryCard({
         </div>
       </article>
     </FadeIn>
-  );
-}
-
-function NewsCard({ item }: { item: LatestNews }) {
-  const dateLabel = formatDate(item.published_at);
-
-  return (
-    <Link
-      href={`/actualites/${item.slug}`}
-      className="group flex h-full min-w-0 flex-col overflow-hidden rounded-[16px] border border-[var(--afd-border)] bg-[var(--afd-background)] transition duration-180 hover:border-[var(--afd-blue)]/35 sm:rounded-[18px]"
-    >
-      <div className="relative aspect-[16/10] bg-[var(--afd-light-blue)]">
-        {item.image_url ? (
-          <Image
-            src={item.image_url}
-            alt=""
-            fill
-            sizes="(max-width:768px) 100vw, (max-width:1024px) 50vw, 33vw"
-            className="object-cover transition duration-300 group-hover:scale-[1.03]"
-          />
-        ) : (
-          <div className="absolute inset-0 flex items-center justify-center text-xs text-[var(--afd-muted)]">
-            Image à venir
-          </div>
-        )}
-      </div>
-      <div className="flex flex-1 flex-col p-4">
-        <div className="flex flex-wrap gap-2 text-[12px] text-[var(--afd-muted)]">
-          {item.category ? (
-            <span className="font-bold text-[var(--afd-blue)]">{item.category}</span>
-          ) : null}
-          {dateLabel ? <span>{dateLabel}</span> : null}
-        </div>
-        <h3 className="afd-h3 mt-2 line-clamp-3 break-words">{item.title}</h3>
-        <p className="mt-2 line-clamp-3 text-[13px] leading-[1.55] text-[var(--afd-muted)] sm:text-[14px]">
-          {item.excerpt}
-        </p>
-        <span className="afd-btn-text mt-auto inline-flex min-h-10 items-center gap-2 pt-4 text-[var(--afd-blue)]">
-          Lire la suite
-          <ArrowRight className="size-3.5" aria-hidden />
-        </span>
-      </div>
-    </Link>
   );
 }

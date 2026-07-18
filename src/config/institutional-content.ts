@@ -50,7 +50,7 @@ export const institutionalContent = {
       year: "2024",
       title: "Structuration institutionnelle",
       description:
-        "Mise en place des piliers d’intervention et des orientations stratégiques en santé, protection, autonomisation économique, éducation, sécurité alimentaire et réponses d’urgence.",
+        "Mise en place des domaines d’intervention et des orientations stratégiques : autonomisation économique, protection et VBG, santé maternelle, WASH, éducation, urgences.",
     },
     {
       year: "2024+",

@@ -1,95 +1,57 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import {
-  Briefcase,
-  GraduationCap,
-  HeartPulse,
-  LifeBuoy,
-  Shield,
-  Sprout,
-  ArrowRight,
-  type LucideIcon,
-} from "lucide-react";
+import { ArrowRight } from "lucide-react";
+import { InterventionDomainsSection } from "@/components/public/interventions/intervention-domains-section";
 import { PublicPageShell } from "@/components/public/PublicPageShell";
-import { homeContent } from "@/config/home-content";
 import { siteConfig } from "@/config/site";
+import { getPublishedInterventionDomains } from "@/lib/queries/public/intervention-domains";
 
 export const metadata: Metadata = {
   title: "Domaines d’intervention",
   description:
-    "Les six piliers d’intervention de l’AFD : santé et WASH, protection, autonomisation économique, éducation, sécurité alimentaire et urgences.",
+    "Les six domaines d’intervention de l’Alliance des Femmes pour le Développement : autonomisation économique, protection et VBG, santé maternelle, WASH, éducation, urgences.",
   alternates: { canonical: `${siteConfig.url}/actions/domaines-intervention` },
+  openGraph: {
+    title: "Domaines d’intervention | AFD ASBL",
+    description:
+      "Six axes d’action de l’Alliance des Femmes pour le Développement en République démocratique du Congo.",
+    url: `${siteConfig.url}/actions/domaines-intervention`,
+    siteName: siteConfig.appName,
+    locale: "fr_CD",
+    type: "website",
+  },
 };
 
-const iconMap: Record<string, LucideIcon> = {
-  HeartPulse,
-  Shield,
-  Briefcase,
-  GraduationCap,
-  Sprout,
-  LifeBuoy,
-};
-
-export default function DomainesInterventionPage() {
-  const allTopics = homeContent.pillars.flatMap((pillar) => pillar.topics);
+export default async function DomainesInterventionPage() {
+  const domains = await getPublishedInterventionDomains();
+  const allTopics = domains.flatMap((domain) => [...domain.topics]);
 
   return (
     <PublicPageShell
       eyebrow="Actions"
       title="Domaines d’intervention"
-      description="L’AFD regroupe ses interventions autour de six piliers complémentaires, chacun couvrant plusieurs secteurs d’action."
+      description="L’AFD structure ses actions autour de six domaines complémentaires, au service des femmes, des filles et des communautés."
       breadcrumbs={[
         { label: "Accueil", href: "/" },
         { label: "Actions", href: "/actions" },
         { label: "Domaines d’intervention" },
       ]}
     >
-      <div className="grid gap-6 lg:grid-cols-2">
-        {homeContent.pillars.map((pillar) => {
-          const Icon = iconMap[pillar.icon] ?? HeartPulse;
-          return (
-            <article
-              key={pillar.id}
-              className="rounded-2xl border border-[var(--afd-border)] bg-white p-6"
-            >
-              <div className="flex items-start gap-4">
-                <div className="inline-flex size-12 shrink-0 items-center justify-center rounded-xl bg-[var(--afd-blue)]/10 text-[var(--afd-blue)]">
-                  <Icon className="size-5" aria-hidden />
-                </div>
-                <div className="min-w-0 flex-1">
-                  <h2 className="font-display text-xl font-semibold text-[var(--afd-ink)]">
-                    {pillar.title}
-                  </h2>
-                  <p className="mt-2 text-sm leading-relaxed text-[var(--afd-muted)]">
-                    {pillar.description}
-                  </p>
-                </div>
-              </div>
-              <ul className="mt-5 space-y-2 border-t border-[var(--afd-border)] pt-4">
-                {pillar.topics.map((topic) => (
-                  <li
-                    key={topic}
-                    className="flex items-start gap-2 text-sm text-[var(--afd-text)]"
-                  >
-                    <span className="mt-0.5 text-[var(--afd-blue)]" aria-hidden>
-                      ›
-                    </span>
-                    {topic}
-                  </li>
-                ))}
-              </ul>
-            </article>
-          );
-        })}
-      </div>
+      <InterventionDomainsSection
+        domains={domains}
+        showPageLink={false}
+        hideHeader
+        bare
+      />
 
-      <section className="mt-10 rounded-2xl border border-[var(--afd-border)] bg-[var(--afd-surface)] p-6">
-        <h2 className="font-display text-lg font-semibold text-[var(--afd-ink)]">
+      <section className="mt-10 rounded-[20px] border border-[var(--afd-blue)]/15 bg-white p-6 sm:p-8">
+        <h2 className="font-heading text-lg font-bold text-[#062653] sm:text-xl">
           Vue d’ensemble des secteurs couverts
         </h2>
-        <p className="mt-2 text-sm text-[var(--afd-muted)]">
-          Les secteurs ci-dessous sont regroupés sous les piliers d’intervention
-          de l’AFD. Ils orientent la conception et le suivi de nos programmes.
+        <p className="mt-2 max-w-[65ch] text-[15px] leading-[1.7] text-[#5F6F83]">
+          Les secteurs ci-dessous orientent la conception et le suivi des
+          programmes. Les textes détaillés peuvent être complétés depuis le
+          Studio de publication.
         </p>
         <ul className="mt-4 columns-1 gap-x-8 sm:columns-2 lg:columns-3">
           {allTopics.map((topic) => (

@@ -18,8 +18,10 @@ function emptyProvince(
     id: province.id,
     code: province.code,
     name: province.name,
+    mainLocality: null,
     active: false,
     projectCount: 0,
+    activityCount: null,
     beneficiaries: null,
     sectors: [],
     programmes: [],
@@ -59,7 +61,9 @@ function buildDemoBundle(): InterventionZonesBundle {
     const province = byId.get(demo.svgId);
     if (!province) continue;
     province.active = true;
+    province.mainLocality = demo.mainLocality;
     province.projectCount = demo.projects;
+    province.activityCount = demo.activities;
     province.beneficiaries = demo.beneficiaries;
     province.sectors = [...demo.sectors];
     province.programmes = [

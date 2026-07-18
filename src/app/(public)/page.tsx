@@ -128,7 +128,14 @@ export default function HomePage() {
       </Suspense>
 
       <OrganizationIntroduction />
-      <InterventionPillars />
+
+      <Suspense
+        fallback={
+          <HomeSectionSkeleton cards={6} className="bg-white" />
+        }
+      >
+        <InterventionPillars />
+      </Suspense>
 
       <Suspense
         fallback={

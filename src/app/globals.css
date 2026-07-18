@@ -300,6 +300,36 @@ html.afd-custom-cursor * {
   cursor: none !important;
 }
 
+@keyframes collapsible-down {
+  from {
+    height: 0;
+    opacity: 0.7;
+  }
+  to {
+    height: var(--radix-collapsible-content-height);
+    opacity: 1;
+  }
+}
+
+@keyframes collapsible-up {
+  from {
+    height: var(--radix-collapsible-content-height);
+    opacity: 1;
+  }
+  to {
+    height: 0;
+    opacity: 0.7;
+  }
+}
+
+.animate-collapsible-down {
+  animation: collapsible-down 250ms ease-out;
+}
+
+.animate-collapsible-up {
+  animation: collapsible-up 200ms ease-in;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .afd-drawer-panel,
   .afd-heart-breathe,
@@ -307,7 +337,9 @@ html.afd-custom-cursor * {
   .afd-ring-pulse,
   .afd-partners-track,
   .afd-hero-media,
-  .afd-hero-glow {
+  .afd-hero-glow,
+  .animate-collapsible-down,
+  .animate-collapsible-up {
     animation: none;
   }
 

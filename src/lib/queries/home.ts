@@ -168,19 +168,17 @@ export async function getFeaturedImpactStory(): Promise<FeaturedImpactStory> {
 }
 
 export async function getLatestPublishedNews(): Promise<LatestNews[]> {
-  return withClient([], async (supabase) => {
-    const { data, error } = await supabase
-      .from("actualites")
-      .select(
-        "id, slug, title, excerpt, image_url, category, published_at",
-      )
-      .eq("published", true)
-      .order("published_at", { ascending: false })
-      .limit(3);
-
-    if (error || !data) return [];
-    return data;
-  });
+  const { getFeaturedNews } = await import("@/lib/queries/public/news");
+  const items = await getFeaturedNews(3);
+  return items.map((item) => ({
+    id: item.id,
+    slug: item.slug,
+    title: item.title,
+    excerpt: item.excerpt,
+    image_url: item.image_url,
+    category: item.category,
+    published_at: item.published_at,
+  }));
 }
 
 export async function getActivePartners(): Promise<ActivePartner[]> {

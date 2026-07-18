@@ -33,12 +33,23 @@ export function ProvinceTooltip({
       <p className="font-heading text-sm font-bold text-[var(--afd-navy)]">
         {province.name}
       </p>
+      {province.mainLocality ? (
+        <p className="mt-0.5 text-[12px] text-[var(--afd-muted)]">
+          {province.mainLocality}
+        </p>
+      ) : null}
       {province.active ? (
         <ul className="mt-2 space-y-1 text-[12px] leading-snug text-[var(--afd-muted)]">
           <li>
             {province.projectCount} projet
             {province.projectCount > 1 ? "s" : ""}
           </li>
+          {province.activityCount != null ? (
+            <li>
+              {province.activityCount} activité
+              {province.activityCount > 1 ? "s" : ""}
+            </li>
+          ) : null}
           <li>
             {province.beneficiaries != null && province.beneficiaries > 0
               ? `${format.format(province.beneficiaries)} bénéficiaires`

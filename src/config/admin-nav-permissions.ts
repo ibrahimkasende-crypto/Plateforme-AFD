@@ -14,6 +14,7 @@ export const adminNavPermissions: Record<string, Permission | Permission[]> = {
   "/admin/finances": "finances:read",
   "/admin/zones-intervention": "projets:read",
   "/admin/actualites": "actualites:read",
+  "/admin/publications": "actualites:read",
   "/admin/mediatheque": "mediatheque:read",
   "/admin/newsletter": "newsletter:read",
   "/admin/newsletter/abonnes": "newsletter:read",

@@ -51,6 +51,11 @@ export function ProvinceDetails({
           <h3 className="font-heading text-lg font-bold text-[var(--afd-navy)]">
             {province.name}
           </h3>
+          {province.mainLocality ? (
+            <p className="mt-1 text-sm text-[var(--afd-muted)]">
+              Zone principale : {province.mainLocality}
+            </p>
+          ) : null}
         </div>
       </div>
 
@@ -64,6 +69,9 @@ export function ProvinceDetails({
             <span className="font-semibold">{province.projectCount}</span> projet
             {province.projectCount > 1 ? "s" : ""} publié
             {province.projectCount > 1 ? "s" : ""}
+            {province.activityCount != null
+              ? ` · ${province.activityCount} activité${province.activityCount > 1 ? "s" : ""}`
+              : ""}
             {province.beneficiaries != null && province.beneficiaries > 0
               ? ` · ${format.format(province.beneficiaries)} bénéficiaires`
               : ""}
