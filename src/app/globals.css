@@ -375,9 +375,16 @@ body {
   min-width: 0;
 }
 
-html.afd-custom-cursor,
-html.afd-custom-cursor * {
-  cursor: none !important;
+/* Rails horizontaux mobiles — scroll natif, pas de hijacking */
+.afd-h-rail {
+  touch-action: pan-x pinch-zoom;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* L’effet liquide ne doit jamais capturer les interactions */
+.afd-water-ripple,
+.afd-water-ripple canvas {
+  pointer-events: none !important;
 }
 
 @keyframes collapsible-down {
@@ -433,8 +440,4 @@ html.afd-custom-cursor * {
     }
   }
 
-  html.afd-custom-cursor,
-  html.afd-custom-cursor * {
-    cursor: auto !important;
-  }
 }

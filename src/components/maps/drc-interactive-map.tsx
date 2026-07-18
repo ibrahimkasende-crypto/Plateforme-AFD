@@ -87,7 +87,10 @@ export function DrcInteractiveMap({
   } publié${bundle.summary.totalProjects > 1 ? "s" : ""}.`;
 
   return (
-    <div className={cn("min-w-0", className)}>
+    <div
+      className={cn("min-w-0", className)}
+      data-disable-water-effect=""
+    >
       <p id={descId} className="sr-only">
         {summaryText} Carte interactive des 26 provinces de la République
         démocratique du Congo. Utilisez Tab pour parcourir les provinces, Entrée

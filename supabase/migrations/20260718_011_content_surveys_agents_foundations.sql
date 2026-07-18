@@ -1,5 +1,49 @@
 -- Fondations contenu dynamique AFD : témoignages, appels d'offres, pages CMS,
 -- enquêtes, agents terrain. Non destructif.
+--
+-- Prérequis : la table public.medias est créée ici si absente
+-- (normalement fournie par 20260718_008_publication_studio_foundations.sql).
+
+-- ---------------------------------------------------------------------------
+-- medias (garde-fou si 008 n'a pas encore été appliquée)
+-- ---------------------------------------------------------------------------
+create table if not exists public.medias (
+  id uuid primary key default gen_random_uuid(),
+  bucket text not null,
+  storage_path text not null,
+  filename text not null,
+  original_filename text,
+  mime_type text,
+  size_bytes bigint,
+  width integer,
+  height integer,
+  alt_text text,
+  caption text,
+  credit text,
+  consent_status text not null default 'to-review'
+    check (consent_status in ('approved', 'to-review', 'not-required', 'refused')),
+  visibility text not null default 'public'
+    check (visibility in ('public', 'private', 'unlisted')),
+  content_hash text,
+  resource_type text,
+  resource_id uuid,
+  created_by uuid references auth.users (id) on delete set null,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  deleted_at timestamptz,
+  unique (bucket, storage_path)
+);
+
+create index if not exists medias_bucket_idx on public.medias (bucket);
+create index if not exists medias_created_at_idx on public.medias (created_at desc);
+create index if not exists medias_content_hash_idx on public.medias (content_hash);
+
+alter table public.medias enable row level security;
+
+drop policy if exists "Lecture publique medias" on public.medias;
+create policy "Lecture publique medias"
+on public.medias for select to anon, authenticated
+using (visibility = 'public' and deleted_at is null);
 
 -- ---------------------------------------------------------------------------
 -- temoignages

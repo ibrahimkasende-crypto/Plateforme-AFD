@@ -146,6 +146,32 @@ create table if not exists public.journal_publication (
 create index if not exists journal_publication_resource_idx
   on public.journal_publication (resource_type, resource_id, created_at desc);
 
+-- ---------------------------------------------------------------------------
+-- actualites (garde-fou si setup_complet / rename n'a pas été appliqué)
+-- ---------------------------------------------------------------------------
+create table if not exists public.actualites (
+  id uuid primary key default gen_random_uuid(),
+  title text not null,
+  slug text unique not null,
+  excerpt text not null default '',
+  content text not null default '',
+  image_url text,
+  author text default 'AFD',
+  category text default 'general',
+  published boolean default false,
+  published_at timestamptz,
+  created_at timestamptz default now(),
+  updated_at timestamptz default now()
+);
+
+alter table public.actualites enable row level security;
+
+drop policy if exists "Public actualites publiees" on public.actualites;
+drop policy if exists "Public actualites" on public.actualites;
+create policy "Public actualites publiees"
+on public.actualites for select to anon, authenticated
+using (published = true);
+
 -- Colonnes de migration éditoriale sur actualites (si absentes)
 alter table public.actualites
   add column if not exists source text,

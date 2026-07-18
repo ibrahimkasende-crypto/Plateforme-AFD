@@ -1,5 +1,5 @@
+import { PublicEffectsLayer } from "@/components/effects/public-effects-layer";
 import { AppEntryExperience } from "@/components/shared/app-entry-loader";
-import { AfdCursor } from "@/components/shared/afd-cursor";
 import { FloatingDonateButton } from "@/components/public/floating-donate-button";
 import { SiteFooter } from "@/components/public/site-footer";
 import { SiteHeader } from "@/components/public/site-header";
@@ -14,7 +14,7 @@ export default function PublicLayout({ children }: { children: ReactNode }) {
       >
         Aller au contenu principal
       </a>
-      <AfdCursor />
+      <PublicEffectsLayer />
       <SiteHeader />
       <main id="contenu-principal" className="min-w-0 flex-1">
         {children}

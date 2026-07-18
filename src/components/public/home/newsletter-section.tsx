@@ -151,6 +151,7 @@ export function NewsletterSection() {
                 onSubmit={handleSubmit(onSubmit)}
                 className="relative overflow-hidden rounded-[22px] border border-white/30 bg-white p-5 shadow-[0_24px_60px_rgba(3,27,60,0.28)] sm:p-7"
                 noValidate
+                data-disable-water-effect=""
               >
                 <div
                   className="pointer-events-none absolute -right-10 -top-10 size-36 rounded-full bg-[var(--afd-sky)]/20 blur-2xl"

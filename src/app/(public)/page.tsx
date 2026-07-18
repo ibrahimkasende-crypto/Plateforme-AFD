@@ -11,6 +11,7 @@ import { NewsletterSection } from "@/components/public/home/newsletter-section";
 import { OrganizationIntroduction } from "@/components/public/home/organization-introduction";
 import { OpenOpportunitiesSection } from "@/components/public/home/open-opportunities-section";
 import { PartnersSection } from "@/components/public/home/partners-section";
+import { SectionDivider } from "@/components/public/section-divider";
 import { homeContent } from "@/config/home-content";
 import { siteConfig } from "@/config/site";
 import {
@@ -116,7 +117,11 @@ export default function HomePage() {
         <StatsBlock />
       </Suspense>
 
+      <SectionDivider variant="curve" from="var(--afd-background)" to="var(--afd-surface)" />
+
       <OrganizationIntroduction />
+
+      <SectionDivider variant="line" className="my-2" />
 
       <Suspense
         fallback={
@@ -126,6 +131,8 @@ export default function HomePage() {
         <InterventionPillars />
       </Suspense>
 
+      <SectionDivider variant="wave-soft" from="#ffffff" to="var(--afd-surface)" />
+
       <Suspense
         fallback={
           <HomeSectionSkeleton cards={4} className="bg-[var(--afd-surface)]" />
@@ -134,9 +141,13 @@ export default function HomePage() {
         <ZonesBlock />
       </Suspense>
 
+      <SectionDivider variant="diagonal" from="var(--afd-surface)" to="var(--afd-background)" />
+
       <Suspense fallback={<HomeSectionSkeleton cards={4} />}>
         <ImpactNewsBlock />
       </Suspense>
+
+      <SectionDivider variant="line" className="my-2" />
 
       <Suspense
         fallback={
@@ -145,6 +156,8 @@ export default function HomePage() {
       >
         <OpenOpportunitiesSection />
       </Suspense>
+
+      <SectionDivider variant="curve" from="var(--afd-surface)" to="#e8f3fc" />
 
       <NewsletterSection />
 

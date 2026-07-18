@@ -70,7 +70,7 @@ export function ContactForm() {
   }
 
   return (
-    <div className={formShellClassName}>
+    <div className={formShellClassName} data-disable-water-effect="">
       <form onSubmit={handleSubmit(onSubmit)} className={formClassName} noValidate>
         <div className="sr-only" aria-hidden>
           <label htmlFor="contact-website">Site web</label>

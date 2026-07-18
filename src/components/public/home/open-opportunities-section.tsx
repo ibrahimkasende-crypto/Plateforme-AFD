@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import { HorizontalCardRail } from "@/components/mobile/horizontal-card-rail";
 import { FadeIn } from "@/components/motion/FadeIn";
 import { OpportunityCard } from "@/components/public/opportunites/opportunity-card";
 import { Section } from "@/components/shared/Section";
@@ -32,7 +33,7 @@ export async function OpenOpportunitiesSection() {
             </div>
             <Link
               href="/ressources/opportunites"
-              className="inline-flex min-h-11 shrink-0 items-center gap-2 text-sm font-bold text-[var(--afd-blue)]"
+              className="inline-flex min-h-11 shrink-0 items-center gap-2 text-sm font-bold text-[var(--afd-blue)] transition hover:translate-x-0.5"
             >
               Voir toutes les opportunités
               <ArrowRight className="size-4" aria-hidden />
@@ -40,12 +41,16 @@ export async function OpenOpportunitiesSection() {
           </div>
         </FadeIn>
 
-        <div className="mt-8 grid gap-5 md:grid-cols-2 lg:mt-10 lg:grid-cols-3">
-          {openItems.map((opportunity, index) => (
-            <FadeIn key={opportunity.id} delay={index * 0.05}>
-              <OpportunityCard opportunity={opportunity} />
-            </FadeIn>
-          ))}
+        <div className="mt-8 lg:mt-10">
+          <HorizontalCardRail
+            label="Opportunités ouvertes"
+            desktopClassName="md:grid-cols-2 lg:grid-cols-3 md:gap-5"
+            className="-mx-4 md:mx-0"
+          >
+            {openItems.map((opportunity) => (
+              <OpportunityCard key={opportunity.id} opportunity={opportunity} />
+            ))}
+          </HorizontalCardRail>
         </div>
       </SiteContainer>
     </Section>
