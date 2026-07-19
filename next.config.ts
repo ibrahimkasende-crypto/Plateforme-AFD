@@ -1,10 +1,8 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // Déplace l’indicateur Next.js pour ne plus masquer « Voir le site public ».
-  devIndicators: {
-    position: "bottom-right",
-  },
+  // Désactive le N Next.js ; le chargement admin utilise le logo AFD.
+  devIndicators: false,
   images: {
     remotePatterns: [
       {

@@ -1,10 +1,11 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { useMemo, useState, type CSSProperties, type ReactNode } from "react";
+import { Suspense, useMemo, useState, type CSSProperties, type ReactNode } from "react";
 import { AdminHeader } from "@/components/admin/admin-header";
 import { AdminMobileSidebar } from "@/components/admin/admin-mobile-sidebar";
 import { AdminSidebar } from "@/components/admin/admin-sidebar";
+import { AfdPageLoadingIndicator } from "@/components/admin/afd-page-loading-indicator";
 import { roleHasPermission } from "@/config/permissions";
 import type { AdminViewer, SidebarBadges } from "@/features/statistiques/types/dashboard";
 import { useAdminSidebarCollapsed } from "@/hooks/use-admin-sidebar-collapsed";
@@ -93,6 +94,10 @@ export function AdminShell({
           {children}
         </main>
       </div>
+
+      <Suspense fallback={null}>
+        <AfdPageLoadingIndicator />
+      </Suspense>
     </div>
   );
 }

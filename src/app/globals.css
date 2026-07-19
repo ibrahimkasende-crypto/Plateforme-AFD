@@ -212,8 +212,25 @@
   }
 }
 
+@keyframes afd-logo-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+/* Pendant une navigation admin : curseur d’attente + pas de reclics */
+html.afd-page-navigating,
+html.afd-page-navigating * {
+  cursor: wait !important;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .motion-safe\:animate-\[afd-logo-breathe_4\.5s_ease-in-out_infinite\],
+  .motion-safe\:animate-\[afd-logo-float_2\.8s_ease-in-out_infinite\],
   .animate-\[afd-nebula_18s_ease-in-out_infinite\],
   .animate-\[afd-nebula_22s_ease-in-out_infinite_reverse\] {
     animation: none !important;

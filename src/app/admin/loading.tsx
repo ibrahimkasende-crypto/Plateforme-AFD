@@ -1,5 +1,7 @@
-import { LoadingState } from "@/components/shared/LoadingState";
+import { AfdLoadingState } from "@/components/admin/afd-loading-state";
 
 export default function AdminLoading() {
-  return <LoadingState label="Chargement de l’administration…" />;
+  return (
+    <AfdLoadingState label="Chargement de l’administration…" />
+  );
 }

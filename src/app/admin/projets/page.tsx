@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { EmptyState } from "@/components/shared/EmptyState";
+import { ImportRapportButton } from "@/features/document-intelligence/components/ImportRapportButton";
 import { archiveProjet, restoreProjet } from "@/features/projets/actions/manage-projet";
 import { requirePermission } from "@/lib/auth/require-permission";
 import { getAdminProjets } from "@/lib/queries/admin/projets";
@@ -31,9 +32,12 @@ export default async function AdminProjetsPage({
           <h1 className="text-2xl font-bold">Projets</h1>
           <p className="text-sm text-[var(--afd-muted)]">Projets terrain rattachés aux programmes.</p>
         </div>
-        <Link className="rounded bg-[var(--afd-blue)] px-4 py-2 text-white" href="/admin/projets/nouvelle">
-          Nouveau projet
-        </Link>
+        <div className="flex flex-wrap gap-2">
+          <ImportRapportButton moduleCible="projets" typeDocument="rapport_projet" />
+          <Link className="rounded bg-[var(--afd-blue)] px-4 py-2 text-white" href="/admin/projets/nouvelle">
+            Nouveau projet
+          </Link>
+        </div>
       </div>
 
       <form className="flex flex-wrap gap-3">

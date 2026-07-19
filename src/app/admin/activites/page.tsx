@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { AdminEmptyCreate } from "@/components/admin/module/admin-empty-create";
 import { AdminPageHeader } from "@/components/admin/module/admin-page-header";
+import { ImportRapportButton } from "@/features/document-intelligence/components/ImportRapportButton";
 import { updateActiviteStatus } from "@/features/activites/actions/manage-activite";
 import { requirePermission } from "@/lib/auth/require-permission";
 import { getAdminActivites } from "@/lib/queries/admin/activites";
@@ -21,6 +22,9 @@ export default async function AdminActivitesPage({
         description="Activités terrain et événements liés aux programmes et projets."
         createHref="/admin/activites/nouvelle"
         createLabel="Nouvelle activité"
+        actions={
+          <ImportRapportButton moduleCible="activites" typeDocument="rapport_activite" />
+        }
       />
 
       <form className="flex flex-wrap gap-3">

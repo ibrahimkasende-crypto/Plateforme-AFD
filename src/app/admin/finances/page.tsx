@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { AdminPageHeader } from "@/components/admin/module/admin-page-header";
+import { ImportRapportButton } from "@/features/document-intelligence/components/ImportRapportButton";
 import { requirePermission } from "@/lib/auth/require-permission";
 import { getFinancesSummary } from "@/lib/queries/admin/finances";
 
@@ -23,6 +24,11 @@ export default async function AdminFinancesPage() {
             <Link href="/admin/finances/transactions" className="rounded border px-3 py-2 text-sm">
               Transactions
             </Link>
+            <ImportRapportButton
+              moduleCible="finances"
+              typeDocument="rapport_financier"
+              devise="USD"
+            />
           </>
         }
       />

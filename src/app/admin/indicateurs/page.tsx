@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { EmptyState } from "@/components/shared/EmptyState";
+import { ImportRapportButton } from "@/features/document-intelligence/components/ImportRapportButton";
 import {
   activateChiffreImpact,
   deactivateChiffreImpact,
@@ -25,9 +26,12 @@ export default async function AdminIndicateursPage({
             Chiffres clés affichés sur le site — seuls les indicateurs validés sont publics.
           </p>
         </div>
-        <Link className="rounded bg-[var(--afd-blue)] px-4 py-2 text-white" href="/admin/indicateurs/nouveau">
-          Nouvel indicateur
-        </Link>
+        <div className="flex flex-wrap gap-2">
+          <ImportRapportButton moduleCible="indicateurs" typeDocument="rapport_indicateurs" />
+          <Link className="rounded bg-[var(--afd-blue)] px-4 py-2 text-white" href="/admin/indicateurs/nouveau">
+            Nouvel indicateur
+          </Link>
+        </div>
       </div>
 
       <form className="flex flex-wrap gap-3">

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { AdminEmptyCreate } from "@/components/admin/module/admin-empty-create";
 import { AdminPageHeader } from "@/components/admin/module/admin-page-header";
+import { ImportRapportButton } from "@/features/document-intelligence/components/ImportRapportButton";
 import { saveBudget } from "@/features/finances/actions/manage-finances";
 import { requirePermission } from "@/lib/auth/require-permission";
 import { getAdminBudgets } from "@/lib/queries/admin/finances";
@@ -15,9 +16,12 @@ export default async function AdminFinancesBudgetsPage() {
         title="Budgets"
         description="Lignes budgétaires par programme ou projet."
         actions={
-          <Link href="/admin/finances" className="rounded border px-3 py-2 text-sm">
-            Vue finances
-          </Link>
+          <>
+            <Link href="/admin/finances" className="rounded border px-3 py-2 text-sm">
+              Vue finances
+            </Link>
+            <ImportRapportButton moduleCible="budgets" typeDocument="budget" />
+          </>
         }
       />
       <form action={saveBudget} className="grid max-w-3xl gap-3 rounded border bg-white p-4 sm:grid-cols-2">

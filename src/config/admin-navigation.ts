@@ -41,6 +41,8 @@ export const adminNavGroups: AdminNavGroupDef[] = [
       { label: "Zones d'intervention", href: "/admin/zones-intervention" },
       { label: "Urgences", href: "/admin/urgences" },
       { label: "Clusters", href: "/admin/clusters" },
+      { label: "Stocks", href: "/admin/stocks" },
+      { label: "Logistique", href: "/admin/logistique" },
     ],
   },
   {
@@ -110,6 +112,7 @@ export const adminNavGroups: AdminNavGroupDef[] = [
     items: [
       { label: "Rapports", href: "/admin/rapports" },
       { label: "Documents", href: "/admin/documents" },
+      { label: "Import intelligent", href: "/admin/import-intelligent" },
       { label: "Générateur", href: "/admin/rapports/nouveau" },
       { label: "Exports", href: "/admin/exports" },
     ],

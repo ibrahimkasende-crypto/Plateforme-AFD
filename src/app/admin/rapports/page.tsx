@@ -1,7 +1,13 @@
 import Link from "next/link";
+import { ImportRapportButton } from "@/features/document-intelligence/components/ImportRapportButton";
 import { requirePermission } from "@/lib/auth/require-permission";
 
 const LINKS = [
+  {
+    href: "/admin/import-intelligent/nouveau",
+    title: "Import intelligent",
+    description: "OCR, extraction et validation documentaire.",
+  },
   {
     href: "/admin/rapports/nouveau",
     title: "Nouveau rapport",
@@ -29,11 +35,14 @@ export default async function AdminRapportsHubPage() {
 
   return (
     <main className="space-y-6 p-6">
-      <div>
-        <h1 className="font-display text-2xl font-extrabold">Rapports</h1>
-        <p className="mt-1 text-sm text-[var(--admin-muted)]">
-          Hub des rapports institutionnels AFD.
-        </p>
+      <div className="flex flex-wrap items-end justify-between gap-3">
+        <div>
+          <h1 className="font-display text-2xl font-extrabold">Rapports</h1>
+          <p className="mt-1 text-sm text-[var(--admin-muted)]">
+            Hub des rapports institutionnels AFD.
+          </p>
+        </div>
+        <ImportRapportButton moduleCible="rapports" typeDocument="rapport_mensuel" />
       </div>
       <ul className="grid gap-3 sm:grid-cols-2">
         {LINKS.map((link) => (

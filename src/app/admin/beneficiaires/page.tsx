@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { AdminEmptyCreate } from "@/components/admin/module/admin-empty-create";
 import { AdminPageHeader } from "@/components/admin/module/admin-page-header";
+import { ImportRapportButton } from "@/features/document-intelligence/components/ImportRapportButton";
 import { requirePermission } from "@/lib/auth/require-permission";
 import { getAdminBeneficiaires } from "@/lib/queries/admin/beneficiaires";
 
@@ -20,6 +21,12 @@ export default async function AdminBeneficiairesPage({
         description="Agrégats de bénéficiaires par période et province."
         createHref="/admin/beneficiaires/nouveau"
         createLabel="Nouvel agrégat"
+        actions={
+          <ImportRapportButton
+            moduleCible="beneficiaires"
+            typeDocument="rapport_beneficiaires"
+          />
+        }
       />
       <form className="flex flex-wrap gap-3">
         <input name="q" defaultValue={q} placeholder="Province" className="rounded border p-2" />

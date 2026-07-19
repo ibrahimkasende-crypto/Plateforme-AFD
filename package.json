@@ -8,6 +8,9 @@
     "start": "next start",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:unit": "vitest run",
+    "ocr:worker": "tsx scripts/ocr-worker.ts",
     "import:partner-logos": "tsx scripts/import-partner-logos-from-legacy-site.ts",
     "seed:presentation": "npx tsx scripts/seed-presentation.ts",
     "seed:presentation:clean": "npx tsx scripts/clean-presentation.ts",
@@ -28,7 +31,10 @@
     "clsx": "^2.1.1",
     "date-fns": "^4.4.0",
     "echarts": "^6.1.0",
+    "exceljs": "^4.4.0",
+    "file-type": "^22.0.1",
     "lucide-react": "^1.24.0",
+    "mammoth": "^1.12.0",
     "motion": "^12.42.2",
     "next": "16.2.10",
     "react": "19.2.4",
@@ -37,7 +43,9 @@
     "recharts": "^3.9.2",
     "sonner": "^2.0.7",
     "tailwind-merge": "^3.6.0",
+    "tesseract.js": "^7.0.0",
     "three": "^0.185.1",
+    "unpdf": "^1.6.2",
     "zod": "^4.4.3"
   },
   "devDependencies": {
@@ -51,6 +59,8 @@
     "eslint-config-next": "16.2.10",
     "supabase": "^2.109.1",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "tsx": "^4.23.1",
+    "typescript": "^5",
+    "vitest": "^4.1.10"
   }
 }

@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { Bell } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -12,17 +13,18 @@ export function AdminNotifications({ count, className }: AdminNotificationsProps
   const displayCount = count && count > 0 ? (count > 99 ? "99+" : String(count)) : null;
 
   return (
-    <button
-      type="button"
+    <Link
+      href="/admin/import-intelligent"
       className={cn(
         "relative inline-flex size-10 items-center justify-center rounded-xl text-slate-600 transition hover:bg-slate-100",
         className,
       )}
       aria-label={
         displayCount
-          ? `${displayCount} notification(s) non lue(s)`
-          : "Notifications"
+          ? `${displayCount} notification(s) — import intelligent / OCR`
+          : "Notifications import intelligent"
       }
+      title="Notifications (OCR, messages)"
     >
       <Bell className="size-5" aria-hidden />
       {displayCount ? (
@@ -30,6 +32,6 @@ export function AdminNotifications({ count, className }: AdminNotificationsProps
           {displayCount}
         </span>
       ) : null}
-    </button>
+    </Link>
   );
 }

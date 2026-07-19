@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { AdminEmptyCreate } from "@/components/admin/module/admin-empty-create";
 import { AdminPageHeader } from "@/components/admin/module/admin-page-header";
+import { ImportRapportButton } from "@/features/document-intelligence/components/ImportRapportButton";
 import { saveDepense } from "@/features/finances/actions/manage-finances";
 import { requirePermission } from "@/lib/auth/require-permission";
 import { getAdminDepenses } from "@/lib/queries/admin/finances";
@@ -15,9 +16,12 @@ export default async function AdminFinancesDepensesPage() {
         title="Dépenses"
         description="Dépenses enregistrées par programme ou projet."
         actions={
-          <Link href="/admin/finances" className="rounded border px-3 py-2 text-sm">
-            Vue finances
-          </Link>
+          <>
+            <Link href="/admin/finances" className="rounded border px-3 py-2 text-sm">
+              Vue finances
+            </Link>
+            <ImportRapportButton moduleCible="depenses" typeDocument="etat_depenses" />
+          </>
         }
       />
       <form action={saveDepense} className="grid max-w-3xl gap-3 rounded border bg-white p-4 sm:grid-cols-2">
