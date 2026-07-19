@@ -1,43 +1,31 @@
-# Progression d’implémentation — Plateforme-AFD
-
-## Vague 0 — Audit forensique (2026-07-19)
+## Vague 1 — Fondations (2026-07-19)
 
 ### Travail effectué
-- Inventaire navigation (53 entrées) et routes admin (174 `page.tsx`)
-- Inventaire features (44) et queries admin (30)
-- Analyse migrations (24) et politiques RLS permissives (030)
-- Matrice de preuve 42 modules (MD + JSON)
-- Baseline admin
-- Vérification `typecheck` OK, tests unitaires 26/26
-- Test E2E anti-placeholder dédié
-- Aucune modification UI « cosmétique » de modules
+- Migration `20260719_051_secure_foundations.sql` appliquée sur projet lié
+- RLS tables 030 durcie (`has_permission` / `is_active_admin`)
+- `platform_owner` reconnu dans `has_role` / `has_permission`
+- Workflows + approbations (tables + service)
+- Background jobs (tables + enqueue)
+- Notifications (tables + service)
+- Référentiels `ref_provinces`, `ref_devises`, `ref_unites`, `ref_statuts`
+- Vue `v_audit_unified` + trigger append-only `audit_logs`
+- Socle stocks/logistique (tables + UI stocks/mouvements + logistique hub)
+- Helpers `src/lib/auth/guards.ts`
+- Composants WorkflowTimeline / ApprovalPanel
+- Tests unitaires privilege-guards + stocks/payroll
+- Script SQL `tests/rls/wave1_foundations_rls.sql`
+- Docs DATABASE_CHANGELOG + EXTERNAL_INTEGRATIONS
 
-### Fichiers
-- `docs/MODULE_COMPLETION_MATRIX.md`
-- `docs/MODULE_COMPLETION_MATRIX.json`
-- `docs/ADMIN_IMPLEMENTATION_BASELINE.md`
-- `docs/IMPLEMENTATION_PROGRESS.md`
-- `docs/implementation-progress.json`
-- `tests/e2e/admin-no-placeholder.spec.ts`
-
-### Migrations
-- Aucune nouvelle migration (audit uniquement)
-
-### Permissions
-- Inventoriées ; durcissement reporté vague 1
-
-### Tests
-- Unitaires : OK
-- E2E anti-placeholder : créé (exécution complète nécessite credentials admin)
-
-### Résultat
-- **0 module opérationnel** au standard strict
-- Placeholders littéraux UI : 0
-- Risque RLS 030 documenté
-
-### Problèmes
-- CLI `migration list` : suivi remote partiel / noms courts
-- Sous-agents Task indisponibles (quota) — audit manuel
+### Gate Vague 1
+- [x] Politiques sensibles 030 remplacées
+- [x] Permissions stocks/logistique/workflows/jobs/notifications ajoutées TS + SQL
+- [x] Workflows / jobs / notifications créés
+- [x] Référentiels créés
+- [x] CRUD partagés déjà présents (data/forms) + workflows UI
+- [x] Journal append-only
+- [x] typecheck OK / tests unitaires OK
+- [~] Types Supabase : régénération CLI à finaliser si token types
+- [~] Tests RLS SQL prêts (exécution manuelle / CI)
 
 ### Prochaine étape
-- **Vague 1 — Fondations** : durcir RLS 030, workflows, jobs, notifications, référentiels, composants CRUD partagés
+Vague 2 — finaliser stocks (entrepôts seed), logistique CRUD, chaîne programme→projet→activité
