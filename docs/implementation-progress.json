@@ -1,34 +1,31 @@
 {
-  "updatedAt": "2026-07-19T12:30:00+01:00",
-  "currentWave": 0,
-  "waves": [
-    {
-      "id": 0,
-      "name": "audit-forensique",
-      "status": "completed",
-      "completedAt": "2026-07-19",
-      "modulesOperational": 0,
-      "modulesAudited": 42,
-      "files": [
-        "docs/MODULE_COMPLETION_MATRIX.md",
-        "docs/MODULE_COMPLETION_MATRIX.json",
-        "docs/ADMIN_IMPLEMENTATION_BASELINE.md",
-        "docs/IMPLEMENTATION_PROGRESS.md",
-        "docs/implementation-progress.json",
-        "tests/e2e/admin-no-placeholder.spec.ts"
-      ],
-      "migrations": [],
-      "tests": {
-        "typecheck": "ok",
-        "unit": "26/26",
-        "e2eAntiPlaceholder": "created"
-      },
-      "problems": [
-        "RLS USING true on 030 tables",
-        "0 modules meet operationnel bar",
-        "stocks/logistics mock hubs"
-      ],
-      "nextStep": "Vague 1 — fondations RLS, workflows, jobs, notifications, référentiels"
-    }
-  ]
+  "updatedAt": "2026-07-19",
+  "branch": "reconstruction-nextjs",
+  "waves": {
+    "0": "done",
+    "1": "done_gate_partial_rls_ci",
+    "2": "advanced",
+    "3": "advanced",
+    "4": "partial_external_blocked",
+    "5": "advanced",
+    "6": "advanced",
+    "7": "advanced",
+    "8": "advanced",
+    "9": "partial"
+  },
+  "modulesOperationnel": 0,
+  "modulesBloqueIntegrationExterne": ["newsletter", "dons_serdipay", "ocr_cloud"],
+  "validations": {
+    "typecheck": "ok",
+    "unitTests": "40/40",
+    "lint": "0 errors (warnings only)",
+    "build": "ok",
+    "gitPush": false
+  },
+  "migrationsAppliedTargeted": [
+    "20260719_051_secure_foundations.sql",
+    "20260719_052_operations_wave2.sql",
+    "20260719_053_waves_3_8_consolidation.sql"
+  ],
+  "note": "Aucun module ne porte encore le statut operationnel au standard strict (preuves E2E/RLS CI). Les fonctionnalités réalisables sans fournisseur externe sont largement implantées."
 }

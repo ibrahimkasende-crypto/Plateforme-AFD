@@ -10,29 +10,26 @@
 
 Un module n’est marqué `operationnel` que s’il dispose de preuves pour : routes, navigation, tables, RLS, permissions, services, types, Zod, liste/recherche/filtres/pagination, CRUD, workflow, journal, tests, docs.
 
-**Résultat global :** **0 module `operationnel`** selon ce standard strict. Plusieurs modules sont `fonctionnel_non_teste` ou `partiel`.
+**Résultat global :** **0 module `operationnel`** selon le standard strict (preuves E2E/RLS automatisées complètes). De nombreux modules sont désormais `fonctionnel_non_teste` après les vagues 1–8.
 
 Sources :
 
-- `src/config/admin-navigation.ts` (53 entrées sidebar)
-- 174 fichiers `src/app/admin/**/page.tsx`
-- 24 migrations `supabase/migrations/`
-- `src/features/*` (44 dossiers)
-- `src/lib/queries/admin/*` (30 fichiers)
-- `npm run typecheck` OK ; `npm run test` 26/26 OK
-- Politiques permissives : `20260719_030_admin_missing_modules.sql` (`USING (true)` pour tables admin manquantes)
+- `src/config/admin-navigation.ts`
+- Migrations `051`, `052`, `053` appliquées (query ciblée)
+- `npm run typecheck` OK ; `npm run test` 40/40 OK
+- Politiques permissives 030 remplacées en 051
 
-## Synthèse par statut
+## Synthèse par statut (mise à jour 2026-07-19)
 
-| Statut | Nombre |
+| Statut | Nombre (approx.) |
 |--------|--------|
-| absent | 4 |
-| maquette_seulement | 5 |
-| partiel | 21 |
-| fonctionnel_non_securise | 4 |
-| fonctionnel_non_teste | 11 |
+| absent | 2 |
+| maquette_seulement | 1 |
+| partiel | 12 |
+| fonctionnel_non_securise | 1 |
+| fonctionnel_non_teste | 28 |
 | operationnel | 0 |
-| bloque_integration_externe | 2 |
+| bloque_integration_externe | 3 |
 | **Total entrées matrice** | **47** |
 
 > Le cahier des charges parle d’environ 42 points d’entrée. La matrice en compte **47** en incluant les modules transversaux (notifications, recherche, jobs) et le découpage finances / stocks.
