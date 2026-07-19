@@ -1,6 +1,10 @@
 @import "tailwindcss";
 
 :root {
+  /* Polices système — pas de dépendance réseau Google Fonts au build */
+  --font-body: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-heading: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+
   /* Palette officielle AFD */
   --afd-blue: #0877d1;
   --afd-blue-hover: #0565b4;

@@ -1,20 +1,13 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, Manrope } from "next/font/google";
 import { AppProviders } from "@/providers/app-providers";
 import { siteConfig } from "@/config/site";
 import "./globals.css";
 
-const inter = Inter({
-  variable: "--font-body",
-  subsets: ["latin"],
-  display: "swap",
-});
-
-const manrope = Manrope({
-  variable: "--font-heading",
-  subsets: ["latin"],
-  display: "swap",
-});
+/**
+ * Polices : variables CSS locales (globals.css).
+ * next/font/google est évité ici pour ne pas bloquer build/dev
+ * lorsque fonts.googleapis.com est inaccessible (écran blanc / build fail).
+ */
 
 export const metadata: Metadata = {
   title: {
@@ -41,11 +34,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="fr"
-      suppressHydrationWarning
-      className={`${inter.variable} ${manrope.variable} h-full antialiased`}
-    >
+    <html lang="fr" suppressHydrationWarning className="h-full antialiased">
       <head>
         <script
           dangerouslySetInnerHTML={{
