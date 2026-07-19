@@ -1,5 +1,23 @@
 # Changelog base de données — Plateforme-AFD
 
+## 2026-07-19 — `20260719_053_waves_3_8_consolidation.sql`
+
+### Objectif
+Consolider finances (versions, transactions), valeurs d’indicateurs, sync enquêtes hors-ligne, appareils agents, consentements témoignages, snapshots santé.
+
+### Tables / colonnes
+- `finances_budgets` : version_num, statut, parent_budget_id, notes
+- `finances_depenses` : justification, fournisseur, approved_*
+- `finances_transactions`
+- `indicateur_valeurs`
+- `enquete_sync_queue`
+- `agent_appareils`
+- `temoignage_consentements`
+- `system_health_snapshots`
+
+### Vérification
+- Appliquée via `npx supabase db query --linked -f ...053...` (pas de `db push` global)
+
 ## 2026-07-19 — `20260719_052_operations_wave2.sql`
 
 ### Objectif
