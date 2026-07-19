@@ -32,9 +32,9 @@
 | 22 | lint | **OK** |
 | 23 | build | **OK** (`npm run build`) |
 | 24 | Dépôt GitHub | `ibrahimkasende-crypto/Platefrome-AFD` |
-| 25 | Branche poussée | `fix/final-dashboard-and-hostinger` |
-| 26 | Pull Request | Créée si `gh` disponible |
-| 27 | Fusion main | Non fusionnée automatiquement |
+| 25 | Branche poussée | `fix/final-dashboard-and-hostinger` ✅ |
+| 26 | Pull Request | `gh` absent — ouvrir : https://github.com/ibrahimkasende-crypto/Platefrome-AFD/pull/new/fix/final-dashboard-and-hostinger |
+| 27 | Fusion main | Non fusionnée (manuel après revue) |
 | 28 | Config Hostinger | `docs/HOSTINGER_DEPLOYMENT_FINAL.md` |
 | 29 | Variables documentées | `docs/HOSTINGER_ENVIRONMENT_VARIABLES.md` |
 | 30 | URL déployée | Non — pas d’accès hPanel |
