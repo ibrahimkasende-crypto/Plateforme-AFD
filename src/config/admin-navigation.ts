@@ -135,6 +135,7 @@ export const adminNavGroups: AdminNavGroupDef[] = [
     permissionGate: ["journal:read", "parametres:manage", "utilisateurs:write"],
     items: [
       { label: "Journal d'activité", href: "/admin/journal-activite" },
+      { label: "Recherche globale", href: "/admin/recherche" },
       { label: "Sessions", href: "/admin/securite/sessions" },
       { label: "Sécurité", href: "/admin/securite" },
       { label: "Mon profil", href: "/admin/mon-profil" },

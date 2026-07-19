@@ -1,5 +1,6 @@
 import { AdminPageHeader } from "@/components/admin/module/admin-page-header";
 import { requestExportJobAction } from "@/features/exports/actions/request-export";
+import { CsvExportDownloadForm } from "@/features/exports/components/csv-export-download-form";
 import { requirePermission } from "@/lib/auth/require-permission";
 import { createClientSafe } from "@/lib/supabase/safe";
 
@@ -21,24 +22,37 @@ export default async function AdminExportsPage() {
     <main className="space-y-6 p-6">
       <AdminPageHeader
         title="Exports"
-        description="Exports asynchrones via file persistante. Aucun faux succès."
+        description="CSV immédiat pour volumes modérés ; file asynchrone pour les gros exports."
       />
-      <form action={requestExportJobAction} className="grid gap-3 rounded border bg-white p-4 sm:grid-cols-3">
-        <select name="module" className="rounded border p-2 text-sm" defaultValue="beneficiaires">
-          <option value="beneficiaires">Bénéficiaires</option>
-          <option value="activites">Activités</option>
-          <option value="dons">Dons</option>
-          <option value="finances">Finances</option>
-        </select>
-        <select name="format" className="rounded border p-2 text-sm" defaultValue="csv">
-          <option value="csv">CSV</option>
-          <option value="xlsx">Excel</option>
-          <option value="pdf">PDF</option>
-        </select>
-        <button type="submit" className="rounded bg-[var(--afd-blue)] px-4 py-2 text-sm text-white">
-          Mettre en file
-        </button>
-      </form>
+
+      <section className="space-y-2">
+        <h2 className="font-semibold">Export CSV immédiat</h2>
+        <CsvExportDownloadForm />
+      </section>
+
+      <section className="space-y-2">
+        <h2 className="font-semibold">File asynchrone (worker)</h2>
+        <form
+          action={requestExportJobAction}
+          className="grid gap-3 rounded border bg-white p-4 sm:grid-cols-3"
+        >
+          <select name="module" className="rounded border p-2 text-sm" defaultValue="beneficiaires">
+            <option value="beneficiaires">Bénéficiaires</option>
+            <option value="activites">Activités</option>
+            <option value="dons">Dons</option>
+            <option value="finances">Finances</option>
+          </select>
+          <select name="format" className="rounded border p-2 text-sm" defaultValue="csv">
+            <option value="csv">CSV</option>
+            <option value="xlsx">Excel</option>
+            <option value="pdf">PDF</option>
+          </select>
+          <button type="submit" className="rounded bg-[var(--afd-blue)] px-4 py-2 text-sm text-white">
+            Mettre en file
+          </button>
+        </form>
+      </section>
+
       <div className="overflow-x-auto rounded border bg-white">
         <table className="w-full text-left text-sm">
           <thead>
