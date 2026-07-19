@@ -63,12 +63,22 @@ export default async function AdminActivitesPage({
               {items.map((item) => (
                 <tr className="border-t" key={item.id}>
                   <td className="p-3">{item.activity_date ?? "—"}</td>
-                  <td>{item.title}</td>
+                  <td>
+                    <Link
+                      href={`/admin/activites/${item.id}`}
+                      className="text-[var(--afd-blue)] hover:underline"
+                    >
+                      {item.title}
+                    </Link>
+                  </td>
                   <td>{item.type}</td>
                   <td>{item.province ?? "—"}</td>
                   <td>{item.total}</td>
                   <td>{item.status}</td>
                   <td className="space-x-2 p-3 text-right">
+                    <Link href={`/admin/activites/${item.id}`} className="text-[var(--afd-blue)]">
+                      Détail
+                    </Link>
                     {item.status !== "realisee" ? (
                       <form action={updateActiviteStatus.bind(null, item.id, "realisee")} className="inline">
                         <button type="submit" className="text-[var(--afd-blue)]">

@@ -8,12 +8,13 @@
     "totalModules": 47,
     "note": "47 entrées dans la matrice (points d’entrée + transversaux). Le cahier cite ~42 ; l’écart couvre RH agrégé vs sous-routes et modules transversaux.",
     "absent": 4,
-    "maquette_seulement": 5,
-    "partiel": 21,
-    "fonctionnel_non_securise": 4,
-    "fonctionnel_non_teste": 11,
+    "maquette_seulement": 3,
+    "partiel": 18,
+    "fonctionnel_non_securise": 3,
+    "fonctionnel_non_teste": 17,
     "operationnel": 0,
     "bloque_integration_externe": 2,
+    "noteStatuts": "Mise à jour Vague 2 partielle — stocks/logistique/urgences/clusters/activites passés en fonctionnel_non_teste",
     "adminPageFiles": 174,
     "navSidebarEntries": 53,
     "migrationsLocal": 24,
@@ -65,9 +66,9 @@
       "domaine": "Opérations",
       "nom": "Activités",
       "routePrincipale": "/admin/activites",
-      "statut": "fonctionnel_non_securise",
-      "preuves": ["src/app/admin/activites/page.tsx", "supabase/migrations/20260719_030_admin_missing_modules.sql"],
-      "travauxRestants": ["détail [id]", "RLS stricte (retirer USING true)", "preuves terrain"]
+      "statut": "fonctionnel_non_teste",
+      "preuves": ["src/app/admin/activites/[id]/page.tsx", "src/features/activites/actions/manage-activite.ts", "sync beneficiaires_agregats", "RLS 051"],
+      "travauxRestants": ["jalons", "tests E2E", "preuves terrain"]
     },
     {
       "id": "zones",
@@ -83,36 +84,36 @@
       "domaine": "Opérations",
       "nom": "Urgences",
       "routePrincipale": "/admin/urgences",
-      "statut": "partiel",
-      "preuves": ["src/app/admin/urgences/page.tsx", "table urgences"],
-      "travauxRestants": ["détail", "sitrep", "stocks liés", "clôture"]
+      "statut": "fonctionnel_non_teste",
+      "preuves": ["src/app/admin/urgences/[id]/page.tsx", "urgence_sitreps", "migration 052"],
+      "travauxRestants": ["stocks liés", "tests E2E"]
     },
     {
       "id": "clusters",
       "domaine": "Opérations",
       "nom": "Clusters",
       "routePrincipale": "/admin/clusters",
-      "statut": "partiel",
-      "preuves": ["src/features/clusters/actions/manage-cluster.ts"],
-      "travauxRestants": ["réunions", "décisions", "membres"]
+      "statut": "fonctionnel_non_teste",
+      "preuves": ["src/app/admin/clusters/[id]/page.tsx", "cluster_membres", "cluster_reunions"],
+      "travauxRestants": ["engagements", "tests"]
     },
     {
       "id": "stocks",
       "domaine": "Opérations",
       "nom": "Stocks",
       "routePrincipale": "/admin/stocks",
-      "statut": "maquette_seulement",
-      "preuves": ["src/app/admin/stocks/page.tsx — hub OCR sans CRUD stock"],
-      "travauxRestants": ["articles", "entrepôts", "mouvements", "inventaires", "alertes"]
+      "statut": "fonctionnel_non_teste",
+      "preuves": ["src/features/stocks/", "v_stock_disponibles", "migrations 051/052"],
+      "travauxRestants": ["inventaires UI", "tests E2E/RLS"]
     },
     {
       "id": "logistique",
       "domaine": "Opérations",
       "nom": "Logistique",
       "routePrincipale": "/admin/logistique",
-      "statut": "maquette_seulement",
-      "preuves": ["src/app/admin/logistique/page.tsx"],
-      "travauxRestants": ["demandes", "achats", "véhicules", "missions", "carburant"]
+      "statut": "fonctionnel_non_teste",
+      "preuves": ["src/features/logistique/", "transitions statut demandes/missions"],
+      "travauxRestants": ["lignes articles UI", "fournisseurs"]
     },
     {
       "id": "beneficiaires",
