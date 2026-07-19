@@ -2,6 +2,17 @@ import "server-only";
 
 import type { SupabaseClient } from "@supabase/supabase-js";
 
+export type UserNotificationRow = {
+  id: string;
+  titre: string;
+  message: string;
+  module: string | null;
+  priorite: string | null;
+  lien: string | null;
+  created_at: string | null;
+  lu_at: string | null;
+};
+
 export async function createNotification(
   supabase: SupabaseClient,
   input: {
@@ -68,4 +79,69 @@ export async function markAllNotificationsRead(
     .update({ lu_at: new Date().toISOString() } as never)
     .eq("user_id", userId)
     .is("lu_at", null);
+}
+
+export async function countUnreadNotifications(
+  supabase: SupabaseClient,
+  userId: string,
+): Promise<number> {
+  const { count, error } = await supabase
+    .from("notification_recipients" as never)
+    .select("id", { count: "exact", head: true })
+    .eq("user_id", userId)
+    .is("lu_at", null);
+  if (error) return 0;
+  return count ?? 0;
+}
+
+export async function listUserNotifications(
+  supabase: SupabaseClient,
+  userId: string,
+  opts: { unreadOnly?: boolean; limit?: number } = {},
+): Promise<UserNotificationRow[]> {
+  let query = supabase
+    .from("notification_recipients" as never)
+    .select(
+      "lu_at, notification_id, notifications(id, titre, message, module, priorite, lien, created_at)",
+    )
+    .eq("user_id", userId)
+    .limit(opts.limit ?? 50);
+
+  if (opts.unreadOnly) {
+    query = query.is("lu_at", null);
+  }
+
+  const { data, error } = await query;
+  if (error || !data) return [];
+
+  type Row = {
+    lu_at: string | null;
+    notifications: {
+      id: string;
+      titre: string;
+      message: string;
+      module: string | null;
+      priorite: string | null;
+      lien: string | null;
+      created_at: string | null;
+    } | null;
+  };
+
+  return (data as unknown as Row[])
+    .map((row) => {
+      const n = row.notifications;
+      if (!n) return null;
+      return {
+        id: n.id,
+        titre: n.titre,
+        message: n.message,
+        module: n.module,
+        priorite: n.priorite,
+        lien: n.lien,
+        created_at: n.created_at,
+        lu_at: row.lu_at,
+      };
+    })
+    .filter((x): x is UserNotificationRow => Boolean(x))
+    .sort((a, b) => String(b.created_at).localeCompare(String(a.created_at)));
 }

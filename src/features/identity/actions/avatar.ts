@@ -35,7 +35,9 @@ export async function uploadAvatarAction(formData: FormData): Promise<void> {
       upsert: true,
     });
 
-  if (uploadError) return;
+  if (uploadError) {
+    throw new Error(uploadError.message || "Échec upload avatar");
+  }
 
   await supabase
     .from("profils_administrateurs" as never)

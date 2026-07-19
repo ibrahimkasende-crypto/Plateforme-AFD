@@ -1,16 +1,19 @@
 "use client";
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
 import {
   Maximize2,
   Menu,
-  MessageSquare,
   Minimize2,
   Settings,
 } from "lucide-react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useCallback, useMemo, useState } from "react";
-import { AdminNotifications } from "@/components/admin/admin-notifications";
+import { AdminMessagesButton } from "@/components/admin/header/admin-messages-button";
+import {
+  AdminNotificationsButton,
+  type HeaderNotificationPreview,
+} from "@/components/admin/header/admin-notifications-button";
 import { AdminProfileMenu } from "@/components/admin/admin-profile-menu";
 import { AdminSearch } from "@/components/admin/admin-search";
 import { AfdEnvironmentBadge } from "@/components/admin/afd-environment-badge";
@@ -26,6 +29,7 @@ type AdminHeaderProps = {
   onMenuClick: () => void;
   presentationMode?: boolean;
   canManageSettings?: boolean;
+  notificationPreviews?: HeaderNotificationPreview[];
 };
 
 export function AdminHeader({
@@ -35,6 +39,7 @@ export function AdminHeader({
   onMenuClick,
   presentationMode = false,
   canManageSettings = false,
+  notificationPreviews = [],
 }: AdminHeaderProps) {
   const pathname = usePathname();
   const [fullscreen, setFullscreen] = useState(false);
@@ -57,8 +62,6 @@ export function AdminHeader({
       setFullscreen(Boolean(document.fullscreenElement));
     }
   }, []);
-
-  const messageCount = badges.messages;
 
   return (
     <header className="sticky top-0 z-30 flex h-[var(--admin-header-height)] shrink-0 items-center gap-3 border-b border-[var(--admin-border)] bg-white px-3 md:px-4">
@@ -83,25 +86,11 @@ export function AdminHeader({
       <div className="flex shrink-0 items-center gap-1 md:gap-2">
         <AfdEnvironmentBadge className="hidden sm:inline-flex" />
         {presentationMode ? <PresentationModeBadge /> : null}
-        <AdminNotifications count={badges.notifications} />
-        <Link
-          href="/admin/messages"
-          className={cn(
-            "relative inline-flex size-10 items-center justify-center rounded-xl text-slate-600 transition hover:bg-slate-100",
-          )}
-          aria-label={
-            messageCount
-              ? `${messageCount} message(s) non traité(s)`
-              : "Messages"
-          }
-        >
-          <MessageSquare className="size-5" aria-hidden />
-          {messageCount && messageCount > 0 ? (
-            <span className="absolute right-1.5 top-1.5 inline-flex min-w-[18px] items-center justify-center rounded-full bg-red-500 px-1 text-[10px] font-semibold text-white">
-              {messageCount > 99 ? "99+" : messageCount}
-            </span>
-          ) : null}
-        </Link>
+        <AdminNotificationsButton
+          count={badges.notifications}
+          previews={notificationPreviews}
+        />
+        <AdminMessagesButton count={badges.messages} />
         {canManageSettings ? (
           <Link
             href="/admin/parametres"
@@ -115,7 +104,9 @@ export function AdminHeader({
         <button
           type="button"
           onClick={toggleFullscreen}
-          className="hidden size-10 items-center justify-center rounded-xl text-slate-600 transition hover:bg-slate-100 sm:inline-flex"
+          className={cn(
+            "hidden size-10 items-center justify-center rounded-xl text-slate-600 transition hover:bg-slate-100 sm:inline-flex",
+          )}
           aria-label={fullscreen ? "Quitter le plein écran" : "Plein écran"}
         >
           {fullscreen ? (

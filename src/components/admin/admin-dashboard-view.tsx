@@ -61,36 +61,42 @@ function SecondaryStatCard({ stat }: { stat: SecondaryStat }) {
   };
   const Icon = meta.icon;
   const isAction = stat.id.startsWith("add_");
+  const valueLabel = isAction
+    ? "Ouvrir"
+    : stat.formatted === "" || stat.formatted == null
+      ? "0"
+      : String(stat.formatted);
 
   return (
     <Link
       href={stat.href}
       className={cn(
-        "admin-panel flex h-full flex-row items-center gap-2.5 !p-2 transition hover:border-[var(--admin-primary)]/40",
+        "admin-panel flex h-full min-h-[4.5rem] flex-row items-center gap-3 !p-3 transition hover:border-[var(--admin-primary)]/40",
         isAction && "border-[var(--admin-primary)]/30 bg-[var(--admin-primary)]/5",
       )}
     >
       <span
         className={cn(
-          "inline-flex size-8 shrink-0 items-center justify-center rounded-full text-white",
+          "inline-flex size-9 shrink-0 items-center justify-center rounded-full text-white",
           meta.bg,
         )}
       >
         <Icon className="size-4" aria-hidden />
       </span>
-      <span className="min-w-0">
-        <span className="block line-clamp-2 text-[10.5px] font-medium leading-tight text-[var(--admin-muted)]">
+      <span className="min-w-0 flex-1">
+        <span className="block text-[11px] font-medium leading-snug text-[var(--admin-muted)]">
           {stat.label}
         </span>
-        {!isAction ? (
-          <span className="font-display text-[18px] font-extrabold leading-none text-[var(--admin-text)]">
-            {stat.formatted}
-          </span>
-        ) : (
-          <span className="text-[12px] font-semibold text-[var(--admin-primary)]">
-            Ouvrir
-          </span>
-        )}
+        <span
+          className={cn(
+            "mt-1 block font-display font-extrabold leading-none tabular-nums tracking-tight text-[var(--admin-navy,#0d254e)]",
+            isAction
+              ? "text-[12px] font-semibold text-[var(--admin-primary)]"
+              : "text-[22px] md:text-[26px]",
+          )}
+        >
+          {valueLabel}
+        </span>
       </span>
     </Link>
   );
@@ -203,7 +209,7 @@ function DashboardContent({ initialData }: AdminDashboardViewProps) {
       )
       .map((stat) => {
         if (stat.id === "messages") {
-          return { ...stat, href: "/admin/messages?statut=nouveau" };
+          return { ...stat, href: "/admin/messages?status=nouveau" };
         }
         if (stat.id === "adhesions") {
           return { ...stat, href: "/admin/adhesions?statut=en_attente" };

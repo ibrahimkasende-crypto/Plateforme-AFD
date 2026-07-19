@@ -1,10 +1,7 @@
 import Link from "next/link";
 import { AdminPageHeader } from "@/components/admin/module/admin-page-header";
-import {
-  removeAvatarAction,
-  uploadAvatarAction,
-  getAvatarSignedUrl,
-} from "@/features/identity/actions/avatar";
+import { ProfileAvatarUploader } from "@/components/admin/profile/profile-avatar-uploader";
+import { getAvatarSignedUrl } from "@/features/identity/actions/avatar";
 import { requireAdmin } from "@/lib/auth/require-admin";
 import { createClientSafe } from "@/lib/supabase/safe";
 
@@ -46,64 +43,26 @@ export default async function AdminMonProfilPage() {
       profil.avatar_path,
     );
   }
+  if (avatarUrl && profil?.avatar_path) {
+    const bust = encodeURIComponent(profil.avatar_path);
+    avatarUrl = `${avatarUrl}${avatarUrl.includes("?") ? "&" : "?"}v=${bust}`;
+  }
 
   return (
     <main className="mx-auto max-w-2xl space-y-6 p-6">
       <AdminPageHeader
         title="Mon profil"
         description="Photo, coordonnées, rôle et sécurité de votre compte."
+        backFallbackHref="/admin"
       />
 
-      <section className="rounded border bg-white p-4">
-        <div className="flex items-center gap-4">
-          {avatarUrl ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
-              src={avatarUrl}
-              alt=""
-              className="size-20 rounded-full object-cover"
-            />
-          ) : (
-            <span className="flex size-20 items-center justify-center rounded-full bg-[#0d254e] text-lg font-semibold text-white">
-              {session.viewer.initials}
-            </span>
-          )}
-          <div className="text-sm">
-            <p className="font-medium text-slate-900">
-              {profil?.nom_affichage || profil?.nom_complet || session.viewer.displayName}
-            </p>
-            <p className="text-[var(--afd-muted)]">{session.viewer.roleLabel}</p>
-          </div>
-        </div>
+      <ProfileAvatarUploader
+        currentUrl={avatarUrl}
+        initials={session.viewer.initials}
+        hasAvatar={Boolean(profil?.avatar_path)}
+      />
 
-        <form action={uploadAvatarAction} className="mt-4 space-y-2" encType="multipart/form-data">
-          <label className="block text-sm font-medium">
-            Photo de profil (JPEG, PNG ou WebP — max 5 Mo)
-            <input
-              name="avatar"
-              type="file"
-              accept="image/jpeg,image/png,image/webp"
-              required
-              className="mt-1 block w-full text-sm"
-            />
-          </label>
-          <button
-            type="submit"
-            className="rounded bg-[var(--afd-blue)] px-4 py-2 text-sm text-white"
-          >
-            Importer / remplacer
-          </button>
-        </form>
-        {profil?.avatar_path ? (
-          <form action={removeAvatarAction} className="mt-2">
-            <button type="submit" className="text-sm text-red-700">
-              Supprimer la photo
-            </button>
-          </form>
-        ) : null}
-      </section>
-
-      <section className="rounded border bg-white p-4 text-sm space-y-2">
+      <section className="space-y-2 rounded border bg-white p-4 text-sm">
         <p>
           <span className="text-[var(--afd-muted)]">E-mail :</span>{" "}
           {profil?.email ?? session.user.email ?? "—"}
@@ -121,35 +80,15 @@ export default async function AdminMonProfilPage() {
           {profil?.telephone ?? "—"}
         </p>
         <p>
-          <span className="text-[var(--afd-muted)]">Statut compte :</span>{" "}
-          {profil?.statut_compte ?? (profil?.actif !== false ? "active" : "disabled")}
+          <span className="text-[var(--afd-muted)]">Rôle :</span>{" "}
+          {session.viewer.roleLabel}
         </p>
         <p>
-          <span className="text-[var(--afd-muted)]">MFA à configurer :</span>{" "}
-          {profil?.doit_configurer_mfa ? "Oui" : "Non"}
-        </p>
-        <p>
-          <span className="text-[var(--afd-muted)]">Dernière connexion :</span>{" "}
-          {profil?.derniere_connexion
-            ? new Date(profil.derniere_connexion).toLocaleString("fr-FR")
-            : "—"}
-        </p>
-        <p className="text-xs text-[var(--afd-muted)]">
-          Votre rôle et vos permissions ne peuvent pas être modifiés depuis cet écran.
+          <Link href="/admin/parametres" className="text-[var(--afd-blue)]">
+            Paramètres du compte
+          </Link>
         </p>
       </section>
-
-      <div className="flex flex-wrap gap-2">
-        <Link href="/admin/securite/sessions" className="rounded border px-4 py-2 text-sm">
-          Sessions
-        </Link>
-        <Link href="/admin/utilisateurs" className="rounded border px-4 py-2 text-sm">
-          Utilisateurs
-        </Link>
-        <Link href="/espace-employe" className="rounded border px-4 py-2 text-sm">
-          Espace employé
-        </Link>
-      </div>
     </main>
   );
 }

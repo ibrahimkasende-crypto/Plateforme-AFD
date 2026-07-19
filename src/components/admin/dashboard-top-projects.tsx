@@ -10,9 +10,21 @@ type DashboardTopProjectsProps = {
   compact?: boolean;
 };
 
+const UUID_RE =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+
 function formatBeneficiaries(value: number | null): string {
   if (value === null) return "—";
   return new Intl.NumberFormat("fr-FR").format(value);
+}
+
+/** Lien canonique : détail projet réel, sinon liste filtrée (évite 404 démo). */
+export function topProjectHref(project: TopProject): string {
+  if (project.id && UUID_RE.test(project.id)) {
+    return `/admin/projets/${project.id}`;
+  }
+  const q = project.title?.trim();
+  return q ? `/admin/projets?q=${encodeURIComponent(q)}` : "/admin/projets";
 }
 
 export function DashboardTopProjects({
@@ -37,9 +49,9 @@ export function DashboardTopProjects({
     <div className={cn(compact ? "space-y-1" : "space-y-4", className)}>
       <ol className={compact ? "space-y-1" : "space-y-3"}>
         {projects.slice(0, 5).map((project) => (
-          <li key={project.id}>
+          <li key={project.id || project.title}>
             <Link
-              href={`/admin/projets/${project.id}/analyse`}
+              href={topProjectHref(project)}
               className={cn(
                 "flex items-center transition hover:bg-slate-50",
                 compact
@@ -87,7 +99,7 @@ export function DashboardTopProjects({
               <span className="shrink-0 text-right">
                 <span
                   className={cn(
-                    "block font-bold text-[var(--admin-primary)]",
+                    "block font-bold tabular-nums text-[var(--admin-primary)]",
                     compact ? "text-[11px]" : "text-sm",
                   )}
                 >

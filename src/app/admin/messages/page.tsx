@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { AdminEmptyCreate } from "@/components/admin/module/admin-empty-create";
 import { AdminPageHeader } from "@/components/admin/module/admin-page-header";
 import { markMessagePending, markMessageRead } from "@/features/messages/actions/manage-message";
@@ -18,6 +19,7 @@ export default async function AdminMessagesPage({
       <AdminPageHeader
         title="Messages"
         description="Messages reçus via le formulaire de contact."
+        backFallbackHref="/admin"
       />
       <form className="flex flex-wrap gap-3">
         <input name="q" defaultValue={q} placeholder="Rechercher" className="rounded border p-2" />
@@ -57,9 +59,22 @@ export default async function AdminMessagesPage({
                     <div>{item.name}</div>
                     <div className="text-[var(--afd-muted)]">{item.email}</div>
                   </td>
-                  <td>{item.subject}</td>
+                  <td>
+                    <Link
+                      href={`/admin/messages/${item.id}`}
+                      className="font-medium text-[var(--afd-blue)] hover:underline"
+                    >
+                      {item.subject}
+                    </Link>
+                  </td>
                   <td>{item.status ?? "unread"}</td>
                   <td className="space-x-2 p-3 text-right">
+                    <Link
+                      href={`/admin/messages/${item.id}`}
+                      className="text-[var(--afd-blue)]"
+                    >
+                      Ouvrir
+                    </Link>
                     {item.status !== "read" ? (
                       <form action={markMessageRead.bind(null, item.id)} className="inline">
                         <button type="submit" className="text-[var(--afd-blue)]">

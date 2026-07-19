@@ -7,6 +7,7 @@ import { AdminMobileSidebar } from "@/components/admin/admin-mobile-sidebar";
 import { AdminSidebar } from "@/components/admin/admin-sidebar";
 import { AfdPageLoadingIndicator } from "@/components/admin/afd-page-loading-indicator";
 import { roleHasPermission } from "@/config/permissions";
+import type { HeaderNotificationPreview } from "@/components/admin/header/admin-notifications-button";
 import type { AdminViewer, SidebarBadges } from "@/features/statistiques/types/dashboard";
 import { useAdminSidebarCollapsed } from "@/hooks/use-admin-sidebar-collapsed";
 import { cn } from "@/lib/utils";
@@ -17,6 +18,7 @@ type AdminShellProps = {
   viewer: AdminViewer;
   pageTitle?: string;
   presentationMode?: boolean;
+  notificationPreviews?: HeaderNotificationPreview[];
 };
 
 export function AdminShell({
@@ -25,6 +27,7 @@ export function AdminShell({
   viewer,
   pageTitle,
   presentationMode = false,
+  notificationPreviews = [],
 }: AdminShellProps) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const { collapsed, toggle } = useAdminSidebarCollapsed(false);
@@ -81,6 +84,7 @@ export function AdminShell({
           viewer={viewer}
           presentationMode={presentationMode}
           canManageSettings={canManageSettings}
+          notificationPreviews={notificationPreviews}
           onMenuClick={() => setMobileOpen(true)}
         />
         <main

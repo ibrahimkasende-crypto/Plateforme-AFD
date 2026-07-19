@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
+import { AdminBackButton } from "@/components/admin/navigation/admin-back-button";
 
 type AdminFormHeaderProps = {
   title: string;
@@ -7,6 +8,8 @@ type AdminFormHeaderProps = {
   breadcrumb?: Array<{ label: string; href?: string }>;
   status?: ReactNode;
   actions?: ReactNode;
+  /** `undefined` = dériver du fil d’Ariane ou `/admin` ; `null` = masquer. */
+  backFallbackHref?: string | null;
 };
 
 export function AdminFormHeader({
@@ -15,7 +18,15 @@ export function AdminFormHeader({
   breadcrumb,
   status,
   actions,
+  backFallbackHref,
 }: AdminFormHeaderProps) {
+  const fallback =
+    backFallbackHref === null
+      ? null
+      : (backFallbackHref ??
+        breadcrumb?.slice().reverse().find((b) => b.href)?.href ??
+        "/admin");
+
   return (
     <header className="space-y-3">
       {breadcrumb && breadcrumb.length > 0 ? (
@@ -39,15 +50,20 @@ export function AdminFormHeader({
         </nav>
       ) : null}
       <div className="flex flex-wrap items-start justify-between gap-3">
-        <div>
-          <h1 className="font-display text-2xl font-extrabold text-[var(--admin-text)]">
-            {title}
-          </h1>
-          {description ? (
-            <p className="mt-1 max-w-2xl text-sm text-[var(--admin-muted)]">
-              {description}
-            </p>
+        <div className="flex min-w-0 flex-1 items-start gap-3">
+          {fallback ? (
+            <AdminBackButton fallbackHref={fallback} className="mt-0.5" />
           ) : null}
+          <div className="min-w-0">
+            <h1 className="font-display text-2xl font-extrabold text-[var(--admin-text)]">
+              {title}
+            </h1>
+            {description ? (
+              <p className="mt-1 max-w-2xl text-sm text-[var(--admin-muted)]">
+                {description}
+              </p>
+            ) : null}
+          </div>
         </div>
         <div className="flex flex-wrap items-center gap-2">
           {status}

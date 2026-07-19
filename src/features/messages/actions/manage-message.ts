@@ -16,7 +16,9 @@ export async function updateMessageStatus(id: string, status: string) {
   if (!supabase) return;
 
   await supabase.from("messages").update({ status: parsed.data }).eq("id", id);
+  revalidatePath("/admin");
   revalidatePath("/admin/messages");
+  revalidatePath(`/admin/messages/${id}`);
 }
 
 export async function markMessageRead(id: string) {
