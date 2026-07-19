@@ -16,6 +16,7 @@
 /playwright-report/
 /blob-report/
 /playwright/.cache/
+/playwright/.auth/
 
 # next.js
 /.next/
@@ -28,6 +29,15 @@
 # misc
 .DS_Store
 *.pem
+*.key
+credentials.json
+service-account*.json
+
+# backups (never commit)
+/backups/
+/production-backups/
+*.dump
+*.sql.gz
 
 # debug
 npm-debug.log*
@@ -36,6 +46,10 @@ yarn-error.log*
 .pnpm-debug.log*
 
 # env files (can opt-in for committing if needed)
+.env
+.env.local
+.env.*.local
+.env.production
 .env*
 !.env.example
 

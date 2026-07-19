@@ -37,7 +37,11 @@ SUPABASE_SERVICE_ROLE_KEY=
 AFD_E2E_ADMIN_EMAIL=
 AFD_E2E_ADMIN_PASSWORD=
 PLAYWRIGHT_BASE_URL=http://127.0.0.1:3010
+# Optionnel si Chromium Playwright n’est pas installé :
+PLAYWRIGHT_CHANNEL=chrome
 ```
+
+Prérequis locaux : `npm run build` puis `npm run test:e2e:operationnel` (workers=1, suite admin en série).
 
 ## Preuve RLS centralisée
 

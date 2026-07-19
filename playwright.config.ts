@@ -10,6 +10,10 @@ export default defineConfig({
     baseURL: process.env.PLAYWRIGHT_BASE_URL ?? "http://127.0.0.1:3010",
     trace: "on-first-retry",
     ...devices["Desktop Chrome"],
+    // Chrome système si Chromium Playwright absente (ex. PLAYWRIGHT_CHANNEL=chrome)
+    ...(process.env.PLAYWRIGHT_CHANNEL
+      ? { channel: process.env.PLAYWRIGHT_CHANNEL as "chrome" | "msedge" }
+      : {}),
   },
   webServer: {
     command: "npm run start -- --port 3010 --hostname 127.0.0.1",

@@ -18,6 +18,8 @@ export default function robots(): MetadataRoute.Robots {
           "/mot-de-passe-oublie",
           "/nouveau-mot-de-passe",
           "/acces-refuse",
+          "/espace-employe",
+          "/espace-employe/",
         ],
       },
     ],
