@@ -1,5 +1,13 @@
 # Changelog base de données — Plateforme-AFD
 
+## 2026-07-19 — `20260719_054_rls_audit_function.sql`
+
+### Objectif
+Fonction `afd_rls_audit_report()` pour preuve CI du standard opérationnel.
+
+### Vérification
+- `AFD_REQUIRE_RLS=1 npm run test:rls` → 3/3 OK (anon bloqué + audit catalogue)
+
 ## 2026-07-19 — `20260719_053_waves_3_8_consolidation.sql`
 
 ### Objectif

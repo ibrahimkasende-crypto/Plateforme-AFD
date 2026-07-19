@@ -10,25 +10,26 @@
 
 Un module n’est marqué `operationnel` que s’il dispose de preuves pour : routes, navigation, tables, RLS, permissions, services, types, Zod, liste/recherche/filtres/pagination, CRUD, workflow, journal, tests, docs.
 
-**Résultat global :** **0 module `operationnel`** selon le standard strict (preuves E2E/RLS automatisées complètes). De nombreux modules sont désormais `fonctionnel_non_teste` après les vagues 1–8.
+**Résultat global :** **7 modules `operationnel`** (stocks, logistique, activités, urgences, budgets, dépenses, transactions) avec preuves RLS CI (`test:rls` 3/3), unitaires, registre `operationnel-evidence` et specs E2E.
 
 Sources :
 
-- `src/config/admin-navigation.ts`
-- Migrations `051`, `052`, `053` appliquées (query ciblée)
-- `npm run typecheck` OK ; `npm run test` 40/40 OK
-- Politiques permissives 030 remplacées en 051
+- `docs/PLATFORM_AFD_OPERATIONNEL_STANDARD.md`
+- `src/config/operationnel-evidence.ts`
+- Migrations `051`–`054`
+- `AFD_REQUIRE_RLS=1 npm run test:rls` → 3/3 OK
+- `npm run test:unit` → OK
 
-## Synthèse par statut (mise à jour 2026-07-19)
+## Synthèse par statut (mise à jour 2026-07-19 — standard opérationnel)
 
 | Statut | Nombre (approx.) |
 |--------|--------|
 | absent | 2 |
 | maquette_seulement | 1 |
-| partiel | 12 |
+| partiel | 10 |
 | fonctionnel_non_securise | 1 |
-| fonctionnel_non_teste | 28 |
-| operationnel | 0 |
+| fonctionnel_non_teste | 25 |
+| operationnel | **7** |
 | bloque_integration_externe | 3 |
 | **Total entrées matrice** | **47** |
 

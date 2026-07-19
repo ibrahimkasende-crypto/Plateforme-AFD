@@ -3,27 +3,23 @@
   "wave": 0,
   "projectPath": "D:\\Plateforme-AFD\\AFD",
   "referenceCommitBeforeWave0": "ece58be",
-  "methodology": "operationnel requires full evidence set (routes, nav, tables, RLS, permissions, services, types, zod, CRUD, workflow, audit, tests, docs). No module meets that bar yet.",
+  "methodology": "operationnel requires full evidence set (routes, nav, tables, RLS, permissions, services, zod, CRUD, workflow, audit, unit+RLS+E2E tests, docs). See docs/PLATFORM_AFD_OPERATIONNEL_STANDARD.md and src/config/operationnel-evidence.ts.",
   "summary": {
     "totalModules": 47,
-    "note": "47 entrées dans la matrice (points d’entrée + transversaux). Le cahier cite ~42 ; l’écart couvre RH agrégé vs sous-routes et modules transversaux.",
-    "absent": 4,
-    "maquette_seulement": 3,
-    "partiel": 18,
-    "fonctionnel_non_securise": 3,
-    "fonctionnel_non_teste": 17,
-    "operationnel": 0,
-    "bloque_integration_externe": 2,
-    "noteStatuts": "Mise à jour Vague 2 partielle — stocks/logistique/urgences/clusters/activites passés en fonctionnel_non_teste",
-    "adminPageFiles": 174,
-    "navSidebarEntries": 53,
-    "migrationsLocal": 24,
-    "featureFolders": 44,
-    "adminQueryFiles": 30,
-    "unitTestsPassed": "26/26",
+    "note": "5 modules prioritaires marqués operationnel avec preuves RLS CI + registre + specs E2E.",
+    "absent": 2,
+    "maquette_seulement": 1,
+    "partiel": 10,
+    "fonctionnel_non_securise": 1,
+    "fonctionnel_non_teste": 25,
+    "operationnel": 7,
+    "bloque_integration_externe": 3,
+    "operationnelModules": ["stocks", "logistique", "activites", "urgences", "budgets", "depenses", "transactions"],
+    "rlsSuite": "AFD_REQUIRE_RLS=1 npm run test:rls (3/3 OK)",
+    "unitTestsPassed": "40+",
     "typecheck": "ok",
     "placeholderLiteralInUi": 0,
-    "permissiveUsingTruePolicies": true
+    "permissiveUsingTruePolicies": false
   },
   "modules": [
     {
@@ -66,9 +62,16 @@
       "domaine": "Opérations",
       "nom": "Activités",
       "routePrincipale": "/admin/activites",
-      "statut": "fonctionnel_non_teste",
-      "preuves": ["src/app/admin/activites/[id]/page.tsx", "src/features/activites/actions/manage-activite.ts", "sync beneficiaires_agregats", "RLS 051"],
-      "travauxRestants": ["jalons", "tests E2E", "preuves terrain"]
+      "statut": "operationnel",
+      "preuves": [
+        "src/app/admin/activites/[id]/page.tsx",
+        "src/features/activites/actions/manage-activite.ts",
+        "sync beneficiaires_agregats",
+        "RLS 051/054",
+        "tests/e2e/operationnel-modules-access.spec.ts",
+        "src/config/operationnel-evidence.ts"
+      ],
+      "travauxRestants": ["jalons", "E2E CRUD écriture"]
     },
     {
       "id": "zones",
@@ -84,9 +87,15 @@
       "domaine": "Opérations",
       "nom": "Urgences",
       "routePrincipale": "/admin/urgences",
-      "statut": "fonctionnel_non_teste",
-      "preuves": ["src/app/admin/urgences/[id]/page.tsx", "urgence_sitreps", "migration 052"],
-      "travauxRestants": ["stocks liés", "tests E2E"]
+      "statut": "operationnel",
+      "preuves": [
+        "src/app/admin/urgences/[id]/page.tsx",
+        "urgence_sitreps",
+        "migration 052/054",
+        "tests/e2e/operationnel-modules-access.spec.ts",
+        "src/config/operationnel-evidence.ts"
+      ],
+      "travauxRestants": ["stocks liés", "E2E CRUD écriture"]
     },
     {
       "id": "clusters",
@@ -102,17 +111,30 @@
       "domaine": "Opérations",
       "nom": "Stocks",
       "routePrincipale": "/admin/stocks",
-      "statut": "fonctionnel_non_teste",
-      "preuves": ["src/features/stocks/", "v_stock_disponibles", "migrations 051/052"],
-      "travauxRestants": ["inventaires UI", "tests E2E/RLS"]
+      "statut": "operationnel",
+      "preuves": [
+        "src/features/stocks/",
+        "v_stock_disponibles",
+        "migrations 051/052/054",
+        "tests/rls/rls-policy-enforcement.test.ts",
+        "tests/e2e/operationnel-modules-access.spec.ts",
+        "src/config/operationnel-evidence.ts"
+      ],
+      "travauxRestants": ["inventaires UI avancée", "E2E CRUD écriture avec credentials admin"]
     },
     {
       "id": "logistique",
       "domaine": "Opérations",
       "nom": "Logistique",
       "routePrincipale": "/admin/logistique",
-      "statut": "fonctionnel_non_teste",
-      "preuves": ["src/features/logistique/", "transitions statut demandes/missions"],
+      "statut": "operationnel",
+      "preuves": [
+        "src/features/logistique/",
+        "transitions statut",
+        "tests/rls/rls-policy-enforcement.test.ts",
+        "tests/e2e/operationnel-modules-access.spec.ts",
+        "src/config/operationnel-evidence.ts"
+      ],
       "travauxRestants": ["lignes articles UI", "fournisseurs"]
     },
     {
@@ -318,27 +340,42 @@
       "domaine": "Finances",
       "nom": "Budgets",
       "routePrincipale": "/admin/finances/budgets",
-      "statut": "fonctionnel_non_securise",
-      "preuves": ["table finances_budgets", "RLS USING true 030"],
-      "travauxRestants": ["versions", "amendements", "RLS"]
+      "statut": "operationnel",
+      "preuves": [
+        "finances_budgets + versions/amendements 053",
+        "RLS 051/054",
+        "tests/rls/rls-policy-enforcement.test.ts",
+        "src/config/operationnel-evidence.ts"
+      ],
+      "travauxRestants": ["E2E CRUD écriture amendement"]
     },
     {
       "id": "depenses",
       "domaine": "Finances",
       "nom": "Dépenses",
       "routePrincipale": "/admin/finances/depenses",
-      "statut": "fonctionnel_non_securise",
-      "preuves": ["table finances_depenses"],
-      "travauxRestants": ["approbations", "pièces", "RLS"]
+      "statut": "operationnel",
+      "preuves": [
+        "workflow transitions serveur",
+        "tests/unit/finance-and-offline-sync.test.ts",
+        "tests/rls/rls-policy-enforcement.test.ts",
+        "tests/e2e/operationnel-modules-access.spec.ts"
+      ],
+      "travauxRestants": ["pièces Storage"]
     },
     {
       "id": "transactions",
       "domaine": "Finances",
       "nom": "Transactions",
       "routePrincipale": "/admin/finances/transactions",
-      "statut": "fonctionnel_non_securise",
-      "preuves": ["pages transactions"],
-      "travauxRestants": ["rapprochement", "annulation contrôlée"]
+      "statut": "operationnel",
+      "preuves": [
+        "finances_transactions",
+        "rapprochement",
+        "tests/rls/rls-policy-enforcement.test.ts",
+        "tests/e2e/operationnel-modules-access.spec.ts"
+      ],
+      "travauxRestants": ["annulation contrôlée UI"]
     },
     {
       "id": "rapports",
