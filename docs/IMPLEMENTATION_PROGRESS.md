@@ -1,59 +1,40 @@
-## Vague 3 — Suivi / communication (partiel, 2026-07-19)
+# Progression d’implémentation — Plateforme-AFD
 
-### Travail effectué
-- Bénéficiaires : import CSV agrégats + détection doublons période+province
-- Newsletter : envoi réel bloqué sans `EMAIL_*` ; plus de faux « Marquer envoyée »
-- Banner « Configuration requise » + statut `bloque_integration_externe`
-- Tests unitaires import + gate newsletter (38 tests)
+**Dernière mise à jour :** 2026-07-19  
+**Branche :** `reconstruction-nextjs`  
+**Validations courantes :** typecheck OK · 40 tests unitaires OK · lint warnings only · build OK (session précédente)
 
-### Restant Vague 3
-- Indicateurs / enquêtes hors-ligne testé
-- Impact / témoignages consentements complets
+## Synthèse vagues
 
-## Vague 2 — Opérations (en cours, 2026-07-19)
+| Vague | Statut | Notes |
+|-------|--------|-------|
+| 0 Audit | Terminée | Matrice 47 modules |
+| 1 Fondations | Terminée (gate technique) | Migration 051, RLS, workflows/jobs/notif |
+| 2 Opérations | Avancée | Stocks/logistique/urgences/clusters/activités |
+| 3 Suivi & impact | Avancée | Import bénéficiaires, indicateurs valeurs, sync offline helpers, consentements |
+| 4 Communication | Partielle | Newsletter bloquée correctement ; SerdiPay non simulé |
+| 5 Organisation | Avancée | RH/paie 050 existants ; appareils agents |
+| 6 Finances | Avancée | Budgets amendables, dépenses workflow, transactions/rapprochement |
+| 7 Rapports/OCR/exports | Avancée | CSV/XLSX réels, jobs async, OCR existant |
+| 8 Administration | Avancée | Santé réelle, recherche globale, sauvegardes sans faux succès |
+| 9 Intégration | Partielle | Scripts seed/verify ; dashboard RPC existant ; preuves `operationnel` encore incomplètes |
 
-### Travail effectué
-- Migration `20260719_052_operations_wave2.sql` appliquée (query ciblée)
-- Stocks : entrepôts, catégories, mouvements avec jointures, transferts, alertes seuil, archivage
-- Logistique : transitions de statut demandes/missions, MAJ véhicules
-- Urgences : détail `[id]`, modifier, sitreps
-- Clusters : table créée si absente, détail membres/réunions
-- Tests unitaires transitions + règles stock (36 tests)
+## Modules `operationnel`
+Toujours **0** au standard strict (E2E + RLS automatisés + preuves complètes). De nombreux modules sont `fonctionnel_non_teste`.
 
-### Restant Vague 2
-- Chaîne programme→projet→activité (détail activités, jalons)
-- Inventaires stock UI complète
-- Zones admin carte croisée
-- Marquage `operationnel` avec preuves E2E/RLS
+## Blocages externes
+- Newsletter email — `bloque_integration_externe`
+- SerdiPay — `bloque_integration_externe`
+- OCR cloud — `bloque_integration_externe` (fallback local limité)
 
-## Vague 1 — Fondations (2026-07-19)
+## Commits locaux (extrait)
+- `feat(admin): complete secure platform foundations`
+- `feat(admin): complete operations management`
+- `feat(admin): complete monitoring impact and surveys`
+- `feat(admin): complete reports documents OCR and exports`
+- (vagues 5–9 à committer dans cette session)
 
-### Travail effectué
-- Migration `20260719_051_secure_foundations.sql` appliquée sur projet lié
-- RLS tables 030 durcie (`has_permission` / `is_active_admin`)
-- `platform_owner` reconnu dans `has_role` / `has_permission`
-- Workflows + approbations (tables + service)
-- Background jobs (tables + enqueue)
-- Notifications (tables + service)
-- Référentiels `ref_provinces`, `ref_devises`, `ref_unites`, `ref_statuts`
-- Vue `v_audit_unified` + trigger append-only `audit_logs`
-- Socle stocks/logistique (tables + UI stocks/mouvements + logistique hub)
-- Helpers `src/lib/auth/guards.ts`
-- Composants WorkflowTimeline / ApprovalPanel
-- Tests unitaires privilege-guards + stocks/payroll
-- Script SQL `tests/rls/wave1_foundations_rls.sql`
-- Docs DATABASE_CHANGELOG + EXTERNAL_INTEGRATIONS
-
-### Gate Vague 1
-- [x] Politiques sensibles 030 remplacées
-- [x] Permissions stocks/logistique/workflows/jobs/notifications ajoutées TS + SQL
-- [x] Workflows / jobs / notifications créés
-- [x] Référentiels créés
-- [x] CRUD partagés déjà présents (data/forms) + workflows UI
-- [x] Journal append-only
-- [x] typecheck OK / tests unitaires OK
-- [~] Types Supabase : régénération CLI à finaliser si token types
-- [~] Tests RLS SQL prêts (exécution manuelle / CI)
-
-### Prochaine étape
-Vague 2 — finaliser stocks (entrepôts seed), logistique CRUD, chaîne programme→projet→activité
+## Prochaine priorité preuves
+- Suite RLS SQL automatisée CI
+- E2E Playwright par module
+- Marquage `operationnel` uniquement avec preuves fichier/tests
