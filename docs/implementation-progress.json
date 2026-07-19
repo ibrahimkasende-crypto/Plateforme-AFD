@@ -1,28 +1,34 @@
 {
-  "projet": "Plateforme-AFD",
-  "updated_at": "2026-07-19T13:00:00+01:00",
-  "vague_courante": 0,
-  "vagues": [
+  "updatedAt": "2026-07-19T12:30:00+01:00",
+  "currentWave": 0,
+  "waves": [
     {
       "id": 0,
-      "nom": "Audit forensique",
-      "statut": "terminee",
-      "date": "2026-07-19",
-      "modules_audites": 55,
-      "modules_operationnels": 0,
-      "migrations_ajoutees": [],
+      "name": "audit-forensique",
+      "status": "completed",
+      "completedAt": "2026-07-19",
+      "modulesOperational": 0,
+      "modulesAudited": 42,
+      "files": [
+        "docs/MODULE_COMPLETION_MATRIX.md",
+        "docs/MODULE_COMPLETION_MATRIX.json",
+        "docs/ADMIN_IMPLEMENTATION_BASELINE.md",
+        "docs/IMPLEMENTATION_PROGRESS.md",
+        "docs/implementation-progress.json",
+        "tests/e2e/admin-no-placeholder.spec.ts"
+      ],
+      "migrations": [],
       "tests": {
         "typecheck": "ok",
         "unit": "26/26",
-        "e2e_anti_placeholder": "spec_created"
+        "e2eAntiPlaceholder": "created"
       },
-      "problemes": [
-        "RLS USING(true) sur modules 030",
-        "RLS incomplète migration 050",
-        "Stocks/Logistique/Exports maquettes",
-        "Intégrations email/SerdiPay/backups manquantes"
+      "problems": [
+        "RLS USING true on 030 tables",
+        "0 modules meet operationnel bar",
+        "stocks/logistics mock hubs"
       ],
-      "prochaine_etape": "Vague 1 — Fondations Auth/RBAC/RLS/CRUD/audit/jobs"
+      "nextStep": "Vague 1 — fondations RLS, workflows, jobs, notifications, référentiels"
     }
   ]
 }

@@ -1,89 +1,223 @@
 # Matrice de preuve des modules — Plateforme-AFD
 
-**Date d'audit :** 2026-07-19  
-**Vague :** 0 (forensique)  
-**Source navigation :** `src/config/admin-navigation.ts`  
-**Total modules :** 55
+**Date d’audit :** 2026-07-19  
+**Vague :** 0 — Audit forensique  
+**Chemin :** `D:\Plateforme-AFD\AFD`  
+**Branche :** `reconstruction-nextjs`  
+**Commit de référence avant vague 0 :** `ece58be` (IAM/RH/paie)
 
-## Synthèse des statuts
+## Méthode
+
+Un module n’est marqué `operationnel` que s’il dispose de preuves pour : routes, navigation, tables, RLS, permissions, services, types, Zod, liste/recherche/filtres/pagination, CRUD, workflow, journal, tests, docs.
+
+**Résultat global :** **0 module `operationnel`** selon ce standard strict. Plusieurs modules sont `fonctionnel_non_teste` ou `partiel`.
+
+Sources :
+
+- `src/config/admin-navigation.ts` (53 entrées sidebar)
+- 174 fichiers `src/app/admin/**/page.tsx`
+- 24 migrations `supabase/migrations/`
+- `src/features/*` (44 dossiers)
+- `src/lib/queries/admin/*` (30 fichiers)
+- `npm run typecheck` OK ; `npm run test` 26/26 OK
+- Politiques permissives : `20260719_030_admin_missing_modules.sql` (`USING (true)` pour tables admin manquantes)
+
+## Synthèse par statut
 
 | Statut | Nombre |
-|--------|-------:|
-| `fonctionnel_non_teste` | 13 |
-| `partiel` | 35 |
-| `maquette_seulement` | 4 |
-| `bloque_integration_externe` | 3 |
+|--------|--------|
+| absent | 4 |
+| maquette_seulement | 8 |
+| partiel | 18 |
+| fonctionnel_non_securise | 6 |
+| fonctionnel_non_teste | 12 |
+| operationnel | 0 |
+| bloque_integration_externe | 4 |
+| **Total modules audités** | **42** |
 
-**Règle :** aucun module n'est `operationnel` sans preuves techniques complètes (CRUD, RLS granulaire, tests auth, journal, pagination serveur).
+> Les sous-modules RH détaillés (paie, congés, etc.) sont regroupés sous « RH / Organisation » pour coller aux ~42 points d’entrée du cahier des charges ; le détail RH figure dans `docs/IDENTITY_RBAC_HR_PAYROLL_AUDIT.md`.
 
-## Matrice
+---
 
-| Domaine | Module | Route | Statut | Preuves principales | Travaux restants |
-|---------|--------|-------|--------|---------------------|------------------|
-| Tableau de bord | Tableau de bord | `/admin` | `fonctionnel_non_teste` | src/app/admin/page.tsx; supabase/migrations/20260718_020_admin_dashboard_rpc.sql | widgets RH/OCR/stocks reliés; export widgets |
-| Opérations | Programmes | `/admin/programmes` | `fonctionnel_non_teste` | src/features/programmes/actions/manage-programme.ts; src/lib/queries/admin/programmes.ts | analyse complète; pagination serveur |
-| Opérations | Projets | `/admin/projets` | `fonctionnel_non_teste` | src/features/projets/actions/manage-projet.ts; src/lib/queries/admin/projets.ts | onglets complets; jalons/risques |
-| Opérations | Activités | `/admin/activites` | `partiel` | src/lib/queries/admin/activites.ts; src/features/activites | preuves photos; validation workflow |
-| Opérations | Zones d'intervention | `/admin/zones-intervention` | `partiel` | src/lib/queries/admin/zones-intervention.ts | carte interactive données live; stats liées |
-| Opérations | Urgences | `/admin/urgences` | `partiel` | src/lib/queries/admin/urgences.ts; src/features/urgences | distributions; sitrep |
-| Opérations | Clusters | `/admin/clusters` | `partiel` | src/lib/queries/admin/clusters.ts | réunions; décisions |
-| Opérations | Stocks | `/admin/stocks` | `maquette_seulement` | src/app/admin/stocks/page.tsx (OCR only, 24 lignes) | tables mouvements; CRUD articles/entrepôts |
-| Opérations | Logistique | `/admin/logistique` | `maquette_seulement` | src/app/admin/logistique/page.tsx | demandes/achats/véhicules; CRUD complet |
-| Suivi et impact | Bénéficiaires | `/admin/beneficiaires` | `partiel` | src/features/beneficiaires/actions/manage-beneficiaire.ts; src/lib/queries/admin/beneficiaires.ts | import; doublons |
-| Suivi et impact | Indicateurs et résultats | `/admin/indicateurs` | `partiel` | src/features/indicateurs; src/lib/queries/admin | cadre logique; validation pièces |
-| Suivi et impact | Enquêtes | `/admin/enquetes` | `partiel` | src/features/enquetes; migration 011 | constructeur complet; offline réel |
-| Suivi et impact | Histoires d'impact | `/admin/histoires-impact` | `partiel` | src/lib/queries/admin/histoires.ts | consentement workflow; publication contrôlée |
-| Suivi et impact | Témoignages | `/admin/temoignages` | `partiel` | src/lib/queries/admin/temoignages.ts | retrait consentement; médias |
-| Communication | Actualités | `/admin/actualites` | `fonctionnel_non_teste` | src/features/actualites; publications/actualites | SEO/planification; révisions |
-| Communication | Médiathèque | `/admin/mediatheque` | `partiel` | src/app/admin/mediatheque/page.tsx; src/features/mediatheque | versions; doublons |
-| Communication | Newsletter | `/admin/newsletter` | `bloque_integration_externe` | src/features/newsletter; NewsletterProviderNotConfiguredError | provider email; envoi réel |
-| Communication | Pages publiques | `/admin/publications/pages` | `partiel` | src/features/pages; src/lib/queries/admin/pages.ts | blocs CMS; historique versions |
-| Engagement | Messages | `/admin/messages` | `partiel` | src/lib/queries/admin/messages.ts; src/features/messages | affectation; réponse PJ |
-| Engagement | Adhésions | `/admin/adhesions` | `partiel` | src/lib/queries/admin/adhesions.ts | renouvellement; documents |
-| Engagement | Partenariats | `/admin/partenariats` | `partiel` | src/lib/queries/admin/partenariats.ts | convention; conversion partenaire |
-| Engagement | Dons | `/admin/dons` | `bloque_integration_externe` | src/features/dons; src/features/paiements/providers/serdipay | SerdiPay credentials; rapprochement auto |
-| Engagement | Opportunités | `/admin/opportunites` | `fonctionnel_non_teste` | src/features/opportunites; migrations 006/007 | tests unitaires; clôture auto |
-| Engagement | Candidatures | `/admin/candidatures` | `fonctionnel_non_teste` | src/lib/queries/admin/candidatures.ts; bucket candidatures-privees | notation/entretiens; pipeline RH |
-| Engagement | Appels d'offres | `/admin/appels-offres` | `partiel` | src/lib/queries/admin/appels-offres.ts | soumissions privées; évaluation |
-| Organisation | Partenaires institutionnels | `/admin/partenaires` | `fonctionnel_non_teste` | src/features/partenaires; Storage partenaires | conventions liées projets |
-| Organisation | Équipe publique | `/admin/equipe` | `fonctionnel_non_teste` | src/features/equipe; src/lib/queries/admin/equipe.ts | séparer clairement de RH |
-| Organisation | Tableau de bord RH | `/admin/rh` | `partiel` | src/app/admin/rh/page.tsx; getHrDashboardStats | graphiques; masse salariale permissionnée |
-| Organisation | Personnel | `/admin/rh/personnel` | `fonctionnel_non_teste` | src/features/hr; migration 050 | pagination; documents Storage |
-| Organisation | Départements et postes | `/admin/rh/departements` | `partiel` | hr_departements; hr_postes | organigramme dynamique complet |
-| Organisation | Recrutement | `/admin/rh/recrutement` | `partiel` | hr_recrutements; hr_candidatures_rh | pipeline complet; conversion employé |
-| Organisation | Présences | `/admin/rh/presences` | `partiel` | hr_presences page | RLS policies; validation supérieur |
-| Organisation | Congés | `/admin/rh/conges` | `partiel` | hr_conges | soldes versionnés; workflow N+1/RH |
-| Organisation | Performance | `/admin/rh/performance` | `partiel` | hr_evaluations | cycles objectifs; confidentialité |
-| Organisation | Formation | `/admin/rh/formations` | `partiel` | hr_formations | certificats; besoins |
-| Organisation | Paie | `/admin/rh/paie` | `partiel` | src/features/payroll; legal_payroll_rules DEMO | validation légale; RLS tables manquantes |
-| Organisation | Utilisateurs et accès | `/admin/utilisateurs` | `fonctionnel_non_teste` | inviteUserAction; privilege-guards | scopes en RLS; MFA enforced prod |
-| Organisation | Invitations | `/admin/invitations` | `fonctionnel_non_teste` | admin_invitations; inviteUserAction | renvoi invitation UI; expiration |
-| Organisation | Périmètres d'accès | `/admin/acces` | `partiel` | access_scopes tables 050 | RLS sur scopes; UI attribution complète |
-| Organisation | Agents terrain | `/admin/agents` | `partiel` | src/features/agents; migration 011 | sync appareils; performance collecte |
-| Finances | Vue financière | `/admin/finances` | `partiel` | src/lib/queries/admin/finances.ts | agrégations cohérentes; alertes budget |
-| Finances | Budgets | `/admin/finances/budgets` | `partiel` | finances_budgets; manage-finances | lignes budgétaires; amendements |
-| Finances | Dépenses | `/admin/finances/depenses` | `partiel` | finances_depenses | workflow approbation; OCR liaison |
-| Finances | Transactions | `/admin/finances/transactions` | `partiel` | page réutilise getAdminDons | ledger dédié; rapprochement |
-| Rapports et documents | Rapports | `/admin/rapports` | `partiel` | src/features/rapports; rapports_generes | génération PDF async; modèles versionnés |
-| Rapports et documents | Documents | `/admin/documents` | `partiel` | src/features/documents; buckets documents-* | versions; hash |
-| Rapports et documents | Import intelligent OCR | `/admin/import-intelligent` | `fonctionnel_non_teste` | migration 040/041; src/features/document-intelligence | antivirus; tests e2e auth |
-| Rapports et documents | Générateur de rapports | `/admin/rapports/nouveau` | `partiel` | src/app/admin/rapports/nouveau/page.tsx | job async; aperçu données live |
-| Rapports et documents | Exports | `/admin/exports` | `maquette_seulement` | src/app/admin/exports/page.tsx liens seulement | jobs persistants; fichiers signés |
-| Administration | Journal d'activité | `/admin/journal-activite` | `partiel` | journal.ts fusion audit_logs; append_audit_log | filtres sensibilité; export autorisé |
-| Administration | Sessions | `/admin/securite/sessions` | `partiel` | security_events query | révocation Auth Admin API; appareils actifs |
-| Administration | Sécurité | `/admin/securite` | `partiel` | src/app/admin/securite/page.tsx | politiques MFA; verrouillages |
-| Administration | Mon profil | `/admin/mon-profil` | `fonctionnel_non_teste` | avatar.ts; admin-avatars | recadrage; MFA UI |
-| Administration | Sauvegardes | `/admin/sauvegardes` | `bloque_integration_externe` | page recommandations seulement | API statut backups Supabase; jamais afficher réussie sans preuve |
-| Administration | Santé du système | `/admin/systeme` | `maquette_seulement` | hub informatif | OpenTelemetry; métriques réelles |
+## Domaine 1 — Tableau de bord
 
-## Détail JSON
+| Champ | Valeur |
+|-------|--------|
+| nom | Tableau de bord |
+| route | `/admin` |
+| statut | fonctionnel_non_teste |
+| navigation | oui |
+| page | `src/app/admin/page.tsx` |
+| service | `src/services/dashboard.service.ts` + RPC `20260718_020_admin_dashboard_rpc.sql` |
+| preuves | Bundle RPC ; filtres ; widgets |
+| restant | Tests E2E dashboard ; cohérence totale avec tous modules ; exports |
 
-Voir [`MODULE_COMPLETION_MATRIX.json`](./MODULE_COMPLETION_MATRIX.json) pour les booléens (liste, Zod, RLS, tests, etc.).
+---
 
-## Risques majeurs identifiés (Vague 0)
+## Domaine 2 — Opérations
 
-1. Policies `USING (true)` sur modules admin 030 (`finances_*`, `activites`, etc.) — migration `20260719_030`.
-2. ~30 tables IAM/RH/paie sans RLS ou sans policies (`20260719_050`).
-3. Stocks / Logistique / Exports / Système = coquilles (pas de CRUD métier).
-4. Newsletter et Dons bloqués par intégrations externes (email, SerdiPay).
-5. Sauvegardes : UI informative uniquement — ne jamais afficher « réussie » sans preuve.
+### 2.1 Programmes — `fonctionnel_non_teste`
+- Routes : `/admin/programmes`, `/nouvelle`, `/[id]/modifier`, `/[id]/analyse`
+- Tables : `programmes` (+ migrations fondations)
+- Service/actions : `src/features/programmes/`, `src/lib/queries/admin/programmes.ts`
+- Preuves : liste + CRUD + requirePermission
+- Restant : workflow complet, pagination serveur systématique, tests module, RLS granulaire
+
+### 2.2 Projets — `fonctionnel_non_teste`
+- Routes : liste, nouveau/nouvelle, détail, modifier, analyse
+- Tables : `projets`
+- Preuves : `src/app/admin/projets/page.tsx` (query+action)
+- Restant : onglets complets (stocks, risques, jalons), tests
+
+### 2.3 Activités — `fonctionnel_non_teste`
+- Routes : `/admin/activites`, `/nouvelle`
+- Tables : `activites` (`20260719_030`)
+- Preuves : query+action ; RLS 030 trop permissive (`USING true`) → aussi `fonctionnel_non_securise` partiel
+- Restant : détail `[id]`, preuves terrain, RLS stricte
+
+### 2.4 Zones d’intervention — `fonctionnel_non_teste`
+- Routes : liste, nouvelle, modifier
+- Tables / queries : `zones-intervention.ts`
+- Restant : carte unifiée, stats croisées, slug public
+
+### 2.5 Urgences — `partiel`
+- Routes : liste, nouvelle ; pas de `[id]` complet
+- Table : `urgences` (030)
+- Restant : réponse, stocks liés, sitrep, clôture
+
+### 2.6 Clusters — `partiel`
+- Liste + actions `manage-cluster.ts`
+- Restant : réunions, décisions, membres
+
+### 2.7 Stocks — `maquette_seulement`
+- Preuve : `src/app/admin/stocks/page.tsx` — texte + bouton OCR uniquement ; **pas de mouvements / entrepôts**
+- Restant : tables articles/mouvements, inventaires, alertes
+
+### 2.8 Logistique — `maquette_seulement`
+- Preuve : `src/app/admin/logistique/page.tsx` — entrée OCR seule
+- Restant : demandes, achats, véhicules, missions
+
+---
+
+## Domaine 3 — Suivi et impact
+
+| Module | Statut | Preuves / restant |
+|--------|--------|-------------------|
+| Bénéficiaires | partiel | Liste + nouveau ; agrégats ; pas import/doublons complets |
+| Indicateurs | partiel | Liste/nouveau/modifier ; cadre logique incomplet |
+| Résultats | partiel | Redirect vers indicateurs |
+| Enquêtes | fonctionnel_non_teste | CRUD + réponses ; hors-ligne non opérationnel |
+| Histoires d’impact | partiel | Alias publications ; Studio publication |
+| Témoignages | partiel | Liste admin + publications |
+
+---
+
+## Domaine 4 — Communication
+
+| Module | Statut | Preuves / restant |
+|--------|--------|-------------------|
+| Actualités | partiel | Redirect Studio publications |
+| Médiathèque | partiel | `listMedia` + upload ; UI preview limitée |
+| Newsletter | bloque_integration_externe | Campagnes/abonnés OK ; envoi réel bloqué sans provider |
+| Pages publiques | fonctionnel_non_teste | Studio pages CRUD |
+
+---
+
+## Domaine 5 — Engagement
+
+| Module | Statut | Preuves / restant |
+|--------|--------|-------------------|
+| Messages | partiel | Liste queries |
+| Adhésions | partiel | Liste + workflow partiel |
+| Partenariats | partiel | Demandes |
+| Dons | bloque_integration_externe | Intentions/transactions UI ; SerdiPay non validé |
+| Opportunités | fonctionnel_non_teste | CRUD + documents privés |
+| Candidatures | partiel | Liste liée opportunités |
+| Appels d’offres | partiel | Redirect publications |
+
+---
+
+## Domaine 6 — Organisation
+
+| Module | Statut | Preuves / restant |
+|--------|--------|-------------------|
+| Partenaires | fonctionnel_non_teste | CRUD + logos Storage |
+| Équipe publique | partiel | Vitrine site ≠ RH |
+| RH (suite) | fonctionnel_non_teste | Migration 050 + pages `/admin/rh/*` ; seed démo ; **pas opérationnel** (tests E2E skip, règles paie draft) |
+| Utilisateurs / accès | fonctionnel_non_teste | Invitations, RBAC, avatars, MFA gates code |
+| Agents terrain | partiel | Liste/nouveau/détail |
+
+---
+
+## Domaine 7 — Finances
+
+| Module | Statut | Preuves / restant |
+|--------|--------|-------------------|
+| Vue financière | partiel | Summary query + OCR entry |
+| Budgets | partiel | Tables 030 ; CRUD basique ; RLS `USING true` → `fonctionnel_non_securise` |
+| Dépenses | partiel | Idem |
+| Transactions | partiel | Idem ; journal comptable non revendiqué |
+
+---
+
+## Domaine 8 — Rapports et documents
+
+| Module | Statut | Preuves / restant |
+|--------|--------|-------------------|
+| Rapports | partiel | Liste/historique/modèles ; générateur incomplet |
+| Documents | partiel | CRUD documents |
+| Import intelligent OCR | fonctionnel_non_teste | Feature complète + migrations 040/041 ; cloud providers = stubs |
+| Générateur | partiel | `/admin/rapports/nouveau` |
+| Exports | maquette_seulement | Liens vers modules ; pas de jobs async |
+
+---
+
+## Domaine 9 — Administration
+
+| Module | Statut | Preuves / restant |
+|--------|--------|-------------------|
+| Journal d’activité | partiel | `journal_activite` + `audit_logs` fusionnés query |
+| Sécurité | partiel | Paramètres session/MFA ; sessions page |
+| Sauvegardes | maquette_seulement | Recommandations texte — **aucune preuve backup** |
+| Santé système | maquette_seulement | Hub de liens — pas d’OpenTelemetry live |
+| Mon profil | fonctionnel_non_teste | Avatar upload + infos |
+| Rôles / permissions | fonctionnel_non_teste | Pages dédiées |
+| Périmètres `/admin/acces` | maquette_seulement | Hub de liens |
+| Paramètres | partiel | Site params |
+
+---
+
+## Modules absents (écarts catalogue vs code)
+
+| Module catalogue | Statut | Note |
+|------------------|--------|------|
+| Stocks (sous-routes articles/entrepôts/…) | absent | Seule page hub OCR |
+| Logistique (sous-routes achats/véhicules/…) | absent | Seule page hub OCR |
+| Centre notifications unifié | absent | Pas de feature `notifications/` complète |
+| Recherche admin globale | absent | Header recherche non branchée multi-modules |
+| Background jobs génériques (hors OCR) | absent | Pas de table jobs universelle pour exports/PDF |
+
+---
+
+## Doublons / incohérences détectés
+
+1. `projets/nouveau` et `projets/nouvelle` coexistent  
+2. `departements` (équipe) vs `hr_departements` (RH)  
+3. `journal_activite` vs `audit_logs`  
+4. Permissions legacy (`utilisateurs:write`) vs granulaires (`users.invite`)  
+5. RLS 030 `USING (true)` vs RLS 050 plus stricte sur RH  
+
+---
+
+## Plan de migrations recommandé (post-vague 0)
+
+1. `051` — durcir RLS tables 030 (retirer `USING true` authenticated)  
+2. `052` — référentiels unifiés (provinces, devises, statuts)  
+3. `053` — stocks + mouvements + inventaires  
+4. `054` — logistique (demandes, véhicules)  
+5. `055` — workflows / approvals génériques  
+6. `056` — jobs async exports/PDF  
+7. `057` — notifications centre  
+8. Régénérer `src/types/database.types.ts`
+
+Voir aussi `docs/MODULE_COMPLETION_MATRIX.json` pour la version machine-lisible.
