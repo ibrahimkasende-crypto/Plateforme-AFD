@@ -1,3 +1,15 @@
+## Vague 3 — Suivi / communication (partiel, 2026-07-19)
+
+### Travail effectué
+- Bénéficiaires : import CSV agrégats + détection doublons période+province
+- Newsletter : envoi réel bloqué sans `EMAIL_*` ; plus de faux « Marquer envoyée »
+- Banner « Configuration requise » + statut `bloque_integration_externe`
+- Tests unitaires import + gate newsletter (38 tests)
+
+### Restant Vague 3
+- Indicateurs / enquêtes hors-ligne testé
+- Impact / témoignages consentements complets
+
 ## Vague 2 — Opérations (en cours, 2026-07-19)
 
 ### Travail effectué
