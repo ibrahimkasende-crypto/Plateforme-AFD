@@ -16,6 +16,9 @@
     "seed:presentation:clean": "npx tsx scripts/clean-presentation.ts",
     "seed:complete-admin": "npx tsx scripts/seed-complete-admin-presentation.ts",
     "seed:complete-admin:clean": "npx tsx scripts/clean-complete-admin-presentation.ts",
+    "seed:hr": "npx tsx scripts/seed-hr-presentation.ts",
+    "seed:hr:clean": "npx tsx scripts/clean-hr-presentation.ts",
+    "bootstrap:platform-owner": "npx tsx scripts/bootstrap-platform-owner.ts",
     "test:e2e": "playwright test",
     "test:e2e:install": "playwright install chromium"
   },

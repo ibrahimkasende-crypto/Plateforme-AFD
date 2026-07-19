@@ -5,6 +5,7 @@ import { roleHasPermission } from "@/config/permissions";
 import { getCurrentUser } from "@/lib/auth/get-current-user";
 import { getAdminProfileWithRoles } from "@/lib/auth/get-user-role";
 import { logAdminActivity } from "@/lib/auth/log-admin-activity";
+import { getAvatarSignedUrl } from "@/features/identity/actions/avatar";
 import type { ProfilAdministrateur } from "@/types/admin-auth.types";
 import type { AdminViewer } from "@/features/statistiques/types/dashboard";
 
@@ -16,10 +17,10 @@ export type AdminSession = {
   viewer: AdminViewer;
 };
 
-function toViewer(
+async function toViewer(
   profile: ProfilAdministrateur,
   role: Role,
-): AdminViewer {
+): Promise<AdminViewer> {
   const displayName =
     profile.nom_complet?.trim() || profile.email || "Administrateur AFD";
   const parts = displayName.trim().split(/\s+/);
@@ -28,12 +29,20 @@ function toViewer(
       ? `${parts[0]?.[0] ?? ""}${parts[1]?.[0] ?? ""}`.toUpperCase()
       : displayName.slice(0, 2).toUpperCase();
 
+  let avatarUrl: string | undefined;
+  if (profile.avatar_path) {
+    const bucket = profile.avatar_bucket || "admin-avatars";
+    const signed = await getAvatarSignedUrl(bucket, profile.avatar_path);
+    if (signed) avatarUrl = signed;
+  }
+
   return {
     displayName,
     roleLabel: roleLabels[role],
     role,
     initials: initials || "AF",
     canReadFinances: roleHasPermission(role, "finances:read"),
+    avatarUrl,
   };
 }
 
@@ -83,7 +92,7 @@ export async function requireAdmin(
     profile: bundle.profile,
     role: bundle.primaryRole,
     roles: bundle.roles,
-    viewer: toViewer(bundle.profile, bundle.primaryRole),
+    viewer: await toViewer(bundle.profile, bundle.primaryRole),
   };
 }
 
@@ -102,6 +111,6 @@ export async function getAdminSession(): Promise<AdminSession | null> {
     profile: bundle.profile,
     role: bundle.primaryRole,
     roles: bundle.roles,
-    viewer: toViewer(bundle.profile, bundle.primaryRole),
+    viewer: await toViewer(bundle.profile, bundle.primaryRole),
   };
 }

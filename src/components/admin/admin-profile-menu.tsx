@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import { ChevronDown, Database, ExternalLink, KeyRound, LogOut } from "lucide-react";
+import { ChevronDown, Database, ExternalLink, KeyRound, LogOut, UserRound } from "lucide-react";
 import { signOut } from "@/actions/auth";
 import { PresentationDataDialog } from "@/components/admin/presentation-data-dialog";
 import type { AdminViewer } from "@/features/statistiques/types/dashboard";
@@ -15,7 +15,8 @@ export function AdminProfileMenu({ viewer }: AdminProfileMenuProps) {
   const [open, setOpen] = useState(false);
   const [presentationOpen, setPresentationOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
-  const isSuperAdmin = viewer.role === "super_admin";
+  const isSuperAdmin =
+    viewer.role === "super_admin" || viewer.role === "platform_owner";
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -39,8 +40,17 @@ export function AdminProfileMenu({ viewer }: AdminProfileMenuProps) {
         aria-expanded={open}
         aria-haspopup="menu"
       >
-        <span className="flex size-9 items-center justify-center rounded-full bg-[#0d254e] text-xs font-semibold text-white">
-          {viewer.initials}
+        <span className="flex size-9 items-center justify-center overflow-hidden rounded-full bg-[#0d254e] text-xs font-semibold text-white">
+          {viewer.avatarUrl ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={viewer.avatarUrl}
+              alt=""
+              className="size-full object-cover"
+            />
+          ) : (
+            viewer.initials
+          )}
         </span>
         <span className="hidden text-left md:block">
           <span className="block text-sm font-medium text-slate-900">
@@ -56,6 +66,15 @@ export function AdminProfileMenu({ viewer }: AdminProfileMenuProps) {
           role="menu"
           className="absolute right-0 z-50 mt-2 w-56 overflow-hidden rounded-xl border border-slate-200 bg-white py-1 shadow-lg"
         >
+          <Link
+            href="/admin/mon-profil"
+            role="menuitem"
+            className="flex items-center gap-2 px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50"
+            onClick={() => setOpen(false)}
+          >
+            <UserRound className="size-4" aria-hidden />
+            Mon profil
+          </Link>
           <Link
             href="/"
             role="menuitem"

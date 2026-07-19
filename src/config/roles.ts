@@ -1,5 +1,8 @@
 export const roles = [
+  "platform_owner",
   "super_admin",
+  "administrateur",
+  "responsable_module",
   "direction_generale",
   "secretariat",
   "charge_programmes",
@@ -11,13 +14,21 @@ export const roles = [
   "ressources_humaines",
   "finance",
   "communication",
+  "employe",
+  "agent_terrain",
+  "auditeur",
+  "partenaire_lecture",
   "lecture_partenaire",
+  "utilisateur_public",
 ] as const;
 
 export type Role = (typeof roles)[number];
 
 export const roleLabels: Record<Role, string> = {
+  platform_owner: "Propriétaire plateforme",
   super_admin: "Super administrateur",
+  administrateur: "Administrateur",
+  responsable_module: "Responsable de module",
   direction_generale: "Direction générale",
   secretariat: "Secrétariat",
   charge_programmes: "Chargé(e) de programmes",
@@ -29,5 +40,10 @@ export const roleLabels: Record<Role, string> = {
   ressources_humaines: "Ressources humaines",
   finance: "Finance",
   communication: "Communication",
+  employe: "Employé",
+  agent_terrain: "Agent terrain",
+  auditeur: "Auditeur",
+  partenaire_lecture: "Partenaire (lecture)",
   lecture_partenaire: "Lecture partenaire",
+  utilisateur_public: "Utilisateur public",
 };

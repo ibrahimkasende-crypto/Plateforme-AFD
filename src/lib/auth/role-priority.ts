@@ -1,7 +1,10 @@
 import { roles, type Role } from "@/config/roles";
 
 const LEGACY_ROLE_MAP: Record<string, Role> = {
+  platform_owner: "platform_owner",
   super_admin: "super_admin",
+  administrateur: "administrateur",
+  responsable_module: "responsable_module",
   direction_generale: "direction_generale",
   secretariat: "secretariat",
   charge_programmes: "charge_programmes",
@@ -13,16 +16,23 @@ const LEGACY_ROLE_MAP: Record<string, Role> = {
   ressources_humaines: "ressources_humaines",
   finance: "finance",
   communication: "communication",
-  lecture_partenaire: "lecture_partenaire",
+  employe: "employe",
+  agent_terrain: "agent_terrain",
+  auditeur: "auditeur",
+  partenaire_lecture: "partenaire_lecture",
+  lecture_partenaire: "partenaire_lecture",
+  utilisateur_public: "utilisateur_public",
   // Rôles historiques migration 20260715
-  administrateur: "direction_generale",
   editeur: "charge_programmes",
   suivi_evaluation: "coordination_meal",
   finance_lecture: "finance",
 };
 
 const ROLE_RANK: Record<Role, number> = {
-  super_admin: 100,
+  platform_owner: 1000,
+  super_admin: 900,
+  administrateur: 800,
+  responsable_module: 700,
   direction_generale: 90,
   charge_programmes: 80,
   coordination_meal: 75,
@@ -34,7 +44,12 @@ const ROLE_RANK: Record<Role, number> = {
   ressources_humaines: 55,
   secretariat: 50,
   logistique: 45,
+  employe: 20,
+  agent_terrain: 15,
+  auditeur: 12,
+  partenaire_lecture: 10,
   lecture_partenaire: 10,
+  utilisateur_public: 1,
 };
 
 export function mapDbRoleToAppRole(roleName: string): Role | null {

@@ -8,15 +8,17 @@ import { requirePermission } from "@/lib/auth/require-permission";
 import { getCurrentUser } from "@/lib/auth/get-current-user";
 import { createAdminServiceClient } from "@/lib/supabase/admin-service";
 import { createClientSafe } from "@/lib/supabase/safe";
+import { hasPermission } from "@/lib/auth/has-permission";
+import { getUserRoleNames } from "@/lib/auth/get-user-role";
+import { inviteUserAction } from "@/features/identity/actions/invite-user";
+import {
+  assertNotSelfAccountDeletion,
+  assertNotSelfRoleChange,
+} from "@/features/identity/security/privilege-guards";
+import { updateUserRoleSecure } from "@/features/identity/services/invitation.service";
+import { appendAuditLog } from "@/features/identity/services/audit.service";
 
 const roleEnum = z.enum(roles);
-
-const createSchema = z.object({
-  email: z.string().email(),
-  nom_complet: z.string().min(2),
-  role: roleEnum,
-  actif: z.string().optional(),
-});
 
 const updateSchema = z.object({
   nom_complet: z.string().min(2),
@@ -24,67 +26,13 @@ const updateSchema = z.object({
   role: roleEnum.optional(),
 });
 
+/** @deprecated Préférer inviteUserAction — délègue au flux d'invitation sécurisé. */
 export async function createAdminUser(formData: FormData) {
-  const session = await requirePermission("utilisateurs:write");
-  const parsed = createSchema.safeParse(Object.fromEntries(formData));
-  if (!parsed.success) return;
-
-  const email = parsed.data.email.toLowerCase();
-  const service = createAdminServiceClient();
-  let userId: string | null = null;
-
-  if (service) {
-    const { data, error } = await service.auth.admin.inviteUserByEmail(email, {
-      redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") || "http://localhost:3000"}/auth/callback?next=/nouveau-mot-de-passe`,
-    });
-    if (error || !data.user) return;
-    userId = data.user.id;
-  }
-
-  const supabase = await createClientSafe();
-  if (!supabase) return;
-
-  if (!userId) {
-    return;
-  }
-
-  await supabase.from("profils_administrateurs" as never).upsert(
-    {
-      id: userId,
-      email,
-      nom_complet: parsed.data.nom_complet,
-      actif: parsed.data.actif !== "off",
-      updated_at: new Date().toISOString(),
-    } as never,
-    { onConflict: "id" },
-  );
-
-  const { data: roleRow } = await supabase
-    .from("roles" as never)
-    .select("id")
-    .eq("nom", parsed.data.role)
-    .maybeSingle();
-
-  if (roleRow && typeof roleRow === "object" && "id" in roleRow) {
-    await supabase.from("utilisateurs_roles" as never).upsert(
-      {
-        utilisateur_id: userId,
-        role_id: (roleRow as { id: string }).id,
-      } as never,
-      { onConflict: "utilisateur_id,role_id" },
-    );
-  }
-
-  if (userId === session.user.id) {
-    return;
-  }
-
-  revalidatePath("/admin/utilisateurs");
-  redirect("/admin/utilisateurs");
+  return inviteUserAction(formData);
 }
 
 export async function updateAdminUser(formData: FormData) {
-  const session = await requirePermission("utilisateurs:write");
+  const session = await requirePermission("users.edit");
   const id = String(formData.get("id") || "");
   if (!z.string().uuid().safeParse(id).success) return;
 
@@ -94,29 +42,72 @@ export async function updateAdminUser(formData: FormData) {
   const supabase = await createClientSafe();
   if (!supabase) return;
 
+  const actorRoles = await getUserRoleNames(session.user.id);
+  const becomingInactive = parsed.data.actif !== "on";
+
+  if (parsed.data.role) {
+    assertNotSelfRoleChange(session.user.id, id);
+
+    const canAssign = await hasPermission(session.user.id, "users.assign_roles");
+    if (!canAssign) return;
+
+    const {
+      data: { session: authSession },
+    } = await supabase.auth.getSession();
+    const mfaAal =
+      (authSession as { aal?: string } | null)?.aal ||
+      ((await supabase.auth.getUser()).data.user?.app_metadata?.aal as
+        | string
+        | undefined) ||
+      null;
+
+    const hasCreateSuperAdmin = await hasPermission(
+      session.user.id,
+      "users.create_super_admin",
+    );
+
+    try {
+      await updateUserRoleSecure(supabase, {
+        actorId: session.user.id,
+        targetId: id,
+        newRole: parsed.data.role,
+        actorRoles,
+        hasAssignRoles: true,
+        hasCreateSuperAdmin,
+        mfaAal: mfaAal || (process.env.NODE_ENV !== "production" ? "aal2" : null),
+      });
+    } catch {
+      return;
+    }
+  }
+
+  if (becomingInactive) {
+    assertNotSelfAccountDeletion(session.user.id, id);
+    const [canDisable, canSuspend] = await Promise.all([
+      hasPermission(session.user.id, "users.disable"),
+      hasPermission(session.user.id, "users.suspend"),
+    ]);
+    if (!canDisable && !canSuspend) return;
+  }
+
   await supabase
     .from("profils_administrateurs" as never)
     .update({
       nom_complet: parsed.data.nom_complet,
       actif: parsed.data.actif === "on",
+      statut_compte: parsed.data.actif === "on" ? "active" : "disabled",
       updated_at: new Date().toISOString(),
     } as never)
     .eq("id", id);
 
-  if (parsed.data.role && id !== session.user.id) {
-    const { data: roleRow } = await supabase
-      .from("roles" as never)
-      .select("id")
-      .eq("nom", parsed.data.role)
-      .maybeSingle();
-
-    if (roleRow && typeof roleRow === "object" && "id" in roleRow) {
-      await supabase.from("utilisateurs_roles" as never).delete().eq("utilisateur_id", id);
-      await supabase.from("utilisateurs_roles" as never).insert({
-        utilisateur_id: id,
-        role_id: (roleRow as { id: string }).id,
-      } as never);
-    }
+  if (becomingInactive) {
+    await appendAuditLog(supabase, {
+      action: "users.disable",
+      module: "identity",
+      entityType: "profils_administrateurs",
+      entityId: id,
+      sensitivity: "sensible",
+    });
   }
 
   revalidatePath("/admin/utilisateurs");
@@ -125,16 +116,40 @@ export async function updateAdminUser(formData: FormData) {
 }
 
 export async function deactivateAdminUser(id: string) {
-  const session = await requirePermission("utilisateurs:write");
-  if (id === session.user.id) return;
+  const session = await requirePermission("users.edit");
+  if (!z.string().uuid().safeParse(id).success) return;
+
+  try {
+    assertNotSelfAccountDeletion(session.user.id, id);
+  } catch {
+    return;
+  }
+
+  const [canDisable, canSuspend] = await Promise.all([
+    hasPermission(session.user.id, "users.disable"),
+    hasPermission(session.user.id, "users.suspend"),
+  ]);
+  if (!canDisable && !canSuspend) return;
 
   const supabase = await createClientSafe();
-  if (!supabase || !z.string().uuid().safeParse(id).success) return;
+  if (!supabase) return;
 
   await supabase
     .from("profils_administrateurs" as never)
-    .update({ actif: false, updated_at: new Date().toISOString() } as never)
+    .update({
+      actif: false,
+      statut_compte: "disabled",
+      updated_at: new Date().toISOString(),
+    } as never)
     .eq("id", id);
+
+  await appendAuditLog(supabase, {
+    action: "users.disable",
+    module: "identity",
+    entityType: "profils_administrateurs",
+    entityId: id,
+    sensitivity: "sensible",
+  });
 
   revalidatePath("/admin/utilisateurs");
 }

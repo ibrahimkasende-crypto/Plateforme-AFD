@@ -8,6 +8,8 @@ export type ProfilAdministrateur = {
   nom_complet: string | null;
   email: string;
   photo_url: string | null;
+  avatar_bucket: string | null;
+  avatar_path: string | null;
   actif: boolean;
   derniere_connexion: string | null;
   created_at: string;

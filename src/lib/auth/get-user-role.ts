@@ -16,7 +16,7 @@ export async function getAdminProfile(
   const { data, error } = await supabase
     .from("profils_administrateurs" as never)
     .select(
-      "id, nom_complet, email, photo_url, actif, derniere_connexion, created_at, updated_at",
+      "id, nom_complet, email, photo_url, avatar_bucket, avatar_path, actif, derniere_connexion, created_at, updated_at",
     )
     .eq("id", userId)
     .maybeSingle();

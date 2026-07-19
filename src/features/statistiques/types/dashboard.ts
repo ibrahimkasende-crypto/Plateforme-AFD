@@ -124,6 +124,7 @@ export type AdminViewer = {
   role: Role;
   initials: string;
   canReadFinances: boolean;
+  avatarUrl?: string;
 };
 
 export type DashboardBundle = {
