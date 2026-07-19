@@ -6,21 +6,29 @@ import { cn } from "@/lib/utils";
 type HeaderLogoProps = {
   compact?: boolean;
   className?: string;
+  /** Texte clair pour fonds sombre (ex. drawer mobile). */
+  onDark?: boolean;
 };
 
-export function HeaderLogo({ compact = false, className }: HeaderLogoProps) {
+export function HeaderLogo({
+  compact = false,
+  className,
+  onDark = false,
+}: HeaderLogoProps) {
   return (
     <Link
       href={siteConfig.routes.home}
       className={cn(
         "group flex min-w-0 shrink-0 items-center gap-2.5 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--afd-blue)] focus-visible:ring-offset-2 sm:gap-3.5",
+        onDark && "focus-visible:ring-offset-[var(--afd-navy)]",
         className,
       )}
       aria-label={`${siteConfig.name} — Accueil`}
     >
       <span
         className={cn(
-          "relative shrink-0 overflow-hidden rounded-full bg-[var(--afd-surface-elevated)] ring-1 ring-[var(--afd-border)] transition-[width,height] duration-200",
+          "relative shrink-0 overflow-hidden rounded-full bg-[var(--afd-surface-elevated)] ring-1 transition-[width,height] duration-200",
+          onDark ? "ring-white/35" : "ring-[var(--afd-border)]",
           "size-11 min-[1200px]:size-[3.25rem]",
           compact && "min-[1200px]:size-12",
         )}
@@ -41,7 +49,8 @@ export function HeaderLogo({ compact = false, className }: HeaderLogoProps) {
           <span
             key={line}
             className={cn(
-              "font-heading leading-[1.15] font-bold tracking-[0.02em] text-[var(--afd-sky)] transition-[font-size] duration-200",
+              "font-heading leading-[1.15] font-bold tracking-[0.02em] transition-[font-size] duration-200",
+              onDark ? "text-white" : "text-[var(--afd-sky)]",
               compact ? "text-[11px]" : "text-xs",
               index === siteConfig.brandLines.length - 1 &&
                 "font-semibold tracking-wide",
@@ -54,7 +63,12 @@ export function HeaderLogo({ compact = false, className }: HeaderLogoProps) {
 
       {/* Mobile / tablette : libellé court */}
       <span className="flex min-w-0 flex-col min-[1200px]:hidden">
-        <span className="font-heading truncate text-sm font-bold text-[var(--afd-sky)]">
+        <span
+          className={cn(
+            "font-heading truncate text-sm font-bold",
+            onDark ? "text-white" : "text-[var(--afd-sky)]",
+          )}
+        >
           {siteConfig.shortName}
         </span>
       </span>
