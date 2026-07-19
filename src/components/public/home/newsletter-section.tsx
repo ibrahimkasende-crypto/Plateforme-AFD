@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import { ArrowRight, Mail, Sparkles } from "lucide-react";
 import Link from "next/link";
 import { motion, useReducedMotion } from "motion/react";
+import { AnimatedSection } from "@/components/motion/animated-section";
 import { FadeIn } from "@/components/motion/FadeIn";
 import { NewsletterGoogleButton } from "@/components/newsletter/newsletter-google-button";
 import { Section } from "@/components/shared/Section";
@@ -105,6 +106,7 @@ export function NewsletterSection() {
       />
 
       <SiteContainer className="relative z-[1]">
+        <AnimatedSection as="div" variant="mask-up">
         <FadeIn>
           <div className="grid items-stretch gap-8 lg:grid-cols-12 lg:gap-12">
             <div className="flex flex-col justify-center text-white lg:col-span-5">
@@ -272,6 +274,7 @@ export function NewsletterSection() {
             </div>
           </div>
         </FadeIn>
+        </AnimatedSection>
       </SiteContainer>
     </Section>
   );

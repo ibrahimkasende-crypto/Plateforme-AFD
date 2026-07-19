@@ -11,6 +11,7 @@ import {
   Tooltip,
 } from "recharts";
 import { AFD_CHART_COLORS } from "@/components/charts/chart-colors";
+import { DarkChartTooltip } from "@/components/charts/chart-tooltip";
 import type { NamedCount } from "@/features/statistiques/types/dashboard";
 
 type ProjectStatusChartProps = {
@@ -25,6 +26,13 @@ function statusToQuery(name: string): string {
   if (value.includes("suspend")) return "suspendu";
   if (value.includes("archiv")) return "archive";
   return encodeURIComponent(name.toLowerCase());
+}
+
+function openStatusAnalyse(router: ReturnType<typeof useRouter>, name: string) {
+  const statut = statusToQuery(name);
+  router.push(
+    `/admin/analyse/projets?vue=statuts&statut=${statut}&sourceWidget=projets-statut`,
+  );
 }
 
 export function ProjectStatusChart({ data }: ProjectStatusChartProps) {
@@ -49,7 +57,7 @@ export function ProjectStatusChart({ data }: ProjectStatusChartProps) {
                 ? String(entry.name)
                 : null;
             if (!name) return;
-            router.push(`/admin/projets?statut=${statusToQuery(name)}`);
+            openStatusAnalyse(router, name);
           }}
         >
           {data.map((entry, index) => (
@@ -88,13 +96,21 @@ export function ProjectStatusChart({ data }: ProjectStatusChartProps) {
             position="center"
           />
         </Pie>
-        <Tooltip />
+        <Tooltip content={<DarkChartTooltip />} />
         <Legend
           verticalAlign="middle"
           align="right"
           layout="vertical"
           iconType="circle"
-          wrapperStyle={{ fontSize: 11, paddingLeft: 4 }}
+          wrapperStyle={{ fontSize: 11, paddingLeft: 4, cursor: "pointer" }}
+          onClick={(entry) => {
+            const name =
+              entry && typeof entry === "object" && "value" in entry
+                ? String(entry.value)
+                : null;
+            if (!name) return;
+            openStatusAnalyse(router, name);
+          }}
         />
       </PieChart>
     </ResponsiveContainer>

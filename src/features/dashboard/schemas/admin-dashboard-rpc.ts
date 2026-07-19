@@ -2,7 +2,7 @@ import { z } from "zod";
 
 const kpiSchema = z.object({
   label: z.string(),
-  value: z.number().nullable().optional(),
+  value: z.union([z.number(), z.string()]).nullable().optional(),
   formatted: z.string().optional(),
   variation_pct: z.number().nullable().optional(),
   variationPct: z.number().nullable().optional(),

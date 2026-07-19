@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import { FadeIn } from "@/components/motion/FadeIn";
+import { AnimatedSection } from "@/components/motion/animated-section";
+import { MotionHeading } from "@/components/motion/motion-heading";
 import { ImpactImageBanner } from "@/components/public/home/impact-image-banner";
 import { HomeNewsComposition } from "@/components/public/news/news-grid";
 import { EmptyState } from "@/components/shared/EmptyState";
@@ -21,13 +22,13 @@ export async function ImpactAndNews({
   return (
     <Section className="bg-[var(--afd-surface-elevated)]">
       <SiteContainer>
-        <FadeIn>
+        <AnimatedSection as="div" variant="fade-up">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
             <div>
               <p className="afd-label text-[var(--afd-blue)]">Actualités</p>
-              <h2 className="font-heading mt-3 text-[27px] font-extrabold leading-[1.15] text-[#062653] sm:text-[34px] lg:text-[40px]">
+              <MotionHeading className="font-heading mt-3 text-[27px] font-extrabold leading-[1.15] text-[#062653] sm:text-[34px] lg:text-[40px]">
                 Dernières nouvelles
-              </h2>
+              </MotionHeading>
               <p className="mt-2 max-w-2xl text-[15px] leading-[1.7] text-[#5F6F83]">
                 Restez informés de nos actions sur le terrain
               </p>
@@ -40,9 +41,9 @@ export async function ImpactAndNews({
               <ArrowRight className="size-4" aria-hidden />
             </Link>
           </div>
-        </FadeIn>
+        </AnimatedSection>
 
-        <div className="mt-8">
+        <AnimatedSection as="div" variant="soft-scale" delay={0.06} className="mt-8">
           {news.length === 0 ? (
             <EmptyState
               title="Aucune actualité publiée"
@@ -51,9 +52,11 @@ export async function ImpactAndNews({
           ) : (
             <HomeNewsComposition items={news} />
           )}
-        </div>
+        </AnimatedSection>
 
-        <ImpactImageBanner />
+        <AnimatedSection as="div" variant="fade-up" delay={0.1}>
+          <ImpactImageBanner />
+        </AnimatedSection>
       </SiteContainer>
     </Section>
   );

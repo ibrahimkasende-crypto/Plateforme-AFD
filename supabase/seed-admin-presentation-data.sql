@@ -114,11 +114,12 @@ BEGIN
   END LOOP;
 
   -- -------------------------------------------------------------------------
-  -- 10 programmes (6 obligatoires + 4 optionnels)
+  -- 10 programmes (6 obligatoires + 4 optionnels) — upsert pour éviter
+  -- l'échec sur slug déjà présent (cause fréquente de projets_total = 0).
   -- -------------------------------------------------------------------------
   INSERT INTO public.programmes (
     title, slug, description, long_description, icon, color, "order",
-    secteur, is_demo, demo_batch_id
+    secteur, is_demo, demo_batch_id, active
   )
   VALUES
     (
@@ -127,7 +128,7 @@ BEGIN
       'Accès aux soins, nutrition et eau potable.',
       'Programme intégré santé maternelle, nutrition communautaire et infrastructures WASH.',
       'heart-pulse', 'rose', 1,
-      'Santé, nutrition et WASH', true, v_batch
+      'Santé, nutrition et WASH', true, v_batch, true
     ),
     (
       'Protection, VBG et droits des femmes',
@@ -135,7 +136,7 @@ BEGIN
       'Protection, prévention VBG et droits des femmes.',
       'Accompagnement des survivantes, espaces sûrs et plaidoyer pour les droits des femmes.',
       'shield', 'violet', 2,
-      'Protection, VBG et droits des femmes', true, v_batch
+      'Protection, VBG et droits des femmes', true, v_batch, true
     ),
     (
       'Autonomisation économique',
@@ -143,7 +144,7 @@ BEGIN
       'Revenus, épargne et activités génératrices.',
       'Formation professionnelle, microcrédit et insertion économique des ménages vulnérables.',
       'briefcase', 'amber', 3,
-      'Autonomisation économique', true, v_batch
+      'Autonomisation économique', true, v_batch, true
     ),
     (
       'Éducation et leadership',
@@ -151,7 +152,7 @@ BEGIN
       'Scolarisation, alphabétisation et leadership.',
       'Soutien scolaire, clubs de jeunes et renforcement du leadership communautaire.',
       'graduation-cap', 'sky', 4,
-      'Éducation et leadership', true, v_batch
+      'Éducation et leadership', true, v_batch, true
     ),
     (
       'Sécurité alimentaire et agriculture',
@@ -159,7 +160,7 @@ BEGIN
       'Production agricole et résilience alimentaire.',
       'Appui aux producteurs, semences améliorées et diversification des cultures.',
       'wheat', 'green', 5,
-      'Sécurité alimentaire et agriculture', true, v_batch
+      'Sécurité alimentaire et agriculture', true, v_batch, true
     ),
     (
       'Urgences, relèvement et cohésion sociale',
@@ -167,7 +168,7 @@ BEGIN
       'Réponse humanitaire et cohésion communautaire.',
       'Assistance d''urgence, relèvement rapide et dialogues intercommunautaires.',
       'life-buoy', 'orange', 6,
-      'Urgences, relèvement et cohésion sociale', true, v_batch
+      'Urgences, relèvement et cohésion sociale', true, v_batch, true
     ),
     (
       'Gouvernance locale et redevabilité',
@@ -175,7 +176,7 @@ BEGIN
       'Renforcement des capacités des acteurs locaux.',
       'Formation des leaders locaux et mécanismes de redevabilité communautaire.',
       'landmark', 'slate', 7,
-      'Gouvernance locale et redevabilité', true, v_batch
+      'Gouvernance locale et redevabilité', true, v_batch, true
     ),
     (
       'Environnement et résilience climatique',
@@ -183,7 +184,7 @@ BEGIN
       'Adaptation climatique et gestion durable.',
       'Reboisement, gestion des déchets et sensibilisation aux risques climatiques.',
       'leaf', 'emerald', 8,
-      'Environnement et résilience climatique', true, v_batch
+      'Environnement et résilience climatique', true, v_batch, true
     ),
     (
       'Infrastructure communautaire',
@@ -191,7 +192,7 @@ BEGIN
       'Infrastructures de base pour les communautés.',
       'Réhabilitation d''écoles, centres de santé et points d''eau communautaires.',
       'building', 'blue', 9,
-      'Infrastructure communautaire', true, v_batch
+      'Infrastructure communautaire', true, v_batch, true
     ),
     (
       'Renforcement institutionnel',
@@ -199,8 +200,14 @@ BEGIN
       'Capacités des organisations partenaires.',
       'Coaching MEAL, planification stratégique et systèmes de gestion.',
       'network', 'indigo', 10,
-      'Renforcement institutionnel', true, v_batch
-    );
+      'Renforcement institutionnel', true, v_batch, true
+    )
+  ON CONFLICT (slug) DO UPDATE SET
+    secteur = EXCLUDED.secteur,
+    is_demo = true,
+    demo_batch_id = EXCLUDED.demo_batch_id,
+    active = true,
+    updated_at = now();
 
   -- -------------------------------------------------------------------------
   -- 30 projets — 6 secteurs × répartition 8 provinces
@@ -210,7 +217,7 @@ BEGIN
   -- -------------------------------------------------------------------------
   INSERT INTO public.projets (
     program_id, title, slug, description, location, status,
-    start_date, end_date, budget, beneficiaries, secteur, is_demo, demo_batch_id
+    start_date, end_date, budget, beneficiaries, secteur, is_demo, demo_batch_id, active
   )
   SELECT
     pr.id,
@@ -225,7 +232,8 @@ BEGIN
     p.beneficiaries,
     pr.secteur,
     true,
-    v_batch
+    v_batch,
+    true
   FROM (
     VALUES
       ('demo-pres-sante-nutrition-wash', 'Centre nutritionnel Kinshasa', 'demo-pres-proj-kin-sante-01', 'Suivi nutritionnel des enfants <5 ans.', 'Kinshasa', 'en_cours', '2024-01-15', '2026-12-31', 85000, 110),
@@ -269,7 +277,29 @@ BEGIN
     prog_slug, title, slug, description, location, status,
     start_date, end_date, budget, beneficiaries
   )
-  JOIN public.programmes pr ON pr.slug = p.prog_slug AND pr.demo_batch_id = v_batch;
+  JOIN public.programmes pr ON pr.slug = p.prog_slug
+  ON CONFLICT (slug) DO UPDATE SET
+    program_id = EXCLUDED.program_id,
+    title = EXCLUDED.title,
+    description = EXCLUDED.description,
+    location = EXCLUDED.location,
+    status = EXCLUDED.status,
+    start_date = EXCLUDED.start_date,
+    end_date = EXCLUDED.end_date,
+    budget = EXCLUDED.budget,
+    beneficiaries = EXCLUDED.beneficiaries,
+    secteur = EXCLUDED.secteur,
+    is_demo = true,
+    demo_batch_id = EXCLUDED.demo_batch_id,
+    active = true,
+    updated_at = now();
+
+  IF NOT EXISTS (
+    SELECT 1 FROM public.projets WHERE demo_batch_id = v_batch LIMIT 1
+  ) THEN
+    RAISE EXCEPTION
+      'Aucun projet de présentation créé après INSERT. Vérifiez la table public.projets et les slugs programmes.';
+  END IF;
 
   -- -------------------------------------------------------------------------
   -- Stats mensuelles — 24 mois (2024-07 → 2026-06), 8 provinces, croissance

@@ -1,7 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import { FadeIn } from "@/components/motion/FadeIn";
+import { AnimatedSection } from "@/components/motion/animated-section";
+import { ImageReveal } from "@/components/motion/image-reveal";
+import { MotionHeading } from "@/components/motion/motion-heading";
 import { Section } from "@/components/shared/Section";
 import { SiteContainer } from "@/components/shared/SiteContainer";
 import { homeContent } from "@/config/home-content";
@@ -14,8 +16,12 @@ export function OrganizationIntroduction() {
     <Section id="presentation-afd" className="bg-[var(--afd-surface-elevated)]">
       <SiteContainer>
         <div className="grid items-center gap-7 sm:gap-10 lg:grid-cols-12 lg:gap-16">
-          <FadeIn className="relative lg:col-span-5">
-            <div className="relative overflow-hidden rounded-[1.15rem] sm:rounded-[1.35rem]">
+          <AnimatedSection
+            as="div"
+            variant="slide-left"
+            className="relative lg:col-span-5"
+          >
+            <ImageReveal className="overflow-hidden rounded-[1.15rem] sm:rounded-[1.35rem]">
               <div className="relative aspect-[16/11] sm:aspect-[4/5]">
                 <Image
                   src={content.image.src}
@@ -29,24 +35,26 @@ export function OrganizationIntroduction() {
                   className="absolute inset-0 bg-[linear-gradient(180deg,transparent_55%,rgba(6,38,83,0.35)_100%)]"
                 />
               </div>
-            </div>
+            </ImageReveal>
             <p className="mt-3 text-xs text-[var(--afd-muted)]">
               {content.image.caption}
             </p>
-          </FadeIn>
+          </AnimatedSection>
 
-          <FadeIn delay={0.08} className="lg:col-span-7">
+          <AnimatedSection
+            as="div"
+            variant="slide-right"
+            delay={0.08}
+            className="lg:col-span-7"
+          >
             <div className="flex items-center gap-3">
-              <span
-                className="h-px w-8 bg-[var(--afd-blue)]"
-                aria-hidden
-              />
+              <span className="h-px w-8 bg-[var(--afd-blue)]" aria-hidden />
               <p className="afd-label text-[var(--afd-blue)]">{content.eyebrow}</p>
             </div>
 
-            <h2 className="afd-h2 mt-4 max-w-full tracking-[-0.02em] sm:max-w-[18ch]">
+            <MotionHeading className="afd-h2 mt-4 max-w-full tracking-[-0.02em] sm:max-w-[18ch]">
               {content.title}
-            </h2>
+            </MotionHeading>
 
             <div className="mt-6 max-w-[38rem]">
               <p className="text-[1.05rem] leading-[1.75] font-medium text-[var(--afd-text)] md:text-[1.125rem] md:leading-[1.7]">
@@ -94,7 +102,7 @@ export function OrganizationIntroduction() {
               {content.cta.label}
               <ArrowRight className="size-4" aria-hidden />
             </Link>
-          </FadeIn>
+          </AnimatedSection>
         </div>
       </SiteContainer>
     </Section>

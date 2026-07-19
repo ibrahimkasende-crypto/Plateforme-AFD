@@ -73,9 +73,14 @@ export function AdminProvincePanel({ data }: AdminProvincePanelProps) {
     [data],
   );
 
+  const hoveredRow = hovered ? byId.get(hovered) : null;
+  const hoveredName = hovered
+    ? RDC_PROVINCE_PATHS.find((p) => p.id === hovered)?.name
+    : null;
+
   return (
     <div className="flex h-full min-h-0 gap-2" data-province-projects-panel>
-      <div className="relative min-h-0 min-w-0 flex-[1.15]">
+      <div className="relative min-h-0 min-w-0 flex-[1.25]">
         <svg
           viewBox={RDC_MAP_VIEWBOX}
           className="h-full w-full"
@@ -87,7 +92,12 @@ export function AdminProvincePanel({ data }: AdminProvincePanelProps) {
             const row = byId.get(path.id);
             const value = row?.value ?? 0;
             const covered = COVERED_IDS.has(path.id) || value > 0;
-            const fill = covered ? fillForValue(value, max) : "#edf1f5";
+            const fill =
+              value > 0
+                ? fillForValue(value, max)
+                : covered
+                  ? "#dbe7f5"
+                  : "#edf1f5";
             const isHover = hovered === path.id;
             const slug = row?.slug ?? slugify(path.name);
 
@@ -98,28 +108,52 @@ export function AdminProvincePanel({ data }: AdminProvincePanelProps) {
                 fill={fill}
                 stroke={isHover ? "#07152f" : "#ffffff"}
                 strokeWidth={isHover ? 1.4 : 0.6}
-                className={covered ? "cursor-pointer transition-[fill,stroke-width] duration-200" : "transition-[fill,stroke-width] duration-200"}
-                tabIndex={covered ? 0 : -1}
+                className={
+                  value > 0
+                    ? "cursor-pointer transition-[fill,stroke-width] duration-200"
+                    : "transition-[fill,stroke-width] duration-200"
+                }
+                tabIndex={value > 0 ? 0 : -1}
                 aria-label={`${path.name}: ${value} projet(s)`}
                 onMouseEnter={() => setHovered(path.id)}
                 onMouseLeave={() => setHovered(null)}
                 onFocus={() => setHovered(path.id)}
                 onBlur={() => setHovered(null)}
                 onClick={() => {
-                  if (!covered) return;
-                  router.push(`/admin/projets?province=${encodeURIComponent(slug)}`);
+                  if (value <= 0) return;
+                  router.push(
+                    `/admin/provinces/${encodeURIComponent(slug)}/analyse?sourceWidget=carte-rdc`,
+                  );
                 }}
                 onKeyDown={(event) => {
-                  if (!covered) return;
+                  if (value <= 0) return;
                   if (event.key === "Enter" || event.key === " ") {
                     event.preventDefault();
-                    router.push(`/admin/projets?province=${encodeURIComponent(slug)}`);
+                    router.push(
+                      `/admin/provinces/${encodeURIComponent(slug)}/analyse?sourceWidget=carte-rdc`,
+                    );
                   }
                 }}
               />
             );
           })}
         </svg>
+
+        {hovered && hoveredName ? (
+          <div className="pointer-events-none absolute left-2 top-2 max-w-[170px] rounded-xl border border-slate-600/60 bg-slate-900 px-3 py-2 text-[10px] text-slate-100 shadow-[0_12px_28px_rgba(15,23,42,0.45)]">
+            <p className="font-semibold text-white">{hoveredName}</p>
+            <p className="mt-0.5 text-slate-300">
+              {hoveredRow?.value ?? 0} projet
+              {(hoveredRow?.value ?? 0) > 1 ? "s" : ""}
+            </p>
+            {typeof hoveredRow?.beneficiaries === "number" ? (
+              <p className="text-slate-300">
+                {hoveredRow.beneficiaries.toLocaleString("fr-FR")} bénéficiaires
+              </p>
+            ) : null}
+          </div>
+        ) : null}
+
         <div className="pointer-events-none absolute bottom-0 left-0 flex items-center gap-1.5 text-[10px] text-[var(--admin-muted)]">
           <span>Moins</span>
           <span className="inline-flex h-2 w-16 overflow-hidden rounded-sm">
@@ -138,7 +172,7 @@ export function AdminProvincePanel({ data }: AdminProvincePanelProps) {
           return (
             <li key={row.name}>
               <Link
-                href={`/admin/projets?province=${encodeURIComponent(slug)}`}
+                href={`/admin/provinces/${encodeURIComponent(slug)}/analyse?sourceWidget=carte-rdc`}
                 className="flex items-center justify-between gap-1 rounded px-1 py-0.5 hover:bg-slate-50"
               >
                 <span className="min-w-0 truncate text-[var(--admin-text)]">

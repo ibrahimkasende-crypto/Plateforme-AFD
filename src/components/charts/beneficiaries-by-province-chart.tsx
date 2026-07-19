@@ -11,6 +11,7 @@ import {
   YAxis,
 } from "recharts";
 import { AFD_CHART_COLORS } from "@/components/charts/chart-colors";
+import { DarkChartTooltip } from "@/components/charts/chart-tooltip";
 import type { ProvinceBeneficiaries } from "@/features/statistiques/types/dashboard";
 
 type BeneficiariesByProvinceChartProps = {
@@ -41,7 +42,10 @@ export function BeneficiariesByProvinceChart({
             width={100}
             tick={{ fontSize: 11, fill: "#64748b" }}
           />
-          <Tooltip />
+          <Tooltip
+            content={<DarkChartTooltip />}
+            cursor={{ fill: "rgba(15, 23, 42, 0.06)" }}
+          />
           <Bar dataKey="value" name="Bénéficiaires" radius={[0, 6, 6, 0]}>
             {data.map((entry, index) => (
               <Cell

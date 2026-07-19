@@ -11,6 +11,7 @@ import {
 } from "recharts";
 import { AFD_CHART_COLORS } from "@/components/charts/chart-colors";
 import type { ChartTimedValue } from "@/components/charts/chart-colors";
+import { DarkChartTooltip } from "@/components/charts/chart-tooltip";
 
 type DonationsEvolutionChartProps = {
   data: ChartTimedValue[];
@@ -23,7 +24,7 @@ export function DonationsEvolutionChart({ data }: DonationsEvolutionChartProps) 
         <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
         <XAxis dataKey="label" tick={{ fontSize: 12, fill: "#64748b" }} />
         <YAxis tick={{ fontSize: 12, fill: "#64748b" }} />
-        <Tooltip />
+        <Tooltip content={<DarkChartTooltip />} />
         <Area
           type="monotone"
           dataKey="value"

@@ -1,14 +1,25 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
-import { ChevronDown, Download, FilePlus, Printer, RotateCcw } from "lucide-react";
+import { useEffect, useId, useRef, useState } from "react";
+import { createPortal } from "react-dom";
+import {
+  ChevronDown,
+  Download,
+  FilePlus,
+  FileSpreadsheet,
+  Printer,
+  RotateCcw,
+} from "lucide-react";
 import { useDashboardFilters } from "@/features/statistiques/hooks/use-dashboard-filters";
 import type {
   DashboardBundle,
   DashboardPeriod,
-  DashboardSummary,
 } from "@/features/statistiques/types/dashboard";
+import {
+  downloadDashboardCsv,
+  printDashboardReport,
+} from "@/features/statistiques/utils/export-dashboard-report";
 import { cn } from "@/lib/utils";
 
 const PERIOD_OPTIONS: { value: DashboardPeriod; label: string }[] = [
@@ -21,39 +32,17 @@ const PERIOD_OPTIONS: { value: DashboardPeriod; label: string }[] = [
 
 type AdminFiltersProps = {
   filterOptions: DashboardBundle["filterOptions"];
-  summary: DashboardSummary;
+  bundle: DashboardBundle;
   className?: string;
   compact?: boolean;
 };
-
-function buildCsv(summary: DashboardSummary): string {
-  const rows = [
-    ["Indicateur", "Valeur", "Variation (%)"],
-    ...Object.values(summary.kpis).map((kpi) => [
-      kpi.label,
-      kpi.formatted,
-      kpi.variationPct?.toString() ?? "",
-    ]),
-  ];
-  return rows.map((row) => row.map((cell) => `"${cell}"`).join(",")).join("\n");
-}
-
-function downloadCsv(summary: DashboardSummary) {
-  const blob = new Blob([buildCsv(summary)], { type: "text/csv;charset=utf-8;" });
-  const url = URL.createObjectURL(blob);
-  const anchor = document.createElement("a");
-  anchor.href = url;
-  anchor.download = "tableau-de-bord-afd.csv";
-  anchor.click();
-  URL.revokeObjectURL(url);
-}
 
 const selectClassName =
   "h-[38px] w-full rounded-lg border border-[var(--admin-border)] bg-white px-2.5 text-[12px] text-[var(--admin-text)] outline-none focus:border-[var(--admin-primary)] focus:ring-2 focus:ring-[var(--admin-primary)]/20";
 
 export function AdminFilters({
   filterOptions,
-  summary,
+  bundle,
   className,
   compact = false,
 }: AdminFiltersProps) {
@@ -66,17 +55,58 @@ export function AdminFilters({
     updateParams,
   } = useDashboardFilters();
   const [exportOpen, setExportOpen] = useState(false);
-  const exportRef = useRef<HTMLDivElement>(null);
+  const [menuPos, setMenuPos] = useState<{ top: number; right: number } | null>(
+    null,
+  );
+  const exportBtnRef = useRef<HTMLButtonElement>(null);
+  const menuRef = useRef<HTMLDivElement>(null);
+  const menuId = useId();
+
+  const updateMenuPosition = () => {
+    const btn = exportBtnRef.current;
+    if (!btn) return;
+    const rect = btn.getBoundingClientRect();
+    setMenuPos({
+      top: rect.bottom + 6,
+      right: window.innerWidth - rect.right,
+    });
+  };
 
   useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (exportRef.current && !exportRef.current.contains(event.target as Node)) {
-        setExportOpen(false);
+    if (!exportOpen) return;
+
+    updateMenuPosition();
+
+    function handlePointerDown(event: MouseEvent) {
+      const target = event.target as Node;
+      if (
+        exportBtnRef.current?.contains(target) ||
+        menuRef.current?.contains(target)
+      ) {
+        return;
       }
+      setExportOpen(false);
     }
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
+
+    function handleKey(event: KeyboardEvent) {
+      if (event.key === "Escape") setExportOpen(false);
+    }
+
+    function handleReposition() {
+      updateMenuPosition();
+    }
+
+    document.addEventListener("mousedown", handlePointerDown);
+    document.addEventListener("keydown", handleKey);
+    window.addEventListener("resize", handleReposition);
+    window.addEventListener("scroll", handleReposition, true);
+    return () => {
+      document.removeEventListener("mousedown", handlePointerDown);
+      document.removeEventListener("keydown", handleKey);
+      window.removeEventListener("resize", handleReposition);
+      window.removeEventListener("scroll", handleReposition, true);
+    };
+  }, [exportOpen]);
 
   const resetFilters = () => {
     updateParams({
@@ -88,6 +118,70 @@ export function AdminFilters({
       to: null,
     });
   };
+
+  const exportMenu =
+    exportOpen && menuPos && typeof document !== "undefined"
+      ? createPortal(
+          <div
+            ref={menuRef}
+            id={menuId}
+            role="menu"
+            aria-label="Options d'export du rapport"
+            className="fixed z-[200] w-64 overflow-hidden rounded-lg border border-[var(--admin-border)] bg-white py-1 shadow-xl"
+            style={{ top: menuPos.top, right: menuPos.right }}
+          >
+            <button
+              type="button"
+              role="menuitem"
+              className="flex w-full items-center gap-2 px-3 py-2.5 text-left text-sm text-[var(--admin-text)] hover:bg-slate-50"
+              onClick={() => {
+                downloadDashboardCsv(bundle, filters);
+                setExportOpen(false);
+              }}
+            >
+              <FileSpreadsheet className="size-4 shrink-0 text-[var(--admin-primary)]" aria-hidden />
+              <span>
+                <span className="block font-medium">Télécharger CSV</span>
+                <span className="block text-[11px] text-[var(--admin-muted)]">
+                  Indicateurs, projets, budget
+                </span>
+              </span>
+            </button>
+            <button
+              type="button"
+              role="menuitem"
+              className="flex w-full items-center gap-2 px-3 py-2.5 text-left text-sm text-[var(--admin-text)] hover:bg-slate-50"
+              onClick={() => {
+                printDashboardReport(bundle, filters);
+                setExportOpen(false);
+              }}
+            >
+              <Printer className="size-4 shrink-0 text-[var(--admin-primary)]" aria-hidden />
+              <span>
+                <span className="block font-medium">Imprimer / PDF</span>
+                <span className="block text-[11px] text-[var(--admin-muted)]">
+                  Ouvre l’aperçu d’impression
+                </span>
+              </span>
+            </button>
+            <Link
+              href="/admin/rapports/nouveau"
+              role="menuitem"
+              className="flex items-center gap-2 px-3 py-2.5 text-sm text-[var(--admin-text)] hover:bg-slate-50"
+              onClick={() => setExportOpen(false)}
+            >
+              <FilePlus className="size-4 shrink-0 text-[var(--admin-primary)]" aria-hidden />
+              <span>
+                <span className="block font-medium">Rapport personnalisé</span>
+                <span className="block text-[11px] text-[var(--admin-muted)]">
+                  Créer un rapport enregistré
+                </span>
+              </span>
+            </Link>
+          </div>,
+          document.body,
+        )
+      : null;
 
   return (
     <div
@@ -205,59 +299,31 @@ export function AdminFilters({
         <span className="hidden xl:inline">Réinitialiser</span>
       </button>
 
-      <div ref={exportRef} className="relative ml-auto shrink-0">
+      <div className="relative ml-auto shrink-0">
         <button
+          ref={exportBtnRef}
           type="button"
-          onClick={() => setExportOpen((value) => !value)}
+          onClick={() => {
+            setExportOpen((open) => {
+              const next = !open;
+              if (next) {
+                // position mise à jour dans l’effet ; pré-calcul immédiat
+                requestAnimationFrame(updateMenuPosition);
+              }
+              return next;
+            });
+          }}
           className="inline-flex h-[38px] items-center gap-1.5 rounded-lg bg-[var(--admin-primary)] px-3 text-[12px] font-semibold text-white transition hover:bg-[var(--admin-primary-dark)]"
           aria-expanded={exportOpen}
           aria-haspopup="menu"
+          aria-controls={exportOpen ? menuId : undefined}
         >
           <Download className="size-4" aria-hidden />
           <span className="hidden sm:inline">Exporter le rapport</span>
           <span className="sm:hidden">Exporter</span>
           <ChevronDown className="size-3.5 opacity-80" aria-hidden />
         </button>
-        {exportOpen ? (
-          <div
-            role="menu"
-            className="absolute right-0 z-30 mt-1.5 w-56 overflow-hidden rounded-lg border border-[var(--admin-border)] bg-white py-1 shadow-lg"
-          >
-            <button
-              type="button"
-              role="menuitem"
-              className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-[var(--admin-text)] hover:bg-slate-50"
-              onClick={() => {
-                window.print();
-                setExportOpen(false);
-              }}
-            >
-              <Printer className="size-4" aria-hidden />
-              Impression
-            </button>
-            <button
-              type="button"
-              role="menuitem"
-              className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-[var(--admin-text)] hover:bg-slate-50"
-              onClick={() => {
-                downloadCsv(summary);
-                setExportOpen(false);
-              }}
-            >
-              <Download className="size-4" aria-hidden />
-              Télécharger CSV
-            </button>
-            <Link
-              href="/admin/rapports/nouveau"
-              role="menuitem"
-              className="flex items-center gap-2 px-3 py-2 text-sm text-[var(--admin-text)] hover:bg-slate-50"
-              onClick={() => setExportOpen(false)}
-            >
-              <FilePlus className="size-4" aria-hidden />
-              Rapport personnalisé
-            </Link>
-          </div>
-        ) : null}
+        {exportMenu}
       </div>
     </div>
   );

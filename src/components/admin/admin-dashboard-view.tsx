@@ -5,22 +5,20 @@ import { Suspense } from "react";
 import {
   ChartNoAxesCombined,
   DollarSign,
-  FileChartColumn,
-  Folder,
   Goal,
   HandHeart,
   Handshake,
   HeartHandshake,
+  ListChecks,
   Mail,
   MailCheck,
+  Plus,
   UserRoundPlus,
   UsersRound,
 } from "lucide-react";
 import { AdminFilters } from "@/components/admin/admin-filters";
 import { AdminProvincePanel } from "@/components/admin/admin-province-panel";
-import { DashboardAlerts } from "@/components/admin/dashboard-alerts";
 import { DashboardKpiCard } from "@/components/admin/dashboard-kpi-card";
-import { DashboardQuickActions } from "@/components/admin/dashboard-quick-actions";
 import { DashboardTopProjects } from "@/components/admin/dashboard-top-projects";
 import { ChartCard } from "@/components/charts/ChartCard";
 import {
@@ -31,6 +29,7 @@ import {
   ProjectStatusChart,
 } from "@/components/charts";
 import { EmptyState } from "@/components/shared/EmptyState";
+import { buildAnalyticsHref } from "@/features/admin-analytics/utils/analytics-search-params";
 import { useDashboardBundle } from "@/features/statistiques/hooks/use-dashboard-bundle";
 import { useDashboardFilters } from "@/features/statistiques/hooks/use-dashboard-filters";
 import type {
@@ -51,8 +50,8 @@ const SECONDARY_ICONS: Record<
   adhesions: { icon: UserRoundPlus, bg: "bg-[var(--admin-green)]" },
   dons: { icon: HandHeart, bg: "bg-[var(--admin-orange)]" },
   newsletter: { icon: MailCheck, bg: "bg-[var(--admin-teal)]" },
-  documents: { icon: Folder, bg: "bg-[var(--admin-purple)]" },
-  rapports: { icon: FileChartColumn, bg: "bg-[var(--admin-gold)]" },
+  add_project: { icon: Plus, bg: "bg-[var(--admin-primary)]" },
+  add_activity: { icon: ListChecks, bg: "bg-[var(--admin-purple)]" },
 };
 
 function SecondaryStatCard({ stat }: { stat: SecondaryStat }) {
@@ -61,11 +60,15 @@ function SecondaryStatCard({ stat }: { stat: SecondaryStat }) {
     bg: "bg-[var(--admin-blue)]",
   };
   const Icon = meta.icon;
+  const isAction = stat.id.startsWith("add_");
 
   return (
     <Link
       href={stat.href}
-      className="admin-panel flex h-full flex-row items-center gap-2.5 !p-2 transition hover:border-[var(--admin-primary)]/40"
+      className={cn(
+        "admin-panel flex h-full flex-row items-center gap-2.5 !p-2 transition hover:border-[var(--admin-primary)]/40",
+        isAction && "border-[var(--admin-primary)]/30 bg-[var(--admin-primary)]/5",
+      )}
     >
       <span
         className={cn(
@@ -79,9 +82,15 @@ function SecondaryStatCard({ stat }: { stat: SecondaryStat }) {
         <span className="block line-clamp-2 text-[10.5px] font-medium leading-tight text-[var(--admin-muted)]">
           {stat.label}
         </span>
-        <span className="font-display text-[18px] font-extrabold leading-none text-[var(--admin-text)]">
-          {stat.formatted}
-        </span>
+        {!isAction ? (
+          <span className="font-display text-[18px] font-extrabold leading-none text-[var(--admin-text)]">
+            {stat.formatted}
+          </span>
+        ) : (
+          <span className="text-[12px] font-semibold text-[var(--admin-primary)]">
+            Ouvrir
+          </span>
+        )}
       </span>
     </Link>
   );
@@ -95,53 +104,116 @@ function DashboardContent({ initialData }: AdminDashboardViewProps) {
   );
   const bundle = data ?? initialData;
   const { summary, viewer } = bundle;
-  const isDemo = Boolean(bundle.presentationMode ?? bundle.demoMode);
-  const provinceProjects =
-    bundle.projectsByProvince.length > 0
-      ? bundle.projectsByProvince
-      : bundle.beneficiariesByProvince.map((row) => ({
-          name: row.name,
-          value: 0,
-          beneficiaries: row.value,
-        }));
+
+  const provinceProjects = bundle.projectsByProvince;
+
+  const filterContext = {
+    period: filters.period,
+    programmeId: filters.programmeId,
+    provinceId: filters.province,
+    projetId: filters.projectId,
+    dateStart: filters.from ?? null,
+    dateEnd: filters.to ?? null,
+  };
 
   const kpiEntries = [
     {
       key: "personnesTouchees" as const,
       icon: UsersRound,
       iconBg: "bg-[var(--admin-blue)]",
-      href: "/admin/beneficiaires",
+      href: buildAnalyticsHref("/admin/analyse/beneficiaires", {
+        ...filterContext,
+        segment: "total",
+        sourceWidget: "kpi-personnes",
+      }),
     },
     {
       key: "femmesTouchees" as const,
       icon: HeartHandshake,
       iconBg: "bg-[var(--admin-green)]",
-      href: "/admin/beneficiaires?genre=femmes",
+      href: buildAnalyticsHref("/admin/analyse/beneficiaires", {
+        ...filterContext,
+        segment: "femmes",
+        sourceWidget: "kpi-femmes",
+      }),
     },
     {
       key: "projetsActifs" as const,
       icon: Goal,
       iconBg: "bg-[var(--admin-orange)]",
-      href: "/admin/projets?statut=actif",
+      href: buildAnalyticsHref("/admin/analyse/projets", {
+        ...filterContext,
+        statut: "actif",
+        sourceWidget: "kpi-projets",
+      }),
     },
     {
       key: "activitesRealisees" as const,
       icon: ChartNoAxesCombined,
       iconBg: "bg-[var(--admin-purple)]",
-      href: "/admin/activites",
+      href: buildAnalyticsHref("/admin/analyse/activites", {
+        ...filterContext,
+        sourceWidget: "kpi-activites",
+      }),
     },
     {
       key: "partenairesActifs" as const,
       icon: Handshake,
       iconBg: "bg-[var(--admin-teal)]",
-      href: "/admin/partenaires",
+      href: buildAnalyticsHref("/admin/analyse/partenaires", {
+        ...filterContext,
+        statut: "actif",
+        sourceWidget: "kpi-partenaires",
+      }),
     },
     {
       key: "budgetDepense" as const,
       icon: DollarSign,
       iconBg: "bg-[var(--admin-gold)]",
-      href: "/admin/finances",
+      href: viewer.canReadFinances
+        ? buildAnalyticsHref("/admin/analyse/finances", {
+            ...filterContext,
+            vue: "depenses",
+            sourceWidget: "kpi-budget",
+          })
+        : "/acces-refuse",
     },
+  ];
+
+  const bottomRow: SecondaryStat[] = [
+    {
+      id: "add_project",
+      label: "Ajouter un projet",
+      value: null,
+      formatted: "",
+      href: "/admin/projets/nouveau",
+      available: true,
+    },
+    {
+      id: "add_activity",
+      label: "Ajouter une activité",
+      value: null,
+      formatted: "",
+      href: "/admin/activites/nouvelle",
+      available: true,
+    },
+    ...bundle.secondaryStats
+      .filter((s) =>
+        ["messages", "adhesions", "dons", "newsletter"].includes(s.id),
+      )
+      .map((stat) => {
+        if (stat.id === "messages") {
+          return { ...stat, href: "/admin/messages?statut=nouveau" };
+        }
+        if (stat.id === "adhesions") {
+          return { ...stat, href: "/admin/adhesions?statut=en_attente" };
+        }
+        if (stat.id === "dons") {
+          return { ...stat, href: "/admin/dons?statut=intention" };
+        }
+        return stat;
+      })
+      .slice(0, 4),
   ];
 
   return (
@@ -151,17 +223,23 @@ function DashboardContent({ initialData }: AdminDashboardViewProps) {
     >
       <p className="sr-only">{bundle.accessibleSummary}</p>
 
-      <div className="relative col-span-full">
+      <div
+        data-dashboard-filters
+        className="relative z-20 col-span-full overflow-visible"
+      >
         <AdminFilters
           filterOptions={bundle.filterOptions}
-          summary={summary}
+          bundle={bundle}
           compact
           className="h-full"
         />
       </div>
 
       {kpiEntries.map(({ key, icon, iconBg, href }) => (
-        <div key={key} className="col-span-2 max-lg:col-span-1 max-sm:col-span-full">
+        <div
+          key={key}
+          className="col-span-2 min-h-0 overflow-visible max-lg:col-span-1 max-sm:col-span-full"
+        >
           <DashboardKpiCard
             kpi={summary.kpis[key]}
             icon={icon}
@@ -175,8 +253,16 @@ function DashboardContent({ initialData }: AdminDashboardViewProps) {
         title="Évolution des bénéficiaires"
         className="col-span-4 max-xl:col-span-6 max-lg:col-span-full"
       >
-        {bundle.beneficiaryEvolution.length === 0 && !isDemo ? (
-          <EmptyState title="Aucune série disponible" />
+        {bundle.beneficiaryEvolution.length === 0 ? (
+          <EmptyState
+            title="Aucune série disponible"
+            description="Ajoutez des statistiques bénéficiaires via le module Bénéficiaires."
+            action={
+              <Link href="/admin/beneficiaires/nouveau" className="text-[var(--admin-primary)] underline">
+                Saisir des agrégats
+              </Link>
+            }
+          />
         ) : (
           <BeneficiaryEvolutionChart
             data={bundle.beneficiaryEvolution}
@@ -189,8 +275,16 @@ function DashboardContent({ initialData }: AdminDashboardViewProps) {
         title="Projets par statut"
         className="col-span-3 max-xl:col-span-6 max-lg:col-span-full"
       >
-        {bundle.projectsByStatus.length === 0 && !isDemo ? (
-          <EmptyState title="Aucune donnée de statut" />
+        {bundle.projectsByStatus.length === 0 ? (
+          <EmptyState
+            title="Aucun projet"
+            description="Créez des projets pour alimenter ce graphique."
+            action={
+              <Link href="/admin/projets/nouveau" className="text-[var(--admin-primary)] underline">
+                Ajouter un projet
+              </Link>
+            }
+          />
         ) : (
           <ProjectStatusChart data={bundle.projectsByStatus} />
         )}
@@ -200,8 +294,16 @@ function DashboardContent({ initialData }: AdminDashboardViewProps) {
         title="Projets par secteur"
         className="col-span-3 max-xl:col-span-6 max-lg:col-span-full"
       >
-        {bundle.projectsBySector.length === 0 && !isDemo ? (
-          <EmptyState title="Aucune donnée sectorielle" />
+        {bundle.projectsBySector.length === 0 ? (
+          <EmptyState
+            title="Aucun secteur"
+            description="Renseignez le secteur sur les programmes ou projets."
+            action={
+              <Link href="/admin/programmes" className="text-[var(--admin-primary)] underline">
+                Gérer les programmes
+              </Link>
+            }
+          />
         ) : (
           <ProjectSectorChart data={bundle.projectsBySector} />
         )}
@@ -224,10 +326,18 @@ function DashboardContent({ initialData }: AdminDashboardViewProps) {
 
       <ChartCard
         title="Projets par province"
-        className="col-span-3 max-xl:col-span-6 max-lg:col-span-full"
+        className="col-span-4 max-xl:col-span-6 max-lg:col-span-full"
       >
-        {provinceProjects.length === 0 && !isDemo ? (
-          <EmptyState title="Aucune donnée provinciale" />
+        {provinceProjects.length === 0 ? (
+          <EmptyState
+            title="Aucune province"
+            description="Indiquez la province (location) sur chaque projet."
+            action={
+              <Link href="/admin/projets" className="text-[var(--admin-primary)] underline">
+                Voir les projets
+              </Link>
+            }
+          />
         ) : (
           <AdminProvincePanel data={provinceProjects} />
         )}
@@ -235,10 +345,18 @@ function DashboardContent({ initialData }: AdminDashboardViewProps) {
 
       <ChartCard
         title="Activités réalisées par mois"
-        className="col-span-3 max-xl:col-span-6 max-lg:col-span-full"
+        className="col-span-4 max-xl:col-span-6 max-lg:col-span-full"
       >
-        {bundle.monthlyActivities.length === 0 && !isDemo ? (
-          <EmptyState title="Aucune activité enregistrée" />
+        {bundle.monthlyActivities.length === 0 ? (
+          <EmptyState
+            title="Aucune activité"
+            description="Ajoutez des activités via le module Activités."
+            action={
+              <Link href="/admin/activites/nouvelle" className="text-[var(--admin-primary)] underline">
+                Ajouter une activité
+              </Link>
+            }
+          />
         ) : (
           <MonthlyActivitiesChart data={bundle.monthlyActivities} />
         )}
@@ -247,38 +365,31 @@ function DashboardContent({ initialData }: AdminDashboardViewProps) {
       {viewer.canReadFinances ? (
         <ChartCard
           title="Budget prévu vs dépensé"
-          className="col-span-3 max-xl:col-span-6 max-lg:col-span-full"
+          className="col-span-4 max-xl:col-span-6 max-lg:col-span-full"
         >
-          {bundle.budgetComparison.length === 0 && !isDemo ? (
-            <EmptyState title="Aucune donnée budgétaire" />
+          {bundle.budgetComparison.length === 0 ? (
+            <EmptyState
+              title="Aucune donnée budgétaire"
+              description="Saisissez budgets et dépenses dans Finances."
+              action={
+                <Link href="/admin/finances/budgets" className="text-[var(--admin-primary)] underline">
+                  Ouvrir Finances
+                </Link>
+              }
+            />
           ) : (
             <BudgetComparisonChart data={bundle.budgetComparison} />
           )}
         </ChartCard>
       ) : (
-        <div className="admin-panel col-span-3 flex items-center justify-center max-xl:col-span-6 max-lg:col-span-full">
+        <div className="admin-panel col-span-4 flex items-center justify-center max-xl:col-span-6 max-lg:col-span-full">
           <p className="text-center text-xs text-[var(--admin-muted)]">
             Données financières réservées aux rôles autorisés.
           </p>
         </div>
       )}
 
-      <div className="col-span-3 flex min-h-0 flex-col gap-[var(--admin-content-gap)] max-xl:col-span-6 max-lg:col-span-full">
-        <div className="admin-panel min-h-0 flex-[0.48]">
-          <h3 className="admin-panel__title">Alertes</h3>
-          <div className="admin-panel__body overflow-y-auto">
-            <DashboardAlerts alerts={bundle.alerts} compact />
-          </div>
-        </div>
-        <div className="admin-panel min-h-0 flex-[0.52]">
-          <h3 className="admin-panel__title">Accès rapides</h3>
-          <div className="admin-panel__body overflow-y-auto">
-            <DashboardQuickActions compact />
-          </div>
-        </div>
-      </div>
-
-      {bundle.secondaryStats.map((stat) => (
+      {bottomRow.map((stat) => (
         <div
           key={stat.id}
           className="col-span-2 max-lg:col-span-1 max-sm:col-span-full"
@@ -312,8 +423,7 @@ function DashboardSkeleton() {
       aria-busy="true"
       aria-label="Chargement du tableau de bord"
     >
-      <div className="col-span-10 animate-pulse rounded-[var(--admin-card-radius)] bg-white" />
-      <div className="col-span-2 animate-pulse rounded-[var(--admin-card-radius)] bg-white" />
+      <div className="col-span-full animate-pulse rounded-[var(--admin-card-radius)] bg-white" />
       {Array.from({ length: 6 }).map((_, index) => (
         <div
           key={`kpi-${index}`}
@@ -326,10 +436,10 @@ function DashboardSkeleton() {
           className="col-span-3 animate-pulse rounded-[var(--admin-card-radius)] bg-white first:col-span-4 last:col-span-2"
         />
       ))}
-      {Array.from({ length: 4 }).map((_, index) => (
+      {Array.from({ length: 3 }).map((_, index) => (
         <div
           key={`r2-${index}`}
-          className="col-span-3 animate-pulse rounded-[var(--admin-card-radius)] bg-white"
+          className="col-span-4 animate-pulse rounded-[var(--admin-card-radius)] bg-white"
         />
       ))}
       {Array.from({ length: 6 }).map((_, index) => (

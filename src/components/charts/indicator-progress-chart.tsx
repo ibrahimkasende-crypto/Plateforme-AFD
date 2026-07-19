@@ -12,6 +12,7 @@ import {
 } from "recharts";
 import { AFD_CHART_COLORS } from "@/components/charts/chart-colors";
 import type { ChartComparisonPoint } from "@/components/charts/chart-colors";
+import { DarkChartTooltip } from "@/components/charts/chart-tooltip";
 
 type IndicatorProgressChartProps = {
   data: ChartComparisonPoint[];
@@ -24,7 +25,10 @@ export function IndicatorProgressChart({ data }: IndicatorProgressChartProps) {
         <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
         <XAxis dataKey="label" tick={{ fontSize: 12, fill: "#64748b" }} />
         <YAxis tick={{ fontSize: 12, fill: "#64748b" }} />
-        <Tooltip />
+        <Tooltip
+          content={<DarkChartTooltip />}
+          cursor={{ fill: "rgba(15, 23, 42, 0.06)" }}
+        />
         <Legend />
         <Bar
           dataKey="planned"

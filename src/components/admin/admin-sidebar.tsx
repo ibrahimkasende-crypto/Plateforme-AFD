@@ -168,15 +168,19 @@ function TopLevelNavLink({
         aria-current={active ? "page" : undefined}
         aria-label={group.label}
         className={cn(
-          "group relative flex h-9 items-center rounded-lg text-[13px] transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white",
-          collapsed ? "justify-center px-0" : "gap-2.5 px-2.5",
+          "group relative flex items-center rounded-xl text-[13px] transition-colors duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white",
+          collapsed ? "h-12 justify-center px-0" : "h-10 gap-2.5 px-2.5",
           active
             ? "bg-[var(--admin-sidebar-active)] font-medium text-white"
             : "text-[var(--admin-sidebar-muted)] hover:bg-white/10 hover:text-white",
         )}
       >
         {Icon ? (
-          <Icon className="size-[17px] shrink-0" strokeWidth={1.75} aria-hidden />
+          <Icon
+            className={cn("shrink-0", collapsed ? "size-6" : "size-[18px]")}
+            strokeWidth={1.75}
+            aria-hidden
+          />
         ) : null}
         <span className={cn("truncate", collapsed && "sr-only")}>{group.label}</span>
         {collapsed ? (
@@ -221,8 +225,11 @@ function NavGroupAccordion({
   }, 0);
 
   const handleCollapsedClick = useCallback(() => {
-    onFlyoutOpenChange(!flyoutOpen);
-  }, [flyoutOpen, onFlyoutOpenChange]);
+    // Spec D4 : ouvrir la sidebar, afficher les libellés et le groupe sélectionné.
+    onExpandSidebar?.();
+    onOpenChange(true);
+    onFlyoutOpenChange(false);
+  }, [onExpandSidebar, onFlyoutOpenChange, onOpenChange]);
 
   useEffect(() => {
     if (!flyoutOpen || collapsed) return;
@@ -254,19 +261,17 @@ function NavGroupAccordion({
           type="button"
           title={group.label}
           aria-label={group.label}
-          aria-expanded={flyoutOpen}
-          aria-haspopup="true"
+          aria-expanded={open}
           onClick={handleCollapsedClick}
-          onDoubleClick={onExpandSidebar}
           className={cn(
-            "relative flex h-10 w-full items-center justify-center rounded-lg transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white",
-            active || flyoutOpen
+            "relative flex h-12 w-full items-center justify-center rounded-xl transition-colors duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white",
+            active
               ? "bg-[var(--admin-sidebar-active)] text-white"
               : "text-[var(--admin-sidebar-muted)] hover:bg-white/10 hover:text-white",
           )}
         >
           {Icon ? (
-            <Icon className="size-[17px] shrink-0" strokeWidth={1.75} aria-hidden />
+            <Icon className="size-6 shrink-0" strokeWidth={1.75} aria-hidden />
           ) : null}
           {groupBadgeCount > 0 ? (
             <span className="absolute right-1.5 top-1.5 size-1.5 rounded-full bg-[var(--admin-red)]" />
@@ -340,7 +345,7 @@ function NavGroupAccordion({
         )}
       >
         {Icon ? (
-          <Icon className="size-[17px] shrink-0" strokeWidth={1.75} aria-hidden />
+          <Icon className="size-[18px] shrink-0" strokeWidth={1.75} aria-hidden />
         ) : null}
         <span className="flex-1 truncate">{group.label}</span>
         <ChevronDown
@@ -418,10 +423,21 @@ export function AdminSidebarNav({
 
   return (
     <nav
-      className={cn("min-h-0 flex-1 overflow-y-auto px-2 py-2", className)}
+      className={cn(
+        "flex min-h-0 flex-1 flex-col overflow-y-auto px-2 py-2",
+        className,
+      )}
       aria-label="Navigation admin"
+      data-sidebar-collapsed={collapsed ? "true" : "false"}
     >
-      <div className="space-y-2.5">
+      <div
+        className={cn(
+          "flex min-h-0 flex-1 flex-col",
+          collapsed
+            ? "justify-evenly gap-[clamp(0.35rem,1.2vh,0.85rem)]"
+            : "space-y-2.5",
+        )}
+      >
         {groups.map((group) => {
           if (group.href) {
             return (
@@ -556,11 +572,15 @@ export function AdminSidebar({
           title={collapsed ? "Voir le site public" : undefined}
           aria-label="Voir le site public"
           className={cn(
-            "inline-flex h-10 w-full items-center justify-center gap-1.5 rounded-md bg-[var(--admin-primary)] text-[12px] font-semibold text-white transition hover:bg-[var(--admin-primary-dark)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white",
-            collapsed && "px-0",
+            "inline-flex w-full items-center justify-center gap-1.5 rounded-xl bg-[var(--admin-primary)] text-[12px] font-semibold text-white transition duration-200 hover:bg-[var(--admin-primary-dark)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white",
+            collapsed ? "h-12 px-0" : "h-10",
           )}
+          data-admin-public-site
         >
-          <ExternalLink className="size-4 shrink-0" aria-hidden />
+          <ExternalLink
+            className={cn("shrink-0", collapsed ? "size-5" : "size-4")}
+            aria-hidden
+          />
           <span className={cn(collapsed && "sr-only")}>Voir le site public</span>
         </Link>
       </div>

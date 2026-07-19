@@ -39,7 +39,7 @@ export function DashboardTopProjects({
         {projects.slice(0, 5).map((project) => (
           <li key={project.id}>
             <Link
-              href={`/admin/projets/${project.id}`}
+              href={`/admin/projets/${project.id}/analyse`}
               className={cn(
                 "flex items-center transition hover:bg-slate-50",
                 compact

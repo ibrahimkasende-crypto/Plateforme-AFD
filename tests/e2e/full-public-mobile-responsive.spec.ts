@@ -53,10 +53,7 @@ test.describe("Full public mobile responsive", () => {
         page.getByRole("region", { name: /domaines d’intervention/i }),
       ).toBeVisible();
       await expect(
-        page.getByRole("heading", { name: /programmes prioritaires/i }),
-      ).toBeVisible();
-      await expect(
-        page.getByRole("heading", { name: /actions sur le terrain/i }),
+        page.getByRole("heading", { name: /domaines d’intervention/i }),
       ).toBeVisible();
       await assertNoOverflow(page);
     });

@@ -12,6 +12,7 @@ import {
   YAxis,
 } from "recharts";
 import { AFD_CHART_COLORS } from "@/components/charts/chart-colors";
+import { ChartTooltipShell } from "@/components/charts/chart-tooltip";
 import type { NamedCount } from "@/features/statistiques/types/dashboard";
 import { slugify } from "@/lib/slugify";
 
@@ -28,13 +29,13 @@ function SectorTooltip({ active, payload }: TipProps) {
   if (!active || !payload?.[0]) return null;
   const row = payload[0].payload;
   return (
-    <div className="rounded-md border border-slate-200 bg-white px-2.5 py-1.5 text-[11px] shadow-sm">
-      <p className="font-semibold text-[var(--admin-text)]">{row.name}</p>
-      <p className="text-[var(--admin-muted)]">
+    <ChartTooltipShell>
+      <p className="font-semibold text-white">{row.name}</p>
+      <p className="mt-0.5 text-slate-300">
         {row.value} projet{row.value > 1 ? "s" : ""}
         {typeof row.percent === "number" ? ` · ${row.percent} %` : ""}
       </p>
-    </div>
+    </ChartTooltipShell>
   );
 }
 
@@ -70,7 +71,9 @@ export function ProjectSectorChart({ data }: ProjectSectorChartProps) {
             const name = payload?.name;
             if (!name) return;
             const slug = slugify(name);
-            router.push(`/admin/projets?secteur=${encodeURIComponent(slug)}`);
+            router.push(
+              `/admin/analyse/secteurs/${encodeURIComponent(slug)}?sourceWidget=projets-secteur`,
+            );
           }}
         >
           {data.map((entry, index) => (

@@ -4,7 +4,6 @@ import Link from "next/link";
 import {
   ArrowDownRight,
   ArrowUpRight,
-  HelpCircle,
   type LucideIcon,
 } from "lucide-react";
 import type { KpiValue } from "@/features/statistiques/types/dashboard";
@@ -25,68 +24,63 @@ export function DashboardKpiCard({
 }: DashboardKpiCardProps) {
   const variation = kpi.variationPct;
   const positive = variation !== null && variation >= 0;
+  const displayValue =
+    kpi.available && kpi.value !== null
+      ? kpi.formatted
+      : kpi.formatted && kpi.formatted !== "—"
+        ? kpi.formatted
+        : "0";
 
   const content = (
-    <>
-      <div className="flex items-start justify-between gap-2">
-        <div
-          className={cn(
-            "inline-flex size-11 shrink-0 items-center justify-center rounded-full text-white sm:size-12",
-            iconBgClassName,
-          )}
-        >
-          <Icon className="size-6" strokeWidth={2} aria-hidden />
-        </div>
-        {!kpi.available && kpi.tooltip ? (
-          <span title={kpi.tooltip} className="text-[var(--admin-muted)]">
-            <HelpCircle className="size-3.5" aria-hidden />
-            <span className="sr-only">{kpi.tooltip}</span>
-          </span>
+    <div className="flex h-full min-h-0 items-center gap-2.5">
+      <span
+        className={cn(
+          "inline-flex size-9 shrink-0 items-center justify-center rounded-full text-white",
+          iconBgClassName,
+        )}
+      >
+        <Icon className="size-4" strokeWidth={2} aria-hidden />
+      </span>
+      <div className="min-w-0 flex-1">
+        <p className="truncate text-[11px] font-medium leading-tight text-[var(--admin-muted)]">
+          {kpi.label}
+        </p>
+        <p className="font-display text-[22px] font-extrabold leading-none tracking-tight text-[var(--admin-text)]">
+          {displayValue}
+        </p>
+        {kpi.available && variation !== null ? (
+          <p
+            className={cn(
+              "mt-0.5 inline-flex items-center gap-0.5 text-[10px] font-bold",
+              positive ? "text-[var(--admin-green)]" : "text-[var(--admin-red)]",
+            )}
+          >
+            {positive ? (
+              <ArrowUpRight className="size-3" aria-hidden />
+            ) : (
+              <ArrowDownRight className="size-3" aria-hidden />
+            )}
+            {positive ? "+" : "−"}
+            {Math.abs(variation).toLocaleString("fr-FR", {
+              maximumFractionDigits: 1,
+            })}
+            %
+          </p>
         ) : null}
       </div>
-
-      <p className="mt-2 text-[12px] font-medium leading-tight text-[var(--admin-muted)]">
-        {kpi.label}
-      </p>
-      <p className="mt-0.5 font-display text-[26px] font-extrabold leading-none tracking-tight text-[var(--admin-text)] sm:text-[28px]">
-        {kpi.formatted}
-      </p>
-
-      {kpi.available && variation !== null ? (
-        <p
-          className={cn(
-            "mt-1.5 inline-flex items-center gap-0.5 text-[11px] font-bold",
-            positive ? "text-[var(--admin-green)]" : "text-[var(--admin-red)]",
-          )}
-        >
-          {positive ? (
-            <ArrowUpRight className="size-3.5" aria-hidden />
-          ) : (
-            <ArrowDownRight className="size-3.5" aria-hidden />
-          )}
-          {positive ? "+" : "−"}
-          {Math.abs(variation).toLocaleString("fr-FR", {
-            maximumFractionDigits: 1,
-          })}
-          %
-          <span className="ml-0.5 font-medium text-[var(--admin-muted)]">
-            vs préc.
-          </span>
-        </p>
-      ) : !kpi.available ? (
-        <p className="mt-1.5 text-[11px] text-[var(--admin-muted)]" title={kpi.tooltip}>
-          {kpi.tooltip ?? "Non disponible"}
-        </p>
-      ) : null}
-    </>
+    </div>
   );
 
   const className =
-    "admin-panel block h-full transition hover:border-[var(--admin-primary)]/40 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--admin-primary)]";
+    "admin-panel block h-full !py-2 transition hover:border-[var(--admin-primary)]/40 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--admin-primary)]";
 
   if (href) {
     return (
-      <Link href={href} className={className} aria-label={`${kpi.label}: ${kpi.formatted}`}>
+      <Link
+        href={href}
+        className={className}
+        aria-label={`${kpi.label}: ${displayValue}`}
+      >
         {content}
       </Link>
     );

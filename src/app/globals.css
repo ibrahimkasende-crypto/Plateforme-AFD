@@ -80,13 +80,13 @@
 
   --admin-header-height: 64px;
   --admin-sidebar-width: 228px;
-  --admin-sidebar-width-collapsed: 72px;
+  --admin-sidebar-width-collapsed: 80px;
   --admin-sidebar-current-width: var(--admin-sidebar-width);
   --admin-content-gap: 7px;
   --admin-card-radius: 9px;
   --admin-panel-padding: 9px;
   --admin-filter-row-height: 40px;
-  --admin-kpi-row-height: 88px;
+  --admin-kpi-row-height: 78px;
   --admin-chart-row-one-height: minmax(195px, 1fr);
   --admin-chart-row-two-height: minmax(190px, 1fr);
   --admin-secondary-row-height: 76px;
@@ -161,6 +161,11 @@
   min-width: 0;
   min-height: 0;
   overflow: hidden;
+}
+
+/* La barre de filtres doit pouvoir afficher le menu d'export */
+.admin-dashboard-overview > [data-dashboard-filters] {
+  overflow: visible;
 }
 
 .admin-panel {

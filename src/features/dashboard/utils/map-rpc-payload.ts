@@ -49,7 +49,8 @@ function mapKpi(
     };
   }
 
-  const available = raw.available !== false && raw.value != null;
+  const hasValue = raw.value !== null && raw.value !== undefined && raw.value !== "";
+  const available = raw.available !== false && hasValue;
   const value = available ? asNumber(raw.value) : null;
   const variation =
     typeof raw.variation_pct === "number"

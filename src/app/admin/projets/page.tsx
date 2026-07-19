@@ -8,12 +8,17 @@ import { getProgrammeOptions } from "@/lib/queries/admin/programmes";
 export default async function AdminProjetsPage({
   searchParams,
 }: {
-  searchParams: Promise<{ q?: string; statut?: string; program_id?: string }>;
+  searchParams: Promise<{
+    q?: string;
+    statut?: string;
+    program_id?: string;
+    province?: string;
+  }>;
 }) {
   await requirePermission("projets:read");
-  const { q, statut, program_id } = await searchParams;
+  const { q, statut, program_id, province } = await searchParams;
   const [items, programmes] = await Promise.all([
-    getAdminProjets({ q, statut, program_id }),
+    getAdminProjets({ q, statut, program_id, province }),
     getProgrammeOptions(),
   ]);
 
@@ -47,8 +52,23 @@ export default async function AdminProjetsPage({
             </option>
           ))}
         </select>
+        <input
+          name="province"
+          defaultValue={province}
+          placeholder="Province"
+          className="rounded border p-2"
+        />
         <button className="rounded border px-4 py-2">Filtrer</button>
       </form>
+      {province ? (
+        <p className="text-sm text-[var(--afd-muted)]">
+          Filtre province : <strong>{province.replace(/-/g, " ")}</strong>
+          {" · "}
+          <Link href="/admin/projets" className="text-[var(--afd-blue)] underline">
+            Effacer
+          </Link>
+        </p>
+      ) : null}
 
       {items.length === 0 ? (
         <EmptyState

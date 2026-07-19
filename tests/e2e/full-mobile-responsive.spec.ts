@@ -51,7 +51,7 @@ test.describe("Full mobile responsive — public", () => {
       page.getByRole("region", { name: /indicateurs d’impact/i }),
     ).toBeVisible();
     await expect(
-      page.getByRole("heading", { name: /Agir avec l’AFD/i }),
+      page.getByRole("heading", { name: /domaines d’intervention/i }),
     ).toBeVisible();
   });
 
