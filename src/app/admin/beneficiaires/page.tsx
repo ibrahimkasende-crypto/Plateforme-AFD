@@ -2,6 +2,7 @@ import Link from "next/link";
 import { AdminEmptyCreate } from "@/components/admin/module/admin-empty-create";
 import { AdminPageHeader } from "@/components/admin/module/admin-page-header";
 import { ImportRapportButton } from "@/features/document-intelligence/components/ImportRapportButton";
+import { BeneficiairesImportForm } from "@/features/beneficiaires/components/beneficiaires-import-form";
 import { requirePermission } from "@/lib/auth/require-permission";
 import { getAdminBeneficiaires } from "@/lib/queries/admin/beneficiaires";
 
@@ -18,7 +19,7 @@ export default async function AdminBeneficiairesPage({
     <main className="space-y-6 p-6">
       <AdminPageHeader
         title="Bénéficiaires"
-        description="Agrégats de bénéficiaires par période et province."
+        description="Agrégats de bénéficiaires par période et province (pas de données personnelles ici)."
         createHref="/admin/beneficiaires/nouveau"
         createLabel="Nouvel agrégat"
         actions={
@@ -28,6 +29,7 @@ export default async function AdminBeneficiairesPage({
           />
         }
       />
+      <BeneficiairesImportForm />
       <form className="flex flex-wrap gap-3">
         <input name="q" defaultValue={q} placeholder="Province" className="rounded border p-2" />
         <button className="rounded border px-4 py-2">Filtrer</button>

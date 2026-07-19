@@ -47,3 +47,47 @@ export async function saveBeneficiaireAgregat(formData: FormData) {
   revalidatePath("/admin/beneficiaires");
   redirect("/admin/beneficiaires");
 }
+
+export async function importBeneficiairesCsvAction(formData: FormData): Promise<{
+  imported: number;
+  duplicates: number;
+  errors: string[];
+}> {
+  await requirePermission("beneficiaires:write");
+  const file = formData.get("file");
+  if (!(file instanceof File)) {
+    return { imported: 0, duplicates: 0, errors: ["Fichier manquant"] };
+  }
+  const content = await file.text();
+  const { parseBeneficiairesCsv } = await import(
+    "@/features/beneficiaires/lib/import-csv"
+  );
+  const parsed = parseBeneficiairesCsv(content);
+  const supabase = await createClientSafe();
+  if (!supabase) {
+    return { imported: 0, duplicates: parsed.duplicates.length, errors: ["Supabase indisponible"] };
+  }
+
+  let imported = 0;
+  for (const row of parsed.rows) {
+    const { error } = await supabase.from("beneficiaires_agregats" as never).insert({
+      periode: row.periode,
+      province: row.province || null,
+      femmes: row.femmes,
+      hommes: row.hommes,
+      enfants: row.enfants,
+      jeunes: row.jeunes,
+      total: row.femmes + row.hommes + row.enfants + row.jeunes,
+      is_demo: false,
+      demo_batch_id: null,
+    } as never);
+    if (!error) imported += 1;
+  }
+
+  revalidatePath("/admin/beneficiaires");
+  return {
+    imported,
+    duplicates: parsed.duplicates.length,
+    errors: parsed.errors,
+  };
+}

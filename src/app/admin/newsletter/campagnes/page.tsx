@@ -2,12 +2,14 @@ import Link from "next/link";
 import { AdminEmptyCreate } from "@/components/admin/module/admin-empty-create";
 import { AdminPageHeader } from "@/components/admin/module/admin-page-header";
 import { markCampagneSent } from "@/features/newsletter/actions/manage-newsletter";
+import { isEmailProviderConfigured } from "@/features/newsletter/providers/resolve-provider";
 import { requirePermission } from "@/lib/auth/require-permission";
 import { getAdminCampagnes } from "@/lib/queries/admin/newsletter-admin";
 
 export default async function AdminNewsletterCampagnesPage() {
   await requirePermission("newsletter:read");
   const items = await getAdminCampagnes();
+  const providerReady = isEmailProviderConfigured();
 
   return (
     <main className="space-y-6 p-6">
@@ -17,6 +19,28 @@ export default async function AdminNewsletterCampagnesPage() {
         createHref="/admin/newsletter/campagnes/nouvelle"
         createLabel="Nouvelle campagne"
       />
+
+      {!providerReady ? (
+        <div
+          role="status"
+          className="rounded border border-amber-300 bg-amber-50 p-4 text-sm text-amber-950"
+        >
+          <p className="font-semibold">Configuration requise</p>
+          <p className="mt-1">
+            L’envoi réel est bloqué tant que{" "}
+            <code className="font-mono text-xs">EMAIL_PROVIDER</code>,{" "}
+            <code className="font-mono text-xs">EMAIL_API_KEY</code> et{" "}
+            <code className="font-mono text-xs">EMAIL_FROM</code> ne sont pas configurés.
+            La création et l’aperçu des campagnes restent disponibles. Statut module :{" "}
+            <strong>bloque_integration_externe</strong>.
+          </p>
+          <p className="mt-2">
+            Voir <Link href="/admin/newsletter" className="underline">documentation intégrations</Link>{" "}
+            (<code className="font-mono text-xs">docs/PLATFORM_AFD_EXTERNAL_INTEGRATIONS.md</code>.
+          </p>
+        </div>
+      ) : null}
+
       {items.length === 0 ? (
         <AdminEmptyCreate
           title="Aucune campagne"
@@ -46,8 +70,16 @@ export default async function AdminNewsletterCampagnesPage() {
                   <td className="p-3 text-right">
                     {item.status !== "envoyee" ? (
                       <form action={markCampagneSent.bind(null, item.id)} className="inline">
-                        <button type="submit" className="text-[var(--afd-blue)]">
-                          Marquer envoyée
+                        <button
+                          type="submit"
+                          className="text-[var(--afd-blue)]"
+                          title={
+                            providerReady
+                              ? "Envoyer via le fournisseur"
+                              : "Configuration requise — envoi bloqué"
+                          }
+                        >
+                          {providerReady ? "Envoyer" : "Tenter l’envoi (bloqué)"}
                         </button>
                       </form>
                     ) : (
