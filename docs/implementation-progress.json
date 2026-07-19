@@ -1,0 +1,28 @@
+{
+  "projet": "Plateforme-AFD",
+  "updated_at": "2026-07-19T13:00:00+01:00",
+  "vague_courante": 0,
+  "vagues": [
+    {
+      "id": 0,
+      "nom": "Audit forensique",
+      "statut": "terminee",
+      "date": "2026-07-19",
+      "modules_audites": 55,
+      "modules_operationnels": 0,
+      "migrations_ajoutees": [],
+      "tests": {
+        "typecheck": "ok",
+        "unit": "26/26",
+        "e2e_anti_placeholder": "spec_created"
+      },
+      "problemes": [
+        "RLS USING(true) sur modules 030",
+        "RLS incomplète migration 050",
+        "Stocks/Logistique/Exports maquettes",
+        "Intégrations email/SerdiPay/backups manquantes"
+      ],
+      "prochaine_etape": "Vague 1 — Fondations Auth/RBAC/RLS/CRUD/audit/jobs"
+    }
+  ]
+}
