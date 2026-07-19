@@ -53,11 +53,21 @@ export default async function AdminUrgencesPage({
             <tbody>
               {items.map((item) => (
                 <tr className="border-t" key={item.id}>
-                  <td className="p-3">{item.title}</td>
+                  <td className="p-3">
+                    <Link
+                      href={`/admin/urgences/${item.id}`}
+                      className="text-[var(--afd-blue)] hover:underline"
+                    >
+                      {item.title}
+                    </Link>
+                  </td>
                   <td>{item.province ?? "—"}</td>
                   <td>{item.started_at ?? "—"}</td>
                   <td>{item.status}</td>
-                  <td className="p-3 text-right">
+                  <td className="space-x-3 p-3 text-right">
+                    <Link href={`/admin/urgences/${item.id}`} className="text-[var(--afd-blue)]">
+                      Détail
+                    </Link>
                     {item.status === "active" ? (
                       <form action={closeUrgence.bind(null, item.id)} className="inline">
                         <button type="submit" className="text-red-700">

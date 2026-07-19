@@ -80,22 +80,26 @@ Sources :
 - Tables / queries : `zones-intervention.ts`
 - Restant : carte unifiée, stats croisées, slug public
 
-### 2.5 Urgences — `partiel`
-- Routes : liste, nouvelle ; pas de `[id]` complet
-- Table : `urgences` (030)
-- Restant : réponse, stocks liés, sitrep, clôture
+### 2.5 Urgences — `partiel` → `fonctionnel_non_teste`
+- Routes : liste, nouvelle, `[id]`, `[id]/modifier`
+- Tables : `urgences`, `urgence_sitreps` (052)
+- Preuves : create/update/close + sitreps + audit
+- Restant : stocks liés, distributions, tests E2E
 
-### 2.6 Clusters — `partiel`
-- Liste + actions `manage-cluster.ts`
-- Restant : réunions, décisions, membres
+### 2.6 Clusters — `partiel` → `fonctionnel_non_teste`
+- Table `clusters` créée (était absente du projet lié) + `cluster_membres`, `cluster_reunions`
+- Routes : liste + `[id]` (membres, réunions)
+- Restant : engagements, zones, tests
 
-### 2.7 Stocks — `maquette_seulement`
-- Preuve : `src/app/admin/stocks/page.tsx` — texte + bouton OCR uniquement ; **pas de mouvements / entrepôts**
-- Restant : tables articles/mouvements, inventaires, alertes
+### 2.7 Stocks — `maquette_seulement` → `fonctionnel_non_teste`
+- Tables 051 + inventaires 052 ; seed entrepôts/catégories
+- Routes : `/admin/stocks`, `/entrepots`, `/categories`, `/mouvements`
+- Preuves : CRUD articles/entrepôts/catégories ; mouvements ; transferts ; dispo via `v_stock_disponibles` ; garde stock insuffisant
+- Restant : inventaires UI, lots/séries complets, tests E2E/RLS
 
-### 2.8 Logistique — `maquette_seulement`
-- Preuve : `src/app/admin/logistique/page.tsx` — entrée OCR seule
-- Restant : demandes, achats, véhicules, missions
+### 2.8 Logistique — `maquette_seulement` → `fonctionnel_non_teste`
+- Demandes avec transitions statut ; véhicules ; missions + véhicule/dates
+- Restant : lignes articles UI, fournisseurs/achats, preuves livraison
 
 ---
 

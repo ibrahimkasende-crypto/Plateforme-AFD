@@ -53,3 +53,53 @@ export async function toggleClusterActive(id: string, active: boolean) {
   await supabase.from("clusters" as never).update({ active } as never).eq("id", id);
   revalidatePath("/admin/clusters");
 }
+
+export async function addClusterMembreAction(formData: FormData) {
+  await requirePermission("clusters:write");
+  const parsed = z
+    .object({
+      cluster_id: z.string().uuid(),
+      nom: z.string().min(2),
+      role: z.string().optional(),
+      email: z.string().email().optional().or(z.literal("")),
+      organisation: z.string().optional(),
+    })
+    .safeParse(Object.fromEntries(formData));
+  if (!parsed.success) return;
+  const supabase = await createClientSafe();
+  if (!supabase) return;
+  await supabase.from("cluster_membres" as never).insert({
+    cluster_id: parsed.data.cluster_id,
+    nom: parsed.data.nom,
+    role: parsed.data.role ?? null,
+    email: parsed.data.email || null,
+    organisation: parsed.data.organisation ?? null,
+  } as never);
+  revalidatePath("/admin/clusters");
+  revalidatePath(`/admin/clusters/${parsed.data.cluster_id}`);
+}
+
+export async function addClusterReunionAction(formData: FormData) {
+  await requirePermission("clusters:write");
+  const parsed = z
+    .object({
+      cluster_id: z.string().uuid(),
+      titre: z.string().min(2),
+      date_reunion: z.string().optional(),
+      decisions: z.string().optional(),
+      actions: z.string().optional(),
+    })
+    .safeParse(Object.fromEntries(formData));
+  if (!parsed.success) return;
+  const supabase = await createClientSafe();
+  if (!supabase) return;
+  await supabase.from("cluster_reunions" as never).insert({
+    cluster_id: parsed.data.cluster_id,
+    titre: parsed.data.titre,
+    date_reunion: parsed.data.date_reunion || new Date().toISOString().slice(0, 10),
+    decisions: parsed.data.decisions ?? null,
+    actions: parsed.data.actions ?? null,
+  } as never);
+  revalidatePath("/admin/clusters");
+  revalidatePath(`/admin/clusters/${parsed.data.cluster_id}`);
+}

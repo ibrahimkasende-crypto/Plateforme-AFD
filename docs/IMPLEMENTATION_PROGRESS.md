@@ -1,3 +1,19 @@
+## Vague 2 — Opérations (en cours, 2026-07-19)
+
+### Travail effectué
+- Migration `20260719_052_operations_wave2.sql` appliquée (query ciblée)
+- Stocks : entrepôts, catégories, mouvements avec jointures, transferts, alertes seuil, archivage
+- Logistique : transitions de statut demandes/missions, MAJ véhicules
+- Urgences : détail `[id]`, modifier, sitreps
+- Clusters : table créée si absente, détail membres/réunions
+- Tests unitaires transitions + règles stock (36 tests)
+
+### Restant Vague 2
+- Chaîne programme→projet→activité (détail activités, jalons)
+- Inventaires stock UI complète
+- Zones admin carte croisée
+- Marquage `operationnel` avec preuves E2E/RLS
+
 ## Vague 1 — Fondations (2026-07-19)
 
 ### Travail effectué

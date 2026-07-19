@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { AdminEmptyCreate } from "@/components/admin/module/admin-empty-create";
 import { AdminPageHeader } from "@/components/admin/module/admin-page-header";
 import { saveCluster, toggleClusterActive } from "@/features/clusters/actions/manage-cluster";
@@ -56,10 +57,20 @@ export default async function AdminClustersPage({
               {items.map((item) => (
                 <tr className="border-t" key={item.id}>
                   <td className="p-3">{item.order ?? 0}</td>
-                  <td>{item.name}</td>
+                  <td>
+                    <Link
+                      href={`/admin/clusters/${item.id}`}
+                      className="text-[var(--afd-blue)] hover:underline"
+                    >
+                      {item.name}
+                    </Link>
+                  </td>
                   <td>{item.type ?? "—"}</td>
                   <td>{item.active ? "Oui" : "Non"}</td>
-                  <td className="p-3 text-right">
+                  <td className="space-x-3 p-3 text-right">
+                    <Link href={`/admin/clusters/${item.id}`} className="text-[var(--afd-blue)]">
+                      Détail
+                    </Link>
                     <form
                       action={toggleClusterActive.bind(null, item.id, !item.active)}
                       className="inline"
