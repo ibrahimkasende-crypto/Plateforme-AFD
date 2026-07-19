@@ -11,14 +11,14 @@
 
 | Indicateur | Valeur | Preuve |
 |------------|--------|--------|
-| Modules détectés / audités | **42** | `MODULE_COMPLETION_MATRIX.json` |
+| Modules détectés / audités | **47** | `MODULE_COMPLETION_MATRIX.json` |
 | Absents | **4** | notifications, recherche globale, jobs async hors OCR, sous-routes stocks |
-| Maquettes seulement | **8** | stocks hub, logistique hub, exports, sauvegardes, système, accès hub, … |
-| Partiels | **18** | urgences, clusters, messages, dons UI, finances, rapports, … |
-| Fonctionnels non sécurisés | **6** | activités/budgets/dépenses/transactions (RLS 030 `USING true`) |
-| Fonctionnels non testés | **12** | dashboard, programmes, projets, enquêtes, OCR, RH, utilisateurs, … |
+| Maquettes seulement | **5** | stocks hub, logistique hub, exports, sauvegardes, système (et hubs proches) |
+| Partiels | **21** | urgences, clusters, messages, finances, rapports, … |
+| Fonctionnels non sécurisés | **4** | activités/budgets/dépenses/transactions (RLS 030 `USING true`) |
+| Fonctionnels non testés | **11** | dashboard, programmes, projets, enquêtes, OCR, RH, utilisateurs, … |
 | Réellement opérationnels (standard strict) | **0** | aucun module ne remplit tous les critères du cahier |
-| Bloqués intégration externe | **4** | newsletter envoi, dons/SerdiPay, (+ OCR cloud si activé) |
+| Bloqués intégration externe | **2** | newsletter envoi, dons/SerdiPay |
 | Routes `page.tsx` admin | **174** | glob `src/app/admin/**/page.tsx` |
 | Entrées navigation sidebar | **53** | `admin-navigation.ts` |
 | Placeholders littéraux UI (« Module en préparation », etc.) | **0** | grep `src` — composant `ModulePlaceholder` sans ce libellé |

@@ -27,15 +27,15 @@ Sources :
 | Statut | Nombre |
 |--------|--------|
 | absent | 4 |
-| maquette_seulement | 8 |
-| partiel | 18 |
-| fonctionnel_non_securise | 6 |
-| fonctionnel_non_teste | 12 |
+| maquette_seulement | 5 |
+| partiel | 21 |
+| fonctionnel_non_securise | 4 |
+| fonctionnel_non_teste | 11 |
 | operationnel | 0 |
-| bloque_integration_externe | 4 |
-| **Total modules audités** | **42** |
+| bloque_integration_externe | 2 |
+| **Total entrées matrice** | **47** |
 
-> Les sous-modules RH détaillés (paie, congés, etc.) sont regroupés sous « RH / Organisation » pour coller aux ~42 points d’entrée du cahier des charges ; le détail RH figure dans `docs/IDENTITY_RBAC_HR_PAYROLL_AUDIT.md`.
+> Le cahier des charges parle d’environ 42 points d’entrée. La matrice en compte **47** en incluant les modules transversaux (notifications, recherche, jobs) et le découpage finances / stocks.
 
 ---
 
