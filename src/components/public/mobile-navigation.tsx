@@ -85,18 +85,14 @@ export function MobileNavigation() {
           "hover:border-[color-mix(in_srgb,var(--afd-blue)_35%,var(--afd-border))] hover:bg-[var(--afd-light-blue)]",
           "active:scale-[0.97]",
           "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--afd-blue)] focus-visible:ring-offset-2",
-          open && "relative z-[70] border-[var(--afd-blue)] bg-[var(--afd-light-blue)]",
+          open && "pointer-events-none opacity-0",
         )}
-        aria-label={open ? "Fermer le menu" : "Ouvrir le menu"}
+        aria-label="Ouvrir le menu"
         aria-expanded={open}
         aria-controls={panelId}
         onClick={toggleMenu}
       >
-        {open ? (
-          <X className="size-5" aria-hidden />
-        ) : (
-          <Menu className="size-5" aria-hidden />
-        )}
+        <Menu className="size-5" aria-hidden />
       </button>
 
       {open ? (

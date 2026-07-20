@@ -62,7 +62,7 @@ function SecondaryStatCard({ stat }: { stat: SecondaryStat }) {
   const Icon = meta.icon;
   const isAction = stat.id.startsWith("add_");
   const valueLabel = isAction
-    ? "Ouvrir"
+    ? null
     : stat.formatted === "" || stat.formatted == null
       ? "0"
       : String(stat.formatted);
@@ -71,33 +71,33 @@ function SecondaryStatCard({ stat }: { stat: SecondaryStat }) {
     <Link
       href={stat.href}
       className={cn(
-        "admin-panel flex h-full min-h-[4.5rem] flex-row items-center gap-3 !p-3 transition hover:border-[var(--admin-primary)]/40",
+        /* Ne pas utiliser .admin-panel ici : il impose flex-direction:column */
+        "flex h-full min-h-0 flex-row items-center gap-2.5 rounded-[var(--admin-card-radius)] border border-[var(--admin-border)] bg-[var(--admin-card)] px-2.5 py-2 transition hover:border-[var(--admin-primary)]/40",
         isAction && "border-[var(--admin-primary)]/30 bg-[var(--admin-primary)]/5",
       )}
     >
       <span
         className={cn(
-          "inline-flex size-9 shrink-0 items-center justify-center rounded-full text-white",
+          "inline-flex size-8 shrink-0 items-center justify-center rounded-full text-white",
           meta.bg,
         )}
       >
-        <Icon className="size-4" aria-hidden />
+        <Icon className="size-3.5" aria-hidden />
       </span>
-      <span className="min-w-0 flex-1">
-        <span className="block text-[11px] font-medium leading-snug text-[var(--admin-muted)]">
-          {stat.label}
-        </span>
-        <span
-          className={cn(
-            "mt-1 block font-display font-extrabold leading-none tabular-nums tracking-tight text-[var(--admin-navy,#0d254e)]",
-            isAction
-              ? "text-[12px] font-semibold text-[var(--admin-primary)]"
-              : "text-[22px] md:text-[26px]",
-          )}
-        >
+
+      <span className="min-w-0 flex-1 truncate text-[11px] font-semibold leading-tight text-[var(--admin-text)]">
+        {stat.label}
+      </span>
+
+      {valueLabel != null ? (
+        <span className="shrink-0 font-display text-[18px] font-extrabold leading-none tabular-nums tracking-tight text-[var(--admin-navy,#0d254e)] md:text-[20px]">
           {valueLabel}
         </span>
-      </span>
+      ) : (
+        <span className="shrink-0 text-[11px] font-semibold text-[var(--admin-primary)]">
+          Ouvrir →
+        </span>
+      )}
     </Link>
   );
 }

@@ -11,10 +11,10 @@ import type { SidebarBadges } from "@/features/statistiques/types/dashboard";
 import type { ReactNode } from "react";
 
 const EMPTY_BADGES: SidebarBadges = {
-  newsletter: null,
-  messages: null,
-  adhesions: null,
-  notifications: null,
+  newsletter: 0,
+  messages: 0,
+  adhesions: 0,
+  notifications: 0,
 };
 
 export default async function AdminLayout({
@@ -30,19 +30,22 @@ export default async function AdminLayout({
 
   try {
     const bundle = await getDashboardBundle();
-    badges = bundle.badges;
+    badges = {
+      newsletter: bundle.badges.newsletter ?? 0,
+      messages: bundle.badges.messages ?? 0,
+      adhesions: bundle.badges.adhesions ?? 0,
+      notifications: bundle.badges.notifications ?? 0,
+    };
     presentationMode = Boolean(bundle.presentationMode ?? bundle.demoMode);
   } catch {
-    // Conserver des badges vides si le chargement échoue.
+    // Conserver des badges à 0 si le chargement échoue.
   }
 
   try {
     const supabase = await createClientSafe();
     if (supabase) {
       const unread = await countUnreadNotifications(supabase, session.user.id);
-      if (unread > 0 || badges.notifications == null) {
-        badges = { ...badges, notifications: unread };
-      }
+      badges = { ...badges, notifications: unread };
       const rows = await listUserNotifications(supabase, session.user.id, {
         limit: 8,
       });

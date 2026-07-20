@@ -19,7 +19,20 @@ import {
 } from "@/features/intervention-zones/utils/intensity";
 import { ProvinceDetails } from "@/components/maps/province-details";
 import { ProvinceList } from "@/components/maps/province-list";
+import { ProvinceTooltip } from "@/components/maps/province-tooltip";
 import { cn } from "@/lib/utils";
+
+function useIsMobileViewport() {
+  return useSyncExternalStore(
+    (onChange) => {
+      const media = window.matchMedia("(max-width: 1023px)");
+      media.addEventListener("change", onChange);
+      return () => media.removeEventListener("change", onChange);
+    },
+    () => window.matchMedia("(max-width: 1023px)").matches,
+    () => false,
+  );
+}
 
 export function DrcInteractiveMap({
   bundle,
@@ -35,6 +48,7 @@ export function DrcInteractiveMap({
   const reduceMotion = useReducedMotion();
   const titleId = useId();
   const descId = useId();
+  const isMobile = useIsMobileViewport();
 
   const provincesById = useMemo(() => {
     const map = new Map<string, InterventionProvince>();
@@ -47,33 +61,25 @@ export function DrcInteractiveMap({
   const [userSelectedId, setUserSelectedId] = useState<string | null>(null);
   const selectedId = userSelectedId ?? initialProvinceId;
   const [hoveredId, setHoveredId] = useState<string | null>(null);
-  const isCoarsePointer = useSyncExternalStore(
-    subscribeCoarsePointer,
-    getCoarsePointerSnapshot,
-    () => false,
-  );
 
-  /** Priorité au survol pour le panneau latéral, sinon la sélection */
-  const previewId = hoveredId ?? selectedId;
+  /** Sur mobile : popup = survol ou sélection ; desktop : panneau latéral */
+  const previewId = isMobile
+    ? (hoveredId ?? selectedId)
+    : (hoveredId ?? selectedId);
   const preview = previewId ? (provincesById.get(previewId) ?? null) : null;
   const panelMode =
     hoveredId != null ? "hover" : selectedId != null ? "selected" : "idle";
 
+  const showMobilePopup = isMobile && preview != null;
+
   const selectProvince = useCallback((id: string) => {
     setUserSelectedId(id);
-  }, []);
-
-  const onProvinceFocus = useCallback((id: string) => {
     setHoveredId(id);
   }, []);
 
-  const onProvincePointerMove = useCallback(
-    (id: string) => {
-      if (isCoarsePointer) return;
-      setHoveredId(id);
-    },
-    [isCoarsePointer],
-  );
+  const onProvinceEnter = useCallback((id: string) => {
+    setHoveredId(id);
+  }, []);
 
   const clearHover = useCallback(() => {
     setHoveredId(null);
@@ -107,7 +113,7 @@ export function DrcInteractiveMap({
       >
         <div
           className={cn(
-            "min-w-0 rounded-2xl border border-[var(--afd-border)] bg-white p-3 sm:p-4",
+            "relative min-w-0 rounded-2xl border border-[var(--afd-border)] bg-white p-3 sm:p-4",
             variant === "home" ? "lg:col-span-7" : "lg:col-span-7",
           )}
         >
@@ -169,10 +175,10 @@ export function DrcInteractiveMap({
                       "translate-y-[-1px]",
                     province.active && !isSelected && "drop-shadow-sm",
                   )}
-                  onPointerEnter={() => onProvincePointerMove(path.id)}
-                  onPointerMove={() => onProvincePointerMove(path.id)}
+                  onPointerEnter={() => onProvinceEnter(path.id)}
+                  onPointerMove={() => onProvinceEnter(path.id)}
                   onPointerLeave={clearHover}
-                  onFocus={() => onProvinceFocus(path.id)}
+                  onFocus={() => onProvinceEnter(path.id)}
                   onBlur={clearHover}
                   onClick={() => selectProvince(path.id)}
                   onKeyDown={(event) => {
@@ -185,6 +191,16 @@ export function DrcInteractiveMap({
               );
             })}
           </svg>
+
+          {/* Popup mobile / tablette : style dashboard (noir arrondi) */}
+          <div className="lg:hidden" aria-live="polite">
+            <ProvinceTooltip
+              province={preview}
+              visible={showMobilePopup}
+              variant="dark"
+            />
+          </div>
+
           <div className="mt-3 flex flex-wrap items-center justify-center gap-x-4 gap-y-1.5 text-[11px] text-[var(--afd-muted)]">
             <span className="inline-flex items-center gap-1.5">
               <span
@@ -202,8 +218,13 @@ export function DrcInteractiveMap({
             </span>
           </div>
           <p className="mt-1.5 text-center text-[11px] text-[var(--afd-muted)]">
-            Survolez une zone bleue pour voir les données à droite · Carte SVG —
-            Simplemaps.com
+            <span className="lg:hidden">
+              Touchez une province bleue pour afficher le détail
+            </span>
+            <span className="hidden lg:inline">
+              Survolez une zone bleue pour voir les données à droite · Carte SVG —
+              Simplemaps.com
+            </span>
           </p>
         </div>
 
@@ -240,13 +261,6 @@ export function DrcInteractiveMap({
             {summaryText}
           </p>
 
-          {bundle.isDemo ? (
-            <p className="rounded-xl border border-amber-300 bg-amber-50 px-3 py-2.5 text-[13px] font-medium text-amber-900">
-              Données de démonstration — ces valeurs ne sont pas des statistiques
-              officielles de l’AFD.
-            </p>
-          ) : null}
-
           {!bundle.hasPublishedLocations && !bundle.isDemo ? (
             <p className="rounded-xl border border-[var(--afd-border)] bg-[var(--afd-light-blue)]/60 px-3 py-2.5 text-[13px] text-[var(--afd-muted)]">
               Les données d’intervention par province seront affichées dès leur
@@ -254,12 +268,14 @@ export function DrcInteractiveMap({
             </p>
           ) : null}
 
-          <ProvinceDetails
-            province={preview}
-            compact={variant === "home"}
-            mode={panelMode}
-            isDemo={bundle.isDemo}
-          />
+          {/* Panneau détail : desktop uniquement (mobile = popup sur la carte) */}
+          <div className="hidden lg:block">
+            <ProvinceDetails
+              province={preview}
+              compact={variant === "home"}
+              mode={panelMode}
+            />
+          </div>
 
           <ProvinceList
             provinces={bundle.provinces}
@@ -285,14 +301,4 @@ function StatCard({ label, value }: { label: string; value: string }) {
       </p>
     </div>
   );
-}
-
-function subscribeCoarsePointer(onStoreChange: () => void) {
-  const media = window.matchMedia("(pointer: coarse)");
-  media.addEventListener("change", onStoreChange);
-  return () => media.removeEventListener("change", onStoreChange);
-}
-
-function getCoarsePointerSnapshot() {
-  return window.matchMedia("(pointer: coarse)").matches;
 }

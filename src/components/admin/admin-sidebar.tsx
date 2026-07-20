@@ -124,11 +124,13 @@ function NavItemLink({
         >
           {item.label}
         </span>
-        {!collapsed && count !== null && count > 0 ? (
+        {!collapsed && count !== null ? (
           <span
             className={cn(
-              "inline-flex min-w-[18px] shrink-0 items-center justify-center rounded-full px-1 py-0.5 text-[9px] font-semibold",
-              badgeClassName(item.badgeKey ?? "notifications"),
+              "inline-flex min-w-[18px] shrink-0 items-center justify-center rounded-full px-1 py-0.5 text-[9px] font-semibold tabular-nums",
+              count > 0
+                ? badgeClassName(item.badgeKey ?? "notifications")
+                : "bg-white/15 text-white/80",
             )}
           >
             {count > 99 ? "99+" : count}
@@ -137,7 +139,7 @@ function NavItemLink({
         {collapsed ? (
           <span className="pointer-events-none absolute left-full z-50 ml-2 hidden whitespace-nowrap rounded-md bg-[#07152f] px-2 py-1 text-[11px] text-white shadow-lg group-hover:block group-focus-visible:block">
             {item.label}
-            {count !== null && count > 0 ? ` (${count})` : ""}
+            {count !== null ? ` (${count})` : ""}
           </span>
         ) : null}
       </Link>
@@ -308,11 +310,13 @@ function NavGroupAccordion({
                       )}
                     >
                       <span className="truncate">{item.label}</span>
-                      {count !== null && count > 0 ? (
+                      {count !== null ? (
                         <span
                           className={cn(
-                            "inline-flex min-w-[18px] items-center justify-center rounded-full px-1 py-0.5 text-[9px] font-semibold",
-                            badgeClassName(item.badgeKey ?? "notifications"),
+                            "inline-flex min-w-[18px] items-center justify-center rounded-full px-1 py-0.5 text-[9px] font-semibold tabular-nums",
+                            count > 0
+                              ? badgeClassName(item.badgeKey ?? "notifications")
+                              : "bg-white/15 text-white/80",
                           )}
                         >
                           {count > 99 ? "99+" : count}

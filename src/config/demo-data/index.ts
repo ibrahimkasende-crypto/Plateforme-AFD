@@ -1,9 +1,4 @@
-/**
- * Jeux de données clairement identifiés comme DÉMO.
- * Ne jamais présenter ces valeurs comme des indicateurs réels de l’AFD.
- */
-export const DEMO_DATA_NOTICE =
-  "Données de démonstration uniquement — non représentatives de l’impact réel de l’AFD.";
+export const DEMO_DATA_NOTICE = "";
 
 export const demoDashboardKpis = {
   __demo: true as const,

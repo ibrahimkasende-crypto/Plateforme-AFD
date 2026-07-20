@@ -10,14 +10,12 @@ export function ProvinceDetails({
   className,
   compact = false,
   mode = "idle",
-  isDemo = false,
 }: {
   province: InterventionProvince | null;
   className?: string;
   compact?: boolean;
   /** idle = rien ; hover = aperçu au survol ; selected = sélection */
   mode?: "idle" | "hover" | "selected";
-  isDemo?: boolean;
 }) {
   if (!province) {
     return (
@@ -137,12 +135,6 @@ export function ProvinceDetails({
                 ))}
               </ul>
             </div>
-          ) : null}
-
-          {isDemo ? (
-            <p className="text-[12px] text-amber-800">
-              Données simples de démonstration — à remplacer plus tard.
-            </p>
           ) : null}
 
           {!compact && province.projects.length > 0 ? (

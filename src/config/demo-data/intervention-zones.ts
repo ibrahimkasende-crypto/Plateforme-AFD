@@ -121,6 +121,6 @@ export function isDemoContentEnabled(): boolean {
   const flag = process.env.NEXT_PUBLIC_ENABLE_DEMO_CONTENT;
   if (flag === "true") return true;
   if (flag === "false") return false;
-  // En développement sans flag explicite : afficher les 8 provinces AFD (démo).
+  // En développement sans flag : afficher les données de secours (sans badge « démo »).
   return process.env.NODE_ENV !== "production";
 }

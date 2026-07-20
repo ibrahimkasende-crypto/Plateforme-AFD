@@ -34,7 +34,7 @@ export function buildDashboardReportCsv(
     ["Rapport tableau de bord AFD"],
     ["Généré le", new Date().toLocaleString("fr-FR")],
     ["Filtres", filterLabel(filters)],
-    ["Mode présentation", bundle.presentationMode || bundle.demoMode ? "Oui" : "Non"],
+    ["Environnement", process.env.NEXT_PUBLIC_APP_ENV ?? process.env.NODE_ENV ?? ""],
     [],
     ["=== INDICATEURS CLÉS ==="],
     ["Indicateur", "Valeur", "Variation (%)", "Disponible"],
@@ -193,7 +193,6 @@ export function printDashboardReport(
   <p>Rapport du tableau de bord administrateur</p>
   <p>Généré le ${new Date().toLocaleString("fr-FR")}</p>
   <p>${filterLabel(filters)}</p>
-  ${bundle.presentationMode || bundle.demoMode ? "<p><em>Jeu de données de présentation</em></p>" : ""}
 
   <h2>Indicateurs clés</h2>
   <table><thead><tr><th>Indicateur</th><th>Valeur</th><th>Variation</th></tr></thead><tbody>${kpis}</tbody></table>

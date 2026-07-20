@@ -64,8 +64,13 @@ export function ProfileAvatarUploader({
         cancel();
         toast.success("Photo de profil mise à jour");
         router.refresh();
-      } catch {
-        setError("Échec de l’upload. Réessayez.");
+      } catch (err) {
+        const message =
+          err instanceof Error && err.message
+            ? err.message
+            : "Échec de l’upload. Réessayez.";
+        setError(message);
+        toast.error(message);
       }
     });
   }

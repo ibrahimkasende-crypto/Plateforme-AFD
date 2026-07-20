@@ -5,6 +5,12 @@ const isProd = process.env.NODE_ENV === "production";
 const nextConfig: NextConfig = {
   // Désactive le N Next.js ; le chargement admin utilise le logo AFD.
   devIndicators: false,
+  // Avatars / uploads FormData (limite client 5 Mo) — défaut Next = 1 Mo
+  experimental: {
+    serverActions: {
+      bodySizeLimit: "6mb",
+    },
+  },
   images: {
     remotePatterns: [
       {

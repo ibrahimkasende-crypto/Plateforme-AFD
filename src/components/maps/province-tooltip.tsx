@@ -3,43 +3,76 @@
 import type { InterventionProvince } from "@/features/intervention-zones/types/intervention-zone";
 import { cn } from "@/lib/utils";
 
+type ProvinceTooltipProps = {
+  province: InterventionProvince | null;
+  visible: boolean;
+  /** Style dashboard : fond noir arrondi */
+  variant?: "light" | "dark";
+  className?: string;
+  /** Position absolute relative au conteneur carte (dark) ou fixed (light) */
+  x?: number;
+  y?: number;
+};
+
 export function ProvinceTooltip({
   province,
+  visible,
+  variant = "dark",
+  className,
   x,
   y,
-  visible,
-}: {
-  province: InterventionProvince | null;
-  x: number;
-  y: number;
-  visible: boolean;
-}) {
+}: ProvinceTooltipProps) {
   if (!province || !visible) return null;
 
   const format = new Intl.NumberFormat("fr-FR");
+  const isDark = variant === "dark";
 
   return (
     <div
       role="tooltip"
       className={cn(
-        "pointer-events-none fixed z-50 w-[min(260px,calc(100vw-24px))] rounded-xl border border-[var(--afd-border)] bg-white p-3 shadow-[0_10px_28px_rgba(3,27,60,0.14)] transition-opacity duration-200",
+        "pointer-events-none z-20 max-w-[min(220px,calc(100%-1rem))] rounded-xl px-3 py-2.5 text-[11px] shadow-[0_12px_28px_rgba(15,23,42,0.45)] transition-opacity duration-200",
+        isDark
+          ? "absolute left-2 top-2 border border-slate-600/60 bg-slate-900 text-slate-100"
+          : "fixed border border-[var(--afd-border)] bg-white text-[var(--afd-navy)]",
         visible ? "opacity-100" : "opacity-0",
+        className,
       )}
-      style={{
-        left: `min(${x + 14}px, calc(100vw - 280px))`,
-        top: Math.max(12, y - 12),
-      }}
+      style={
+        !isDark && x != null && y != null
+          ? {
+              left: `min(${x + 14}px, calc(100vw - 280px))`,
+              top: Math.max(12, y - 12),
+            }
+          : undefined
+      }
     >
-      <p className="font-heading text-sm font-bold text-[var(--afd-navy)]">
+      <p
+        className={cn(
+          "font-semibold leading-snug",
+          isDark ? "text-white" : "font-heading text-sm text-[var(--afd-navy)]",
+        )}
+      >
         {province.name}
       </p>
       {province.mainLocality ? (
-        <p className="mt-0.5 text-[12px] text-[var(--afd-muted)]">
+        <p
+          className={cn(
+            "mt-0.5",
+            isDark ? "text-slate-400" : "text-[12px] text-[var(--afd-muted)]",
+          )}
+        >
           {province.mainLocality}
         </p>
       ) : null}
+
       {province.active ? (
-        <ul className="mt-2 space-y-1 text-[12px] leading-snug text-[var(--afd-muted)]">
+        <ul
+          className={cn(
+            "mt-1.5 space-y-0.5 leading-snug",
+            isDark ? "text-slate-300" : "text-[12px] text-[var(--afd-muted)]",
+          )}
+        >
           <li>
             {province.projectCount} projet
             {province.projectCount > 1 ? "s" : ""}
@@ -57,15 +90,17 @@ export function ProvinceTooltip({
           </li>
           {province.sectors.length > 0 ? (
             <li className="line-clamp-2">
-              Secteurs : {province.sectors.slice(0, 3).join(", ")}
+              {province.sectors.slice(0, 3).join(", ")}
             </li>
           ) : null}
-          <li className="pt-1 font-medium text-[var(--afd-blue)]">
-            Cliquez pour afficher le détail
-          </li>
         </ul>
       ) : (
-        <p className="mt-2 text-[12px] leading-snug text-[var(--afd-muted)]">
+        <p
+          className={cn(
+            "mt-1.5 leading-snug",
+            isDark ? "text-slate-400" : "text-[12px] text-[var(--afd-muted)]",
+          )}
+        >
           Aucune intervention publiée
         </p>
       )}

@@ -6,9 +6,8 @@
 
 import type { DashboardBundle } from "@/features/statistiques/types/dashboard";
 
-export const ADMIN_DEMO_BADGE = "Mode présentation";
-export const ADMIN_DEMO_NOTICE =
-  "Cet environnement utilise un jeu de données de présentation non officiel.";
+export const ADMIN_DEMO_BADGE = "";
+export const ADMIN_DEMO_NOTICE = "";
 
 function kpi(
   label: string,
@@ -24,7 +23,6 @@ function kpi(
       new Intl.NumberFormat("fr-FR", { maximumFractionDigits: 0 }).format(value),
     variationPct,
     available: true,
-    tooltip: ADMIN_DEMO_NOTICE,
   };
 }
 
@@ -270,5 +268,5 @@ export const adminDashboardDemoBundle: Omit<
     notifications: 12,
   },
   accessibleSummary:
-    "Données de démonstration : 128 projets au total, dont 62 en cours, 28 planifiés et 24 terminés. Environ 24 356 personnes touchées.",
+    "128 projets au total, dont 62 en cours, 28 planifiés et 24 terminés. Environ 24 356 personnes touchées.",
 };

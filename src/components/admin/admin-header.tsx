@@ -17,7 +17,6 @@ import {
 import { AdminProfileMenu } from "@/components/admin/admin-profile-menu";
 import { AdminSearch } from "@/components/admin/admin-search";
 import { AfdEnvironmentBadge } from "@/components/admin/afd-environment-badge";
-import { PresentationModeBadge } from "@/components/admin/presentation-mode-badge";
 import { resolveAdminNavTitle } from "@/config/admin-navigation";
 import type { AdminViewer, SidebarBadges } from "@/features/statistiques/types/dashboard";
 import { cn } from "@/lib/utils";
@@ -37,7 +36,6 @@ export function AdminHeader({
   badges,
   viewer,
   onMenuClick,
-  presentationMode = false,
   canManageSettings = false,
   notificationPreviews = [],
 }: AdminHeaderProps) {
@@ -85,7 +83,6 @@ export function AdminHeader({
 
       <div className="flex shrink-0 items-center gap-1 md:gap-2">
         <AfdEnvironmentBadge className="hidden sm:inline-flex" />
-        {presentationMode ? <PresentationModeBadge /> : null}
         <AdminNotificationsButton
           count={badges.notifications}
           previews={notificationPreviews}
