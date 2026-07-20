@@ -6,6 +6,9 @@ export const assets = {
   brand: {
     logo: "/assets/brand/Logo_AFD.jpeg",
   },
+  product: {
+    lisungiLogo: "/images/afd/LisungiHub/logo_lisungi.png",
+  },
   home: {
     hero: "/assets/home/Femmes_AFD.png",
     presentation: "/assets/home/presentation_afd.png",

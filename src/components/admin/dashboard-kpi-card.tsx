@@ -32,26 +32,26 @@ export function DashboardKpiCard({
         : "0";
 
   const content = (
-    <div className="flex h-full min-h-0 items-center gap-2.5">
+    <div className="flex h-full min-h-0 items-center gap-1.5 sm:gap-2.5" data-kpi-card>
       <span
         className={cn(
-          "inline-flex size-9 shrink-0 items-center justify-center rounded-full text-white",
+          "inline-flex size-7 shrink-0 items-center justify-center rounded-full text-white sm:size-9",
           iconBgClassName,
         )}
       >
-        <Icon className="size-4" strokeWidth={2} aria-hidden />
+        <Icon className="size-3.5 sm:size-4" strokeWidth={2} aria-hidden />
       </span>
       <div className="min-w-0 flex-1">
-        <p className="truncate text-[11px] font-medium leading-tight text-[var(--admin-muted)]">
+        <p className="truncate text-[10px] font-medium leading-tight text-[var(--admin-muted)] sm:text-[11px]">
           {kpi.label}
         </p>
-        <p className="font-display text-[22px] font-extrabold leading-none tracking-tight text-[var(--admin-text)]">
+        <p className="admin-kpi-value font-display text-[14px] font-extrabold leading-none tracking-tight text-[var(--admin-text)] sm:text-[22px]">
           {displayValue}
         </p>
         {kpi.available && variation !== null ? (
           <p
             className={cn(
-              "mt-0.5 inline-flex items-center gap-0.5 text-[10px] font-bold",
+              "mt-0.5 inline-flex items-center gap-0.5 text-[9px] font-bold sm:text-[10px]",
               positive ? "text-[var(--admin-green)]" : "text-[var(--admin-red)]",
             )}
           >
@@ -72,7 +72,7 @@ export function DashboardKpiCard({
   );
 
   const className =
-    "admin-panel block h-full !py-2 transition hover:border-[var(--admin-primary)]/40 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--admin-primary)]";
+    "admin-panel block h-full !py-1.5 sm:!py-2 transition hover:border-[var(--admin-primary)]/40 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--admin-primary)]";
 
   if (href) {
     return (

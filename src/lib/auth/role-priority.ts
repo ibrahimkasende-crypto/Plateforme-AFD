@@ -2,6 +2,11 @@ import { roles, type Role } from "@/config/roles";
 
 const LEGACY_ROLE_MAP: Record<string, Role> = {
   platform_owner: "platform_owner",
+  platform_admin: "platform_admin",
+  support_agent: "support_agent",
+  billing_admin: "billing_admin",
+  tenant_owner: "tenant_owner",
+  tenant_super_admin: "tenant_super_admin",
   super_admin: "super_admin",
   administrateur: "administrateur",
   responsable_module: "responsable_module",
@@ -30,6 +35,11 @@ const LEGACY_ROLE_MAP: Record<string, Role> = {
 
 const ROLE_RANK: Record<Role, number> = {
   platform_owner: 1000,
+  platform_admin: 950,
+  support_agent: 920,
+  billing_admin: 910,
+  tenant_owner: 905,
+  tenant_super_admin: 902,
   super_admin: 900,
   administrateur: 800,
   responsable_module: 700,

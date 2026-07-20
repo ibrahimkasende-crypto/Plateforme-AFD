@@ -20,20 +20,21 @@ function InstitutionalCard({
     <div
       className={cn(
         className ??
-          "w-full rounded-[18px] border border-[var(--afd-sky)]/50 bg-white p-[1.125rem] text-[#10233f] shadow-[0_14px_36px_rgba(3,27,60,0.28)] sm:max-w-md sm:p-5 lg:max-w-[14.5rem] lg:rounded-[16px] lg:p-3.5",
+          // Mobile : ~50 % de la taille desktop (padding / typo / largeur)
+          "w-full max-w-[11rem] rounded-[12px] border border-[var(--afd-sky)]/50 bg-white p-2.5 text-[#10233f] shadow-[0_8px_20px_rgba(3,27,60,0.22)] sm:max-w-[13rem] sm:rounded-[14px] sm:p-3 lg:max-w-[14.5rem] lg:rounded-[16px] lg:p-3.5 lg:shadow-[0_14px_36px_rgba(3,27,60,0.28)]",
         breathe && "afd-card-breathe",
       )}
     >
-      <div className="inline-flex size-9 items-center justify-center rounded-full bg-[#eaf5fd] text-[#0877d1] lg:size-8">
-        <UsersRound className="size-4 lg:size-3.5" aria-hidden />
+      <div className="inline-flex size-6 items-center justify-center rounded-full bg-[#eaf5fd] text-[#0877d1] sm:size-7 lg:size-8">
+        <UsersRound className="size-3 sm:size-3.5 lg:size-3.5" aria-hidden />
       </div>
-      <p className="font-heading mt-2.5 text-[1.75rem] font-extrabold leading-none text-[#062653] lg:mt-2 lg:text-2xl">
+      <p className="font-heading mt-1.5 text-[1.05rem] font-extrabold leading-none text-[#062653] sm:mt-2 sm:text-[1.25rem] lg:text-2xl">
         80&nbsp;%
       </p>
-      <p className="mt-2 text-[13px] font-semibold leading-snug text-[#062653] lg:mt-1.5 lg:text-[12px]">
+      <p className="mt-1 text-[10px] font-semibold leading-snug text-[#062653] sm:mt-1.5 sm:text-[11px] lg:text-[12px]">
         de femmes de moins de 35 ans et de jeunes au Conseil d’administration.
       </p>
-      <p className="mt-2 text-[12px] leading-relaxed text-[#5f6f83] lg:mt-1.5 lg:text-[11px]">
+      <p className="mt-1 text-[9px] leading-relaxed text-[#5f6f83] sm:mt-1.5 sm:text-[10px] lg:text-[11px]">
         Fait institutionnel — distinct des indicateurs d’impact terrain.
       </p>
     </div>
@@ -214,9 +215,9 @@ export function HomeHero() {
             ))}
           </motion.ul>
 
-          {/* Carte 80 % — flux mobile / tablette */}
+          {/* Carte 80 % — flux mobile / tablette (~50 % taille) */}
           <motion.div
-            className="mt-6 lg:hidden"
+            className="mt-5 flex justify-start lg:hidden"
             initial={reduceMotion ? false : { opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.35, delay: 0.28 }}

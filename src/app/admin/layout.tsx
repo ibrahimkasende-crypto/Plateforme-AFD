@@ -1,14 +1,22 @@
+import type { Metadata } from "next";
 import { AdminShell } from "@/components/admin/admin-shell";
 import type { HeaderNotificationPreview } from "@/components/admin/header/admin-notifications-button";
 import {
   countUnreadNotifications,
   listUserNotifications,
 } from "@/features/notifications/services/notifications.service";
+import { productBrand } from "@/config/product-brand";
 import { requireAdmin } from "@/lib/auth/require-admin";
 import { createClientSafe } from "@/lib/supabase/safe";
 import { getDashboardBundle } from "@/services/dashboard.service";
 import type { SidebarBadges } from "@/features/statistiques/types/dashboard";
 import type { ReactNode } from "react";
+
+export const metadata: Metadata = {
+  title: productBrand.adminMetadata.title,
+  description: productBrand.adminMetadata.description,
+  robots: { index: false, follow: false },
+};
 
 const EMPTY_BADGES: SidebarBadges = {
   newsletter: 0,

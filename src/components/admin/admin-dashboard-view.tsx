@@ -36,6 +36,8 @@ import type {
   DashboardBundle,
   SecondaryStat,
 } from "@/features/statistiques/types/dashboard";
+import { organizationBrand } from "@/config/organization-brand";
+import { productBrand } from "@/config/product-brand";
 import { cn } from "@/lib/utils";
 
 type AdminDashboardViewProps = {
@@ -72,29 +74,29 @@ function SecondaryStatCard({ stat }: { stat: SecondaryStat }) {
       href={stat.href}
       className={cn(
         /* Ne pas utiliser .admin-panel ici : il impose flex-direction:column */
-        "flex h-full min-h-0 flex-row items-center gap-2.5 rounded-[var(--admin-card-radius)] border border-[var(--admin-border)] bg-[var(--admin-card)] px-2.5 py-2 transition hover:border-[var(--admin-primary)]/40",
+        "flex h-full min-h-0 flex-row items-center gap-1.5 rounded-[var(--admin-card-radius)] border border-[var(--admin-border)] bg-[var(--admin-card)] px-2 py-1.5 transition hover:border-[var(--admin-primary)]/40 sm:gap-2.5 sm:px-2.5 sm:py-2",
         isAction && "border-[var(--admin-primary)]/30 bg-[var(--admin-primary)]/5",
       )}
     >
       <span
         className={cn(
-          "inline-flex size-8 shrink-0 items-center justify-center rounded-full text-white",
+          "inline-flex size-7 shrink-0 items-center justify-center rounded-full text-white sm:size-8",
           meta.bg,
         )}
       >
-        <Icon className="size-3.5" aria-hidden />
+        <Icon className="size-3 sm:size-3.5" aria-hidden />
       </span>
 
-      <span className="min-w-0 flex-1 truncate text-[11px] font-semibold leading-tight text-[var(--admin-text)]">
+      <span className="min-w-0 flex-1 truncate text-[10px] font-semibold leading-tight text-[var(--admin-text)] sm:text-[11px]">
         {stat.label}
       </span>
 
       {valueLabel != null ? (
-        <span className="shrink-0 font-display text-[18px] font-extrabold leading-none tabular-nums tracking-tight text-[var(--admin-navy,#0d254e)] md:text-[20px]">
+        <span className="shrink-0 font-display text-[14px] font-extrabold leading-none tabular-nums tracking-tight text-[var(--admin-navy,#0d254e)] sm:text-[18px] md:text-[20px]">
           {valueLabel}
         </span>
       ) : (
-        <span className="shrink-0 text-[11px] font-semibold text-[var(--admin-primary)]">
+        <span className="shrink-0 text-[10px] font-semibold text-[var(--admin-primary)] sm:text-[11px]">
           Ouvrir →
         </span>
       )}
@@ -225,9 +227,29 @@ function DashboardContent({ initialData }: AdminDashboardViewProps) {
   return (
     <div
       data-dashboard-overview
-      className="admin-dashboard-overview relative max-lg:grid-cols-1 max-lg:auto-rows-auto max-lg:overflow-y-auto max-lg:[grid-template-rows:none]"
+      className="admin-dashboard-overview relative max-lg:grid-cols-2 max-lg:auto-rows-auto max-lg:overflow-visible max-lg:[grid-template-rows:none] max-sm:grid-cols-2"
     >
       <p className="sr-only">{bundle.accessibleSummary}</p>
+
+      <div
+        data-dashboard-welcome
+        className="col-span-full mb-1 flex flex-wrap items-end justify-between gap-2"
+      >
+        <div className="min-w-0">
+          <h2 className="font-display text-lg font-extrabold text-[var(--admin-text)] sm:text-xl">
+            Bienvenue dans {productBrand.productName}
+          </h2>
+          <p className="mt-0.5 text-[12px] text-[var(--admin-muted)] sm:text-[13px]">
+            Pilotez les activités de {organizationBrand.organizationName}.
+          </p>
+        </div>
+        <p
+          className="text-[10px] text-slate-400 sm:text-[11px]"
+          data-powered-by-lisungi
+        >
+          {productBrand.propelledByLabel}
+        </p>
+      </div>
 
       <div
         data-dashboard-filters
@@ -244,7 +266,7 @@ function DashboardContent({ initialData }: AdminDashboardViewProps) {
       {kpiEntries.map(({ key, icon, iconBg, href }) => (
         <div
           key={key}
-          className="col-span-2 min-h-0 overflow-visible max-lg:col-span-1 max-sm:col-span-full"
+          className="col-span-2 min-h-0 overflow-visible max-lg:col-span-1"
         >
           <DashboardKpiCard
             kpi={summary.kpis[key]}
@@ -257,7 +279,7 @@ function DashboardContent({ initialData }: AdminDashboardViewProps) {
 
       <ChartCard
         title="Évolution des bénéficiaires"
-        className="col-span-4 max-xl:col-span-6 max-lg:col-span-full"
+        className="col-span-4 max-xl:col-span-6 max-lg:col-span-full max-lg:min-h-[140px] max-lg:max-h-[160px]"
       >
         {bundle.beneficiaryEvolution.length === 0 ? (
           <EmptyState
@@ -279,7 +301,7 @@ function DashboardContent({ initialData }: AdminDashboardViewProps) {
 
       <ChartCard
         title="Projets par statut"
-        className="col-span-3 max-xl:col-span-6 max-lg:col-span-full"
+        className="col-span-3 max-xl:col-span-6 max-lg:col-span-full max-lg:min-h-[140px] max-lg:max-h-[160px]"
       >
         {bundle.projectsByStatus.length === 0 ? (
           <EmptyState
@@ -298,7 +320,7 @@ function DashboardContent({ initialData }: AdminDashboardViewProps) {
 
       <ChartCard
         title="Projets par secteur"
-        className="col-span-3 max-xl:col-span-6 max-lg:col-span-full"
+        className="col-span-3 max-xl:col-span-6 max-lg:col-span-full max-lg:min-h-[140px] max-lg:max-h-[160px]"
       >
         {bundle.projectsBySector.length === 0 ? (
           <EmptyState
@@ -315,7 +337,7 @@ function DashboardContent({ initialData }: AdminDashboardViewProps) {
         )}
       </ChartCard>
 
-      <div className="admin-panel col-span-2 max-xl:col-span-6 max-lg:col-span-full">
+      <div className="admin-panel col-span-2 max-xl:col-span-6 max-lg:col-span-full max-lg:min-h-[120px] max-lg:max-h-[140px]">
         <div className="mb-1 flex items-center justify-between gap-2">
           <h3 className="admin-panel__title">Top 5 projets</h3>
           <Link
@@ -332,7 +354,7 @@ function DashboardContent({ initialData }: AdminDashboardViewProps) {
 
       <ChartCard
         title="Projets par province"
-        className="col-span-4 max-xl:col-span-6 max-lg:col-span-full"
+        className="col-span-4 max-xl:col-span-6 max-lg:col-span-full max-lg:min-h-[140px] max-lg:max-h-[160px]"
       >
         {provinceProjects.length === 0 ? (
           <EmptyState
@@ -351,7 +373,7 @@ function DashboardContent({ initialData }: AdminDashboardViewProps) {
 
       <ChartCard
         title="Activités réalisées par mois"
-        className="col-span-4 max-xl:col-span-6 max-lg:col-span-full"
+        className="col-span-4 max-xl:col-span-6 max-lg:col-span-full max-lg:min-h-[140px] max-lg:max-h-[160px]"
       >
         {bundle.monthlyActivities.length === 0 ? (
           <EmptyState
@@ -371,7 +393,7 @@ function DashboardContent({ initialData }: AdminDashboardViewProps) {
       {viewer.canReadFinances ? (
         <ChartCard
           title="Budget prévu vs dépensé"
-          className="col-span-4 max-xl:col-span-6 max-lg:col-span-full"
+          className="col-span-4 max-xl:col-span-6 max-lg:col-span-full max-lg:min-h-[140px] max-lg:max-h-[160px]"
         >
           {bundle.budgetComparison.length === 0 ? (
             <EmptyState
@@ -398,7 +420,7 @@ function DashboardContent({ initialData }: AdminDashboardViewProps) {
       {bottomRow.map((stat) => (
         <div
           key={stat.id}
-          className="col-span-2 max-lg:col-span-1 max-sm:col-span-full"
+          className="col-span-2 max-lg:col-span-1"
         >
           <SecondaryStatCard stat={stat} />
         </div>

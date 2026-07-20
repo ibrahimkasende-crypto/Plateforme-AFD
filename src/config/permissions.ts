@@ -162,6 +162,21 @@ const payrollFinancePermissions = [
 
 export const rolePermissions: Record<Role, readonly Permission[]> = {
   platform_owner: permissions,
+  platform_admin: [
+    "dashboard:read",
+    "journal:read",
+    "users.view",
+    "users.view_audit",
+    "utilisateurs:read",
+  ],
+  support_agent: [
+    "dashboard:read",
+    "journal:read",
+    "users.view_audit",
+  ],
+  billing_admin: ["dashboard:read"],
+  tenant_owner: permissions,
+  tenant_super_admin: permissions,
   super_admin: permissions,
   administrateur: [
     "dashboard:read",

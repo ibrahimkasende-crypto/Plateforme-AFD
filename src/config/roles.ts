@@ -1,5 +1,10 @@
 export const roles = [
   "platform_owner",
+  "platform_admin",
+  "support_agent",
+  "billing_admin",
+  "tenant_owner",
+  "tenant_super_admin",
   "super_admin",
   "administrateur",
   "responsable_module",
@@ -26,6 +31,11 @@ export type Role = (typeof roles)[number];
 
 export const roleLabels: Record<Role, string> = {
   platform_owner: "Propriétaire plateforme",
+  platform_admin: "Administrateur plateforme",
+  support_agent: "Agent support Lisungi Hub",
+  billing_admin: "Administrateur facturation",
+  tenant_owner: "Propriétaire organisation",
+  tenant_super_admin: "Super administrateur organisation",
   super_admin: "Super administrateur",
   administrateur: "Administrateur",
   responsable_module: "Responsable de module",

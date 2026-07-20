@@ -30,7 +30,7 @@ test.describe("Sidebar admin pliable", () => {
 
     await expect(sidebar).toHaveAttribute("data-collapsed", "true");
     await expect(
-      page.locator("[data-admin-sidebar]").getByText("AFD ASBL"),
+      page.locator("[data-admin-sidebar]").getByText("LISUNGI"),
     ).toBeHidden();
 
     await expect(

@@ -2,11 +2,12 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import { AuthShell } from "@/components/auth/auth-shell";
 import { LoginForm } from "@/components/auth/login-form";
+import { organizationBrand } from "@/config/organization-brand";
+import { productBrand } from "@/config/product-brand";
 
 export const metadata: Metadata = {
-  title: "Connexion administration",
-  description:
-    "Accès sécurisé à l’espace d’administration de la Plateforme AFD.",
+  title: `Connexion à ${productBrand.productName}`,
+  description: `Espace de gestion de ${organizationBrand.organizationName}, propulsé par ${productBrand.publisherName}.`,
   robots: { index: false, follow: false },
 };
 
@@ -21,8 +22,8 @@ function LoginFormFallback() {
 export default function ConnexionPage() {
   return (
     <AuthShell
-      title="Administration Plateforme-AFD"
-      subtitle="Connexion sécurisée réservée aux administrateurs et équipes autorisées de l’AFD ASBL."
+      title={`Connexion à ${productBrand.productName}`}
+      subtitle={`Espace de gestion de l’${organizationBrand.organizationName}`}
     >
       <Suspense fallback={<LoginFormFallback />}>
         <LoginForm />

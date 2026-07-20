@@ -49,10 +49,12 @@ export function MobileNavigation() {
     };
   }, [open]);
 
-  useEffect(() => {
+  const [menuPath, setMenuPath] = useState(pathname);
+  if (pathname !== menuPath) {
+    setMenuPath(pathname);
     setOpen(false);
     setExpanded(null);
-  }, [pathname]);
+  }
 
   function closeMenu() {
     setOpen(false);

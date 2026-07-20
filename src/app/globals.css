@@ -172,6 +172,67 @@
   overflow: visible;
 }
 
+/* ---------- Admin mobile : scroll libre + widgets ~50 % ---------- */
+@media (max-width: 1023px) {
+  .admin-shell--overview {
+    height: auto;
+    max-height: none;
+    overflow: visible;
+  }
+
+  .admin-shell--overview .admin-main--overview {
+    height: auto;
+    min-height: 0;
+    overflow: visible;
+    padding: 8px;
+  }
+
+  .admin-dashboard-overview {
+    height: auto;
+    gap: 6px;
+    --admin-panel-padding: 6px;
+    --dashboard-chart-title-size: 11px;
+    --dashboard-body-size: 10px;
+  }
+
+  .admin-dashboard-overview > * {
+    overflow: visible;
+  }
+
+  /* Densité ~50 % : KPI, cartes, graphiques */
+  .admin-dashboard-overview .admin-panel {
+    padding: 6px !important;
+    border-radius: 8px;
+  }
+
+  .admin-dashboard-overview .admin-panel__title {
+    font-size: 11px;
+    margin-bottom: 2px;
+  }
+
+  .admin-dashboard-overview .admin-panel__body {
+    min-height: 110px !important;
+    max-height: 140px;
+  }
+
+  .admin-dashboard-overview [data-kpi-card] .admin-kpi-value,
+  .admin-dashboard-overview .font-display.text-\[22px\] {
+    font-size: 14px !important;
+  }
+
+  /* Conteneur scrollable des pages admin hors dashboard */
+  .admin-shell main.overflow-auto {
+    padding: 10px !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .admin-dashboard-overview .admin-panel__body {
+    min-height: 96px !important;
+    max-height: 120px;
+  }
+}
+
 .admin-panel {
   border: 1px solid var(--admin-border);
   border-radius: var(--admin-card-radius);

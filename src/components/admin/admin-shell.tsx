@@ -91,8 +91,8 @@ export function AdminShell({
           className={cn(
             "flex-1 min-h-0",
             isOverview
-              ? "admin-main--overview"
-              : "overflow-auto p-4 md:p-6",
+              ? "admin-main--overview max-lg:overflow-y-auto max-lg:p-2 lg:overflow-hidden"
+              : "overflow-auto p-2.5 sm:p-4 md:p-6",
           )}
         >
           {children}

@@ -2,6 +2,8 @@ import type {
   DashboardBundle,
   DashboardFilters,
 } from "@/features/statistiques/types/dashboard";
+import { organizationBrand } from "@/config/organization-brand";
+import { productBrand } from "@/config/product-brand";
 
 function escapeCsv(value: string | number | null | undefined): string {
   const text = value == null ? "" : String(value);
@@ -31,7 +33,8 @@ export function buildDashboardReportCsv(
   filters: DashboardFilters,
 ): string {
   const lines: string[][] = [
-    ["Rapport tableau de bord AFD"],
+    [`Rapport — ${organizationBrand.organizationLegalName}`],
+    ["Produit", productBrand.productName],
     ["Généré le", new Date().toLocaleString("fr-FR")],
     ["Filtres", filterLabel(filters)],
     ["Environnement", process.env.NEXT_PUBLIC_APP_ENV ?? process.env.NODE_ENV ?? ""],
@@ -176,7 +179,7 @@ export function printDashboardReport(
 <html lang="fr">
 <head>
   <meta charset="utf-8" />
-  <title>Rapport tableau de bord AFD</title>
+  <title>Rapport — ${organizationBrand.organizationShortName}</title>
   <style>
     body { font-family: Georgia, "Times New Roman", serif; color: #0f172a; margin: 32px; }
     h1 { font-size: 22px; margin: 0 0 8px; color: #034ea2; }
@@ -185,12 +188,13 @@ export function printDashboardReport(
     table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 8px; }
     th, td { border: 1px solid #e2e8f0; padding: 8px 10px; text-align: left; }
     th { background: #f1f5f9; }
+    .report-footer { margin-top: 32px; font-size: 11px; color: #94a3b8; }
     @media print { body { margin: 12mm; } }
   </style>
 </head>
 <body>
-  <h1>Alliance des Femmes pour le Développement</h1>
-  <p>Rapport du tableau de bord administrateur</p>
+  <h1>${organizationBrand.organizationName}</h1>
+  <p>Rapport du tableau de bord — ${organizationBrand.organizationLegalName}</p>
   <p>Généré le ${new Date().toLocaleString("fr-FR")}</p>
   <p>${filterLabel(filters)}</p>
 
@@ -203,7 +207,7 @@ export function printDashboardReport(
   <h2>Projets par province</h2>
   <table><thead><tr><th>Province</th><th>Projets</th><th>Bénéficiaires</th></tr></thead><tbody>${provinces || "<tr><td colspan='3'>Aucune donnée</td></tr>"}</tbody></table>
 
-  <p style="margin-top:32px;font-size:11px;color:#94a3b8;">AFD ASBL — export généré depuis la plateforme admin</p>
+  <p class="report-footer">${productBrand.reportFooter}</p>
   <script>window.onload = function () { window.print(); }</script>
 </body>
 </html>`;

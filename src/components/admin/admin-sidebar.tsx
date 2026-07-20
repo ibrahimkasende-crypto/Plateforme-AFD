@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
@@ -19,6 +18,10 @@ import {
   Wallet,
   type LucideIcon,
 } from "lucide-react";
+import { OrganizationIdentity } from "@/components/branding/organization-identity";
+import { OrganizationLogo } from "@/components/branding/organization-logo";
+import { ProductBrandBlock } from "@/components/branding/product-brand";
+import { PublisherBrand } from "@/components/branding/publisher-brand";
 import {
   adminNavGroups,
   navGroupAllowed,
@@ -27,7 +30,8 @@ import {
   type AdminNavItem,
 } from "@/config/admin-navigation";
 import { navItemAllowed } from "@/config/admin-nav-permissions";
-import { siteConfig } from "@/config/site";
+import { organizationBrand } from "@/config/organization-brand";
+import { productBrand } from "@/config/product-brand";
 import { roleHasPermission } from "@/config/permissions";
 import type { Role } from "@/config/roles";
 import type { SidebarBadges } from "@/features/statistiques/types/dashboard";
@@ -517,47 +521,48 @@ export function AdminSidebar({
     >
       <div className="shrink-0 border-b border-white/10 px-2.5 py-2.5">
         <div className={cn("flex items-center", collapsed ? "justify-center" : "gap-2.5")}>
-          <button
-            type="button"
-            onClick={onToggleCollapsed}
-            className="relative size-10 shrink-0 overflow-hidden rounded-full bg-white ring-2 ring-white/20 transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
-            aria-label={collapsed ? "Ouvrir la barre latérale" : "Réduire la barre latérale"}
-            aria-expanded={!collapsed}
-            title={collapsed ? "Ouvrir la barre latérale" : "Réduire la barre latérale"}
-          >
-            <Image
-              src={siteConfig.logo.src}
-              alt=""
-              width={40}
-              height={40}
-              className="size-full object-cover"
-              priority
-            />
-          </button>
-          <div
-            className={cn(
-              "min-w-0 transition-opacity duration-200",
-              collapsed ? "sr-only opacity-0" : "opacity-100",
-            )}
-          >
-            <p className="font-display text-[13.5px] font-bold leading-tight">
-              {siteConfig.shortName}
-            </p>
-            <p className="mt-0.5 line-clamp-2 text-[10px] leading-snug text-[var(--admin-sidebar-muted)]">
-              Alliance des Femmes pour le Développement
-            </p>
-          </div>
+          <ProductBrandBlock
+            mode={collapsed ? "compact" : "extended"}
+            theme="dark"
+            logoAsButton={Boolean(onToggleCollapsed)}
+            onLogoClick={onToggleCollapsed}
+            logoAriaLabel={
+              collapsed ? "Ouvrir la barre latérale" : "Réduire la barre latérale"
+            }
+            logoTitle={
+              collapsed ? "Ouvrir la barre latérale" : "Réduire la barre latérale"
+            }
+            className={cn(!collapsed && "min-w-0 flex-1")}
+          />
           {!collapsed && onToggleCollapsed ? (
             <button
               type="button"
               onClick={onToggleCollapsed}
-              className="ml-auto inline-flex size-8 items-center justify-center rounded-md text-white/80 hover:bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+              className="ml-auto inline-flex size-8 shrink-0 items-center justify-center rounded-md text-white/80 hover:bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
               aria-label="Réduire la barre latérale"
             >
               <PanelLeftClose className="size-4" aria-hidden />
             </button>
           ) : null}
         </div>
+
+        {collapsed ? (
+          <div className="mt-2 flex justify-center">
+            <span
+              className="inline-flex"
+              title={`${productBrand.tenantLabel} : ${organizationBrand.organizationLegalName}`}
+            >
+              <OrganizationLogo size="xs" className="ring-1 ring-white/30" />
+              <span className="sr-only">
+                {productBrand.tenantLabel} — {organizationBrand.organizationName}
+              </span>
+            </span>
+          </div>
+        ) : (
+          <div className="mt-2.5 rounded-lg bg-white/5 px-2 py-1.5">
+            <OrganizationIdentity mode="extended" theme="dark" nameVariant="full" />
+          </div>
+        )}
       </div>
 
       <AdminSidebarNav
@@ -568,7 +573,12 @@ export function AdminSidebar({
         onExpandSidebar={expandSidebar}
       />
 
-      <div className="mt-auto shrink-0 border-t border-white/10 p-2.5">
+      <div className="mt-auto shrink-0 space-y-2 border-t border-white/10 p-2.5">
+        <PublisherBrand
+          mode={collapsed ? "compact" : "extended"}
+          theme="dark"
+          className={cn(collapsed ? "justify-center" : "px-0.5")}
+        />
         <Link
           href="/"
           target="_blank"

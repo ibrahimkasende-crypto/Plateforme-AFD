@@ -139,6 +139,8 @@ export const adminNavGroups: AdminNavGroupDef[] = [
       { label: "Sessions", href: "/admin/securite/sessions" },
       { label: "Sécurité", href: "/admin/securite" },
       { label: "Mon profil", href: "/admin/mon-profil" },
+      { label: "Paramètres", href: "/admin/parametres" },
+      { label: "Abonnement", href: "/admin/abonnement" },
       { label: "Sauvegardes", href: "/admin/sauvegardes" },
       { label: "Santé du système", href: "/admin/systeme" },
     ],

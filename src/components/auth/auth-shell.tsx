@@ -2,6 +2,8 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import { AnimatedUniverseBackground } from "@/components/auth/animated-universe-background";
 import { AuthBrandPanel } from "@/components/auth/auth-brand-panel";
+import { organizationBrand } from "@/config/organization-brand";
+import { productBrand } from "@/config/product-brand";
 
 type AuthShellProps = {
   title: string;
@@ -29,8 +31,11 @@ export function AuthShell({ title, children, subtitle }: AuthShellProps) {
           <div className="mt-3.5">{children}</div>
         </div>
 
-        <p className="mt-3.5 text-center text-[11px] text-white/55">
-          Alliance des Femmes pour le Développement — R.D. Congo
+        <p className="mt-3.5 text-center text-[11px] text-white/55" data-powered-by-lisungi>
+          {productBrand.poweredByLabel}
+        </p>
+        <p className="mt-1 text-center text-[10px] text-white/40">
+          {organizationBrand.organizationLegalName}
         </p>
         <p className="mt-1.5 text-center">
           <Link
