@@ -48,6 +48,16 @@ export default async function AdminMessageDetailPage({
           </span>
           <span>Statut : {message.status ?? "—"}</span>
           {message.phone ? <span>Tél. : {message.phone}</span> : null}
+          {message.organisation ? (
+            <span>Organisation : {message.organisation}</span>
+          ) : null}
+          {message.request_type ? (
+            <span>Type : {message.request_type}</span>
+          ) : null}
+          {message.province ? <span>Province : {message.province}</span> : null}
+          {message.email_notification_status ? (
+            <span>E-mail notif. : {message.email_notification_status}</span>
+          ) : null}
         </div>
         <div className="whitespace-pre-wrap leading-relaxed text-[var(--admin-text)]">
           {message.message || "—"}

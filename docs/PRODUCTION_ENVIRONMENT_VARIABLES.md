@@ -1,70 +1,100 @@
-# Variables d’environnement — production
+# Variables d’environnement — production VPS
 
-**Date :** 2026-07-19  
-**Références :** `.env.example`, `src/config/env.ts`  
-**Aucune valeur secrète dans ce document.**
+Fichier réel **uniquement sur le VPS** :
 
-Légende statut : `requis` · `recommandé` · `optionnel` · `interdit_prod` (si true / mal placé)
+```text
+$VPS_APP_PATH/shared/.env.production
+chmod 600 shared/.env.production
+```
 
----
+Modèles dans le dépôt (sans secrets) :
 
-## Table des variables
-
-| Nom | Obligatoire | Public / Server | Service | Où configurer | Statut |
-|-----|-------------|-----------------|---------|---------------|--------|
-| `NEXT_PUBLIC_APP_ENV` | Oui (prod) | Public | App Next | Hostinger / runtime | `production` requis — **non vérifié live** |
-| `NEXT_PUBLIC_SITE_URL` | Oui (prod) | Public | App / auth redirect | Hostinger + Supabase Auth URLs | Candidat `https://afd-rdc.org` — **non vérifié** |
-| `NEXT_PUBLIC_SUPABASE_URL` | Oui | Public | Supabase client | Hostinger | Doit cibler `ndkcywqihtnuoydwicrq` |
-| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Oui* | Public | Supabase | Hostinger | *ou publishable |
-| `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | Oui* | Public | Supabase | Hostinger | Alternative à anon |
-| `NEXT_PUBLIC_APP_NAME` | Non | Public | Branding | Hostinger | Défaut `Plateforme-AFD` |
-| `NEXT_PUBLIC_ENABLE_DEMO_CONTENT` | Oui (false) | Public | Contenu public | Hostinger | **false** en prod |
-| `NEXT_PUBLIC_ENABLE_ADMIN_DEMO_DATA` | Oui (false) | Public | Dashboard démo | Hostinger | **false** en prod — critique |
-| `NEXT_PUBLIC_ENABLE_SPONTANEOUS_APPLICATIONS` | Non | Public | Candidatures | Hostinger | false par défaut |
-| `NEXT_PUBLIC_ENABLE_WATER_RIPPLE` | Non | Public | UI | Hostinger | optionnel |
-| `NEXT_PUBLIC_ENABLE_SECTION_ANIMATIONS` | Non | Public | UI | Hostinger | optionnel |
-| `NEXT_PUBLIC_ENABLE_MOBILE_RAILS` | Non | Public | UI | Hostinger | optionnel |
-| `SUPABASE_SERVICE_ROLE_KEY` | Oui (invites / jobs) | Server | Supabase admin API | Hostinger secrets | Jamais `NEXT_PUBLIC_` |
-| `NEWSLETTER_SEND_ENABLED` | Non | Server | Newsletter | Hostinger | false tant que non configuré |
-| `EMAIL_PROVIDER` | Si envoi | Server | Newsletter | Hostinger | Absent → « Configuration requise » |
-| `EMAIL_API_KEY` | Si envoi | Server | Newsletter | Hostinger | Secret |
-| `EMAIL_FROM` | Si envoi | Server | Newsletter | Hostinger | |
-| `EMAIL_REPLY_TO` | Non | Server | Newsletter | Hostinger | optionnel |
-| `SERDIPAY_ENABLED` | Non | Server | Paiements | Hostinger | false → pas de faux succès |
-| `SERDIPAY_ENVIRONMENT` | Si pay | Server | SerdiPay | Hostinger | |
-| `SERDIPAY_BASE_URL` | Si pay | Server | SerdiPay | Hostinger | |
-| `SERDIPAY_MERCHANT_ID` | Si pay | Server | SerdiPay | Hostinger | |
-| `SERDIPAY_API_KEY` | Si pay | Server | SerdiPay | Hostinger | Secret |
-| `SERDIPAY_API_SECRET` | Si pay | Server | SerdiPay | Hostinger | Secret |
-| `SERDIPAY_WEBHOOK_SECRET` | Si pay | Server | SerdiPay | Hostinger | Secret |
-| `SERDIPAY_CALLBACK_URL` | Si pay | Server | SerdiPay | Hostinger | |
-| `SERDIPAY_RETURN_URL` | Si pay | Server | SerdiPay | Hostinger | |
-| `SERDIPAY_DEFAULT_CURRENCY` | Non | Server | SerdiPay | Hostinger | défaut USD |
-| `OCR_CLOUD_ENABLED` | Non | Server | OCR | Hostinger | false = native / local |
-| `OCR_PROVIDER` | Non | Server | OCR | Hostinger | défaut `native` |
-| `OCR_MAX_FILE_SIZE_MB` | Non | Server | OCR | Hostinger | |
-| `OCR_MAX_PAGES` | Non | Server | OCR | Hostinger | |
-| `OCR_DEFAULT_LANGUAGE` | Non | Server | OCR | Hostinger | |
-| `OCR_SECONDARY_LANGUAGES` | Non | Server | OCR | Hostinger | |
-| `OCR_MIN_CONFIDENCE` | Non | Server | OCR | Hostinger | |
-| `OCR_ENABLE_TABLE_EXTRACTION` | Non | Server | OCR | Hostinger | |
-| `OCR_ENABLE_SIGNATURE_DETECTION` | Non | Server | OCR | Hostinger | |
-| `OCR_ORGANISATION_ID` | Non | Server | OCR | Hostinger | |
-| `OCR_WORKER_SECRET` | Si worker | Server | OCR worker | Hostinger | Secret |
-| `OCR_WORKER_POLL_MS` | Non | Server | OCR worker | Hostinger | |
-| `AZURE_DOCUMENT_INTELLIGENCE_*` | Si Azure | Server | OCR cloud | Hostinger | optionnel |
-| `GOOGLE_DOCUMENT_AI_*` / `GOOGLE_APPLICATION_CREDENTIALS` | Si Google | Server | OCR cloud | Hostinger | optionnel |
-| `AWS_TEXTRACT_*` / `AWS_ACCESS_KEY_*` | Si AWS | Server | OCR cloud | Hostinger | optionnel |
-| `BACKUP_STATUS_PROVIDER` | Non | Server | UI sauvegardes | Hostinger | informatif |
-| `BACKUP_LAST_KNOWN_AT` | Non | Server | UI sauvegardes | Hostinger | informatif |
-| Secrets CI `NEXT_PUBLIC_SUPABASE_*` / `SUPABASE_SERVICE_ROLE_KEY` | Pour job RLS | CI | GitHub Actions | GitHub Secrets | Job RLS skip si vides |
+- `.env.example`
+- `.env.production.example`
 
 ---
 
-## Règles production
+## Obligatoires
 
-1. `assertProductionPublicEnv()` exige `SITE_URL` + URL Supabase + (anon **ou** publishable).  
-2. Intégrations désactivées par défaut : pas de succès fictif (SerdiPay, newsletter).  
-3. Hostinger : **non configuré** à ce jour — toutes les lignes « où configurer » sont **PENDING**.
+```env
+NODE_ENV=production
+HOSTNAME=127.0.0.1
+PORT=3000
 
-**Statut global env prod :** **NON CONFIGURÉ / BLOQUANT**.
+NEXT_PUBLIC_APP_ENV=production
+NEXT_PUBLIC_SITE_URL=https://afd-rdc.org
+NEXT_PUBLIC_APP_NAME=Plateforme-AFD
+NEXT_PUBLIC_APP_VERSION=0.1.0
+
+NEXT_PUBLIC_SUPABASE_URL=https://mxxuxnoqnwjygawvvhcb.supabase.co
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=
+# ou NEXT_PUBLIC_SUPABASE_ANON_KEY=
+
+SUPABASE_SERVICE_ROLE_KEY=
+```
+
+## Contact / SMTP
+
+```env
+CONTACT_NOTIFICATION_EMAIL=contactafdrdc@gmail.com
+CONTACT_FROM_EMAIL=admin@afd-rdc.org
+CONTACT_FROM_NAME=Site officiel AFD
+CONTACT_AUTO_REPLY_ENABLED=true
+
+MAIL_WEBMAIL_URL=
+MAIL_IMAP_HOST=afd-rdc.org
+MAIL_IMAP_PORT=993
+MAIL_IMAP_SECURE=true
+MAIL_SMTP_HOST=afd-rdc.org
+MAIL_SMTP_PORT=587
+MAIL_SMTP_SECURE=false
+MAIL_SMTP_USERNAME=
+MAIL_SMTP_PASSWORD=
+MAIL_INTEGRATED_ENABLED=false
+```
+
+## OCR
+
+```env
+OCR_CLOUD_ENABLED=false
+OCR_PROVIDER=native
+OCR_MAX_FILE_SIZE_MB=25
+OCR_MAX_PAGES=100
+OCR_DEFAULT_LANGUAGE=fr
+OCR_ORGANISATION_ID=afd-asbl
+```
+
+## Flags publics
+
+```env
+NEXT_PUBLIC_ENABLE_ADMIN_DEMO_DATA=false
+NEXT_PUBLIC_ENABLE_DEMO_CONTENT=false
+NEXT_PUBLIC_NEWSLETTER_GOOGLE_OAUTH_ENABLED=true
+```
+
+---
+
+## Interdits en `NEXT_PUBLIC_*`
+
+- `SUPABASE_SERVICE_ROLE_KEY`
+- mot de passe SMTP
+- secret Google OAuth
+- token / mot de passe CyberPanel
+- clé SSH
+- tout token d’administration
+
+---
+
+## Secrets GitHub Actions (Settings → Secrets)
+
+| Secret | Usage |
+|---|---|
+| `VPS_HOST` | IP ou hostname SSH |
+| `VPS_PORT` | Port SSH (souvent 22) |
+| `VPS_USER` | Utilisateur Linux de déploiement |
+| `VPS_SSH_PRIVATE_KEY` | Clé privée Actions → VPS |
+| `VPS_APP_PATH` | Ex. `/home/afd-rdc.org/apps/plateforme-afd` |
+| `VPS_DEPLOY_BRANCH` | `main` |
+| `VPS_KNOWN_HOSTS` | (optionnel) sortie de `ssh-keyscan` |
+
+Aucun de ces secrets ne doit apparaître dans le YAML ni dans Git.

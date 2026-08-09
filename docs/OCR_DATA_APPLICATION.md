@@ -4,3 +4,4 @@ Tables autorisées uniquement : `finances_depenses`, `finances_budgets`, `activi
 
 Plan visible avant apply. Traçabilité via `imports_donnees` / lignes + `ocr_applications.rollback_data`.  
 `revalidateTag` dashboard/finances/… **uniquement après** application réussie.
+

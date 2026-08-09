@@ -27,3 +27,4 @@ Table : `agents_terrain`
 Permissions : `agents:read`, `agents:write`
 
 Champs : nom, matricule, fonction, téléphone, province, territoire, disponibilité, affectation, actif.
+

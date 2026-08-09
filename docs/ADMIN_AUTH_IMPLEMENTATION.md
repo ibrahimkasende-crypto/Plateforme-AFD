@@ -79,3 +79,4 @@ Jamais de mot de passe / token.
 ## 15. Prochaine étape
 
 Modules CRUD admin (programmes, projets, …) derrière `requirePermission`.
+

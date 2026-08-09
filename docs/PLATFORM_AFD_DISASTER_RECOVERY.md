@@ -7,3 +7,4 @@
 5. Tester connexion admin + RLS
 
 Ne pas utiliser `supabase db reset` en production.
+

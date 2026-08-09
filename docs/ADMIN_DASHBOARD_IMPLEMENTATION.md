@@ -46,3 +46,4 @@ Maquette : `Maquette_AFD/Maquette_AFD_Admin.png`
 3. SVG officiel carte RDC
 4. Exports PDF réels
 5. Personnalisation du tableau de bord
+

@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { AfdHeartLoader } from "@/components/shared/afd-heart-loader";
 import { NewsletterPopup } from "@/components/newsletter/newsletter-popup";
 import { LOADER_DURATION_MS, LOADER_STORAGE } from "@/config/newsletter-popup";
+import { useBodyScrollLock } from "@/hooks/use-body-scroll-lock";
 import { useNewsletterPopup } from "@/hooks/use-newsletter-popup";
 
 function readLoaderSeen(): boolean {
@@ -26,6 +27,7 @@ export function AppEntryExperience() {
   const [loaderVisible, setLoaderVisible] = useState(false);
   const [loaderDone, setLoaderDone] = useState(false);
   const popup = useNewsletterPopup({ loaderDone });
+  useBodyScrollLock(loaderVisible);
 
   useEffect(() => {
     const reduceMotion = window.matchMedia(

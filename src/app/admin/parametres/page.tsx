@@ -18,7 +18,7 @@ export default async function AdminParametresPage() {
     <main className="space-y-6 p-6">
       <AdminPageHeader
         title="Paramètres"
-        description="Séparation claire : produit LISUNGI, organisation cliente et préférences."
+        description="Configuration de la plateforme AFD, de l’organisation et des préférences."
       />
 
       <div className="grid gap-4 md:grid-cols-3">
@@ -30,7 +30,7 @@ export default async function AdminParametresPage() {
             <ProductLogo size="md" />
             <div>
               <p className="text-[10px] font-semibold uppercase tracking-wide text-slate-500">
-                Produit
+                Plateforme
               </p>
               <h2 className="font-display text-base font-bold text-[var(--admin-text)]">
                 {productBrand.productName}
@@ -43,7 +43,7 @@ export default async function AdminParametresPage() {
               <dd className="font-medium text-slate-800">{productBrand.version}</dd>
             </div>
             <div className="flex justify-between gap-2">
-              <dt>Éditeur</dt>
+              <dt>Organisation</dt>
               <dd className="font-medium text-slate-800">
                 {productBrand.publisherName}
               </dd>

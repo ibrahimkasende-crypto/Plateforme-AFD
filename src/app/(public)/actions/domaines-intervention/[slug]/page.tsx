@@ -1,10 +1,14 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { DomainEventArchiveSection } from "@/components/public/interventions/domain-event-archive-section";
+import { LibraryDomainActivities } from "@/components/public/bibliotheque/library-domain-activities";
 import { InterventionDomainDetail } from "@/components/public/interventions/intervention-domain-detail";
 import { Breadcrumb } from "@/components/shared/Breadcrumb";
 import { Section } from "@/components/shared/Section";
 import { SiteContainer } from "@/components/shared/SiteContainer";
 import { siteConfig } from "@/config/site";
+import { getPublishedEventArchivesByDomain } from "@/lib/queries/public/event-archives";
+import { getLibraryActivitiesByDomain } from "@/lib/queries/public/bibliotheque";
 import {
   getInterventionDomainBySlug,
   getPublishedInterventionDomains,
@@ -55,6 +59,8 @@ export default async function DomaineInterventionDetailPage({
 
   const all = await getPublishedInterventionDomains();
   const related = all.filter((item) => item.slug !== domain.slug).slice(0, 3);
+  const archives = await getPublishedEventArchivesByDomain(domain.slug);
+  const libraryActivities = await getLibraryActivitiesByDomain(domain.slug);
 
   return (
     <Section className="bg-[var(--afd-background)] pt-6 sm:pt-8">
@@ -72,6 +78,12 @@ export default async function DomaineInterventionDetailPage({
         />
         <div className="mt-6">
           <InterventionDomainDetail domain={domain} related={related} />
+          <LibraryDomainActivities
+            domainSlug={domain.slug}
+            domainTitle={domain.title}
+            activities={libraryActivities}
+          />
+          <DomainEventArchiveSection domain={domain} events={archives} />
         </div>
       </SiteContainer>
     </Section>

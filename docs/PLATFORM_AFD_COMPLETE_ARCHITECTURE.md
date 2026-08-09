@@ -17,3 +17,4 @@
 Opérations · Suivi/Impact · Communication · Engagement · Organisation/RH · Finances · Rapports/OCR · Administration
 
 Voir aussi la matrice : `docs/MODULE_COMPLETION_MATRIX.md`.
+

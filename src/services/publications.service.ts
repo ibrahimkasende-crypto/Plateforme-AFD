@@ -15,6 +15,13 @@ export const PUBLICATION_MODULES: readonly PublicationModule[] = [
     statusLabel: "Éditorial",
   },
   {
+    slug: "archives",
+    title: "Archives terrain",
+    description: "Événements, galeries et preuves classés par domaine.",
+    href: "/admin/publications/archives",
+    statusLabel: "Preuves",
+  },
+  {
     slug: "programmes",
     title: "Programmes",
     description: "Fiches programmes, couvertures et relations.",

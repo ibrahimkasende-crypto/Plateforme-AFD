@@ -65,3 +65,4 @@ Vague 1 : durcir RLS migration 030, fondations workflows/jobs/notifications/réf
 ### Vérification
 - `npx supabase db query --linked -f ...051...` OK
 - Script `tests/rls/wave1_foundations_rls.sql`
+

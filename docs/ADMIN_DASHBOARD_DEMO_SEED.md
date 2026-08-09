@@ -147,3 +147,4 @@ Sources possibles du flag :
 
 - Service TS (`adminDashboardDemoBundle`)
 - RPC (`summary.demo_mode` / `is_demo`)
+

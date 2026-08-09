@@ -1,19 +1,19 @@
 import { expect, test } from "@playwright/test";
 
-test.describe("Connexion admin — co-branding LISUNGI", () => {
-  test("affiche LISUNGI, Lisungi Hub et présence AFD", async ({ page }) => {
+test.describe("Connexion admin — identité AFD", () => {
+  test("affiche la connexion AFD", async ({ page }) => {
     await page.goto("/connexion");
     await expect(
-      page.getByRole("heading", { name: /Connexion à LISUNGI/i }),
+      page.getByRole("heading", { name: /Connexion AFD ASBL/i }),
     ).toBeVisible();
     await expect(
       page.getByText(/Espace de gestion de .*Alliance des Femmes/i),
     ).toBeVisible();
-    await expect(page.locator("[data-powered-by-lisungi]")).toContainText(
-      /Un produit Lisungi Hub/i,
+    await expect(page.locator("[data-afd-platform-brand]")).toContainText(
+      /Plateforme officielle AFD/i,
     );
     await expect(page.locator("[data-auth-product-brand]")).toContainText(
-      "LISUNGI",
+      "AFD",
     );
     await expect(
       page.getByRole("img", { name: /AFD|Alliance des Femmes/i }).first(),

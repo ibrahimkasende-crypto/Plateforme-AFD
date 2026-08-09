@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Partenaires officiellement affichés sur afd-rdc.org
  * (section « Ils nous font confiance » / « Nos partenaires »).
  * Logos locaux : public/images/afd/partenaires/0N-*.png
@@ -12,7 +12,7 @@ export type LegacyPartnerRecord = {
   category: string | null;
   order: number;
   logoLocalPath: string;
-  sourceLogoUrl: string;
+  sourceLogoUrl: null;
   websiteUrl: null;
   description: null;
 };
@@ -29,8 +29,7 @@ export const LEGACY_PARTNERS: readonly LegacyPartnerRecord[] = [
     order: 1,
     logoLocalPath:
       "/images/afd/partenaires/01-ministere-de-la-sante-publique-hygiene-et-prevoyance-sociale.png",
-    sourceLogoUrl:
-      "https://ndkcywqihtnuoydwicrq.supabase.co/storage/v1/object/public/gallery/partenaires/1783517120866-design-sans-titre-13.png",
+    sourceLogoUrl: null,
     websiteUrl: null,
     description: null,
   },
@@ -42,8 +41,7 @@ export const LEGACY_PARTNERS: readonly LegacyPartnerRecord[] = [
     category: "international",
     order: 2,
     logoLocalPath: "/images/afd/partenaires/02-chwid.png",
-    sourceLogoUrl:
-      "https://ndkcywqihtnuoydwicrq.supabase.co/storage/v1/object/public/gallery/partenaires/1783517192898-design-sans-titre-7.png",
+    sourceLogoUrl: null,
     websiteUrl: null,
     description: null,
   },
@@ -55,8 +53,7 @@ export const LEGACY_PARTNERS: readonly LegacyPartnerRecord[] = [
     category: "international",
     order: 3,
     logoLocalPath: "/images/afd/partenaires/03-caritas.png",
-    sourceLogoUrl:
-      "https://ndkcywqihtnuoydwicrq.supabase.co/storage/v1/object/public/gallery/partenaires/1783517284168-design-sans-titre-11.png",
+    sourceLogoUrl: null,
     websiteUrl: null,
     description: null,
   },
@@ -68,8 +65,7 @@ export const LEGACY_PARTNERS: readonly LegacyPartnerRecord[] = [
     category: "ong",
     order: 4,
     logoLocalPath: "/images/afd/partenaires/04-rojaf.png",
-    sourceLogoUrl:
-      "https://ndkcywqihtnuoydwicrq.supabase.co/storage/v1/object/public/gallery/partenaires/1783517413261-design-sans-titre-4.png",
+    sourceLogoUrl: null,
     websiteUrl: null,
     description: null,
   },
@@ -81,8 +77,7 @@ export const LEGACY_PARTNERS: readonly LegacyPartnerRecord[] = [
     category: "ong",
     order: 5,
     logoLocalPath: "/images/afd/partenaires/05-casamed.png",
-    sourceLogoUrl:
-      "https://ndkcywqihtnuoydwicrq.supabase.co/storage/v1/object/public/gallery/partenaires/1783517479877-design-sans-titre-2.png",
+    sourceLogoUrl: null,
     websiteUrl: null,
     description: null,
   },
@@ -94,8 +89,7 @@ export const LEGACY_PARTNERS: readonly LegacyPartnerRecord[] = [
     category: "international",
     order: 6,
     logoLocalPath: "/images/afd/partenaires/06-impact-sante-afrique.png",
-    sourceLogoUrl:
-      "https://ndkcywqihtnuoydwicrq.supabase.co/storage/v1/object/public/gallery/partenaires/1783517552627-design-sans-titre-1.png",
+    sourceLogoUrl: null,
     websiteUrl: null,
     description: null,
   },
@@ -107,8 +101,7 @@ export const LEGACY_PARTNERS: readonly LegacyPartnerRecord[] = [
     category: "ong",
     order: 7,
     logoLocalPath: "/images/afd/partenaires/07-cs4me.png",
-    sourceLogoUrl:
-      "https://ndkcywqihtnuoydwicrq.supabase.co/storage/v1/object/public/gallery/partenaires/1783517596267-design-sans-titre.png",
+    sourceLogoUrl: null,
     websiteUrl: null,
     description: null,
   },
@@ -120,8 +113,7 @@ export const LEGACY_PARTNERS: readonly LegacyPartnerRecord[] = [
     category: "international",
     order: 8,
     logoLocalPath: "/images/afd/partenaires/08-uaf.png",
-    sourceLogoUrl:
-      "https://ndkcywqihtnuoydwicrq.supabase.co/storage/v1/object/public/gallery/partenaires/1783517659221-design-sans-titre-6.png",
+    sourceLogoUrl: null,
     websiteUrl: null,
     description: null,
   },
@@ -133,8 +125,7 @@ export const LEGACY_PARTNERS: readonly LegacyPartnerRecord[] = [
     category: "ong",
     order: 9,
     logoLocalPath: "/images/afd/partenaires/09-racoj.png",
-    sourceLogoUrl:
-      "https://ndkcywqihtnuoydwicrq.supabase.co/storage/v1/object/public/gallery/partenaires/1783517723346-design-sans-titre-3.png",
+    sourceLogoUrl: null,
     websiteUrl: null,
     description: null,
   },
@@ -146,8 +137,7 @@ export const LEGACY_PARTNERS: readonly LegacyPartnerRecord[] = [
     category: "ong",
     order: 10,
     logoLocalPath: "/images/afd/partenaires/10-psds.png",
-    sourceLogoUrl:
-      "https://ndkcywqihtnuoydwicrq.supabase.co/storage/v1/object/public/gallery/partenaires/1783517786473-design-sans-titre-10.png",
+    sourceLogoUrl: null,
     websiteUrl: null,
     description: null,
   },
@@ -159,8 +149,7 @@ export const LEGACY_PARTNERS: readonly LegacyPartnerRecord[] = [
     category: "international",
     order: 11,
     logoLocalPath: "/images/afd/partenaires/11-alleviate.png",
-    sourceLogoUrl:
-      "https://ndkcywqihtnuoydwicrq.supabase.co/storage/v1/object/public/gallery/partenaires/1783517857788-design-sans-titre-9.png",
+    sourceLogoUrl: null,
     websiteUrl: null,
     description: null,
   },
@@ -172,8 +161,7 @@ export const LEGACY_PARTNERS: readonly LegacyPartnerRecord[] = [
     category: "ong",
     order: 12,
     logoLocalPath: "/images/afd/partenaires/12-pnsr.png",
-    sourceLogoUrl:
-      "https://ndkcywqihtnuoydwicrq.supabase.co/storage/v1/object/public/gallery/partenaires/1783517897852-design-sans-titre-12.png",
+    sourceLogoUrl: null,
     websiteUrl: null,
     description: null,
   },
@@ -185,8 +173,7 @@ export const LEGACY_PARTNERS: readonly LegacyPartnerRecord[] = [
     category: "ong",
     order: 13,
     logoLocalPath: "/images/afd/partenaires/13-si-jeunesse-savait.png",
-    sourceLogoUrl:
-      "https://ndkcywqihtnuoydwicrq.supabase.co/storage/v1/object/public/gallery/partenaires/1783517951731-design-sans-titre-5.png",
+    sourceLogoUrl: null,
     websiteUrl: null,
     description: null,
   },
@@ -206,3 +193,4 @@ export const LEGACY_SEED_PARTNER_NAMES_TO_DEACTIVATE = [
   "OCHA",
   "CARE",
 ] as const;
+

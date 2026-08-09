@@ -1,4 +1,4 @@
--- Force-seed PROJETS + PROGRAMMES de présentation (lot afd-presentation-2024-2026)
+﻿-- Force-seed PROJETS + PROGRAMMES de présentation (lot afd-presentation-2024-2026)
 -- À exécuter dans Supabase SQL Editor si count(projets) = 0.
 -- Idempotent : ON CONFLICT (slug) DO UPDATE.
 
@@ -168,3 +168,4 @@ FROM public.projets
 WHERE coalesce(active, true)
 GROUP BY location
 ORDER BY nb DESC;
+

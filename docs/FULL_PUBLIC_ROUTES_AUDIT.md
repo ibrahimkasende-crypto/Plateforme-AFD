@@ -190,3 +190,4 @@ Programmes, projets, activités, bénéficiaires, indicateurs, zones, finances, 
 | CRUD studio publications | Partiel (12 routes) |
 
 **Conclusion :** le header ne mène pas à des 404, mais plusieurs sections restent vides ou purement statiques, et la majorité du CRUD admin n’est pas finalisée. La suite commence par les 5 pages publiques vides + fondations dynamiques.
+

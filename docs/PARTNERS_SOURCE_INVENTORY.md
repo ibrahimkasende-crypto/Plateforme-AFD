@@ -51,3 +51,4 @@ Aucun. Les 13 logos sont associés à un nom explicite dans l’API.
 - CSV : `...\08_Partenaires\inventaire-partenaires.csv`
 - Public Next : `public/images/afd/partenaires/`
 - Config : `src/config/legacy-partners.ts`
+

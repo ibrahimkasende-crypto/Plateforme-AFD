@@ -41,3 +41,4 @@ Les listes retournent un état vide lorsque Supabase est indisponible, que les t
 | `npx playwright test` (5 specs opportunités/documents) | OK — 30 passed |
 
 Aucun push GitHub.
+

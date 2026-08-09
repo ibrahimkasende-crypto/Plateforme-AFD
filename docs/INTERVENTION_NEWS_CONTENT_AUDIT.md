@@ -55,3 +55,4 @@
 2. Actualités migrées locales + UI moderne (fallback si Supabase vide)  
 3. Alignement images JPG  
 4. Socle Studio / medias Supabase (migration non destructive)
+

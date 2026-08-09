@@ -266,6 +266,7 @@ export const adminDashboardDemoBundle: Omit<
     messages: 18,
     adhesions: 24,
     notifications: 12,
+    messagerie: null,
   },
   accessibleSummary:
     "128 projets au total, dont 62 en cours, 28 planifiés et 24 terminés. Environ 24 356 personnes touchées.",

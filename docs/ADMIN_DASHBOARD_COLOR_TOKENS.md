@@ -111,3 +111,4 @@ Ces tokens alignent l’interface admin sur la maquette de référence (`docs/re
 - Contraste `--admin-muted` sur `--admin-card` : ≥ 4.5:1 (AA labels).
 - Item sidebar actif : texte blanc sur `--admin-sidebar-active` — vérifier ratio ≥ 4.5:1.
 - Ne pas utiliser la couleur seule pour les variations KPI : conserver flèches ↑↓.
+

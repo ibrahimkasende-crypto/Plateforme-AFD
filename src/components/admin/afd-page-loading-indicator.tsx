@@ -16,8 +16,7 @@ const MIN_VISIBLE_MS = 450;
 const MAX_VISIBLE_MS = 12000;
 
 /**
- * Badge flottant AFD (remplace le N Next.js) — toujours visible en bas à droite.
- * S’agrandit et s’anime dès qu’une navigation admin démarre.
+ * Badge flottant AFD pendant une navigation admin.
  */
 export function AfdPageLoadingIndicator({
   className,
@@ -136,52 +135,38 @@ export function AfdPageLoadingIndicator({
         />
       ) : null}
 
-      <div
-        role="status"
-        aria-live="polite"
-        aria-busy={busy}
-        aria-label={busy ? "Chargement de la page" : "Indicateur de navigation AFD"}
-        data-afd-page-loading
-        data-busy={busy ? "true" : "false"}
-        className={cn(
-          "pointer-events-none fixed bottom-5 right-5 z-[60] flex items-center gap-2.5 rounded-full border shadow-[0_12px_36px_rgba(1,26,87,0.35)] backdrop-blur-md transition-all duration-300",
-          busy
-            ? "border-[#3ba3e6]/50 bg-[#01265d] px-3.5 py-2.5 text-white scale-105"
-            : "border-white/25 bg-[#01265d]/88 px-2 py-2 text-white/90",
-          className,
-        )}
-      >
-        <span className="relative inline-flex size-9 items-center justify-center">
-          {busy ? (
-            <span className="absolute inset-0 animate-ping rounded-full bg-[#3ba3e6]/40" />
-          ) : null}
-          <span
-            className={cn(
-              "relative size-9 overflow-hidden rounded-full bg-white ring-2 shadow-sm",
-              busy ? "ring-[#3ba3e6]/70" : "ring-white/35",
-              "motion-safe:animate-[afd-logo-float_2.8s_ease-in-out_infinite]",
-            )}
-          >
-            <Image
-              src={siteConfig.logo.src}
-              alt=""
-              width={36}
-              height={36}
-              className="size-full object-cover"
-              priority
-            />
-          </span>
-        </span>
-
-        <span
+      {busy ? (
+        <div
+          role="status"
+          aria-live="polite"
+          aria-busy="true"
+          aria-label="Chargement de la page"
+          data-afd-page-loading
+          data-busy="true"
           className={cn(
-            "overflow-hidden whitespace-nowrap text-[11px] font-semibold tracking-wide transition-all duration-300",
-            busy ? "max-w-[9rem] pr-1 opacity-100" : "max-w-0 opacity-0",
+            "pointer-events-none fixed bottom-5 right-5 z-[60] flex scale-105 items-center gap-2.5 rounded-full border border-[#3ba3e6]/50 bg-[#01265d] px-3.5 py-2.5 text-white shadow-[0_12px_36px_rgba(1,26,87,0.35)] backdrop-blur-md transition-all duration-300",
+            className,
           )}
         >
-          Chargement…
-        </span>
-      </div>
+          <span className="relative inline-flex size-9 items-center justify-center">
+            <span className="absolute inset-0 animate-ping rounded-full bg-[#3ba3e6]/40" />
+            <span className="relative size-9 overflow-hidden rounded-full bg-white shadow-sm ring-2 ring-[#3ba3e6]/70 motion-safe:animate-[afd-logo-float_2.8s_ease-in-out_infinite]">
+              <Image
+                src={siteConfig.logo.src}
+                alt=""
+                width={36}
+                height={36}
+                className="size-full object-cover"
+                priority
+              />
+            </span>
+          </span>
+
+          <span className="overflow-hidden whitespace-nowrap pr-1 text-[11px] font-semibold tracking-wide">
+            Chargement…
+          </span>
+        </div>
+      ) : null}
     </>
   );
 }

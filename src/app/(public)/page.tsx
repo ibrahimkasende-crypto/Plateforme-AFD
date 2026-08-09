@@ -21,6 +21,7 @@ import {
   getPublicImpactStats,
 } from "@/lib/queries/home";
 import { getPublicInterventionZones } from "@/lib/queries/intervention-zones";
+import { getResolvedPublicSiteSettings } from "@/lib/queries/public/site-settings";
 
 export const metadata: Metadata = {
   title: {
@@ -73,21 +74,24 @@ async function PartnersBlock() {
   return <PartnersSection partners={partners} />;
 }
 
-export default function HomePage() {
+export default async function HomePage() {
+  const settings = await getResolvedPublicSiteSettings();
   const organizationJsonLd = {
     "@context": "https://schema.org",
     "@type": "NGO",
-    name: siteConfig.name,
-    alternateName: siteConfig.shortName,
+    name: settings.orgName,
+    alternateName: settings.shortName,
     url: siteConfig.url,
-    logo: `${siteConfig.url}${siteConfig.logo.src}`,
-    foundingDate: String(homeContent.organization.foundedYear),
+    logo: settings.logoUrl.startsWith("http")
+      ? settings.logoUrl
+      : `${siteConfig.url}${settings.logoUrl}`,
+    foundingDate: homeContent.organization.foundedDate,
     areaServed: {
       "@type": "Country",
       name: siteConfig.country,
     },
-    email: siteConfig.contact.email,
-    description: siteConfig.description,
+    email: settings.contact.email,
+    description: settings.slogan || siteConfig.description,
     disclaimer:
       "AFD ASBL (Alliance des Femmes pour le Développement) ne doit pas être confondue avec l’Agence Française de Développement.",
   };

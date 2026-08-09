@@ -63,3 +63,4 @@ Flag `allowUnverifiedRules` réservé à la démo / dev.
 Route : `/admin/rh/paie`.
 
 Tests unitaires : `tests/unit/payroll-*.test.ts`.
+

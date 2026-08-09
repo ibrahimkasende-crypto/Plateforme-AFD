@@ -14,3 +14,4 @@ Valeurs canoniques (nom de province) et localité affichée :
 | Nord-Kivu | Beni | CDNK |
 
 Les données de démonstration portent `isDemo = true` / `is_demo = true` et affichent le badge « Données de démonstration ».
+

@@ -36,3 +36,4 @@
 - bucket privé candidatures (CV)
 
 Ne jamais exposer `service_role` côté navigateur.
+

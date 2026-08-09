@@ -32,7 +32,10 @@ export function DashboardKpiCard({
         : "0";
 
   const content = (
-    <div className="flex h-full min-h-0 items-center gap-1.5 sm:gap-2.5" data-kpi-card>
+    <div
+      className="flex h-full min-h-0 items-center gap-1.5 overflow-hidden sm:gap-2.5"
+      data-kpi-card
+    >
       <span
         className={cn(
           "inline-flex size-7 shrink-0 items-center justify-center rounded-full text-white sm:size-9",
@@ -41,11 +44,11 @@ export function DashboardKpiCard({
       >
         <Icon className="size-3.5 sm:size-4" strokeWidth={2} aria-hidden />
       </span>
-      <div className="min-w-0 flex-1">
+      <div className="min-w-0 flex-1 overflow-hidden">
         <p className="truncate text-[10px] font-medium leading-tight text-[var(--admin-muted)] sm:text-[11px]">
           {kpi.label}
         </p>
-        <p className="admin-kpi-value font-display text-[14px] font-extrabold leading-none tracking-tight text-[var(--admin-text)] sm:text-[22px]">
+        <p className="admin-kpi-value max-w-full break-words font-display text-[15px] font-extrabold leading-tight tracking-normal text-[var(--admin-text)] sm:text-[clamp(16px,1.15vw,21px)]">
           {displayValue}
         </p>
         {kpi.available && variation !== null ? (
@@ -72,7 +75,7 @@ export function DashboardKpiCard({
   );
 
   const className =
-    "admin-panel block h-full !py-1.5 sm:!py-2 transition hover:border-[var(--admin-primary)]/40 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--admin-primary)]";
+    "admin-panel block h-full min-h-[76px] !py-1.5 sm:!py-2 transition hover:border-[var(--admin-primary)]/40 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--admin-primary)]";
 
   if (href) {
     return (

@@ -36,3 +36,4 @@ Images nécessitant validation de consentement (enfants / personnes identifiable
 Versions WebP dans `public/images/afd/` et `12_Optimisees-Web/`.
 
 Hero actuel du site conservé (`Femmes_AFD.png`) ; candidat alternatif : `/images/afd/home/hero-afd.webp`.
+

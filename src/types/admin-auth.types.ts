@@ -14,6 +14,14 @@ export type ProfilAdministrateur = {
   derniere_connexion: string | null;
   created_at: string;
   updated_at: string;
+  must_change_password?: boolean | null;
+  password_changed_at?: string | null;
+  temporary_password_issued_at?: string | null;
+  prenom?: string | null;
+  nom_famille?: string | null;
+  telephone?: string | null;
+  fonction?: string | null;
+  statut_compte?: string | null;
 };
 
 export type RoleRow = {

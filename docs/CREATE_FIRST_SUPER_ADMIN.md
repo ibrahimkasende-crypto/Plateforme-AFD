@@ -72,3 +72,4 @@ Vérifier `actif = true` sur `profils_administrateurs`.
 - Révoquer immédiatement un compte compromis (`actif = false`)
 - Réserver `super_admin` à un nombre minimal de personnes
 - Après premier login, changer le mot de passe temporaire
+

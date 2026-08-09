@@ -45,3 +45,4 @@ Les règles `DEMO_*` insérées par migration **ne constituent pas** une validat
 1. Validation par un expert paie / juriste
 2. Passage `statut_validation = verified`
 3. Checklist : `docs/HR_PAYROLL_LEGAL_VALIDATION_CHECKLIST.md`
+

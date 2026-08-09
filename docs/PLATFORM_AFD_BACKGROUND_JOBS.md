@@ -7,3 +7,4 @@ Service : `src/features/jobs/services/jobs.service.ts`
 UI exports : `/admin/exports` enqueue `export.generate`.
 
 Interdit : `setTimeout` post-HTTP pour traitements lourds.
+

@@ -1,4 +1,4 @@
--- OCR Document Intelligence — migration non destructive (040).
+﻿-- OCR Document Intelligence — migration non destructive (040).
 -- Pipeline d'import intelligent : stockage privé, file OCR, extraction, révision, approbation.
 -- PRÉREQUIS : has_permission / has_role (20260715_001), set_updated_at, journal_activite (005).
 
@@ -1152,3 +1152,4 @@ $$;
 revoke all on function public.log_ocr_activity(text, jsonb, uuid, uuid) from public;
 grant execute on function public.log_ocr_activity(text, jsonb, uuid, uuid) to authenticated;
 grant execute on function public.log_ocr_activity(text, jsonb, uuid, uuid) to service_role;
+

@@ -26,3 +26,4 @@ Pour forcer l’indicateur sur un bouton (navigation programmatique) : `data-afd
 ## Badge environnement
 
 `src/components/admin/afd-environment-badge.tsx` — header admin hors production.
+

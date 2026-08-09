@@ -13,16 +13,36 @@ export async function getAdminProfile(
   userId: string,
 ): Promise<ProfilAdministrateur | null> {
   const supabase = await createClient();
-  const { data, error } = await supabase
+  // Select large : inclut avatar_* si la migration identity est appliquée.
+  const full = await supabase
     .from("profils_administrateurs" as never)
     .select(
-      "id, nom_complet, email, photo_url, avatar_bucket, avatar_path, actif, derniere_connexion, created_at, updated_at",
+      "id, nom_complet, email, photo_url, avatar_bucket, avatar_path, actif, derniere_connexion, created_at, updated_at, must_change_password, password_changed_at, temporary_password_issued_at, prenom, nom_famille, telephone, fonction, statut_compte",
     )
     .eq("id", userId)
     .maybeSingle();
 
-  if (error || !data) return null;
-  return data as unknown as ProfilAdministrateur;
+  if (!full.error && full.data) {
+    return full.data as unknown as ProfilAdministrateur;
+  }
+
+  // Fallback schéma partiel (projet récemment migré sans colonnes avatar).
+  const basic = await supabase
+    .from("profils_administrateurs" as never)
+    .select(
+      "id, nom_complet, email, photo_url, actif, derniere_connexion, created_at, updated_at",
+    )
+    .eq("id", userId)
+    .maybeSingle();
+
+  if (basic.error || !basic.data) return null;
+
+  return {
+    ...(basic.data as object),
+    avatar_bucket: null,
+    avatar_path: null,
+    must_change_password: false,
+  } as ProfilAdministrateur;
 }
 
 export async function getUserRoleNames(userId: string): Promise<string[]> {

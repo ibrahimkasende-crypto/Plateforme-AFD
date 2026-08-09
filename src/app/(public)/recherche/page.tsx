@@ -33,14 +33,17 @@ export default async function RecherchePage({ searchParams }: PageProps) {
   const results = q ? await searchPublicContent(q) : null;
 
   const totalResults = results
-    ? results.programmes.length + results.projets.length + results.actualites.length
+    ? results.programmes.length +
+      results.projets.length +
+      results.actualites.length +
+      results.bibliotheque.length
     : 0;
 
   return (
     <PublicPageShell
       eyebrow="Recherche"
       title="Rechercher sur le site"
-      description="Trouvez des programmes, projets et actualités publiés par l’AFD."
+      description="Trouvez des programmes, projets, actualités et contenus de la bibliothèque institutionnelle."
       breadcrumbs={[
         { label: "Accueil", href: "/" },
         { label: "Recherche" },
@@ -50,7 +53,7 @@ export default async function RecherchePage({ searchParams }: PageProps) {
         <PublicSearchField
           action="/recherche"
           defaultValue={q}
-          placeholder="Programmes, projets, actualités…"
+          placeholder="Programmes, projets, actualités, bibliothèque…"
           className="mb-8"
         />
       </Suspense>
@@ -141,6 +144,36 @@ export default async function RecherchePage({ searchParams }: PageProps) {
                       {item.category ? (
                         <p className="mt-1 text-xs text-[var(--afd-muted)]">{item.category}</p>
                       ) : null}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          ) : null}
+
+          {results!.bibliotheque.length > 0 ? (
+            <section>
+              <h2 className="font-display text-xl font-semibold text-[var(--afd-ink)]">
+                Bibliothèque ({results!.bibliotheque.length})
+              </h2>
+              <ul className="mt-4 space-y-3">
+                {results!.bibliotheque.map((item) => (
+                  <li key={item.id}>
+                    <Link
+                      href={`/bibliotheque/${item.slug}`}
+                      className="block rounded-xl border border-[var(--afd-border)] bg-[var(--afd-surface)] p-4 transition hover:border-[var(--afd-blue)]/40"
+                    >
+                      <h3 className="font-semibold text-[var(--afd-ink)]">
+                        {item.title}
+                      </h3>
+                      {item.summary ? (
+                        <p className="mt-1 line-clamp-2 text-sm text-[var(--afd-muted)]">
+                          {item.summary}
+                        </p>
+                      ) : null}
+                      <p className="mt-1 text-xs text-[var(--afd-muted)]">
+                        {item.categoryLabel}
+                      </p>
                     </Link>
                   </li>
                 ))}

@@ -9,6 +9,21 @@ import { homeContent } from "@/config/home-content";
 import { siteConfig } from "@/config/site";
 import { SiteContainer } from "@/components/shared/SiteContainer";
 import { cn } from "@/lib/utils";
+import type { ResolvedPublicSiteSettings } from "@/lib/queries/public/site-settings";
+
+type FooterSettings = Pick<
+  ResolvedPublicSiteSettings,
+  "orgName" | "shortName" | "foundedLabel" | "contact" | "social" | "logoUrl"
+>;
+
+function resolveSocial(
+  settings: FooterSettings | undefined,
+  key: keyof FooterSettings["social"],
+): string {
+  if (settings?.social?.[key]) return settings.social[key];
+  if (key === "twitter") return "";
+  return (siteConfig.social as Record<string, string>)[key] ?? "";
+}
 
 function FacebookIcon({ className }: { className?: string }) {
   return (
@@ -124,7 +139,7 @@ function FooterAccordion({
   );
 }
 
-function FooterEngageBar() {
+function FooterEngageBar({ settings }: { settings?: FooterSettings }) {
   return (
     <div className="mt-8 border-t border-white/10 pt-7 md:mt-10">
       <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between lg:gap-6">
@@ -134,7 +149,7 @@ function FooterEngageBar() {
           </p>
           <ul className="flex flex-wrap items-center gap-2.5">
             {socialItems.map(({ key, label, Icon, className: brandClass }) => {
-              const href = siteConfig.social[key];
+              const href = resolveSocial(settings, key);
               const baseClass = cn(
                 "inline-flex size-11 items-center justify-center rounded-2xl transition duration-200 sm:size-12",
                 "hover:-translate-y-1 hover:scale-105 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white",
@@ -199,8 +214,14 @@ function FooterEngageBar() {
   );
 }
 
-export function SiteFooter() {
-  const phoneIsPlaceholder = siteConfig.contact.phone.includes("000 000");
+export function SiteFooter({ settings }: { settings?: FooterSettings }) {
+  const contact = settings?.contact ?? siteConfig.contact;
+  const orgName = settings?.orgName ?? siteConfig.name;
+  const shortName = settings?.shortName ?? siteConfig.shortName;
+  const foundedLabel =
+    settings?.foundedLabel ?? homeContent.organization.foundedLabel;
+  const logoSrc = settings?.logoUrl ?? siteConfig.logo.src;
+  const phoneIsPlaceholder = contact.phone.includes("000 000");
   const actionLinks =
     publicNavigation.find((item) => item.href === "/actions")?.children ?? [];
 
@@ -216,35 +237,34 @@ export function SiteFooter() {
           <div className="max-w-md lg:col-span-1">
             <Link href="/" className="inline-flex items-center gap-3">
               <Image
-                src={siteConfig.logo.src}
+                src={logoSrc}
                 alt={siteConfig.logo.alt}
                 width={48}
                 height={48}
                 className="rounded-full object-cover ring-2 ring-white/15"
               />
               <span className="font-display text-lg font-semibold tracking-tight">
-                {siteConfig.shortName}
+                {shortName}
               </span>
             </Link>
 
             <p className="mt-4 text-sm leading-relaxed text-white/75">
-              {siteConfig.name} — ONG nationale congolaise créée en{" "}
-              {homeContent.organization.foundedYear}, engagée auprès des
-              communautés vulnérables.
+              {orgName} — ONG nationale congolaise créée le {foundedLabel},
+              engagée auprès des communautés vulnérables.
             </p>
 
             <ul className="mt-5 space-y-2.5 text-sm text-white/80">
               <li className="flex items-start gap-2.5">
                 <MapPin className="mt-0.5 size-4 shrink-0 text-[var(--afd-gold)]" aria-hidden />
-                <span>{siteConfig.contact.address}</span>
+                <span>{contact.address}</span>
               </li>
               <li className="flex items-start gap-2.5">
                 <Mail className="mt-0.5 size-4 shrink-0 text-[var(--afd-gold)]" aria-hidden />
                 <a
-                  href={`mailto:${siteConfig.contact.email}`}
+                  href={`mailto:${contact.email}`}
                   className="min-h-9 hover:text-white"
                 >
-                  {siteConfig.contact.email}
+                  {contact.email}
                 </a>
               </li>
               <li className="flex items-start gap-2.5">
@@ -255,7 +275,7 @@ export function SiteFooter() {
                     <em className="not-italic text-white/50">à renseigner</em>
                   </span>
                 ) : (
-                  <span>{siteConfig.contact.phone}</span>
+                  <span>{contact.phone}</span>
                 )}
               </li>
             </ul>
@@ -337,14 +357,14 @@ export function SiteFooter() {
           </div>
         </div>
 
-        <FooterEngageBar />
+        <FooterEngageBar settings={settings} />
       </SiteContainer>
 
       <div className="border-t border-white/10 bg-black/20">
         <SiteContainer className="flex flex-col items-center gap-3 py-4 text-center text-xs text-white/55 sm:flex-row sm:justify-between sm:text-left">
           <p>
-            © {new Date().getFullYear()} {siteConfig.name} (
-            {siteConfig.shortName}). Tous droits réservés.
+            © {new Date().getFullYear()} {orgName} ({shortName}). Tous droits
+            réservés.
           </p>
           <ul className="flex flex-wrap justify-center gap-x-4 gap-y-1">
             {footerLinks.legal.map((link) => (

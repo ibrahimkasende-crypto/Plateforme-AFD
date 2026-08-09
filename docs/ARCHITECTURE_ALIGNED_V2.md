@@ -97,3 +97,4 @@ Commit local : `chore: align Plateforme-AFD architecture for development` (`6f5e
 ## Redirections anciennes URLs
 
 `/about`, `/programs`, `/projects`, `/news`, `/donate`, `/gallery`, etc. → nouvelles routes FR.
+

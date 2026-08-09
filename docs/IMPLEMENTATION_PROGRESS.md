@@ -38,3 +38,4 @@ Toujours **0** au standard strict (E2E + RLS automatisés + preuves complètes).
 - Suite RLS SQL automatisée CI
 - E2E Playwright par module
 - Marquage `operationnel` uniquement avec preuves fichier/tests
+

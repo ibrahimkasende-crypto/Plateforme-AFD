@@ -228,3 +228,4 @@ Config : `playwright.config.ts` — projet `desktop-1536` (1536×1024).
 - [ ] Grille compacte 1536 zero-scroll
 - [ ] Exécuter suite e2e dashboard
 - [ ] Mettre à jour capture visuelle de référence
+

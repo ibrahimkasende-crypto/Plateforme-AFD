@@ -618,6 +618,7 @@ async function enrichDashboardBundle(
         pendingMessages + pendingMemberships > 0
           ? pendingMessages + pendingMemberships
           : bundle.badges.notifications,
+      messagerie: null,
     },
     filterOptions: {
       programmes:
@@ -943,6 +944,7 @@ export async function getDashboardBundle(
         messages: pendingMessages || adminDashboardDemoBundle.badges.messages,
         adhesions: pendingMemberships || adminDashboardDemoBundle.badges.adhesions,
         notifications: adminDashboardDemoBundle.badges.notifications,
+        messagerie: null,
       },
     };
   }
@@ -1133,6 +1135,7 @@ export async function getDashboardBundle(
       notifications: pendingMessages + pendingMemberships > 0
         ? pendingMessages + pendingMemberships
         : null,
+      messagerie: null,
     },
     viewer,
     accessibleSummary: `${filteredProjects.length} projet(s) au total, dont ${enCours} en cours, ${planifies} planifié(s) et ${termines} terminé(s). ${personnes > 0 ? `${formatNumber(personnes)} personnes touchées (agrégat projets).` : "Total de bénéficiaires non disponible."}`,
@@ -1179,6 +1182,7 @@ function emptyBundle(viewer: DashboardBundle["viewer"], demoAllowed: boolean): D
       messages: null,
       adhesions: null,
       notifications: null,
+      messagerie: null,
     },
     viewer,
     accessibleSummary: "Aucune statistique disponible pour le moment.",

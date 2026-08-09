@@ -59,3 +59,4 @@ AWS_TEXTRACT_REGION=
 ### Fallback
 - Provider `native` / Tesseract local pour démo limitée
 - Application métier uniquement après validation humaine
+

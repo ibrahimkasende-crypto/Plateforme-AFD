@@ -10,6 +10,11 @@ export type PublicNavItem = {
   children?: PublicNavChild[];
 };
 
+/**
+ * Navigation publique.
+ * - `desktopPrimary` : toujours visible en desktop
+ * - `desktopSecondary` : visibles en full (≥1440) ; regroupés dans « Plus » en compact
+ */
 export const publicNavigation: PublicNavItem[] = [
   { label: "Accueil", href: "/" },
   {
@@ -120,11 +125,22 @@ export const publicNavigation: PublicNavItem[] = [
       },
     ],
   },
+  { label: "Bibliothèque", href: "/bibliotheque" },
   { label: "Actualités", href: "/actualites" },
   {
     label: "Ressources",
     href: "/ressources",
     children: [
+      {
+        label: "Bibliothèque",
+        href: "/bibliotheque",
+        description: "Archives institutionnelles des activités",
+      },
+      {
+        label: "Photothèque",
+        href: "/bibliotheque/phototheque",
+        description: "Toutes les photographies",
+      },
       {
         label: "Médiathèque",
         href: "/ressources/mediatheque",
@@ -132,12 +148,12 @@ export const publicNavigation: PublicNavItem[] = [
       },
       {
         label: "Documents",
-        href: "/ressources/documents",
+        href: "/bibliotheque/documents",
         description: "Documents institutionnels",
       },
       {
         label: "Rapports",
-        href: "/impact/rapports",
+        href: "/bibliotheque/rapports",
         description: "Rapports et publications",
       },
       {
@@ -159,6 +175,34 @@ export const publicNavigation: PublicNavItem[] = [
   },
   { label: "Contact", href: "/contact" },
 ];
+
+/** Liens toujours visibles dès le mode desktop compact. */
+export const desktopNavPrimaryHrefs = [
+  "/",
+  "/qui-sommes-nous",
+  "/actions",
+  "/impact",
+] as const;
+
+/** Liens déplacés dans « Plus » entre 1280 et 1439 px. */
+export const desktopNavSecondaryHrefs = [
+  "/bibliotheque",
+  "/actualites",
+  "/ressources",
+  "/contact",
+] as const;
+
+export function getDesktopNavPrimary(): PublicNavItem[] {
+  return publicNavigation.filter((item) =>
+    (desktopNavPrimaryHrefs as readonly string[]).includes(item.href),
+  );
+}
+
+export function getDesktopNavSecondary(): PublicNavItem[] {
+  return publicNavigation.filter((item) =>
+    (desktopNavSecondaryHrefs as readonly string[]).includes(item.href),
+  );
+}
 
 export const publicCtas = [
   {
@@ -184,6 +228,7 @@ export const footerLinks = {
     },
   ],
   quick: [
+    { label: "Bibliothèque", href: "/bibliotheque" },
     { label: "Rejoindre l’équipe", href: "/rejoindre-equipe" },
     { label: "Nos partenaires", href: "/partenaires" },
     { label: "Devenir partenaire", href: "/partenariat" },

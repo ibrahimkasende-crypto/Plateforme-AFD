@@ -56,3 +56,4 @@ Header, homepage, newsletter popup, thème, responsive — ne pas modifier sauf 
 5. Ressources  
 6. Formulaires  
 7. Légal / recherche / SEO / tests / commit
+

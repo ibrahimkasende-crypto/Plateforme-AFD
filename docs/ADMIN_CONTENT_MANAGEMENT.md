@@ -30,3 +30,4 @@ Modules :
 `/admin/mediatheque` — images et documents Supabase Storage.
 
 Les formulaires acceptent une URL Storage ; le picker média avancé peut être branché progressivement sur ces champs.
+

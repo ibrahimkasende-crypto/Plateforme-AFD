@@ -9,3 +9,4 @@ Nouvelles clés : `clusters:read|write`, `urgences:read|write`.
 Migration 030 active RLS + policies SELECT/INSERT/UPDATE pour `authenticated` sur les nouvelles tables.
 
 Les documents sensibles (CV, candidatures) restent hors buckets publics.
+

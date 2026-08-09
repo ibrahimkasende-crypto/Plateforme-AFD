@@ -35,6 +35,20 @@ export default async function AdminSystemePage() {
         <Status ok={health.emailConfigured} label="Email / newsletter" />
         <Status ok={health.serdipayConfigured} label="SerdiPay" />
       </div>
+      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        <Status
+          ok={health.supabasePublicConfigured}
+          label="Supabase public (URL + clé)"
+        />
+        <Status
+          ok={health.serviceRoleConfigured}
+          label="Service role (serveur)"
+        />
+        <Status
+          ok={health.mandatedProjectOk}
+          label={`Projet ${health.supabaseProjectRef ?? "—"}`}
+        />
+      </div>
       <div className="grid gap-3 sm:grid-cols-2">
         <div className="rounded border bg-white p-4">
           <p className="text-sm text-slate-500">Jobs en file</p>

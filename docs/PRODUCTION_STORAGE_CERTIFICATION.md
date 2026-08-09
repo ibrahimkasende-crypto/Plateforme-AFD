@@ -22,11 +22,11 @@ Règles cibles : MIME / chemins sans `..` ; lectures privées via **URL signées
 
 ---
 
-## Checklist (à cocher après vérif live sur `ndkcywqihtnuoydwicrq`)
+## Checklist (à cocher après vérif live sur `mxxuxnoqnwjygawvvhcb`)
 
 | # | Contrôle | Statut |
 |---|----------|--------|
-| 1 | Buckets existent sur ADF_BD | PENDING |
+| 1 | Buckets existent sur AFD | PENDING |
 | 2 | Policies `storage.objects` alignées migrations | PENDING |
 | 3 | Anon ne liste pas les buckets privés | PENDING |
 | 4 | Upload admin avatars / RH / OCR fonctionne | PENDING |
@@ -50,3 +50,4 @@ Règles cibles : MIME / chemins sans `..` ; lectures privées via **URL signées
 
 **Storage : NON CERTIFIÉ en production.**  
 Checklist ci-dessus reste **PENDING**.
+

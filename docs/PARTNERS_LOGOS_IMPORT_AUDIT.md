@@ -85,3 +85,4 @@ partenaires/{partner_id}/logo-original.ext
 6. UI publique + CRUD + RLS Storage write  
 7. Validation typecheck / lint / build  
 8. Commit local (pas de push)
+

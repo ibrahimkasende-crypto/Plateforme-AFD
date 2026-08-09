@@ -355,6 +355,16 @@ export type Database = {
           phone: string | null
           status: string | null
           subject: string
+          organisation: string | null
+          request_type: string | null
+          province: string | null
+          email_notification_status: string | null
+          email_notification_sent_at: string | null
+          email_notification_error: string | null
+          notification_recipient: string | null
+          notification_attempts: number | null
+          auto_reply_status: string | null
+          auto_reply_sent_at: string | null
         }
         Insert: {
           created_at?: string | null
@@ -365,6 +375,16 @@ export type Database = {
           phone?: string | null
           status?: string | null
           subject: string
+          organisation?: string | null
+          request_type?: string | null
+          province?: string | null
+          email_notification_status?: string | null
+          email_notification_sent_at?: string | null
+          email_notification_error?: string | null
+          notification_recipient?: string | null
+          notification_attempts?: number | null
+          auto_reply_status?: string | null
+          auto_reply_sent_at?: string | null
         }
         Update: {
           created_at?: string | null
@@ -375,6 +395,16 @@ export type Database = {
           phone?: string | null
           status?: string | null
           subject?: string
+          organisation?: string | null
+          request_type?: string | null
+          province?: string | null
+          email_notification_status?: string | null
+          email_notification_sent_at?: string | null
+          email_notification_error?: string | null
+          notification_recipient?: string | null
+          notification_attempts?: number | null
+          auto_reply_status?: string | null
+          auto_reply_sent_at?: string | null
         }
         Relationships: []
       }

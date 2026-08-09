@@ -5,3 +5,4 @@
 3. `npm run build && npm run start`
 4. Workers OCR / jobs en processus séparés
 5. Redirect Auth configurés
+

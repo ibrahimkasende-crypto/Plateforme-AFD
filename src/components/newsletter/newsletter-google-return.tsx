@@ -4,9 +4,13 @@ import { useEffect } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import { markNewsletterSubscribed } from "@/lib/newsletter/client-storage";
+import { NEWSLETTER_GOOGLE_SUCCESS_QUERY } from "@/lib/newsletter/google-oauth";
+
+export const NEWSLETTER_GOOGLE_OPEN_EVENT = "afd:newsletter-google-open";
 
 /**
- * Traite le retour OAuth newsletter (?newsletter=subscribed|already|error…).
+ * Traite les retours OAuth newsletter (erreurs / legacy) et signale
+ * `google-success` pour rouverture de la fenêtre.
  */
 export function NewsletterGoogleReturn() {
   const searchParams = useSearchParams();
@@ -17,6 +21,11 @@ export function NewsletterGoogleReturn() {
     const status = searchParams.get("newsletter");
     if (!status) return;
 
+    if (status === NEWSLETTER_GOOGLE_SUCCESS_QUERY) {
+      window.dispatchEvent(new CustomEvent(NEWSLETTER_GOOGLE_OPEN_EVENT));
+      return;
+    }
+
     if (status === "subscribed") {
       markNewsletterSubscribed();
       toast.success(
@@ -24,7 +33,7 @@ export function NewsletterGoogleReturn() {
       );
     } else if (status === "already") {
       markNewsletterSubscribed();
-      toast.success("Cette adresse Google est déjà inscrite à la newsletter.");
+      toast.success("Cette adresse est déjà inscrite à notre newsletter.");
     } else if (status === "missing_email") {
       toast.error(
         "Google n’a pas fourni d’adresse e-mail. Réessayez ou inscrivez-vous manuellement.",
@@ -40,7 +49,9 @@ export function NewsletterGoogleReturn() {
     const params = new URLSearchParams(searchParams.toString());
     params.delete("newsletter");
     const query = params.toString();
-    router.replace(query ? `${pathname}?${query}` : pathname);
+    router.replace(query ? `${pathname}?${query}` : pathname, {
+      scroll: false,
+    });
   }, [searchParams, router, pathname]);
 
   return null;

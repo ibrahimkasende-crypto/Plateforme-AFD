@@ -13,8 +13,7 @@ export const MAMBASA_DOCUMENT = {
   /** Copie servie par Next (document déjà public sur l’ancien site). */
   publicPath:
     "/documents/offres/chef-de-projet-mambasa/chef-projet-mambasa-afd.pdf",
-  sourceUrl:
-    "https://ndkcywqihtnuoydwicrq.supabase.co/storage/v1/object/public/documents/offres/1784241669013-offre-afd-chef-de-projet-et-officier-sante-nutrition.pdf",
+  sourceUrl: null,
   mimeType: "application/pdf",
   sizeBytes: 7_858_560,
 } as const;
@@ -46,11 +45,12 @@ export const MIGRATED_OPPORTUNITIES: Opportunity[] = [
     email_candidature: "ressourceshumainesafd871@gmail.com",
     date_publication: "2026-07-16T22:56:18.063+00:00",
     date_limite: null,
-    statut: "ouverte",
-    publie: true,
+    // Offre expirée — retirée du site public (accueil, liste, candidature).
+    statut: "cloturee",
+    publie: false,
     candidatures_spontanees_autorisees: false,
     created_at: "2026-07-16T22:42:05.55553+00:00",
-    updated_at: "2026-07-16T23:29:56.091+00:00",
+    updated_at: "2026-08-03T00:00:00.000+00:00",
     deleted_at: null,
   },
 ];
@@ -58,9 +58,10 @@ export const MIGRATED_OPPORTUNITIES: Opportunity[] = [
 export function getMigratedOpportunityBySlug(
   slug: string,
 ): Opportunity | null {
-  return (
-    MIGRATED_OPPORTUNITIES.find((item) => item.slug === slug) ?? null
-  );
+  const item =
+    MIGRATED_OPPORTUNITIES.find((entry) => entry.slug === slug) ?? null;
+  if (!item || !item.publie || item.deleted_at) return null;
+  return item;
 }
 
 export function getMigratedOpenOpportunities(limit = 3): Opportunity[] {

@@ -34,8 +34,8 @@ CI : job `rls` dans `.github/workflows/ci.yml` — **exécuté seulement si secr
 
 | Point | Statut |
 |-------|--------|
-| Projet cible des 3/3 | **Suspect** si exécuté avant correction vers `ndkcywqihtnuoydwicrq` |
-| Certification live ADF_BD | **PENDING** |
+| Projet cible des 3/3 | **Suspect** si exécuté avant correction vers `mxxuxnoqnwjygawvvhcb` |
+| Certification live AFD | **PENDING** |
 | Couverture toutes tables métier | Audit catalogue via RPC — **à rejouer** sur prod |
 | RH / contenus / OCR | Policies présentes en migrations — **pas re-certifiées** ici pour prod |
 
@@ -43,7 +43,7 @@ CI : job `rls` dans `.github/workflows/ci.yml` — **exécuté seulement si secr
 
 ## Checklist certification prod
 
-- [ ] Env pointe vers `ndkcywqihtnuoydwicrq`  
+- [ ] Env pointe vers `mxxuxnoqnwjygawvvhcb`  
 - [ ] Migration `054` présente sur remote  
 - [ ] `AFD_REQUIRE_RLS=1 npm run test:rls` → 3/3 sur ce projet  
 - [ ] Export JSON/texte du rapport RPC archivé (sans secrets)  
@@ -62,3 +62,4 @@ CI : job `rls` dans `.github/workflows/ci.yml` — **exécuté seulement si secr
 
 **RLS : CERTIFIÉE EN LOCAL / CI CONDITIONNELLE — NON CERTIFIÉE PRODUCTION.**  
 Ne pas marquer `PRODUCTION_RÉUSSIE` sur la base RLS seule.
+

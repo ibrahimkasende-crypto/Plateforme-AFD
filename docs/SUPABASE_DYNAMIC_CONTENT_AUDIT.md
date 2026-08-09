@@ -40,3 +40,4 @@ Ajout migration `20260718_008` : `medias`, `domaines_intervention`, `chiffres_im
 - Ne pas supprimer les constantes avant migration réussie
 - Risque : migration SQL non appliquée → secours local actif
 - Script : `scripts/migrate-local-assets-to-supabase.ts --dry-run`
+

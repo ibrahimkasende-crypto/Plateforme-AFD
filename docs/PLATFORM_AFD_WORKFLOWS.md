@@ -5,3 +5,4 @@ Tables : `workflow_definitions`, `workflow_states`, `workflow_transitions`, `app
 Service : `src/features/workflows/services/workflow.service.ts`
 
 Transitions invalides rejetées côté serveur.
+

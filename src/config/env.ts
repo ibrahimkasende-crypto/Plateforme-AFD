@@ -137,3 +137,49 @@ export function assertProductionPublicEnv(): void {
     );
   }
 }
+
+/** Indique si la clé service_role est présente (sans exposer la valeur). */
+export function isSupabaseServiceRoleConfigured(): boolean {
+  const key =
+    process.env.SUPABASE_SERVICE_ROLE_KEY?.trim() ||
+    process.env.SUPABASE_SECRET_KEY?.trim() ||
+    "";
+  if (!key) return false;
+  if (
+    key.length < 20 ||
+    /^(your-|changeme|xxx|placeholder|ta_vraie|sb_secret_your|sb_publishable_your)/i.test(
+      key,
+    )
+  ) {
+    return false;
+  }
+  return true;
+}
+
+/**
+ * Vérifie que l’URL publique pointe vers le projet AFD mandaté.
+ * Ne lit que le hostname — aucune clé secrète.
+ */
+export function getSupabaseProjectRefFromEnv(): string | null {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim();
+  if (!url) return null;
+  try {
+    const host = new URL(url).hostname;
+    const match = host.match(/^([a-z0-9]+)\.supabase\.co$/i);
+    return match?.[1] ?? null;
+  } catch {
+    return null;
+  }
+}
+
+export const MANDATED_SUPABASE_PROJECT_REF = "mxxuxnoqnwjygawvvhcb";
+
+export function assertMandatedSupabaseProject(): void {
+  if (publicEnv.NEXT_PUBLIC_APP_ENV !== "production") return;
+  const ref = getSupabaseProjectRefFromEnv();
+  if (ref && ref !== MANDATED_SUPABASE_PROJECT_REF) {
+    throw new Error(
+      `NEXT_PUBLIC_SUPABASE_URL doit cibler ${MANDATED_SUPABASE_PROJECT_REF} (reçu : ${ref})`,
+    );
+  }
+}

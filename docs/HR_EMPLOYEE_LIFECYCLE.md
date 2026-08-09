@@ -58,3 +58,4 @@ flowchart LR
 | Départ | `hr.manage_offboarding` |
 
 Fichiers : `manage-employee.ts`, migration `20260719_050`.
+

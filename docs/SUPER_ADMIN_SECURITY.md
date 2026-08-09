@@ -42,3 +42,4 @@ Implémentation : `src/features/identity/security/privilege-guards.ts`.
 4. Ne jamais committer `SUPABASE_SERVICE_ROLE_KEY`.
 
 Voir : `docs/CREATE_FIRST_SUPER_ADMIN.md`, `scripts/bootstrap-platform-owner.ts`.
+

@@ -46,3 +46,4 @@ Si le profil ou le rôle échoue après création Auth, `invitation.service.ts` 
 - `/admin/utilisateurs` — liste des comptes
 
 Fichiers : `src/features/identity/actions/invite-user.ts`, `src/features/identity/services/invitation.service.ts`.
+

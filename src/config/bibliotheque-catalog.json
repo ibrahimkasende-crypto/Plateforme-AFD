@@ -1,0 +1,3559 @@
+{
+  "generatedAt": "2026-08-03T13:05:34.948Z",
+  "categories": [
+    {
+      "slug": "sante",
+      "label": "Santé",
+      "domainSlug": "sante-maternelle-infantile",
+      "coverImageUrl": "/assets/Banque des images AFD - Classees/01_sante/afd_sante_formation_prestataires_soins_salama_001.jpg",
+      "activityCount": 3,
+      "photoCount": 110,
+      "latestTitle": "Formation Prestataires Soins Salama",
+      "latestSlug": "sante-formation-prestataires-soins-salama-sante"
+    },
+    {
+      "slug": "education",
+      "label": "Éducation",
+      "domainSlug": "education",
+      "coverImageUrl": null,
+      "activityCount": 0,
+      "photoCount": 0,
+      "latestTitle": null,
+      "latestSlug": null
+    },
+    {
+      "slug": "protection",
+      "label": "Protection",
+      "domainSlug": "protection-vbg-droits-femmes",
+      "coverImageUrl": null,
+      "activityCount": 0,
+      "photoCount": 0,
+      "latestTitle": null,
+      "latestSlug": null
+    },
+    {
+      "slug": "vbg",
+      "label": "VBG",
+      "domainSlug": "protection-vbg-droits-femmes",
+      "coverImageUrl": null,
+      "activityCount": 0,
+      "photoCount": 0,
+      "latestTitle": null,
+      "latestSlug": null
+    },
+    {
+      "slug": "nutrition",
+      "label": "Nutrition",
+      "domainSlug": "nutrition",
+      "coverImageUrl": null,
+      "activityCount": 0,
+      "photoCount": 0,
+      "latestTitle": null,
+      "latestSlug": null
+    },
+    {
+      "slug": "wash",
+      "label": "WASH",
+      "domainSlug": "eau-hygiene-assainissement",
+      "coverImageUrl": "/assets/Banque des images AFD - Classees/06_wash/afd_wash_dotation_dispositifs_lavage_mains_salama_001.jpg",
+      "activityCount": 3,
+      "photoCount": 65,
+      "latestTitle": "Dotation Dispositifs Lavage Mains Salama",
+      "latestSlug": "wash-dotation-dispositifs-lavage-mains-salama-wash"
+    },
+    {
+      "slug": "agriculture",
+      "label": "Agriculture",
+      "domainSlug": "agriculture",
+      "coverImageUrl": null,
+      "activityCount": 0,
+      "photoCount": 0,
+      "latestTitle": null,
+      "latestSlug": null
+    },
+    {
+      "slug": "securite-alimentaire",
+      "label": "Sécurité alimentaire",
+      "domainSlug": "securite-alimentaire",
+      "coverImageUrl": null,
+      "activityCount": 0,
+      "photoCount": 0,
+      "latestTitle": null,
+      "latestSlug": null
+    },
+    {
+      "slug": "autonomisation",
+      "label": "Autonomisation",
+      "domainSlug": "autonomisation-economique",
+      "coverImageUrl": null,
+      "activityCount": 0,
+      "photoCount": 0,
+      "latestTitle": null,
+      "latestSlug": null
+    },
+    {
+      "slug": "entrepreneuriat",
+      "label": "Entrepreneuriat",
+      "domainSlug": "autonomisation-economique",
+      "coverImageUrl": null,
+      "activityCount": 0,
+      "photoCount": 0,
+      "latestTitle": null,
+      "latestSlug": null
+    },
+    {
+      "slug": "inclusion",
+      "label": "Inclusion",
+      "domainSlug": "inclusion",
+      "coverImageUrl": null,
+      "activityCount": 0,
+      "photoCount": 0,
+      "latestTitle": null,
+      "latestSlug": null
+    },
+    {
+      "slug": "enfance",
+      "label": "Enfance",
+      "domainSlug": "enfance",
+      "coverImageUrl": "/assets/Banque des images AFD - Classees/12_enfance/afd_enfance_activites_enfants_site_communautaire_001.jpg",
+      "activityCount": 1,
+      "photoCount": 41,
+      "latestTitle": "Activites Enfants Site Communautaire",
+      "latestSlug": "enfance-activites-enfants-site-communautaire-enfance"
+    },
+    {
+      "slug": "jeunesse",
+      "label": "Jeunesse",
+      "domainSlug": "jeunesse",
+      "coverImageUrl": null,
+      "activityCount": 0,
+      "photoCount": 0,
+      "latestTitle": null,
+      "latestSlug": null
+    },
+    {
+      "slug": "formation",
+      "label": "Formation",
+      "domainSlug": "formation",
+      "coverImageUrl": null,
+      "activityCount": 0,
+      "photoCount": 0,
+      "latestTitle": null,
+      "latestSlug": null
+    },
+    {
+      "slug": "renforcement-capacites",
+      "label": "Renforcement des capacités",
+      "domainSlug": "formation",
+      "coverImageUrl": null,
+      "activityCount": 0,
+      "photoCount": 0,
+      "latestTitle": null,
+      "latestSlug": null
+    },
+    {
+      "slug": "distribution-humanitaire",
+      "label": "Distribution humanitaire",
+      "domainSlug": "femmes-reponse-humanitaire-urgence",
+      "coverImageUrl": null,
+      "activityCount": 0,
+      "photoCount": 0,
+      "latestTitle": null,
+      "latestSlug": null
+    },
+    {
+      "slug": "missions-terrain",
+      "label": "Missions de terrain",
+      "domainSlug": "femmes-reponse-humanitaire-urgence",
+      "coverImageUrl": "/assets/Banque des images AFD - Classees/17_missions_terrain/afd_missions_terrain_visite_evaluation_salama_001.jpg",
+      "activityCount": 2,
+      "photoCount": 28,
+      "latestTitle": "Terrain Visite Evaluation Salama",
+      "latestSlug": "missions-terrain-visite-evaluation-salama-missions-terrain"
+    },
+    {
+      "slug": "coordination",
+      "label": "Coordination",
+      "domainSlug": "femmes-leadership-gouvernance-communautaire",
+      "coverImageUrl": "/assets/Banque des images AFD - Classees/18_coordination/afd_coordination_seance_travail_caritas_kisangani_001.jpg",
+      "activityCount": 1,
+      "photoCount": 45,
+      "latestTitle": "Seance Travail Caritas Kisangani",
+      "latestSlug": "coordination-seance-travail-caritas-kisangani-coordination"
+    },
+    {
+      "slug": "gouvernance",
+      "label": "Gouvernance",
+      "domainSlug": "femmes-leadership-gouvernance-communautaire",
+      "coverImageUrl": "/assets/Banque des images AFD - Classees/19_gouvernance/afd_gouvernance_remise_documents_coordination_tshopo_001.jpg",
+      "activityCount": 1,
+      "photoCount": 5,
+      "latestTitle": "Remise Documents Coordination Tshopo",
+      "latestSlug": "gouvernance-remise-documents-coordination-tshopo-gouvernance"
+    },
+    {
+      "slug": "partenariats",
+      "label": "Partenariats",
+      "domainSlug": "partenariats",
+      "coverImageUrl": null,
+      "activityCount": 0,
+      "photoCount": 0,
+      "latestTitle": null,
+      "latestSlug": null
+    },
+    {
+      "slug": "plaidoyer",
+      "label": "Plaidoyer",
+      "domainSlug": "plaidoyer",
+      "coverImageUrl": null,
+      "activityCount": 0,
+      "photoCount": 0,
+      "latestTitle": null,
+      "latestSlug": null
+    },
+    {
+      "slug": "sensibilisation",
+      "label": "Sensibilisation",
+      "domainSlug": "protection-vbg-droits-femmes",
+      "coverImageUrl": "/assets/Banque des images AFD - Classees/22_sensibilisation/afd_sensibilisation_sensibilisation_8_mars_camp_kabila_001.jpg",
+      "activityCount": 1,
+      "photoCount": 7,
+      "latestTitle": "Sensibilisation 8 Mars Camp Kabila",
+      "latestSlug": "sensibilisation-sensibilisation-8-mars-camp-kabila-sensibilisation"
+    },
+    {
+      "slug": "reunions",
+      "label": "Réunions",
+      "domainSlug": "coordination",
+      "coverImageUrl": null,
+      "activityCount": 0,
+      "photoCount": 0,
+      "latestTitle": null,
+      "latestSlug": null
+    },
+    {
+      "slug": "visites-institutionnelles",
+      "label": "Événements institutionnels",
+      "domainSlug": "femmes-leadership-gouvernance-communautaire",
+      "coverImageUrl": "/assets/Banque des images AFD - Classees/24_visites_institutionnelles/afd_visites_institutionnelles_civilites_autorites_mambasa_001.jpg",
+      "activityCount": 2,
+      "photoCount": 15,
+      "latestTitle": "Institutionnelles Civilites Autorites Mambasa",
+      "latestSlug": "visites-institutionnelles-civilites-autorites-mambasa-visites-institutionnelles"
+    },
+    {
+      "slug": "communication",
+      "label": "Communication",
+      "domainSlug": "communication",
+      "coverImageUrl": null,
+      "activityCount": 0,
+      "photoCount": 0,
+      "latestTitle": null,
+      "latestSlug": null
+    },
+    {
+      "slug": "evenements",
+      "label": "Événements",
+      "domainSlug": "evenements",
+      "coverImageUrl": null,
+      "activityCount": 0,
+      "photoCount": 0,
+      "latestTitle": null,
+      "latestSlug": null
+    }
+  ],
+  "activities": [
+    {
+      "id": "lib-sante-formation-prestataires-soins-salama-sante",
+      "slug": "sante-formation-prestataires-soins-salama-sante",
+      "categorySlug": "sante",
+      "categoryLabel": "Santé",
+      "domainSlug": "sante-maternelle-infantile",
+      "folder": "01_sante",
+      "title": "Formation Prestataires Soins Salama",
+      "summary": "Archive photographique officielle AFD — Santé.",
+      "description": "Cette fiche documente une activité AFD dans le domaine « Santé ». Les images proviennent de la banque institutionnelle classée.",
+      "status": "archivee",
+      "published": true,
+      "featured": false,
+      "eventDate": null,
+      "province": null,
+      "territory": null,
+      "locality": null,
+      "locationName": null,
+      "project": null,
+      "partners": [],
+      "tags": [
+        "Santé"
+      ],
+      "author": "AFD ASBL",
+      "images": [
+        {
+          "id": "lib-sante-formation-prestataires-soins-salama-sante-0",
+          "src": "/assets/Banque des images AFD - Classees/01_sante/afd_sante_formation_prestataires_soins_salama_001.jpg",
+          "alt": "Formation Prestataires Soins Salama — photo 1",
+          "title": "Formation Prestataires Soins Salama",
+          "caption": null,
+          "isCover": true,
+          "orderIndex": 1
+        },
+        {
+          "id": "lib-sante-formation-prestataires-soins-salama-sante-1",
+          "src": "/assets/Banque des images AFD - Classees/01_sante/afd_sante_formation_prestataires_soins_salama_002.jpg",
+          "alt": "Formation Prestataires Soins Salama — photo 2",
+          "title": "Formation Prestataires Soins Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 2
+        },
+        {
+          "id": "lib-sante-formation-prestataires-soins-salama-sante-2",
+          "src": "/assets/Banque des images AFD - Classees/01_sante/afd_sante_formation_prestataires_soins_salama_003.jpg",
+          "alt": "Formation Prestataires Soins Salama — photo 3",
+          "title": "Formation Prestataires Soins Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 3
+        },
+        {
+          "id": "lib-sante-formation-prestataires-soins-salama-sante-3",
+          "src": "/assets/Banque des images AFD - Classees/01_sante/afd_sante_formation_prestataires_soins_salama_004.jpg",
+          "alt": "Formation Prestataires Soins Salama — photo 4",
+          "title": "Formation Prestataires Soins Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 4
+        },
+        {
+          "id": "lib-sante-formation-prestataires-soins-salama-sante-4",
+          "src": "/assets/Banque des images AFD - Classees/01_sante/afd_sante_formation_prestataires_soins_salama_005.jpg",
+          "alt": "Formation Prestataires Soins Salama — photo 5",
+          "title": "Formation Prestataires Soins Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 5
+        },
+        {
+          "id": "lib-sante-formation-prestataires-soins-salama-sante-5",
+          "src": "/assets/Banque des images AFD - Classees/01_sante/afd_sante_formation_prestataires_soins_salama_006.jpg",
+          "alt": "Formation Prestataires Soins Salama — photo 6",
+          "title": "Formation Prestataires Soins Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 6
+        },
+        {
+          "id": "lib-sante-formation-prestataires-soins-salama-sante-6",
+          "src": "/assets/Banque des images AFD - Classees/01_sante/afd_sante_formation_prestataires_soins_salama_007.jpg",
+          "alt": "Formation Prestataires Soins Salama — photo 7",
+          "title": "Formation Prestataires Soins Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 7
+        },
+        {
+          "id": "lib-sante-formation-prestataires-soins-salama-sante-7",
+          "src": "/assets/Banque des images AFD - Classees/01_sante/afd_sante_formation_prestataires_soins_salama_008.jpg",
+          "alt": "Formation Prestataires Soins Salama — photo 8",
+          "title": "Formation Prestataires Soins Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 8
+        },
+        {
+          "id": "lib-sante-formation-prestataires-soins-salama-sante-8",
+          "src": "/assets/Banque des images AFD - Classees/01_sante/afd_sante_formation_prestataires_soins_salama_009.jpg",
+          "alt": "Formation Prestataires Soins Salama — photo 9",
+          "title": "Formation Prestataires Soins Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 9
+        },
+        {
+          "id": "lib-sante-formation-prestataires-soins-salama-sante-9",
+          "src": "/assets/Banque des images AFD - Classees/01_sante/afd_sante_formation_prestataires_soins_salama_010.jpg",
+          "alt": "Formation Prestataires Soins Salama — photo 10",
+          "title": "Formation Prestataires Soins Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 10
+        },
+        {
+          "id": "lib-sante-formation-prestataires-soins-salama-sante-10",
+          "src": "/assets/Banque des images AFD - Classees/01_sante/afd_sante_formation_prestataires_soins_salama_011.jpg",
+          "alt": "Formation Prestataires Soins Salama — photo 11",
+          "title": "Formation Prestataires Soins Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 11
+        },
+        {
+          "id": "lib-sante-formation-prestataires-soins-salama-sante-11",
+          "src": "/assets/Banque des images AFD - Classees/01_sante/afd_sante_formation_prestataires_soins_salama_012.jpg",
+          "alt": "Formation Prestataires Soins Salama — photo 12",
+          "title": "Formation Prestataires Soins Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 12
+        },
+        {
+          "id": "lib-sante-formation-prestataires-soins-salama-sante-12",
+          "src": "/assets/Banque des images AFD - Classees/01_sante/afd_sante_formation_prestataires_soins_salama_013.jpg",
+          "alt": "Formation Prestataires Soins Salama — photo 13",
+          "title": "Formation Prestataires Soins Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 13
+        },
+        {
+          "id": "lib-sante-formation-prestataires-soins-salama-sante-13",
+          "src": "/assets/Banque des images AFD - Classees/01_sante/afd_sante_formation_prestataires_soins_salama_014.jpg",
+          "alt": "Formation Prestataires Soins Salama — photo 14",
+          "title": "Formation Prestataires Soins Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 14
+        },
+        {
+          "id": "lib-sante-formation-prestataires-soins-salama-sante-14",
+          "src": "/assets/Banque des images AFD - Classees/01_sante/afd_sante_formation_prestataires_soins_salama_015.jpg",
+          "alt": "Formation Prestataires Soins Salama — photo 15",
+          "title": "Formation Prestataires Soins Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 15
+        },
+        {
+          "id": "lib-sante-formation-prestataires-soins-salama-sante-15",
+          "src": "/assets/Banque des images AFD - Classees/01_sante/afd_sante_formation_prestataires_soins_salama_016.jpg",
+          "alt": "Formation Prestataires Soins Salama — photo 16",
+          "title": "Formation Prestataires Soins Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 16
+        },
+        {
+          "id": "lib-sante-formation-prestataires-soins-salama-sante-16",
+          "src": "/assets/Banque des images AFD - Classees/01_sante/afd_sante_formation_prestataires_soins_salama_017.jpg",
+          "alt": "Formation Prestataires Soins Salama — photo 17",
+          "title": "Formation Prestataires Soins Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 17
+        },
+        {
+          "id": "lib-sante-formation-prestataires-soins-salama-sante-17",
+          "src": "/assets/Banque des images AFD - Classees/01_sante/afd_sante_formation_prestataires_soins_salama_018.jpg",
+          "alt": "Formation Prestataires Soins Salama — photo 18",
+          "title": "Formation Prestataires Soins Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 18
+        },
+        {
+          "id": "lib-sante-formation-prestataires-soins-salama-sante-18",
+          "src": "/assets/Banque des images AFD - Classees/01_sante/afd_sante_formation_prestataires_soins_salama_019.jpg",
+          "alt": "Formation Prestataires Soins Salama — photo 19",
+          "title": "Formation Prestataires Soins Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 19
+        },
+        {
+          "id": "lib-sante-formation-prestataires-soins-salama-sante-19",
+          "src": "/assets/Banque des images AFD - Classees/01_sante/afd_sante_formation_prestataires_soins_salama_020.jpg",
+          "alt": "Formation Prestataires Soins Salama — photo 20",
+          "title": "Formation Prestataires Soins Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 20
+        },
+        {
+          "id": "lib-sante-formation-prestataires-soins-salama-sante-20",
+          "src": "/assets/Banque des images AFD - Classees/01_sante/afd_sante_formation_prestataires_soins_salama_021.jpg",
+          "alt": "Formation Prestataires Soins Salama — photo 21",
+          "title": "Formation Prestataires Soins Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 21
+        },
+        {
+          "id": "lib-sante-formation-prestataires-soins-salama-sante-21",
+          "src": "/assets/Banque des images AFD - Classees/01_sante/afd_sante_formation_prestataires_soins_salama_022.jpg",
+          "alt": "Formation Prestataires Soins Salama — photo 22",
+          "title": "Formation Prestataires Soins Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 22
+        },
+        {
+          "id": "lib-sante-formation-prestataires-soins-salama-sante-22",
+          "src": "/assets/Banque des images AFD - Classees/01_sante/afd_sante_formation_prestataires_soins_salama_023.jpg",
+          "alt": "Formation Prestataires Soins Salama — photo 23",
+          "title": "Formation Prestataires Soins Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 23
+        },
+        {
+          "id": "lib-sante-formation-prestataires-soins-salama-sante-23",
+          "src": "/assets/Banque des images AFD - Classees/01_sante/afd_sante_formation_prestataires_soins_salama_024.jpg",
+          "alt": "Formation Prestataires Soins Salama — photo 24",
+          "title": "Formation Prestataires Soins Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 24
+        },
+        {
+          "id": "lib-sante-formation-prestataires-soins-salama-sante-24",
+          "src": "/assets/Banque des images AFD - Classees/01_sante/afd_sante_formation_prestataires_soins_salama_025.jpg",
+          "alt": "Formation Prestataires Soins Salama — photo 25",
+          "title": "Formation Prestataires Soins Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 25
+        },
+        {
+          "id": "lib-sante-formation-prestataires-soins-salama-sante-25",
+          "src": "/assets/Banque des images AFD - Classees/01_sante/afd_sante_formation_prestataires_soins_salama_026.jpg",
+          "alt": "Formation Prestataires Soins Salama — photo 26",
+          "title": "Formation Prestataires Soins Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 26
+        },
+        {
+          "id": "lib-sante-formation-prestataires-soins-salama-sante-26",
+          "src": "/assets/Banque des images AFD - Classees/01_sante/afd_sante_formation_prestataires_soins_salama_027.jpg",
+          "alt": "Formation Prestataires Soins Salama — photo 27",
+          "title": "Formation Prestataires Soins Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 27
+        },
+        {
+          "id": "lib-sante-formation-prestataires-soins-salama-sante-27",
+          "src": "/assets/Banque des images AFD - Classees/01_sante/afd_sante_formation_prestataires_soins_salama_028.jpg",
+          "alt": "Formation Prestataires Soins Salama — photo 28",
+          "title": "Formation Prestataires Soins Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 28
+        },
+        {
+          "id": "lib-sante-formation-prestataires-soins-salama-sante-28",
+          "src": "/assets/Banque des images AFD - Classees/01_sante/afd_sante_formation_prestataires_soins_salama_029.jpg",
+          "alt": "Formation Prestataires Soins Salama — photo 29",
+          "title": "Formation Prestataires Soins Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 29
+        },
+        {
+          "id": "lib-sante-formation-prestataires-soins-salama-sante-29",
+          "src": "/assets/Banque des images AFD - Classees/01_sante/afd_sante_formation_prestataires_soins_salama_030.jpg",
+          "alt": "Formation Prestataires Soins Salama — photo 30",
+          "title": "Formation Prestataires Soins Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 30
+        },
+        {
+          "id": "lib-sante-formation-prestataires-soins-salama-sante-30",
+          "src": "/assets/Banque des images AFD - Classees/01_sante/afd_sante_formation_prestataires_soins_salama_031.jpg",
+          "alt": "Formation Prestataires Soins Salama — photo 31",
+          "title": "Formation Prestataires Soins Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 31
+        },
+        {
+          "id": "lib-sante-formation-prestataires-soins-salama-sante-31",
+          "src": "/assets/Banque des images AFD - Classees/01_sante/afd_sante_formation_prestataires_soins_salama_032.jpg",
+          "alt": "Formation Prestataires Soins Salama — photo 32",
+          "title": "Formation Prestataires Soins Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 32
+        },
+        {
+          "id": "lib-sante-formation-prestataires-soins-salama-sante-32",
+          "src": "/assets/Banque des images AFD - Classees/01_sante/afd_sante_formation_prestataires_soins_salama_033.jpg",
+          "alt": "Formation Prestataires Soins Salama — photo 33",
+          "title": "Formation Prestataires Soins Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 33
+        },
+        {
+          "id": "lib-sante-formation-prestataires-soins-salama-sante-33",
+          "src": "/assets/Banque des images AFD - Classees/01_sante/afd_sante_formation_prestataires_soins_salama_034.jpg",
+          "alt": "Formation Prestataires Soins Salama — photo 34",
+          "title": "Formation Prestataires Soins Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 34
+        },
+        {
+          "id": "lib-sante-formation-prestataires-soins-salama-sante-34",
+          "src": "/assets/Banque des images AFD - Classees/01_sante/afd_sante_formation_prestataires_soins_salama_035.jpg",
+          "alt": "Formation Prestataires Soins Salama — photo 35",
+          "title": "Formation Prestataires Soins Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 35
+        },
+        {
+          "id": "lib-sante-formation-prestataires-soins-salama-sante-35",
+          "src": "/assets/Banque des images AFD - Classees/01_sante/afd_sante_formation_prestataires_soins_salama_036.jpg",
+          "alt": "Formation Prestataires Soins Salama — photo 36",
+          "title": "Formation Prestataires Soins Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 36
+        },
+        {
+          "id": "lib-sante-formation-prestataires-soins-salama-sante-36",
+          "src": "/assets/Banque des images AFD - Classees/01_sante/afd_sante_formation_prestataires_soins_salama_037.jpg",
+          "alt": "Formation Prestataires Soins Salama — photo 37",
+          "title": "Formation Prestataires Soins Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 37
+        },
+        {
+          "id": "lib-sante-formation-prestataires-soins-salama-sante-37",
+          "src": "/assets/Banque des images AFD - Classees/01_sante/afd_sante_formation_prestataires_soins_salama_038.jpg",
+          "alt": "Formation Prestataires Soins Salama — photo 38",
+          "title": "Formation Prestataires Soins Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 38
+        },
+        {
+          "id": "lib-sante-formation-prestataires-soins-salama-sante-38",
+          "src": "/assets/Banque des images AFD - Classees/01_sante/afd_sante_formation_prestataires_soins_salama_039.jpg",
+          "alt": "Formation Prestataires Soins Salama — photo 39",
+          "title": "Formation Prestataires Soins Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 39
+        },
+        {
+          "id": "lib-sante-formation-prestataires-soins-salama-sante-39",
+          "src": "/assets/Banque des images AFD - Classees/01_sante/afd_sante_formation_prestataires_soins_salama_040.jpg",
+          "alt": "Formation Prestataires Soins Salama — photo 40",
+          "title": "Formation Prestataires Soins Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 40
+        },
+        {
+          "id": "lib-sante-formation-prestataires-soins-salama-sante-40",
+          "src": "/assets/Banque des images AFD - Classees/01_sante/afd_sante_formation_prestataires_soins_salama_041.jpg",
+          "alt": "Formation Prestataires Soins Salama — photo 41",
+          "title": "Formation Prestataires Soins Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 41
+        },
+        {
+          "id": "lib-sante-formation-prestataires-soins-salama-sante-41",
+          "src": "/assets/Banque des images AFD - Classees/01_sante/afd_sante_formation_prestataires_soins_salama_042.jpg",
+          "alt": "Formation Prestataires Soins Salama — photo 42",
+          "title": "Formation Prestataires Soins Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 42
+        },
+        {
+          "id": "lib-sante-formation-prestataires-soins-salama-sante-42",
+          "src": "/assets/Banque des images AFD - Classees/01_sante/afd_sante_formation_prestataires_soins_salama_043.jpg",
+          "alt": "Formation Prestataires Soins Salama — photo 43",
+          "title": "Formation Prestataires Soins Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 43
+        },
+        {
+          "id": "lib-sante-formation-prestataires-soins-salama-sante-43",
+          "src": "/assets/Banque des images AFD - Classees/01_sante/afd_sante_formation_prestataires_soins_salama_044.jpg",
+          "alt": "Formation Prestataires Soins Salama — photo 44",
+          "title": "Formation Prestataires Soins Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 44
+        },
+        {
+          "id": "lib-sante-formation-prestataires-soins-salama-sante-44",
+          "src": "/assets/Banque des images AFD - Classees/01_sante/afd_sante_formation_prestataires_soins_salama_045.jpg",
+          "alt": "Formation Prestataires Soins Salama — photo 45",
+          "title": "Formation Prestataires Soins Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 45
+        },
+        {
+          "id": "lib-sante-formation-prestataires-soins-salama-sante-45",
+          "src": "/assets/Banque des images AFD - Classees/01_sante/afd_sante_formation_prestataires_soins_salama_046.jpg",
+          "alt": "Formation Prestataires Soins Salama — photo 46",
+          "title": "Formation Prestataires Soins Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 46
+        },
+        {
+          "id": "lib-sante-formation-prestataires-soins-salama-sante-46",
+          "src": "/assets/Banque des images AFD - Classees/01_sante/afd_sante_formation_prestataires_soins_salama_047.jpg",
+          "alt": "Formation Prestataires Soins Salama — photo 47",
+          "title": "Formation Prestataires Soins Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 47
+        },
+        {
+          "id": "lib-sante-formation-prestataires-soins-salama-sante-47",
+          "src": "/assets/Banque des images AFD - Classees/01_sante/afd_sante_formation_prestataires_soins_salama_048.jpg",
+          "alt": "Formation Prestataires Soins Salama — photo 48",
+          "title": "Formation Prestataires Soins Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 48
+        },
+        {
+          "id": "lib-sante-formation-prestataires-soins-salama-sante-48",
+          "src": "/assets/Banque des images AFD - Classees/01_sante/afd_sante_formation_prestataires_soins_salama_049.jpg",
+          "alt": "Formation Prestataires Soins Salama — photo 49",
+          "title": "Formation Prestataires Soins Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 49
+        },
+        {
+          "id": "lib-sante-formation-prestataires-soins-salama-sante-49",
+          "src": "/assets/Banque des images AFD - Classees/01_sante/afd_sante_formation_prestataires_soins_salama_050.jpg",
+          "alt": "Formation Prestataires Soins Salama — photo 50",
+          "title": "Formation Prestataires Soins Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 50
+        },
+        {
+          "id": "lib-sante-formation-prestataires-soins-salama-sante-50",
+          "src": "/assets/Banque des images AFD - Classees/01_sante/afd_sante_formation_prestataires_soins_salama_051.jpg",
+          "alt": "Formation Prestataires Soins Salama — photo 51",
+          "title": "Formation Prestataires Soins Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 51
+        },
+        {
+          "id": "lib-sante-formation-prestataires-soins-salama-sante-51",
+          "src": "/assets/Banque des images AFD - Classees/01_sante/afd_sante_formation_prestataires_soins_salama_052.jpg",
+          "alt": "Formation Prestataires Soins Salama — photo 52",
+          "title": "Formation Prestataires Soins Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 52
+        },
+        {
+          "id": "lib-sante-formation-prestataires-soins-salama-sante-52",
+          "src": "/assets/Banque des images AFD - Classees/01_sante/afd_sante_formation_prestataires_soins_salama_053.jpg",
+          "alt": "Formation Prestataires Soins Salama — photo 53",
+          "title": "Formation Prestataires Soins Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 53
+        },
+        {
+          "id": "lib-sante-formation-prestataires-soins-salama-sante-53",
+          "src": "/assets/Banque des images AFD - Classees/01_sante/afd_sante_formation_prestataires_soins_salama_054.jpg",
+          "alt": "Formation Prestataires Soins Salama — photo 54",
+          "title": "Formation Prestataires Soins Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 54
+        },
+        {
+          "id": "lib-sante-formation-prestataires-soins-salama-sante-54",
+          "src": "/assets/Banque des images AFD - Classees/01_sante/afd_sante_formation_prestataires_soins_salama_055.jpg",
+          "alt": "Formation Prestataires Soins Salama — photo 55",
+          "title": "Formation Prestataires Soins Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 55
+        },
+        {
+          "id": "lib-sante-formation-prestataires-soins-salama-sante-55",
+          "src": "/assets/Banque des images AFD - Classees/01_sante/afd_sante_formation_prestataires_soins_salama_056.jpg",
+          "alt": "Formation Prestataires Soins Salama — photo 56",
+          "title": "Formation Prestataires Soins Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 56
+        },
+        {
+          "id": "lib-sante-formation-prestataires-soins-salama-sante-56",
+          "src": "/assets/Banque des images AFD - Classees/01_sante/afd_sante_formation_prestataires_soins_salama_057.jpg",
+          "alt": "Formation Prestataires Soins Salama — photo 57",
+          "title": "Formation Prestataires Soins Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 57
+        },
+        {
+          "id": "lib-sante-formation-prestataires-soins-salama-sante-57",
+          "src": "/assets/Banque des images AFD - Classees/01_sante/afd_sante_formation_prestataires_soins_salama_058.jpg",
+          "alt": "Formation Prestataires Soins Salama — photo 58",
+          "title": "Formation Prestataires Soins Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 58
+        },
+        {
+          "id": "lib-sante-formation-prestataires-soins-salama-sante-58",
+          "src": "/assets/Banque des images AFD - Classees/01_sante/afd_sante_formation_prestataires_soins_salama_059.jpg",
+          "alt": "Formation Prestataires Soins Salama — photo 59",
+          "title": "Formation Prestataires Soins Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 59
+        },
+        {
+          "id": "lib-sante-formation-prestataires-soins-salama-sante-59",
+          "src": "/assets/Banque des images AFD - Classees/01_sante/afd_sante_formation_prestataires_soins_salama_060.jpg",
+          "alt": "Formation Prestataires Soins Salama — photo 60",
+          "title": "Formation Prestataires Soins Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 60
+        },
+        {
+          "id": "lib-sante-formation-prestataires-soins-salama-sante-60",
+          "src": "/assets/Banque des images AFD - Classees/01_sante/afd_sante_formation_prestataires_soins_salama_061.jpg",
+          "alt": "Formation Prestataires Soins Salama — photo 61",
+          "title": "Formation Prestataires Soins Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 61
+        },
+        {
+          "id": "lib-sante-formation-prestataires-soins-salama-sante-61",
+          "src": "/assets/Banque des images AFD - Classees/01_sante/afd_sante_formation_prestataires_soins_salama_062.jpg",
+          "alt": "Formation Prestataires Soins Salama — photo 62",
+          "title": "Formation Prestataires Soins Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 62
+        },
+        {
+          "id": "lib-sante-formation-prestataires-soins-salama-sante-62",
+          "src": "/assets/Banque des images AFD - Classees/01_sante/afd_sante_formation_prestataires_soins_salama_063.jpg",
+          "alt": "Formation Prestataires Soins Salama — photo 63",
+          "title": "Formation Prestataires Soins Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 63
+        },
+        {
+          "id": "lib-sante-formation-prestataires-soins-salama-sante-63",
+          "src": "/assets/Banque des images AFD - Classees/01_sante/afd_sante_formation_prestataires_soins_salama_064.jpg",
+          "alt": "Formation Prestataires Soins Salama — photo 64",
+          "title": "Formation Prestataires Soins Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 64
+        },
+        {
+          "id": "lib-sante-formation-prestataires-soins-salama-sante-64",
+          "src": "/assets/Banque des images AFD - Classees/01_sante/afd_sante_formation_prestataires_soins_salama_065.jpg",
+          "alt": "Formation Prestataires Soins Salama — photo 65",
+          "title": "Formation Prestataires Soins Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 65
+        },
+        {
+          "id": "lib-sante-formation-prestataires-soins-salama-sante-65",
+          "src": "/assets/Banque des images AFD - Classees/01_sante/afd_sante_formation_prestataires_soins_salama_066.jpg",
+          "alt": "Formation Prestataires Soins Salama — photo 66",
+          "title": "Formation Prestataires Soins Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 66
+        },
+        {
+          "id": "lib-sante-formation-prestataires-soins-salama-sante-66",
+          "src": "/assets/Banque des images AFD - Classees/01_sante/afd_sante_formation_prestataires_soins_salama_067.jpg",
+          "alt": "Formation Prestataires Soins Salama — photo 67",
+          "title": "Formation Prestataires Soins Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 67
+        },
+        {
+          "id": "lib-sante-formation-prestataires-soins-salama-sante-67",
+          "src": "/assets/Banque des images AFD - Classees/01_sante/afd_sante_formation_prestataires_soins_salama_068.jpg",
+          "alt": "Formation Prestataires Soins Salama — photo 68",
+          "title": "Formation Prestataires Soins Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 68
+        },
+        {
+          "id": "lib-sante-formation-prestataires-soins-salama-sante-68",
+          "src": "/assets/Banque des images AFD - Classees/01_sante/afd_sante_formation_prestataires_soins_salama_069.jpg",
+          "alt": "Formation Prestataires Soins Salama — photo 69",
+          "title": "Formation Prestataires Soins Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 69
+        },
+        {
+          "id": "lib-sante-formation-prestataires-soins-salama-sante-69",
+          "src": "/assets/Banque des images AFD - Classees/01_sante/afd_sante_formation_prestataires_soins_salama_070.jpg",
+          "alt": "Formation Prestataires Soins Salama — photo 70",
+          "title": "Formation Prestataires Soins Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 70
+        },
+        {
+          "id": "lib-sante-formation-prestataires-soins-salama-sante-70",
+          "src": "/assets/Banque des images AFD - Classees/01_sante/afd_sante_formation_prestataires_soins_salama_071.jpg",
+          "alt": "Formation Prestataires Soins Salama — photo 71",
+          "title": "Formation Prestataires Soins Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 71
+        },
+        {
+          "id": "lib-sante-formation-prestataires-soins-salama-sante-71",
+          "src": "/assets/Banque des images AFD - Classees/01_sante/afd_sante_formation_prestataires_soins_salama_072.jpg",
+          "alt": "Formation Prestataires Soins Salama — photo 72",
+          "title": "Formation Prestataires Soins Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 72
+        },
+        {
+          "id": "lib-sante-formation-prestataires-soins-salama-sante-72",
+          "src": "/assets/Banque des images AFD - Classees/01_sante/afd_sante_formation_prestataires_soins_salama_073.jpg",
+          "alt": "Formation Prestataires Soins Salama — photo 73",
+          "title": "Formation Prestataires Soins Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 73
+        },
+        {
+          "id": "lib-sante-formation-prestataires-soins-salama-sante-73",
+          "src": "/assets/Banque des images AFD - Classees/01_sante/afd_sante_formation_prestataires_soins_salama_074.jpg",
+          "alt": "Formation Prestataires Soins Salama — photo 74",
+          "title": "Formation Prestataires Soins Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 74
+        },
+        {
+          "id": "lib-sante-formation-prestataires-soins-salama-sante-74",
+          "src": "/assets/Banque des images AFD - Classees/01_sante/afd_sante_formation_prestataires_soins_salama_075.jpg",
+          "alt": "Formation Prestataires Soins Salama — photo 75",
+          "title": "Formation Prestataires Soins Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 75
+        }
+      ],
+      "coverImageUrl": "/assets/Banque des images AFD - Classees/01_sante/afd_sante_formation_prestataires_soins_salama_001.jpg",
+      "photoCount": 75,
+      "downloadCount": 0,
+      "publishedAt": null,
+      "updatedAt": null
+    },
+    {
+      "id": "lib-sante-sensibilisation-cpn-salama-sante",
+      "slug": "sante-sensibilisation-cpn-salama-sante",
+      "categorySlug": "sante",
+      "categoryLabel": "Santé",
+      "domainSlug": "sante-maternelle-infantile",
+      "folder": "01_sante",
+      "title": "Sensibilisation Cpn Salama",
+      "summary": "Archive photographique officielle AFD — Santé.",
+      "description": "Cette fiche documente une activité AFD dans le domaine « Santé ». Les images proviennent de la banque institutionnelle classée.",
+      "status": "terminee",
+      "published": true,
+      "featured": false,
+      "eventDate": null,
+      "province": null,
+      "territory": null,
+      "locality": null,
+      "locationName": null,
+      "project": null,
+      "partners": [],
+      "tags": [
+        "Santé"
+      ],
+      "author": "AFD ASBL",
+      "images": [
+        {
+          "id": "lib-sante-sensibilisation-cpn-salama-sante-0",
+          "src": "/assets/Banque des images AFD - Classees/01_sante/afd_sante_sensibilisation_cpn_salama_001.jpg",
+          "alt": "Sensibilisation Cpn Salama — photo 1",
+          "title": "Sensibilisation Cpn Salama",
+          "caption": null,
+          "isCover": true,
+          "orderIndex": 1
+        },
+        {
+          "id": "lib-sante-sensibilisation-cpn-salama-sante-1",
+          "src": "/assets/Banque des images AFD - Classees/01_sante/afd_sante_sensibilisation_cpn_salama_002.jpg",
+          "alt": "Sensibilisation Cpn Salama — photo 2",
+          "title": "Sensibilisation Cpn Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 2
+        },
+        {
+          "id": "lib-sante-sensibilisation-cpn-salama-sante-2",
+          "src": "/assets/Banque des images AFD - Classees/01_sante/afd_sante_sensibilisation_cpn_salama_003.jpg",
+          "alt": "Sensibilisation Cpn Salama — photo 3",
+          "title": "Sensibilisation Cpn Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 3
+        },
+        {
+          "id": "lib-sante-sensibilisation-cpn-salama-sante-3",
+          "src": "/assets/Banque des images AFD - Classees/01_sante/afd_sante_sensibilisation_cpn_salama_004.jpg",
+          "alt": "Sensibilisation Cpn Salama — photo 4",
+          "title": "Sensibilisation Cpn Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 4
+        },
+        {
+          "id": "lib-sante-sensibilisation-cpn-salama-sante-4",
+          "src": "/assets/Banque des images AFD - Classees/01_sante/afd_sante_sensibilisation_cpn_salama_005.jpg",
+          "alt": "Sensibilisation Cpn Salama — photo 5",
+          "title": "Sensibilisation Cpn Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 5
+        },
+        {
+          "id": "lib-sante-sensibilisation-cpn-salama-sante-5",
+          "src": "/assets/Banque des images AFD - Classees/01_sante/afd_sante_sensibilisation_cpn_salama_006.jpg",
+          "alt": "Sensibilisation Cpn Salama — photo 6",
+          "title": "Sensibilisation Cpn Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 6
+        },
+        {
+          "id": "lib-sante-sensibilisation-cpn-salama-sante-6",
+          "src": "/assets/Banque des images AFD - Classees/01_sante/afd_sante_sensibilisation_cpn_salama_007.jpg",
+          "alt": "Sensibilisation Cpn Salama — photo 7",
+          "title": "Sensibilisation Cpn Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 7
+        },
+        {
+          "id": "lib-sante-sensibilisation-cpn-salama-sante-7",
+          "src": "/assets/Banque des images AFD - Classees/01_sante/afd_sante_sensibilisation_cpn_salama_008.jpg",
+          "alt": "Sensibilisation Cpn Salama — photo 8",
+          "title": "Sensibilisation Cpn Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 8
+        },
+        {
+          "id": "lib-sante-sensibilisation-cpn-salama-sante-8",
+          "src": "/assets/Banque des images AFD - Classees/01_sante/afd_sante_sensibilisation_cpn_salama_009.jpg",
+          "alt": "Sensibilisation Cpn Salama — photo 9",
+          "title": "Sensibilisation Cpn Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 9
+        },
+        {
+          "id": "lib-sante-sensibilisation-cpn-salama-sante-9",
+          "src": "/assets/Banque des images AFD - Classees/01_sante/afd_sante_sensibilisation_cpn_salama_010.jpg",
+          "alt": "Sensibilisation Cpn Salama — photo 10",
+          "title": "Sensibilisation Cpn Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 10
+        },
+        {
+          "id": "lib-sante-sensibilisation-cpn-salama-sante-10",
+          "src": "/assets/Banque des images AFD - Classees/01_sante/afd_sante_sensibilisation_cpn_salama_011.jpg",
+          "alt": "Sensibilisation Cpn Salama — photo 11",
+          "title": "Sensibilisation Cpn Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 11
+        },
+        {
+          "id": "lib-sante-sensibilisation-cpn-salama-sante-11",
+          "src": "/assets/Banque des images AFD - Classees/01_sante/afd_sante_sensibilisation_cpn_salama_012.jpg",
+          "alt": "Sensibilisation Cpn Salama — photo 12",
+          "title": "Sensibilisation Cpn Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 12
+        },
+        {
+          "id": "lib-sante-sensibilisation-cpn-salama-sante-12",
+          "src": "/assets/Banque des images AFD - Classees/01_sante/afd_sante_sensibilisation_cpn_salama_013.jpg",
+          "alt": "Sensibilisation Cpn Salama — photo 13",
+          "title": "Sensibilisation Cpn Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 13
+        },
+        {
+          "id": "lib-sante-sensibilisation-cpn-salama-sante-13",
+          "src": "/assets/Banque des images AFD - Classees/01_sante/afd_sante_sensibilisation_cpn_salama_014.jpg",
+          "alt": "Sensibilisation Cpn Salama — photo 14",
+          "title": "Sensibilisation Cpn Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 14
+        },
+        {
+          "id": "lib-sante-sensibilisation-cpn-salama-sante-14",
+          "src": "/assets/Banque des images AFD - Classees/01_sante/afd_sante_sensibilisation_cpn_salama_015.jpg",
+          "alt": "Sensibilisation Cpn Salama — photo 15",
+          "title": "Sensibilisation Cpn Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 15
+        },
+        {
+          "id": "lib-sante-sensibilisation-cpn-salama-sante-15",
+          "src": "/assets/Banque des images AFD - Classees/01_sante/afd_sante_sensibilisation_cpn_salama_016.jpg",
+          "alt": "Sensibilisation Cpn Salama — photo 16",
+          "title": "Sensibilisation Cpn Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 16
+        },
+        {
+          "id": "lib-sante-sensibilisation-cpn-salama-sante-16",
+          "src": "/assets/Banque des images AFD - Classees/01_sante/afd_sante_sensibilisation_cpn_salama_017.jpg",
+          "alt": "Sensibilisation Cpn Salama — photo 17",
+          "title": "Sensibilisation Cpn Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 17
+        },
+        {
+          "id": "lib-sante-sensibilisation-cpn-salama-sante-17",
+          "src": "/assets/Banque des images AFD - Classees/01_sante/afd_sante_sensibilisation_cpn_salama_018.jpg",
+          "alt": "Sensibilisation Cpn Salama — photo 18",
+          "title": "Sensibilisation Cpn Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 18
+        }
+      ],
+      "coverImageUrl": "/assets/Banque des images AFD - Classees/01_sante/afd_sante_sensibilisation_cpn_salama_001.jpg",
+      "photoCount": 18,
+      "downloadCount": 0,
+      "publishedAt": null,
+      "updatedAt": null
+    },
+    {
+      "id": "lib-sante-supervision-formative-salama-sante",
+      "slug": "sante-supervision-formative-salama-sante",
+      "categorySlug": "sante",
+      "categoryLabel": "Santé",
+      "domainSlug": "sante-maternelle-infantile",
+      "folder": "01_sante",
+      "title": "Supervision Formative Salama",
+      "summary": "Archive photographique officielle AFD — Santé.",
+      "description": "Cette fiche documente une activité AFD dans le domaine « Santé ». Les images proviennent de la banque institutionnelle classée.",
+      "status": "terminee",
+      "published": true,
+      "featured": false,
+      "eventDate": null,
+      "province": null,
+      "territory": null,
+      "locality": null,
+      "locationName": null,
+      "project": null,
+      "partners": [],
+      "tags": [
+        "Santé"
+      ],
+      "author": "AFD ASBL",
+      "images": [
+        {
+          "id": "lib-sante-supervision-formative-salama-sante-0",
+          "src": "/assets/Banque des images AFD - Classees/01_sante/afd_sante_supervision_formative_salama_001.jpg",
+          "alt": "Supervision Formative Salama — photo 1",
+          "title": "Supervision Formative Salama",
+          "caption": null,
+          "isCover": true,
+          "orderIndex": 1
+        },
+        {
+          "id": "lib-sante-supervision-formative-salama-sante-1",
+          "src": "/assets/Banque des images AFD - Classees/01_sante/afd_sante_supervision_formative_salama_002.jpg",
+          "alt": "Supervision Formative Salama — photo 2",
+          "title": "Supervision Formative Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 2
+        },
+        {
+          "id": "lib-sante-supervision-formative-salama-sante-2",
+          "src": "/assets/Banque des images AFD - Classees/01_sante/afd_sante_supervision_formative_salama_003.jpg",
+          "alt": "Supervision Formative Salama — photo 3",
+          "title": "Supervision Formative Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 3
+        },
+        {
+          "id": "lib-sante-supervision-formative-salama-sante-3",
+          "src": "/assets/Banque des images AFD - Classees/01_sante/afd_sante_supervision_formative_salama_004.jpg",
+          "alt": "Supervision Formative Salama — photo 4",
+          "title": "Supervision Formative Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 4
+        },
+        {
+          "id": "lib-sante-supervision-formative-salama-sante-4",
+          "src": "/assets/Banque des images AFD - Classees/01_sante/afd_sante_supervision_formative_salama_005.jpg",
+          "alt": "Supervision Formative Salama — photo 5",
+          "title": "Supervision Formative Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 5
+        },
+        {
+          "id": "lib-sante-supervision-formative-salama-sante-5",
+          "src": "/assets/Banque des images AFD - Classees/01_sante/afd_sante_supervision_formative_salama_006.jpg",
+          "alt": "Supervision Formative Salama — photo 6",
+          "title": "Supervision Formative Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 6
+        },
+        {
+          "id": "lib-sante-supervision-formative-salama-sante-6",
+          "src": "/assets/Banque des images AFD - Classees/01_sante/afd_sante_supervision_formative_salama_007.jpg",
+          "alt": "Supervision Formative Salama — photo 7",
+          "title": "Supervision Formative Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 7
+        },
+        {
+          "id": "lib-sante-supervision-formative-salama-sante-7",
+          "src": "/assets/Banque des images AFD - Classees/01_sante/afd_sante_supervision_formative_salama_008.jpg",
+          "alt": "Supervision Formative Salama — photo 8",
+          "title": "Supervision Formative Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 8
+        },
+        {
+          "id": "lib-sante-supervision-formative-salama-sante-8",
+          "src": "/assets/Banque des images AFD - Classees/01_sante/afd_sante_supervision_formative_salama_009.jpg",
+          "alt": "Supervision Formative Salama — photo 9",
+          "title": "Supervision Formative Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 9
+        },
+        {
+          "id": "lib-sante-supervision-formative-salama-sante-9",
+          "src": "/assets/Banque des images AFD - Classees/01_sante/afd_sante_supervision_formative_salama_010.jpg",
+          "alt": "Supervision Formative Salama — photo 10",
+          "title": "Supervision Formative Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 10
+        },
+        {
+          "id": "lib-sante-supervision-formative-salama-sante-10",
+          "src": "/assets/Banque des images AFD - Classees/01_sante/afd_sante_supervision_formative_salama_011.jpg",
+          "alt": "Supervision Formative Salama — photo 11",
+          "title": "Supervision Formative Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 11
+        },
+        {
+          "id": "lib-sante-supervision-formative-salama-sante-11",
+          "src": "/assets/Banque des images AFD - Classees/01_sante/afd_sante_supervision_formative_salama_012.jpg",
+          "alt": "Supervision Formative Salama — photo 12",
+          "title": "Supervision Formative Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 12
+        },
+        {
+          "id": "lib-sante-supervision-formative-salama-sante-12",
+          "src": "/assets/Banque des images AFD - Classees/01_sante/afd_sante_supervision_formative_salama_013.jpg",
+          "alt": "Supervision Formative Salama — photo 13",
+          "title": "Supervision Formative Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 13
+        },
+        {
+          "id": "lib-sante-supervision-formative-salama-sante-13",
+          "src": "/assets/Banque des images AFD - Classees/01_sante/afd_sante_supervision_formative_salama_014.jpg",
+          "alt": "Supervision Formative Salama — photo 14",
+          "title": "Supervision Formative Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 14
+        },
+        {
+          "id": "lib-sante-supervision-formative-salama-sante-14",
+          "src": "/assets/Banque des images AFD - Classees/01_sante/afd_sante_supervision_formative_salama_015.jpg",
+          "alt": "Supervision Formative Salama — photo 15",
+          "title": "Supervision Formative Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 15
+        },
+        {
+          "id": "lib-sante-supervision-formative-salama-sante-15",
+          "src": "/assets/Banque des images AFD - Classees/01_sante/afd_sante_supervision_formative_salama_016.jpg",
+          "alt": "Supervision Formative Salama — photo 16",
+          "title": "Supervision Formative Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 16
+        },
+        {
+          "id": "lib-sante-supervision-formative-salama-sante-16",
+          "src": "/assets/Banque des images AFD - Classees/01_sante/afd_sante_supervision_formative_salama_017.jpg",
+          "alt": "Supervision Formative Salama — photo 17",
+          "title": "Supervision Formative Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 17
+        }
+      ],
+      "coverImageUrl": "/assets/Banque des images AFD - Classees/01_sante/afd_sante_supervision_formative_salama_001.jpg",
+      "photoCount": 17,
+      "downloadCount": 0,
+      "publishedAt": null,
+      "updatedAt": null
+    },
+    {
+      "id": "lib-wash-dotation-dispositifs-lavage-mains-salama-wash",
+      "slug": "wash-dotation-dispositifs-lavage-mains-salama-wash",
+      "categorySlug": "wash",
+      "categoryLabel": "WASH",
+      "domainSlug": "eau-hygiene-assainissement",
+      "folder": "06_wash",
+      "title": "Dotation Dispositifs Lavage Mains Salama",
+      "summary": "Archive photographique officielle AFD — WASH.",
+      "description": "Cette fiche documente une activité AFD dans le domaine « WASH ». Les images proviennent de la banque institutionnelle classée.",
+      "status": "archivee",
+      "published": true,
+      "featured": false,
+      "eventDate": null,
+      "province": null,
+      "territory": null,
+      "locality": null,
+      "locationName": null,
+      "project": null,
+      "partners": [],
+      "tags": [
+        "WASH"
+      ],
+      "author": "AFD ASBL",
+      "images": [
+        {
+          "id": "lib-wash-dotation-dispositifs-lavage-mains-salama-wash-0",
+          "src": "/assets/Banque des images AFD - Classees/06_wash/afd_wash_dotation_dispositifs_lavage_mains_salama_001.jpg",
+          "alt": "Dotation Dispositifs Lavage Mains Salama — photo 1",
+          "title": "Dotation Dispositifs Lavage Mains Salama",
+          "caption": null,
+          "isCover": true,
+          "orderIndex": 1
+        },
+        {
+          "id": "lib-wash-dotation-dispositifs-lavage-mains-salama-wash-1",
+          "src": "/assets/Banque des images AFD - Classees/06_wash/afd_wash_dotation_dispositifs_lavage_mains_salama_002.jpg",
+          "alt": "Dotation Dispositifs Lavage Mains Salama — photo 2",
+          "title": "Dotation Dispositifs Lavage Mains Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 2
+        },
+        {
+          "id": "lib-wash-dotation-dispositifs-lavage-mains-salama-wash-2",
+          "src": "/assets/Banque des images AFD - Classees/06_wash/afd_wash_dotation_dispositifs_lavage_mains_salama_003.jpg",
+          "alt": "Dotation Dispositifs Lavage Mains Salama — photo 3",
+          "title": "Dotation Dispositifs Lavage Mains Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 3
+        },
+        {
+          "id": "lib-wash-dotation-dispositifs-lavage-mains-salama-wash-3",
+          "src": "/assets/Banque des images AFD - Classees/06_wash/afd_wash_dotation_dispositifs_lavage_mains_salama_004.jpg",
+          "alt": "Dotation Dispositifs Lavage Mains Salama — photo 4",
+          "title": "Dotation Dispositifs Lavage Mains Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 4
+        },
+        {
+          "id": "lib-wash-dotation-dispositifs-lavage-mains-salama-wash-4",
+          "src": "/assets/Banque des images AFD - Classees/06_wash/afd_wash_dotation_dispositifs_lavage_mains_salama_005.jpg",
+          "alt": "Dotation Dispositifs Lavage Mains Salama — photo 5",
+          "title": "Dotation Dispositifs Lavage Mains Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 5
+        },
+        {
+          "id": "lib-wash-dotation-dispositifs-lavage-mains-salama-wash-5",
+          "src": "/assets/Banque des images AFD - Classees/06_wash/afd_wash_dotation_dispositifs_lavage_mains_salama_006.jpg",
+          "alt": "Dotation Dispositifs Lavage Mains Salama — photo 6",
+          "title": "Dotation Dispositifs Lavage Mains Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 6
+        },
+        {
+          "id": "lib-wash-dotation-dispositifs-lavage-mains-salama-wash-6",
+          "src": "/assets/Banque des images AFD - Classees/06_wash/afd_wash_dotation_dispositifs_lavage_mains_salama_007.jpg",
+          "alt": "Dotation Dispositifs Lavage Mains Salama — photo 7",
+          "title": "Dotation Dispositifs Lavage Mains Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 7
+        },
+        {
+          "id": "lib-wash-dotation-dispositifs-lavage-mains-salama-wash-7",
+          "src": "/assets/Banque des images AFD - Classees/06_wash/afd_wash_dotation_dispositifs_lavage_mains_salama_008.jpg",
+          "alt": "Dotation Dispositifs Lavage Mains Salama — photo 8",
+          "title": "Dotation Dispositifs Lavage Mains Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 8
+        },
+        {
+          "id": "lib-wash-dotation-dispositifs-lavage-mains-salama-wash-8",
+          "src": "/assets/Banque des images AFD - Classees/06_wash/afd_wash_dotation_dispositifs_lavage_mains_salama_009.jpg",
+          "alt": "Dotation Dispositifs Lavage Mains Salama — photo 9",
+          "title": "Dotation Dispositifs Lavage Mains Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 9
+        },
+        {
+          "id": "lib-wash-dotation-dispositifs-lavage-mains-salama-wash-9",
+          "src": "/assets/Banque des images AFD - Classees/06_wash/afd_wash_dotation_dispositifs_lavage_mains_salama_010.jpg",
+          "alt": "Dotation Dispositifs Lavage Mains Salama — photo 10",
+          "title": "Dotation Dispositifs Lavage Mains Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 10
+        },
+        {
+          "id": "lib-wash-dotation-dispositifs-lavage-mains-salama-wash-10",
+          "src": "/assets/Banque des images AFD - Classees/06_wash/afd_wash_dotation_dispositifs_lavage_mains_salama_011.jpg",
+          "alt": "Dotation Dispositifs Lavage Mains Salama — photo 11",
+          "title": "Dotation Dispositifs Lavage Mains Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 11
+        },
+        {
+          "id": "lib-wash-dotation-dispositifs-lavage-mains-salama-wash-11",
+          "src": "/assets/Banque des images AFD - Classees/06_wash/afd_wash_dotation_dispositifs_lavage_mains_salama_012.jpg",
+          "alt": "Dotation Dispositifs Lavage Mains Salama — photo 12",
+          "title": "Dotation Dispositifs Lavage Mains Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 12
+        },
+        {
+          "id": "lib-wash-dotation-dispositifs-lavage-mains-salama-wash-12",
+          "src": "/assets/Banque des images AFD - Classees/06_wash/afd_wash_dotation_dispositifs_lavage_mains_salama_013.jpg",
+          "alt": "Dotation Dispositifs Lavage Mains Salama — photo 13",
+          "title": "Dotation Dispositifs Lavage Mains Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 13
+        },
+        {
+          "id": "lib-wash-dotation-dispositifs-lavage-mains-salama-wash-13",
+          "src": "/assets/Banque des images AFD - Classees/06_wash/afd_wash_dotation_dispositifs_lavage_mains_salama_014.jpg",
+          "alt": "Dotation Dispositifs Lavage Mains Salama — photo 14",
+          "title": "Dotation Dispositifs Lavage Mains Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 14
+        },
+        {
+          "id": "lib-wash-dotation-dispositifs-lavage-mains-salama-wash-14",
+          "src": "/assets/Banque des images AFD - Classees/06_wash/afd_wash_dotation_dispositifs_lavage_mains_salama_015.jpg",
+          "alt": "Dotation Dispositifs Lavage Mains Salama — photo 15",
+          "title": "Dotation Dispositifs Lavage Mains Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 15
+        },
+        {
+          "id": "lib-wash-dotation-dispositifs-lavage-mains-salama-wash-15",
+          "src": "/assets/Banque des images AFD - Classees/06_wash/afd_wash_dotation_dispositifs_lavage_mains_salama_016.jpg",
+          "alt": "Dotation Dispositifs Lavage Mains Salama — photo 16",
+          "title": "Dotation Dispositifs Lavage Mains Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 16
+        },
+        {
+          "id": "lib-wash-dotation-dispositifs-lavage-mains-salama-wash-16",
+          "src": "/assets/Banque des images AFD - Classees/06_wash/afd_wash_dotation_dispositifs_lavage_mains_salama_017.jpg",
+          "alt": "Dotation Dispositifs Lavage Mains Salama — photo 17",
+          "title": "Dotation Dispositifs Lavage Mains Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 17
+        },
+        {
+          "id": "lib-wash-dotation-dispositifs-lavage-mains-salama-wash-17",
+          "src": "/assets/Banque des images AFD - Classees/06_wash/afd_wash_dotation_dispositifs_lavage_mains_salama_018.jpg",
+          "alt": "Dotation Dispositifs Lavage Mains Salama — photo 18",
+          "title": "Dotation Dispositifs Lavage Mains Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 18
+        },
+        {
+          "id": "lib-wash-dotation-dispositifs-lavage-mains-salama-wash-18",
+          "src": "/assets/Banque des images AFD - Classees/06_wash/afd_wash_dotation_dispositifs_lavage_mains_salama_019.jpg",
+          "alt": "Dotation Dispositifs Lavage Mains Salama — photo 19",
+          "title": "Dotation Dispositifs Lavage Mains Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 19
+        },
+        {
+          "id": "lib-wash-dotation-dispositifs-lavage-mains-salama-wash-19",
+          "src": "/assets/Banque des images AFD - Classees/06_wash/afd_wash_dotation_dispositifs_lavage_mains_salama_020.jpg",
+          "alt": "Dotation Dispositifs Lavage Mains Salama — photo 20",
+          "title": "Dotation Dispositifs Lavage Mains Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 20
+        },
+        {
+          "id": "lib-wash-dotation-dispositifs-lavage-mains-salama-wash-20",
+          "src": "/assets/Banque des images AFD - Classees/06_wash/afd_wash_dotation_dispositifs_lavage_mains_salama_021.jpg",
+          "alt": "Dotation Dispositifs Lavage Mains Salama — photo 21",
+          "title": "Dotation Dispositifs Lavage Mains Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 21
+        },
+        {
+          "id": "lib-wash-dotation-dispositifs-lavage-mains-salama-wash-21",
+          "src": "/assets/Banque des images AFD - Classees/06_wash/afd_wash_dotation_dispositifs_lavage_mains_salama_022.jpg",
+          "alt": "Dotation Dispositifs Lavage Mains Salama — photo 22",
+          "title": "Dotation Dispositifs Lavage Mains Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 22
+        },
+        {
+          "id": "lib-wash-dotation-dispositifs-lavage-mains-salama-wash-22",
+          "src": "/assets/Banque des images AFD - Classees/06_wash/afd_wash_dotation_dispositifs_lavage_mains_salama_023.jpg",
+          "alt": "Dotation Dispositifs Lavage Mains Salama — photo 23",
+          "title": "Dotation Dispositifs Lavage Mains Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 23
+        },
+        {
+          "id": "lib-wash-dotation-dispositifs-lavage-mains-salama-wash-23",
+          "src": "/assets/Banque des images AFD - Classees/06_wash/afd_wash_dotation_dispositifs_lavage_mains_salama_024.jpg",
+          "alt": "Dotation Dispositifs Lavage Mains Salama — photo 24",
+          "title": "Dotation Dispositifs Lavage Mains Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 24
+        }
+      ],
+      "coverImageUrl": "/assets/Banque des images AFD - Classees/06_wash/afd_wash_dotation_dispositifs_lavage_mains_salama_001.jpg",
+      "photoCount": 24,
+      "downloadCount": 0,
+      "publishedAt": null,
+      "updatedAt": null
+    },
+    {
+      "id": "lib-wash-sensibilisation-dotation-lavage-mains-site-ceca-20-makoko-1-wash",
+      "slug": "wash-sensibilisation-dotation-lavage-mains-site-ceca-20-makoko-1-wash",
+      "categorySlug": "wash",
+      "categoryLabel": "WASH",
+      "domainSlug": "eau-hygiene-assainissement",
+      "folder": "06_wash",
+      "title": "Sensibilisation Dotation Lavage Mains Site Ceca 20 Makoko 1",
+      "summary": "Archive photographique officielle AFD — WASH.",
+      "description": "Cette fiche documente une activité AFD dans le domaine « WASH ». Les images proviennent de la banque institutionnelle classée.",
+      "status": "terminee",
+      "published": true,
+      "featured": false,
+      "eventDate": null,
+      "province": null,
+      "territory": null,
+      "locality": null,
+      "locationName": null,
+      "project": null,
+      "partners": [],
+      "tags": [
+        "WASH"
+      ],
+      "author": "AFD ASBL",
+      "images": [
+        {
+          "id": "lib-wash-sensibilisation-dotation-lavage-mains-site-ceca-20-makoko-1-wash-0",
+          "src": "/assets/Banque des images AFD - Classees/06_wash/afd_wash_sensibilisation_dotation_lavage_mains_site_ceca_20_makoko_1_001.jpg",
+          "alt": "Sensibilisation Dotation Lavage Mains Site Ceca 20 Makoko 1 — photo 1",
+          "title": "Sensibilisation Dotation Lavage Mains Site Ceca 20 Makoko 1",
+          "caption": null,
+          "isCover": true,
+          "orderIndex": 1
+        },
+        {
+          "id": "lib-wash-sensibilisation-dotation-lavage-mains-site-ceca-20-makoko-1-wash-1",
+          "src": "/assets/Banque des images AFD - Classees/06_wash/afd_wash_sensibilisation_dotation_lavage_mains_site_ceca_20_makoko_1_002.jpg",
+          "alt": "Sensibilisation Dotation Lavage Mains Site Ceca 20 Makoko 1 — photo 2",
+          "title": "Sensibilisation Dotation Lavage Mains Site Ceca 20 Makoko 1",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 2
+        },
+        {
+          "id": "lib-wash-sensibilisation-dotation-lavage-mains-site-ceca-20-makoko-1-wash-2",
+          "src": "/assets/Banque des images AFD - Classees/06_wash/afd_wash_sensibilisation_dotation_lavage_mains_site_ceca_20_makoko_1_003.jpg",
+          "alt": "Sensibilisation Dotation Lavage Mains Site Ceca 20 Makoko 1 — photo 3",
+          "title": "Sensibilisation Dotation Lavage Mains Site Ceca 20 Makoko 1",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 3
+        },
+        {
+          "id": "lib-wash-sensibilisation-dotation-lavage-mains-site-ceca-20-makoko-1-wash-3",
+          "src": "/assets/Banque des images AFD - Classees/06_wash/afd_wash_sensibilisation_dotation_lavage_mains_site_ceca_20_makoko_1_004.jpg",
+          "alt": "Sensibilisation Dotation Lavage Mains Site Ceca 20 Makoko 1 — photo 4",
+          "title": "Sensibilisation Dotation Lavage Mains Site Ceca 20 Makoko 1",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 4
+        },
+        {
+          "id": "lib-wash-sensibilisation-dotation-lavage-mains-site-ceca-20-makoko-1-wash-4",
+          "src": "/assets/Banque des images AFD - Classees/06_wash/afd_wash_sensibilisation_dotation_lavage_mains_site_ceca_20_makoko_1_005.jpg",
+          "alt": "Sensibilisation Dotation Lavage Mains Site Ceca 20 Makoko 1 — photo 5",
+          "title": "Sensibilisation Dotation Lavage Mains Site Ceca 20 Makoko 1",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 5
+        },
+        {
+          "id": "lib-wash-sensibilisation-dotation-lavage-mains-site-ceca-20-makoko-1-wash-5",
+          "src": "/assets/Banque des images AFD - Classees/06_wash/afd_wash_sensibilisation_dotation_lavage_mains_site_ceca_20_makoko_1_006.jpg",
+          "alt": "Sensibilisation Dotation Lavage Mains Site Ceca 20 Makoko 1 — photo 6",
+          "title": "Sensibilisation Dotation Lavage Mains Site Ceca 20 Makoko 1",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 6
+        },
+        {
+          "id": "lib-wash-sensibilisation-dotation-lavage-mains-site-ceca-20-makoko-1-wash-6",
+          "src": "/assets/Banque des images AFD - Classees/06_wash/afd_wash_sensibilisation_dotation_lavage_mains_site_ceca_20_makoko_1_007.jpg",
+          "alt": "Sensibilisation Dotation Lavage Mains Site Ceca 20 Makoko 1 — photo 7",
+          "title": "Sensibilisation Dotation Lavage Mains Site Ceca 20 Makoko 1",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 7
+        },
+        {
+          "id": "lib-wash-sensibilisation-dotation-lavage-mains-site-ceca-20-makoko-1-wash-7",
+          "src": "/assets/Banque des images AFD - Classees/06_wash/afd_wash_sensibilisation_dotation_lavage_mains_site_ceca_20_makoko_1_008.jpg",
+          "alt": "Sensibilisation Dotation Lavage Mains Site Ceca 20 Makoko 1 — photo 8",
+          "title": "Sensibilisation Dotation Lavage Mains Site Ceca 20 Makoko 1",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 8
+        },
+        {
+          "id": "lib-wash-sensibilisation-dotation-lavage-mains-site-ceca-20-makoko-1-wash-8",
+          "src": "/assets/Banque des images AFD - Classees/06_wash/afd_wash_sensibilisation_dotation_lavage_mains_site_ceca_20_makoko_1_009.jpg",
+          "alt": "Sensibilisation Dotation Lavage Mains Site Ceca 20 Makoko 1 — photo 9",
+          "title": "Sensibilisation Dotation Lavage Mains Site Ceca 20 Makoko 1",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 9
+        },
+        {
+          "id": "lib-wash-sensibilisation-dotation-lavage-mains-site-ceca-20-makoko-1-wash-9",
+          "src": "/assets/Banque des images AFD - Classees/06_wash/afd_wash_sensibilisation_dotation_lavage_mains_site_ceca_20_makoko_1_010.jpg",
+          "alt": "Sensibilisation Dotation Lavage Mains Site Ceca 20 Makoko 1 — photo 10",
+          "title": "Sensibilisation Dotation Lavage Mains Site Ceca 20 Makoko 1",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 10
+        },
+        {
+          "id": "lib-wash-sensibilisation-dotation-lavage-mains-site-ceca-20-makoko-1-wash-10",
+          "src": "/assets/Banque des images AFD - Classees/06_wash/afd_wash_sensibilisation_dotation_lavage_mains_site_ceca_20_makoko_1_011.jpg",
+          "alt": "Sensibilisation Dotation Lavage Mains Site Ceca 20 Makoko 1 — photo 11",
+          "title": "Sensibilisation Dotation Lavage Mains Site Ceca 20 Makoko 1",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 11
+        },
+        {
+          "id": "lib-wash-sensibilisation-dotation-lavage-mains-site-ceca-20-makoko-1-wash-11",
+          "src": "/assets/Banque des images AFD - Classees/06_wash/afd_wash_sensibilisation_dotation_lavage_mains_site_ceca_20_makoko_1_012.jpg",
+          "alt": "Sensibilisation Dotation Lavage Mains Site Ceca 20 Makoko 1 — photo 12",
+          "title": "Sensibilisation Dotation Lavage Mains Site Ceca 20 Makoko 1",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 12
+        },
+        {
+          "id": "lib-wash-sensibilisation-dotation-lavage-mains-site-ceca-20-makoko-1-wash-12",
+          "src": "/assets/Banque des images AFD - Classees/06_wash/afd_wash_sensibilisation_dotation_lavage_mains_site_ceca_20_makoko_1_013.jpg",
+          "alt": "Sensibilisation Dotation Lavage Mains Site Ceca 20 Makoko 1 — photo 13",
+          "title": "Sensibilisation Dotation Lavage Mains Site Ceca 20 Makoko 1",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 13
+        },
+        {
+          "id": "lib-wash-sensibilisation-dotation-lavage-mains-site-ceca-20-makoko-1-wash-13",
+          "src": "/assets/Banque des images AFD - Classees/06_wash/afd_wash_sensibilisation_dotation_lavage_mains_site_ceca_20_makoko_1_014.jpg",
+          "alt": "Sensibilisation Dotation Lavage Mains Site Ceca 20 Makoko 1 — photo 14",
+          "title": "Sensibilisation Dotation Lavage Mains Site Ceca 20 Makoko 1",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 14
+        },
+        {
+          "id": "lib-wash-sensibilisation-dotation-lavage-mains-site-ceca-20-makoko-1-wash-14",
+          "src": "/assets/Banque des images AFD - Classees/06_wash/afd_wash_sensibilisation_dotation_lavage_mains_site_ceca_20_makoko_1_015.jpg",
+          "alt": "Sensibilisation Dotation Lavage Mains Site Ceca 20 Makoko 1 — photo 15",
+          "title": "Sensibilisation Dotation Lavage Mains Site Ceca 20 Makoko 1",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 15
+        },
+        {
+          "id": "lib-wash-sensibilisation-dotation-lavage-mains-site-ceca-20-makoko-1-wash-15",
+          "src": "/assets/Banque des images AFD - Classees/06_wash/afd_wash_sensibilisation_dotation_lavage_mains_site_ceca_20_makoko_1_016.jpg",
+          "alt": "Sensibilisation Dotation Lavage Mains Site Ceca 20 Makoko 1 — photo 16",
+          "title": "Sensibilisation Dotation Lavage Mains Site Ceca 20 Makoko 1",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 16
+        },
+        {
+          "id": "lib-wash-sensibilisation-dotation-lavage-mains-site-ceca-20-makoko-1-wash-16",
+          "src": "/assets/Banque des images AFD - Classees/06_wash/afd_wash_sensibilisation_dotation_lavage_mains_site_ceca_20_makoko_1_017.jpg",
+          "alt": "Sensibilisation Dotation Lavage Mains Site Ceca 20 Makoko 1 — photo 17",
+          "title": "Sensibilisation Dotation Lavage Mains Site Ceca 20 Makoko 1",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 17
+        },
+        {
+          "id": "lib-wash-sensibilisation-dotation-lavage-mains-site-ceca-20-makoko-1-wash-17",
+          "src": "/assets/Banque des images AFD - Classees/06_wash/afd_wash_sensibilisation_dotation_lavage_mains_site_ceca_20_makoko_1_018.jpg",
+          "alt": "Sensibilisation Dotation Lavage Mains Site Ceca 20 Makoko 1 — photo 18",
+          "title": "Sensibilisation Dotation Lavage Mains Site Ceca 20 Makoko 1",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 18
+        },
+        {
+          "id": "lib-wash-sensibilisation-dotation-lavage-mains-site-ceca-20-makoko-1-wash-18",
+          "src": "/assets/Banque des images AFD - Classees/06_wash/afd_wash_sensibilisation_dotation_lavage_mains_site_ceca_20_makoko_1_019.jpg",
+          "alt": "Sensibilisation Dotation Lavage Mains Site Ceca 20 Makoko 1 — photo 19",
+          "title": "Sensibilisation Dotation Lavage Mains Site Ceca 20 Makoko 1",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 19
+        },
+        {
+          "id": "lib-wash-sensibilisation-dotation-lavage-mains-site-ceca-20-makoko-1-wash-19",
+          "src": "/assets/Banque des images AFD - Classees/06_wash/afd_wash_sensibilisation_dotation_lavage_mains_site_ceca_20_makoko_1_020.jpg",
+          "alt": "Sensibilisation Dotation Lavage Mains Site Ceca 20 Makoko 1 — photo 20",
+          "title": "Sensibilisation Dotation Lavage Mains Site Ceca 20 Makoko 1",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 20
+        },
+        {
+          "id": "lib-wash-sensibilisation-dotation-lavage-mains-site-ceca-20-makoko-1-wash-20",
+          "src": "/assets/Banque des images AFD - Classees/06_wash/afd_wash_sensibilisation_dotation_lavage_mains_site_ceca_20_makoko_1_021.jpg",
+          "alt": "Sensibilisation Dotation Lavage Mains Site Ceca 20 Makoko 1 — photo 21",
+          "title": "Sensibilisation Dotation Lavage Mains Site Ceca 20 Makoko 1",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 21
+        },
+        {
+          "id": "lib-wash-sensibilisation-dotation-lavage-mains-site-ceca-20-makoko-1-wash-21",
+          "src": "/assets/Banque des images AFD - Classees/06_wash/afd_wash_sensibilisation_dotation_lavage_mains_site_ceca_20_makoko_1_022.jpg",
+          "alt": "Sensibilisation Dotation Lavage Mains Site Ceca 20 Makoko 1 — photo 22",
+          "title": "Sensibilisation Dotation Lavage Mains Site Ceca 20 Makoko 1",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 22
+        },
+        {
+          "id": "lib-wash-sensibilisation-dotation-lavage-mains-site-ceca-20-makoko-1-wash-22",
+          "src": "/assets/Banque des images AFD - Classees/06_wash/afd_wash_sensibilisation_dotation_lavage_mains_site_ceca_20_makoko_1_023.jpg",
+          "alt": "Sensibilisation Dotation Lavage Mains Site Ceca 20 Makoko 1 — photo 23",
+          "title": "Sensibilisation Dotation Lavage Mains Site Ceca 20 Makoko 1",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 23
+        },
+        {
+          "id": "lib-wash-sensibilisation-dotation-lavage-mains-site-ceca-20-makoko-1-wash-23",
+          "src": "/assets/Banque des images AFD - Classees/06_wash/afd_wash_sensibilisation_dotation_lavage_mains_site_ceca_20_makoko_1_024.jpg",
+          "alt": "Sensibilisation Dotation Lavage Mains Site Ceca 20 Makoko 1 — photo 24",
+          "title": "Sensibilisation Dotation Lavage Mains Site Ceca 20 Makoko 1",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 24
+        },
+        {
+          "id": "lib-wash-sensibilisation-dotation-lavage-mains-site-ceca-20-makoko-1-wash-24",
+          "src": "/assets/Banque des images AFD - Classees/06_wash/afd_wash_sensibilisation_dotation_lavage_mains_site_ceca_20_makoko_1_025.jpg",
+          "alt": "Sensibilisation Dotation Lavage Mains Site Ceca 20 Makoko 1 — photo 25",
+          "title": "Sensibilisation Dotation Lavage Mains Site Ceca 20 Makoko 1",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 25
+        }
+      ],
+      "coverImageUrl": "/assets/Banque des images AFD - Classees/06_wash/afd_wash_sensibilisation_dotation_lavage_mains_site_ceca_20_makoko_1_001.jpg",
+      "photoCount": 25,
+      "downloadCount": 0,
+      "publishedAt": null,
+      "updatedAt": null
+    },
+    {
+      "id": "lib-wash-sensibilisation-lavage-mains-enfants-site-ceca-20-wash",
+      "slug": "wash-sensibilisation-lavage-mains-enfants-site-ceca-20-wash",
+      "categorySlug": "wash",
+      "categoryLabel": "WASH",
+      "domainSlug": "eau-hygiene-assainissement",
+      "folder": "06_wash",
+      "title": "Sensibilisation Lavage Mains Enfants Site Ceca 20",
+      "summary": "Archive photographique officielle AFD — WASH.",
+      "description": "Cette fiche documente une activité AFD dans le domaine « WASH ». Les images proviennent de la banque institutionnelle classée.",
+      "status": "en_cours",
+      "published": true,
+      "featured": false,
+      "eventDate": null,
+      "province": null,
+      "territory": null,
+      "locality": null,
+      "locationName": null,
+      "project": null,
+      "partners": [],
+      "tags": [
+        "WASH"
+      ],
+      "author": "AFD ASBL",
+      "images": [
+        {
+          "id": "lib-wash-sensibilisation-lavage-mains-enfants-site-ceca-20-wash-0",
+          "src": "/assets/Banque des images AFD - Classees/06_wash/afd_wash_sensibilisation_lavage_mains_enfants_site_ceca_20_001.jpg",
+          "alt": "Sensibilisation Lavage Mains Enfants Site Ceca 20 — photo 1",
+          "title": "Sensibilisation Lavage Mains Enfants Site Ceca 20",
+          "caption": null,
+          "isCover": true,
+          "orderIndex": 1
+        },
+        {
+          "id": "lib-wash-sensibilisation-lavage-mains-enfants-site-ceca-20-wash-1",
+          "src": "/assets/Banque des images AFD - Classees/06_wash/afd_wash_sensibilisation_lavage_mains_enfants_site_ceca_20_002.jpg",
+          "alt": "Sensibilisation Lavage Mains Enfants Site Ceca 20 — photo 2",
+          "title": "Sensibilisation Lavage Mains Enfants Site Ceca 20",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 2
+        },
+        {
+          "id": "lib-wash-sensibilisation-lavage-mains-enfants-site-ceca-20-wash-2",
+          "src": "/assets/Banque des images AFD - Classees/06_wash/afd_wash_sensibilisation_lavage_mains_enfants_site_ceca_20_003.jpg",
+          "alt": "Sensibilisation Lavage Mains Enfants Site Ceca 20 — photo 3",
+          "title": "Sensibilisation Lavage Mains Enfants Site Ceca 20",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 3
+        },
+        {
+          "id": "lib-wash-sensibilisation-lavage-mains-enfants-site-ceca-20-wash-3",
+          "src": "/assets/Banque des images AFD - Classees/06_wash/afd_wash_sensibilisation_lavage_mains_enfants_site_ceca_20_004.jpg",
+          "alt": "Sensibilisation Lavage Mains Enfants Site Ceca 20 — photo 4",
+          "title": "Sensibilisation Lavage Mains Enfants Site Ceca 20",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 4
+        },
+        {
+          "id": "lib-wash-sensibilisation-lavage-mains-enfants-site-ceca-20-wash-4",
+          "src": "/assets/Banque des images AFD - Classees/06_wash/afd_wash_sensibilisation_lavage_mains_enfants_site_ceca_20_005.jpg",
+          "alt": "Sensibilisation Lavage Mains Enfants Site Ceca 20 — photo 5",
+          "title": "Sensibilisation Lavage Mains Enfants Site Ceca 20",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 5
+        },
+        {
+          "id": "lib-wash-sensibilisation-lavage-mains-enfants-site-ceca-20-wash-5",
+          "src": "/assets/Banque des images AFD - Classees/06_wash/afd_wash_sensibilisation_lavage_mains_enfants_site_ceca_20_006.jpg",
+          "alt": "Sensibilisation Lavage Mains Enfants Site Ceca 20 — photo 6",
+          "title": "Sensibilisation Lavage Mains Enfants Site Ceca 20",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 6
+        },
+        {
+          "id": "lib-wash-sensibilisation-lavage-mains-enfants-site-ceca-20-wash-6",
+          "src": "/assets/Banque des images AFD - Classees/06_wash/afd_wash_sensibilisation_lavage_mains_enfants_site_ceca_20_007.jpg",
+          "alt": "Sensibilisation Lavage Mains Enfants Site Ceca 20 — photo 7",
+          "title": "Sensibilisation Lavage Mains Enfants Site Ceca 20",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 7
+        },
+        {
+          "id": "lib-wash-sensibilisation-lavage-mains-enfants-site-ceca-20-wash-7",
+          "src": "/assets/Banque des images AFD - Classees/06_wash/afd_wash_sensibilisation_lavage_mains_enfants_site_ceca_20_008.jpg",
+          "alt": "Sensibilisation Lavage Mains Enfants Site Ceca 20 — photo 8",
+          "title": "Sensibilisation Lavage Mains Enfants Site Ceca 20",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 8
+        },
+        {
+          "id": "lib-wash-sensibilisation-lavage-mains-enfants-site-ceca-20-wash-8",
+          "src": "/assets/Banque des images AFD - Classees/06_wash/afd_wash_sensibilisation_lavage_mains_enfants_site_ceca_20_009.jpg",
+          "alt": "Sensibilisation Lavage Mains Enfants Site Ceca 20 — photo 9",
+          "title": "Sensibilisation Lavage Mains Enfants Site Ceca 20",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 9
+        },
+        {
+          "id": "lib-wash-sensibilisation-lavage-mains-enfants-site-ceca-20-wash-9",
+          "src": "/assets/Banque des images AFD - Classees/06_wash/afd_wash_sensibilisation_lavage_mains_enfants_site_ceca_20_010.jpg",
+          "alt": "Sensibilisation Lavage Mains Enfants Site Ceca 20 — photo 10",
+          "title": "Sensibilisation Lavage Mains Enfants Site Ceca 20",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 10
+        },
+        {
+          "id": "lib-wash-sensibilisation-lavage-mains-enfants-site-ceca-20-wash-10",
+          "src": "/assets/Banque des images AFD - Classees/06_wash/afd_wash_sensibilisation_lavage_mains_enfants_site_ceca_20_011.jpg",
+          "alt": "Sensibilisation Lavage Mains Enfants Site Ceca 20 — photo 11",
+          "title": "Sensibilisation Lavage Mains Enfants Site Ceca 20",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 11
+        },
+        {
+          "id": "lib-wash-sensibilisation-lavage-mains-enfants-site-ceca-20-wash-11",
+          "src": "/assets/Banque des images AFD - Classees/06_wash/afd_wash_sensibilisation_lavage_mains_enfants_site_ceca_20_012.jpg",
+          "alt": "Sensibilisation Lavage Mains Enfants Site Ceca 20 — photo 12",
+          "title": "Sensibilisation Lavage Mains Enfants Site Ceca 20",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 12
+        },
+        {
+          "id": "lib-wash-sensibilisation-lavage-mains-enfants-site-ceca-20-wash-12",
+          "src": "/assets/Banque des images AFD - Classees/06_wash/afd_wash_sensibilisation_lavage_mains_enfants_site_ceca_20_013.jpg",
+          "alt": "Sensibilisation Lavage Mains Enfants Site Ceca 20 — photo 13",
+          "title": "Sensibilisation Lavage Mains Enfants Site Ceca 20",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 13
+        },
+        {
+          "id": "lib-wash-sensibilisation-lavage-mains-enfants-site-ceca-20-wash-13",
+          "src": "/assets/Banque des images AFD - Classees/06_wash/afd_wash_sensibilisation_lavage_mains_enfants_site_ceca_20_014.jpg",
+          "alt": "Sensibilisation Lavage Mains Enfants Site Ceca 20 — photo 14",
+          "title": "Sensibilisation Lavage Mains Enfants Site Ceca 20",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 14
+        },
+        {
+          "id": "lib-wash-sensibilisation-lavage-mains-enfants-site-ceca-20-wash-14",
+          "src": "/assets/Banque des images AFD - Classees/06_wash/afd_wash_sensibilisation_lavage_mains_enfants_site_ceca_20_015.jpg",
+          "alt": "Sensibilisation Lavage Mains Enfants Site Ceca 20 — photo 15",
+          "title": "Sensibilisation Lavage Mains Enfants Site Ceca 20",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 15
+        },
+        {
+          "id": "lib-wash-sensibilisation-lavage-mains-enfants-site-ceca-20-wash-15",
+          "src": "/assets/Banque des images AFD - Classees/06_wash/afd_wash_sensibilisation_lavage_mains_enfants_site_ceca_20_016.jpg",
+          "alt": "Sensibilisation Lavage Mains Enfants Site Ceca 20 — photo 16",
+          "title": "Sensibilisation Lavage Mains Enfants Site Ceca 20",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 16
+        }
+      ],
+      "coverImageUrl": "/assets/Banque des images AFD - Classees/06_wash/afd_wash_sensibilisation_lavage_mains_enfants_site_ceca_20_001.jpg",
+      "photoCount": 16,
+      "downloadCount": 0,
+      "publishedAt": null,
+      "updatedAt": null
+    },
+    {
+      "id": "lib-enfance-activites-enfants-site-communautaire-enfance",
+      "slug": "enfance-activites-enfants-site-communautaire-enfance",
+      "categorySlug": "enfance",
+      "categoryLabel": "Enfance",
+      "domainSlug": "enfance",
+      "folder": "12_enfance",
+      "title": "Activites Enfants Site Communautaire",
+      "summary": "Archive photographique officielle AFD — Enfance.",
+      "description": "Cette fiche documente une activité AFD dans le domaine « Enfance ». Les images proviennent de la banque institutionnelle classée.",
+      "status": "archivee",
+      "published": true,
+      "featured": false,
+      "eventDate": null,
+      "province": null,
+      "territory": null,
+      "locality": null,
+      "locationName": null,
+      "project": null,
+      "partners": [],
+      "tags": [
+        "Enfance"
+      ],
+      "author": "AFD ASBL",
+      "images": [
+        {
+          "id": "lib-enfance-activites-enfants-site-communautaire-enfance-0",
+          "src": "/assets/Banque des images AFD - Classees/12_enfance/afd_enfance_activites_enfants_site_communautaire_001.jpg",
+          "alt": "Activites Enfants Site Communautaire — photo 1",
+          "title": "Activites Enfants Site Communautaire",
+          "caption": null,
+          "isCover": true,
+          "orderIndex": 1
+        },
+        {
+          "id": "lib-enfance-activites-enfants-site-communautaire-enfance-1",
+          "src": "/assets/Banque des images AFD - Classees/12_enfance/afd_enfance_activites_enfants_site_communautaire_002.jpg",
+          "alt": "Activites Enfants Site Communautaire — photo 2",
+          "title": "Activites Enfants Site Communautaire",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 2
+        },
+        {
+          "id": "lib-enfance-activites-enfants-site-communautaire-enfance-2",
+          "src": "/assets/Banque des images AFD - Classees/12_enfance/afd_enfance_activites_enfants_site_communautaire_003.jpg",
+          "alt": "Activites Enfants Site Communautaire — photo 3",
+          "title": "Activites Enfants Site Communautaire",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 3
+        },
+        {
+          "id": "lib-enfance-activites-enfants-site-communautaire-enfance-3",
+          "src": "/assets/Banque des images AFD - Classees/12_enfance/afd_enfance_activites_enfants_site_communautaire_004.jpg",
+          "alt": "Activites Enfants Site Communautaire — photo 4",
+          "title": "Activites Enfants Site Communautaire",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 4
+        },
+        {
+          "id": "lib-enfance-activites-enfants-site-communautaire-enfance-4",
+          "src": "/assets/Banque des images AFD - Classees/12_enfance/afd_enfance_activites_enfants_site_communautaire_005.jpg",
+          "alt": "Activites Enfants Site Communautaire — photo 5",
+          "title": "Activites Enfants Site Communautaire",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 5
+        },
+        {
+          "id": "lib-enfance-activites-enfants-site-communautaire-enfance-5",
+          "src": "/assets/Banque des images AFD - Classees/12_enfance/afd_enfance_activites_enfants_site_communautaire_006.jpg",
+          "alt": "Activites Enfants Site Communautaire — photo 6",
+          "title": "Activites Enfants Site Communautaire",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 6
+        },
+        {
+          "id": "lib-enfance-activites-enfants-site-communautaire-enfance-6",
+          "src": "/assets/Banque des images AFD - Classees/12_enfance/afd_enfance_activites_enfants_site_communautaire_007.jpg",
+          "alt": "Activites Enfants Site Communautaire — photo 7",
+          "title": "Activites Enfants Site Communautaire",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 7
+        },
+        {
+          "id": "lib-enfance-activites-enfants-site-communautaire-enfance-7",
+          "src": "/assets/Banque des images AFD - Classees/12_enfance/afd_enfance_activites_enfants_site_communautaire_008.jpg",
+          "alt": "Activites Enfants Site Communautaire — photo 8",
+          "title": "Activites Enfants Site Communautaire",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 8
+        },
+        {
+          "id": "lib-enfance-activites-enfants-site-communautaire-enfance-8",
+          "src": "/assets/Banque des images AFD - Classees/12_enfance/afd_enfance_activites_enfants_site_communautaire_009.jpg",
+          "alt": "Activites Enfants Site Communautaire — photo 9",
+          "title": "Activites Enfants Site Communautaire",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 9
+        },
+        {
+          "id": "lib-enfance-activites-enfants-site-communautaire-enfance-9",
+          "src": "/assets/Banque des images AFD - Classees/12_enfance/afd_enfance_activites_enfants_site_communautaire_010.jpg",
+          "alt": "Activites Enfants Site Communautaire — photo 10",
+          "title": "Activites Enfants Site Communautaire",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 10
+        },
+        {
+          "id": "lib-enfance-activites-enfants-site-communautaire-enfance-10",
+          "src": "/assets/Banque des images AFD - Classees/12_enfance/afd_enfance_activites_enfants_site_communautaire_011.jpg",
+          "alt": "Activites Enfants Site Communautaire — photo 11",
+          "title": "Activites Enfants Site Communautaire",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 11
+        },
+        {
+          "id": "lib-enfance-activites-enfants-site-communautaire-enfance-11",
+          "src": "/assets/Banque des images AFD - Classees/12_enfance/afd_enfance_activites_enfants_site_communautaire_012.jpg",
+          "alt": "Activites Enfants Site Communautaire — photo 12",
+          "title": "Activites Enfants Site Communautaire",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 12
+        },
+        {
+          "id": "lib-enfance-activites-enfants-site-communautaire-enfance-12",
+          "src": "/assets/Banque des images AFD - Classees/12_enfance/afd_enfance_activites_enfants_site_communautaire_013.jpg",
+          "alt": "Activites Enfants Site Communautaire — photo 13",
+          "title": "Activites Enfants Site Communautaire",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 13
+        },
+        {
+          "id": "lib-enfance-activites-enfants-site-communautaire-enfance-13",
+          "src": "/assets/Banque des images AFD - Classees/12_enfance/afd_enfance_activites_enfants_site_communautaire_014.jpg",
+          "alt": "Activites Enfants Site Communautaire — photo 14",
+          "title": "Activites Enfants Site Communautaire",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 14
+        },
+        {
+          "id": "lib-enfance-activites-enfants-site-communautaire-enfance-14",
+          "src": "/assets/Banque des images AFD - Classees/12_enfance/afd_enfance_activites_enfants_site_communautaire_015.jpg",
+          "alt": "Activites Enfants Site Communautaire — photo 15",
+          "title": "Activites Enfants Site Communautaire",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 15
+        },
+        {
+          "id": "lib-enfance-activites-enfants-site-communautaire-enfance-15",
+          "src": "/assets/Banque des images AFD - Classees/12_enfance/afd_enfance_activites_enfants_site_communautaire_016.jpg",
+          "alt": "Activites Enfants Site Communautaire — photo 16",
+          "title": "Activites Enfants Site Communautaire",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 16
+        },
+        {
+          "id": "lib-enfance-activites-enfants-site-communautaire-enfance-16",
+          "src": "/assets/Banque des images AFD - Classees/12_enfance/afd_enfance_activites_enfants_site_communautaire_017.jpg",
+          "alt": "Activites Enfants Site Communautaire — photo 17",
+          "title": "Activites Enfants Site Communautaire",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 17
+        },
+        {
+          "id": "lib-enfance-activites-enfants-site-communautaire-enfance-17",
+          "src": "/assets/Banque des images AFD - Classees/12_enfance/afd_enfance_activites_enfants_site_communautaire_018.jpg",
+          "alt": "Activites Enfants Site Communautaire — photo 18",
+          "title": "Activites Enfants Site Communautaire",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 18
+        },
+        {
+          "id": "lib-enfance-activites-enfants-site-communautaire-enfance-18",
+          "src": "/assets/Banque des images AFD - Classees/12_enfance/afd_enfance_activites_enfants_site_communautaire_019.jpg",
+          "alt": "Activites Enfants Site Communautaire — photo 19",
+          "title": "Activites Enfants Site Communautaire",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 19
+        },
+        {
+          "id": "lib-enfance-activites-enfants-site-communautaire-enfance-19",
+          "src": "/assets/Banque des images AFD - Classees/12_enfance/afd_enfance_activites_enfants_site_communautaire_020.jpg",
+          "alt": "Activites Enfants Site Communautaire — photo 20",
+          "title": "Activites Enfants Site Communautaire",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 20
+        },
+        {
+          "id": "lib-enfance-activites-enfants-site-communautaire-enfance-20",
+          "src": "/assets/Banque des images AFD - Classees/12_enfance/afd_enfance_activites_enfants_site_communautaire_021.jpg",
+          "alt": "Activites Enfants Site Communautaire — photo 21",
+          "title": "Activites Enfants Site Communautaire",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 21
+        },
+        {
+          "id": "lib-enfance-activites-enfants-site-communautaire-enfance-21",
+          "src": "/assets/Banque des images AFD - Classees/12_enfance/afd_enfance_activites_enfants_site_communautaire_022.jpg",
+          "alt": "Activites Enfants Site Communautaire — photo 22",
+          "title": "Activites Enfants Site Communautaire",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 22
+        },
+        {
+          "id": "lib-enfance-activites-enfants-site-communautaire-enfance-22",
+          "src": "/assets/Banque des images AFD - Classees/12_enfance/afd_enfance_activites_enfants_site_communautaire_023.jpg",
+          "alt": "Activites Enfants Site Communautaire — photo 23",
+          "title": "Activites Enfants Site Communautaire",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 23
+        },
+        {
+          "id": "lib-enfance-activites-enfants-site-communautaire-enfance-23",
+          "src": "/assets/Banque des images AFD - Classees/12_enfance/afd_enfance_activites_enfants_site_communautaire_024.jpg",
+          "alt": "Activites Enfants Site Communautaire — photo 24",
+          "title": "Activites Enfants Site Communautaire",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 24
+        },
+        {
+          "id": "lib-enfance-activites-enfants-site-communautaire-enfance-24",
+          "src": "/assets/Banque des images AFD - Classees/12_enfance/afd_enfance_activites_enfants_site_communautaire_025.jpg",
+          "alt": "Activites Enfants Site Communautaire — photo 25",
+          "title": "Activites Enfants Site Communautaire",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 25
+        },
+        {
+          "id": "lib-enfance-activites-enfants-site-communautaire-enfance-25",
+          "src": "/assets/Banque des images AFD - Classees/12_enfance/afd_enfance_activites_enfants_site_communautaire_026.jpg",
+          "alt": "Activites Enfants Site Communautaire — photo 26",
+          "title": "Activites Enfants Site Communautaire",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 26
+        },
+        {
+          "id": "lib-enfance-activites-enfants-site-communautaire-enfance-26",
+          "src": "/assets/Banque des images AFD - Classees/12_enfance/afd_enfance_activites_enfants_site_communautaire_027.jpg",
+          "alt": "Activites Enfants Site Communautaire — photo 27",
+          "title": "Activites Enfants Site Communautaire",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 27
+        },
+        {
+          "id": "lib-enfance-activites-enfants-site-communautaire-enfance-27",
+          "src": "/assets/Banque des images AFD - Classees/12_enfance/afd_enfance_activites_enfants_site_communautaire_028.jpg",
+          "alt": "Activites Enfants Site Communautaire — photo 28",
+          "title": "Activites Enfants Site Communautaire",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 28
+        },
+        {
+          "id": "lib-enfance-activites-enfants-site-communautaire-enfance-28",
+          "src": "/assets/Banque des images AFD - Classees/12_enfance/afd_enfance_activites_enfants_site_communautaire_029.jpg",
+          "alt": "Activites Enfants Site Communautaire — photo 29",
+          "title": "Activites Enfants Site Communautaire",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 29
+        },
+        {
+          "id": "lib-enfance-activites-enfants-site-communautaire-enfance-29",
+          "src": "/assets/Banque des images AFD - Classees/12_enfance/afd_enfance_activites_enfants_site_communautaire_030.jpg",
+          "alt": "Activites Enfants Site Communautaire — photo 30",
+          "title": "Activites Enfants Site Communautaire",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 30
+        },
+        {
+          "id": "lib-enfance-activites-enfants-site-communautaire-enfance-30",
+          "src": "/assets/Banque des images AFD - Classees/12_enfance/afd_enfance_activites_enfants_site_communautaire_031.jpg",
+          "alt": "Activites Enfants Site Communautaire — photo 31",
+          "title": "Activites Enfants Site Communautaire",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 31
+        },
+        {
+          "id": "lib-enfance-activites-enfants-site-communautaire-enfance-31",
+          "src": "/assets/Banque des images AFD - Classees/12_enfance/afd_enfance_activites_enfants_site_communautaire_032.jpg",
+          "alt": "Activites Enfants Site Communautaire — photo 32",
+          "title": "Activites Enfants Site Communautaire",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 32
+        },
+        {
+          "id": "lib-enfance-activites-enfants-site-communautaire-enfance-32",
+          "src": "/assets/Banque des images AFD - Classees/12_enfance/afd_enfance_activites_enfants_site_communautaire_033.jpg",
+          "alt": "Activites Enfants Site Communautaire — photo 33",
+          "title": "Activites Enfants Site Communautaire",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 33
+        },
+        {
+          "id": "lib-enfance-activites-enfants-site-communautaire-enfance-33",
+          "src": "/assets/Banque des images AFD - Classees/12_enfance/afd_enfance_activites_enfants_site_communautaire_034.jpg",
+          "alt": "Activites Enfants Site Communautaire — photo 34",
+          "title": "Activites Enfants Site Communautaire",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 34
+        },
+        {
+          "id": "lib-enfance-activites-enfants-site-communautaire-enfance-34",
+          "src": "/assets/Banque des images AFD - Classees/12_enfance/afd_enfance_activites_enfants_site_communautaire_035.jpg",
+          "alt": "Activites Enfants Site Communautaire — photo 35",
+          "title": "Activites Enfants Site Communautaire",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 35
+        },
+        {
+          "id": "lib-enfance-activites-enfants-site-communautaire-enfance-35",
+          "src": "/assets/Banque des images AFD - Classees/12_enfance/afd_enfance_activites_enfants_site_communautaire_036.jpg",
+          "alt": "Activites Enfants Site Communautaire — photo 36",
+          "title": "Activites Enfants Site Communautaire",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 36
+        },
+        {
+          "id": "lib-enfance-activites-enfants-site-communautaire-enfance-36",
+          "src": "/assets/Banque des images AFD - Classees/12_enfance/afd_enfance_activites_enfants_site_communautaire_037.jpg",
+          "alt": "Activites Enfants Site Communautaire — photo 37",
+          "title": "Activites Enfants Site Communautaire",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 37
+        },
+        {
+          "id": "lib-enfance-activites-enfants-site-communautaire-enfance-37",
+          "src": "/assets/Banque des images AFD - Classees/12_enfance/afd_enfance_activites_enfants_site_communautaire_038.jpg",
+          "alt": "Activites Enfants Site Communautaire — photo 38",
+          "title": "Activites Enfants Site Communautaire",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 38
+        },
+        {
+          "id": "lib-enfance-activites-enfants-site-communautaire-enfance-38",
+          "src": "/assets/Banque des images AFD - Classees/12_enfance/afd_enfance_activites_enfants_site_communautaire_039.jpg",
+          "alt": "Activites Enfants Site Communautaire — photo 39",
+          "title": "Activites Enfants Site Communautaire",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 39
+        },
+        {
+          "id": "lib-enfance-activites-enfants-site-communautaire-enfance-39",
+          "src": "/assets/Banque des images AFD - Classees/12_enfance/afd_enfance_activites_enfants_site_communautaire_040.jpg",
+          "alt": "Activites Enfants Site Communautaire — photo 40",
+          "title": "Activites Enfants Site Communautaire",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 40
+        },
+        {
+          "id": "lib-enfance-activites-enfants-site-communautaire-enfance-40",
+          "src": "/assets/Banque des images AFD - Classees/12_enfance/afd_enfance_activites_enfants_site_communautaire_041.jpg",
+          "alt": "Activites Enfants Site Communautaire — photo 41",
+          "title": "Activites Enfants Site Communautaire",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 41
+        }
+      ],
+      "coverImageUrl": "/assets/Banque des images AFD - Classees/12_enfance/afd_enfance_activites_enfants_site_communautaire_001.jpg",
+      "photoCount": 41,
+      "downloadCount": 0,
+      "publishedAt": null,
+      "updatedAt": null
+    },
+    {
+      "id": "lib-missions-terrain-visite-evaluation-salama-missions-terrain",
+      "slug": "missions-terrain-visite-evaluation-salama-missions-terrain",
+      "categorySlug": "missions-terrain",
+      "categoryLabel": "Missions de terrain",
+      "domainSlug": "femmes-reponse-humanitaire-urgence",
+      "folder": "17_missions_terrain",
+      "title": "Terrain Visite Evaluation Salama",
+      "summary": "Archive photographique officielle AFD — Missions de terrain.",
+      "description": "Cette fiche documente une activité AFD dans le domaine « Missions de terrain ». Les images proviennent de la banque institutionnelle classée.",
+      "status": "terminee",
+      "published": true,
+      "featured": false,
+      "eventDate": null,
+      "province": null,
+      "territory": null,
+      "locality": null,
+      "locationName": null,
+      "project": null,
+      "partners": [],
+      "tags": [
+        "Missions de terrain"
+      ],
+      "author": "AFD ASBL",
+      "images": [
+        {
+          "id": "lib-missions-terrain-visite-evaluation-salama-missions-terrain-0",
+          "src": "/assets/Banque des images AFD - Classees/17_missions_terrain/afd_missions_terrain_visite_evaluation_salama_001.jpg",
+          "alt": "Terrain Visite Evaluation Salama — photo 1",
+          "title": "Terrain Visite Evaluation Salama",
+          "caption": null,
+          "isCover": true,
+          "orderIndex": 1
+        },
+        {
+          "id": "lib-missions-terrain-visite-evaluation-salama-missions-terrain-1",
+          "src": "/assets/Banque des images AFD - Classees/17_missions_terrain/afd_missions_terrain_visite_evaluation_salama_002.jpg",
+          "alt": "Terrain Visite Evaluation Salama — photo 2",
+          "title": "Terrain Visite Evaluation Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 2
+        },
+        {
+          "id": "lib-missions-terrain-visite-evaluation-salama-missions-terrain-2",
+          "src": "/assets/Banque des images AFD - Classees/17_missions_terrain/afd_missions_terrain_visite_evaluation_salama_003.jpg",
+          "alt": "Terrain Visite Evaluation Salama — photo 3",
+          "title": "Terrain Visite Evaluation Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 3
+        },
+        {
+          "id": "lib-missions-terrain-visite-evaluation-salama-missions-terrain-3",
+          "src": "/assets/Banque des images AFD - Classees/17_missions_terrain/afd_missions_terrain_visite_evaluation_salama_004.jpg",
+          "alt": "Terrain Visite Evaluation Salama — photo 4",
+          "title": "Terrain Visite Evaluation Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 4
+        },
+        {
+          "id": "lib-missions-terrain-visite-evaluation-salama-missions-terrain-4",
+          "src": "/assets/Banque des images AFD - Classees/17_missions_terrain/afd_missions_terrain_visite_evaluation_salama_005.jpg",
+          "alt": "Terrain Visite Evaluation Salama — photo 5",
+          "title": "Terrain Visite Evaluation Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 5
+        },
+        {
+          "id": "lib-missions-terrain-visite-evaluation-salama-missions-terrain-5",
+          "src": "/assets/Banque des images AFD - Classees/17_missions_terrain/afd_missions_terrain_visite_evaluation_salama_006.jpg",
+          "alt": "Terrain Visite Evaluation Salama — photo 6",
+          "title": "Terrain Visite Evaluation Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 6
+        },
+        {
+          "id": "lib-missions-terrain-visite-evaluation-salama-missions-terrain-6",
+          "src": "/assets/Banque des images AFD - Classees/17_missions_terrain/afd_missions_terrain_visite_evaluation_salama_007.jpg",
+          "alt": "Terrain Visite Evaluation Salama — photo 7",
+          "title": "Terrain Visite Evaluation Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 7
+        },
+        {
+          "id": "lib-missions-terrain-visite-evaluation-salama-missions-terrain-7",
+          "src": "/assets/Banque des images AFD - Classees/17_missions_terrain/afd_missions_terrain_visite_evaluation_salama_008.jpg",
+          "alt": "Terrain Visite Evaluation Salama — photo 8",
+          "title": "Terrain Visite Evaluation Salama",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 8
+        }
+      ],
+      "coverImageUrl": "/assets/Banque des images AFD - Classees/17_missions_terrain/afd_missions_terrain_visite_evaluation_salama_001.jpg",
+      "photoCount": 8,
+      "downloadCount": 0,
+      "publishedAt": null,
+      "updatedAt": null
+    },
+    {
+      "id": "lib-missions-terrain-visite-evaluation-site-deplaces-site-ceca-20-makoko-1-missions-terrain",
+      "slug": "missions-terrain-visite-evaluation-site-deplaces-site-ceca-20-makoko-1-missions-terrain",
+      "categorySlug": "missions-terrain",
+      "categoryLabel": "Missions de terrain",
+      "domainSlug": "femmes-reponse-humanitaire-urgence",
+      "folder": "17_missions_terrain",
+      "title": "Terrain Visite Evaluation Site Deplaces Site Ceca 20 Makoko 1",
+      "summary": "Archive photographique officielle AFD — Missions de terrain.",
+      "description": "Cette fiche documente une activité AFD dans le domaine « Missions de terrain ». Les images proviennent de la banque institutionnelle classée.",
+      "status": "terminee",
+      "published": true,
+      "featured": false,
+      "eventDate": null,
+      "province": null,
+      "territory": null,
+      "locality": null,
+      "locationName": null,
+      "project": null,
+      "partners": [],
+      "tags": [
+        "Missions de terrain"
+      ],
+      "author": "AFD ASBL",
+      "images": [
+        {
+          "id": "lib-missions-terrain-visite-evaluation-site-deplaces-site-ceca-20-makoko-1-missions-terrain-0",
+          "src": "/assets/Banque des images AFD - Classees/17_missions_terrain/afd_missions_terrain_visite_evaluation_site_deplaces_site_ceca_20_makoko_1_001.jpg",
+          "alt": "Terrain Visite Evaluation Site Deplaces Site Ceca 20 Makoko 1 — photo 1",
+          "title": "Terrain Visite Evaluation Site Deplaces Site Ceca 20 Makoko 1",
+          "caption": null,
+          "isCover": true,
+          "orderIndex": 1
+        },
+        {
+          "id": "lib-missions-terrain-visite-evaluation-site-deplaces-site-ceca-20-makoko-1-missions-terrain-1",
+          "src": "/assets/Banque des images AFD - Classees/17_missions_terrain/afd_missions_terrain_visite_evaluation_site_deplaces_site_ceca_20_makoko_1_002.jpg",
+          "alt": "Terrain Visite Evaluation Site Deplaces Site Ceca 20 Makoko 1 — photo 2",
+          "title": "Terrain Visite Evaluation Site Deplaces Site Ceca 20 Makoko 1",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 2
+        },
+        {
+          "id": "lib-missions-terrain-visite-evaluation-site-deplaces-site-ceca-20-makoko-1-missions-terrain-2",
+          "src": "/assets/Banque des images AFD - Classees/17_missions_terrain/afd_missions_terrain_visite_evaluation_site_deplaces_site_ceca_20_makoko_1_003.jpg",
+          "alt": "Terrain Visite Evaluation Site Deplaces Site Ceca 20 Makoko 1 — photo 3",
+          "title": "Terrain Visite Evaluation Site Deplaces Site Ceca 20 Makoko 1",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 3
+        },
+        {
+          "id": "lib-missions-terrain-visite-evaluation-site-deplaces-site-ceca-20-makoko-1-missions-terrain-3",
+          "src": "/assets/Banque des images AFD - Classees/17_missions_terrain/afd_missions_terrain_visite_evaluation_site_deplaces_site_ceca_20_makoko_1_004.jpg",
+          "alt": "Terrain Visite Evaluation Site Deplaces Site Ceca 20 Makoko 1 — photo 4",
+          "title": "Terrain Visite Evaluation Site Deplaces Site Ceca 20 Makoko 1",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 4
+        },
+        {
+          "id": "lib-missions-terrain-visite-evaluation-site-deplaces-site-ceca-20-makoko-1-missions-terrain-4",
+          "src": "/assets/Banque des images AFD - Classees/17_missions_terrain/afd_missions_terrain_visite_evaluation_site_deplaces_site_ceca_20_makoko_1_005.jpg",
+          "alt": "Terrain Visite Evaluation Site Deplaces Site Ceca 20 Makoko 1 — photo 5",
+          "title": "Terrain Visite Evaluation Site Deplaces Site Ceca 20 Makoko 1",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 5
+        },
+        {
+          "id": "lib-missions-terrain-visite-evaluation-site-deplaces-site-ceca-20-makoko-1-missions-terrain-5",
+          "src": "/assets/Banque des images AFD - Classees/17_missions_terrain/afd_missions_terrain_visite_evaluation_site_deplaces_site_ceca_20_makoko_1_006.jpg",
+          "alt": "Terrain Visite Evaluation Site Deplaces Site Ceca 20 Makoko 1 — photo 6",
+          "title": "Terrain Visite Evaluation Site Deplaces Site Ceca 20 Makoko 1",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 6
+        },
+        {
+          "id": "lib-missions-terrain-visite-evaluation-site-deplaces-site-ceca-20-makoko-1-missions-terrain-6",
+          "src": "/assets/Banque des images AFD - Classees/17_missions_terrain/afd_missions_terrain_visite_evaluation_site_deplaces_site_ceca_20_makoko_1_007.jpg",
+          "alt": "Terrain Visite Evaluation Site Deplaces Site Ceca 20 Makoko 1 — photo 7",
+          "title": "Terrain Visite Evaluation Site Deplaces Site Ceca 20 Makoko 1",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 7
+        },
+        {
+          "id": "lib-missions-terrain-visite-evaluation-site-deplaces-site-ceca-20-makoko-1-missions-terrain-7",
+          "src": "/assets/Banque des images AFD - Classees/17_missions_terrain/afd_missions_terrain_visite_evaluation_site_deplaces_site_ceca_20_makoko_1_008.jpg",
+          "alt": "Terrain Visite Evaluation Site Deplaces Site Ceca 20 Makoko 1 — photo 8",
+          "title": "Terrain Visite Evaluation Site Deplaces Site Ceca 20 Makoko 1",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 8
+        },
+        {
+          "id": "lib-missions-terrain-visite-evaluation-site-deplaces-site-ceca-20-makoko-1-missions-terrain-8",
+          "src": "/assets/Banque des images AFD - Classees/17_missions_terrain/afd_missions_terrain_visite_evaluation_site_deplaces_site_ceca_20_makoko_1_009.jpg",
+          "alt": "Terrain Visite Evaluation Site Deplaces Site Ceca 20 Makoko 1 — photo 9",
+          "title": "Terrain Visite Evaluation Site Deplaces Site Ceca 20 Makoko 1",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 9
+        },
+        {
+          "id": "lib-missions-terrain-visite-evaluation-site-deplaces-site-ceca-20-makoko-1-missions-terrain-9",
+          "src": "/assets/Banque des images AFD - Classees/17_missions_terrain/afd_missions_terrain_visite_evaluation_site_deplaces_site_ceca_20_makoko_1_010.jpg",
+          "alt": "Terrain Visite Evaluation Site Deplaces Site Ceca 20 Makoko 1 — photo 10",
+          "title": "Terrain Visite Evaluation Site Deplaces Site Ceca 20 Makoko 1",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 10
+        },
+        {
+          "id": "lib-missions-terrain-visite-evaluation-site-deplaces-site-ceca-20-makoko-1-missions-terrain-10",
+          "src": "/assets/Banque des images AFD - Classees/17_missions_terrain/afd_missions_terrain_visite_evaluation_site_deplaces_site_ceca_20_makoko_1_011.jpg",
+          "alt": "Terrain Visite Evaluation Site Deplaces Site Ceca 20 Makoko 1 — photo 11",
+          "title": "Terrain Visite Evaluation Site Deplaces Site Ceca 20 Makoko 1",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 11
+        },
+        {
+          "id": "lib-missions-terrain-visite-evaluation-site-deplaces-site-ceca-20-makoko-1-missions-terrain-11",
+          "src": "/assets/Banque des images AFD - Classees/17_missions_terrain/afd_missions_terrain_visite_evaluation_site_deplaces_site_ceca_20_makoko_1_012.jpg",
+          "alt": "Terrain Visite Evaluation Site Deplaces Site Ceca 20 Makoko 1 — photo 12",
+          "title": "Terrain Visite Evaluation Site Deplaces Site Ceca 20 Makoko 1",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 12
+        },
+        {
+          "id": "lib-missions-terrain-visite-evaluation-site-deplaces-site-ceca-20-makoko-1-missions-terrain-12",
+          "src": "/assets/Banque des images AFD - Classees/17_missions_terrain/afd_missions_terrain_visite_evaluation_site_deplaces_site_ceca_20_makoko_1_013.jpg",
+          "alt": "Terrain Visite Evaluation Site Deplaces Site Ceca 20 Makoko 1 — photo 13",
+          "title": "Terrain Visite Evaluation Site Deplaces Site Ceca 20 Makoko 1",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 13
+        },
+        {
+          "id": "lib-missions-terrain-visite-evaluation-site-deplaces-site-ceca-20-makoko-1-missions-terrain-13",
+          "src": "/assets/Banque des images AFD - Classees/17_missions_terrain/afd_missions_terrain_visite_evaluation_site_deplaces_site_ceca_20_makoko_1_014.jpg",
+          "alt": "Terrain Visite Evaluation Site Deplaces Site Ceca 20 Makoko 1 — photo 14",
+          "title": "Terrain Visite Evaluation Site Deplaces Site Ceca 20 Makoko 1",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 14
+        },
+        {
+          "id": "lib-missions-terrain-visite-evaluation-site-deplaces-site-ceca-20-makoko-1-missions-terrain-14",
+          "src": "/assets/Banque des images AFD - Classees/17_missions_terrain/afd_missions_terrain_visite_evaluation_site_deplaces_site_ceca_20_makoko_1_015.jpg",
+          "alt": "Terrain Visite Evaluation Site Deplaces Site Ceca 20 Makoko 1 — photo 15",
+          "title": "Terrain Visite Evaluation Site Deplaces Site Ceca 20 Makoko 1",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 15
+        },
+        {
+          "id": "lib-missions-terrain-visite-evaluation-site-deplaces-site-ceca-20-makoko-1-missions-terrain-15",
+          "src": "/assets/Banque des images AFD - Classees/17_missions_terrain/afd_missions_terrain_visite_evaluation_site_deplaces_site_ceca_20_makoko_1_016.jpg",
+          "alt": "Terrain Visite Evaluation Site Deplaces Site Ceca 20 Makoko 1 — photo 16",
+          "title": "Terrain Visite Evaluation Site Deplaces Site Ceca 20 Makoko 1",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 16
+        },
+        {
+          "id": "lib-missions-terrain-visite-evaluation-site-deplaces-site-ceca-20-makoko-1-missions-terrain-16",
+          "src": "/assets/Banque des images AFD - Classees/17_missions_terrain/afd_missions_terrain_visite_evaluation_site_deplaces_site_ceca_20_makoko_1_017.jpg",
+          "alt": "Terrain Visite Evaluation Site Deplaces Site Ceca 20 Makoko 1 — photo 17",
+          "title": "Terrain Visite Evaluation Site Deplaces Site Ceca 20 Makoko 1",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 17
+        },
+        {
+          "id": "lib-missions-terrain-visite-evaluation-site-deplaces-site-ceca-20-makoko-1-missions-terrain-17",
+          "src": "/assets/Banque des images AFD - Classees/17_missions_terrain/afd_missions_terrain_visite_evaluation_site_deplaces_site_ceca_20_makoko_1_018.jpg",
+          "alt": "Terrain Visite Evaluation Site Deplaces Site Ceca 20 Makoko 1 — photo 18",
+          "title": "Terrain Visite Evaluation Site Deplaces Site Ceca 20 Makoko 1",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 18
+        },
+        {
+          "id": "lib-missions-terrain-visite-evaluation-site-deplaces-site-ceca-20-makoko-1-missions-terrain-18",
+          "src": "/assets/Banque des images AFD - Classees/17_missions_terrain/afd_missions_terrain_visite_evaluation_site_deplaces_site_ceca_20_makoko_1_019.jpg",
+          "alt": "Terrain Visite Evaluation Site Deplaces Site Ceca 20 Makoko 1 — photo 19",
+          "title": "Terrain Visite Evaluation Site Deplaces Site Ceca 20 Makoko 1",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 19
+        },
+        {
+          "id": "lib-missions-terrain-visite-evaluation-site-deplaces-site-ceca-20-makoko-1-missions-terrain-19",
+          "src": "/assets/Banque des images AFD - Classees/17_missions_terrain/afd_missions_terrain_visite_evaluation_site_deplaces_site_ceca_20_makoko_1_020.jpg",
+          "alt": "Terrain Visite Evaluation Site Deplaces Site Ceca 20 Makoko 1 — photo 20",
+          "title": "Terrain Visite Evaluation Site Deplaces Site Ceca 20 Makoko 1",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 20
+        }
+      ],
+      "coverImageUrl": "/assets/Banque des images AFD - Classees/17_missions_terrain/afd_missions_terrain_visite_evaluation_site_deplaces_site_ceca_20_makoko_1_001.jpg",
+      "photoCount": 20,
+      "downloadCount": 0,
+      "publishedAt": null,
+      "updatedAt": null
+    },
+    {
+      "id": "lib-coordination-seance-travail-caritas-kisangani-coordination",
+      "slug": "coordination-seance-travail-caritas-kisangani-coordination",
+      "categorySlug": "coordination",
+      "categoryLabel": "Coordination",
+      "domainSlug": "femmes-leadership-gouvernance-communautaire",
+      "folder": "18_coordination",
+      "title": "Seance Travail Caritas Kisangani",
+      "summary": "Archive photographique officielle AFD — Coordination.",
+      "description": "Cette fiche documente une activité AFD dans le domaine « Coordination ». Les images proviennent de la banque institutionnelle classée.",
+      "status": "archivee",
+      "published": true,
+      "featured": false,
+      "eventDate": null,
+      "province": null,
+      "territory": null,
+      "locality": null,
+      "locationName": null,
+      "project": null,
+      "partners": [],
+      "tags": [
+        "Coordination"
+      ],
+      "author": "AFD ASBL",
+      "images": [
+        {
+          "id": "lib-coordination-seance-travail-caritas-kisangani-coordination-0",
+          "src": "/assets/Banque des images AFD - Classees/18_coordination/afd_coordination_seance_travail_caritas_kisangani_001.jpg",
+          "alt": "Seance Travail Caritas Kisangani — photo 1",
+          "title": "Seance Travail Caritas Kisangani",
+          "caption": null,
+          "isCover": true,
+          "orderIndex": 1
+        },
+        {
+          "id": "lib-coordination-seance-travail-caritas-kisangani-coordination-1",
+          "src": "/assets/Banque des images AFD - Classees/18_coordination/afd_coordination_seance_travail_caritas_kisangani_002.jpg",
+          "alt": "Seance Travail Caritas Kisangani — photo 2",
+          "title": "Seance Travail Caritas Kisangani",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 2
+        },
+        {
+          "id": "lib-coordination-seance-travail-caritas-kisangani-coordination-2",
+          "src": "/assets/Banque des images AFD - Classees/18_coordination/afd_coordination_seance_travail_caritas_kisangani_003.jpg",
+          "alt": "Seance Travail Caritas Kisangani — photo 3",
+          "title": "Seance Travail Caritas Kisangani",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 3
+        },
+        {
+          "id": "lib-coordination-seance-travail-caritas-kisangani-coordination-3",
+          "src": "/assets/Banque des images AFD - Classees/18_coordination/afd_coordination_seance_travail_caritas_kisangani_004.jpg",
+          "alt": "Seance Travail Caritas Kisangani — photo 4",
+          "title": "Seance Travail Caritas Kisangani",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 4
+        },
+        {
+          "id": "lib-coordination-seance-travail-caritas-kisangani-coordination-4",
+          "src": "/assets/Banque des images AFD - Classees/18_coordination/afd_coordination_seance_travail_caritas_kisangani_005.jpg",
+          "alt": "Seance Travail Caritas Kisangani — photo 5",
+          "title": "Seance Travail Caritas Kisangani",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 5
+        },
+        {
+          "id": "lib-coordination-seance-travail-caritas-kisangani-coordination-5",
+          "src": "/assets/Banque des images AFD - Classees/18_coordination/afd_coordination_seance_travail_caritas_kisangani_006.jpg",
+          "alt": "Seance Travail Caritas Kisangani — photo 6",
+          "title": "Seance Travail Caritas Kisangani",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 6
+        },
+        {
+          "id": "lib-coordination-seance-travail-caritas-kisangani-coordination-6",
+          "src": "/assets/Banque des images AFD - Classees/18_coordination/afd_coordination_seance_travail_caritas_kisangani_007.jpg",
+          "alt": "Seance Travail Caritas Kisangani — photo 7",
+          "title": "Seance Travail Caritas Kisangani",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 7
+        },
+        {
+          "id": "lib-coordination-seance-travail-caritas-kisangani-coordination-7",
+          "src": "/assets/Banque des images AFD - Classees/18_coordination/afd_coordination_seance_travail_caritas_kisangani_008.jpg",
+          "alt": "Seance Travail Caritas Kisangani — photo 8",
+          "title": "Seance Travail Caritas Kisangani",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 8
+        },
+        {
+          "id": "lib-coordination-seance-travail-caritas-kisangani-coordination-8",
+          "src": "/assets/Banque des images AFD - Classees/18_coordination/afd_coordination_seance_travail_caritas_kisangani_009.jpg",
+          "alt": "Seance Travail Caritas Kisangani — photo 9",
+          "title": "Seance Travail Caritas Kisangani",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 9
+        },
+        {
+          "id": "lib-coordination-seance-travail-caritas-kisangani-coordination-9",
+          "src": "/assets/Banque des images AFD - Classees/18_coordination/afd_coordination_seance_travail_caritas_kisangani_010.jpg",
+          "alt": "Seance Travail Caritas Kisangani — photo 10",
+          "title": "Seance Travail Caritas Kisangani",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 10
+        },
+        {
+          "id": "lib-coordination-seance-travail-caritas-kisangani-coordination-10",
+          "src": "/assets/Banque des images AFD - Classees/18_coordination/afd_coordination_seance_travail_caritas_kisangani_011.jpg",
+          "alt": "Seance Travail Caritas Kisangani — photo 11",
+          "title": "Seance Travail Caritas Kisangani",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 11
+        },
+        {
+          "id": "lib-coordination-seance-travail-caritas-kisangani-coordination-11",
+          "src": "/assets/Banque des images AFD - Classees/18_coordination/afd_coordination_seance_travail_caritas_kisangani_012.jpg",
+          "alt": "Seance Travail Caritas Kisangani — photo 12",
+          "title": "Seance Travail Caritas Kisangani",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 12
+        },
+        {
+          "id": "lib-coordination-seance-travail-caritas-kisangani-coordination-12",
+          "src": "/assets/Banque des images AFD - Classees/18_coordination/afd_coordination_seance_travail_caritas_kisangani_013.jpg",
+          "alt": "Seance Travail Caritas Kisangani — photo 13",
+          "title": "Seance Travail Caritas Kisangani",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 13
+        },
+        {
+          "id": "lib-coordination-seance-travail-caritas-kisangani-coordination-13",
+          "src": "/assets/Banque des images AFD - Classees/18_coordination/afd_coordination_seance_travail_caritas_kisangani_014.jpg",
+          "alt": "Seance Travail Caritas Kisangani — photo 14",
+          "title": "Seance Travail Caritas Kisangani",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 14
+        },
+        {
+          "id": "lib-coordination-seance-travail-caritas-kisangani-coordination-14",
+          "src": "/assets/Banque des images AFD - Classees/18_coordination/afd_coordination_seance_travail_caritas_kisangani_015.jpg",
+          "alt": "Seance Travail Caritas Kisangani — photo 15",
+          "title": "Seance Travail Caritas Kisangani",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 15
+        },
+        {
+          "id": "lib-coordination-seance-travail-caritas-kisangani-coordination-15",
+          "src": "/assets/Banque des images AFD - Classees/18_coordination/afd_coordination_seance_travail_caritas_kisangani_016.jpg",
+          "alt": "Seance Travail Caritas Kisangani — photo 16",
+          "title": "Seance Travail Caritas Kisangani",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 16
+        },
+        {
+          "id": "lib-coordination-seance-travail-caritas-kisangani-coordination-16",
+          "src": "/assets/Banque des images AFD - Classees/18_coordination/afd_coordination_seance_travail_caritas_kisangani_017.jpg",
+          "alt": "Seance Travail Caritas Kisangani — photo 17",
+          "title": "Seance Travail Caritas Kisangani",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 17
+        },
+        {
+          "id": "lib-coordination-seance-travail-caritas-kisangani-coordination-17",
+          "src": "/assets/Banque des images AFD - Classees/18_coordination/afd_coordination_seance_travail_caritas_kisangani_018.jpg",
+          "alt": "Seance Travail Caritas Kisangani — photo 18",
+          "title": "Seance Travail Caritas Kisangani",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 18
+        },
+        {
+          "id": "lib-coordination-seance-travail-caritas-kisangani-coordination-18",
+          "src": "/assets/Banque des images AFD - Classees/18_coordination/afd_coordination_seance_travail_caritas_kisangani_019.jpg",
+          "alt": "Seance Travail Caritas Kisangani — photo 19",
+          "title": "Seance Travail Caritas Kisangani",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 19
+        },
+        {
+          "id": "lib-coordination-seance-travail-caritas-kisangani-coordination-19",
+          "src": "/assets/Banque des images AFD - Classees/18_coordination/afd_coordination_seance_travail_caritas_kisangani_020.jpg",
+          "alt": "Seance Travail Caritas Kisangani — photo 20",
+          "title": "Seance Travail Caritas Kisangani",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 20
+        },
+        {
+          "id": "lib-coordination-seance-travail-caritas-kisangani-coordination-20",
+          "src": "/assets/Banque des images AFD - Classees/18_coordination/afd_coordination_seance_travail_caritas_kisangani_021.jpg",
+          "alt": "Seance Travail Caritas Kisangani — photo 21",
+          "title": "Seance Travail Caritas Kisangani",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 21
+        },
+        {
+          "id": "lib-coordination-seance-travail-caritas-kisangani-coordination-21",
+          "src": "/assets/Banque des images AFD - Classees/18_coordination/afd_coordination_seance_travail_caritas_kisangani_022.jpg",
+          "alt": "Seance Travail Caritas Kisangani — photo 22",
+          "title": "Seance Travail Caritas Kisangani",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 22
+        },
+        {
+          "id": "lib-coordination-seance-travail-caritas-kisangani-coordination-22",
+          "src": "/assets/Banque des images AFD - Classees/18_coordination/afd_coordination_seance_travail_caritas_kisangani_023.jpg",
+          "alt": "Seance Travail Caritas Kisangani — photo 23",
+          "title": "Seance Travail Caritas Kisangani",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 23
+        },
+        {
+          "id": "lib-coordination-seance-travail-caritas-kisangani-coordination-23",
+          "src": "/assets/Banque des images AFD - Classees/18_coordination/afd_coordination_seance_travail_caritas_kisangani_024.jpg",
+          "alt": "Seance Travail Caritas Kisangani — photo 24",
+          "title": "Seance Travail Caritas Kisangani",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 24
+        },
+        {
+          "id": "lib-coordination-seance-travail-caritas-kisangani-coordination-24",
+          "src": "/assets/Banque des images AFD - Classees/18_coordination/afd_coordination_seance_travail_caritas_kisangani_025.jpg",
+          "alt": "Seance Travail Caritas Kisangani — photo 25",
+          "title": "Seance Travail Caritas Kisangani",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 25
+        },
+        {
+          "id": "lib-coordination-seance-travail-caritas-kisangani-coordination-25",
+          "src": "/assets/Banque des images AFD - Classees/18_coordination/afd_coordination_seance_travail_caritas_kisangani_026.jpg",
+          "alt": "Seance Travail Caritas Kisangani — photo 26",
+          "title": "Seance Travail Caritas Kisangani",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 26
+        },
+        {
+          "id": "lib-coordination-seance-travail-caritas-kisangani-coordination-26",
+          "src": "/assets/Banque des images AFD - Classees/18_coordination/afd_coordination_seance_travail_caritas_kisangani_027.jpg",
+          "alt": "Seance Travail Caritas Kisangani — photo 27",
+          "title": "Seance Travail Caritas Kisangani",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 27
+        },
+        {
+          "id": "lib-coordination-seance-travail-caritas-kisangani-coordination-27",
+          "src": "/assets/Banque des images AFD - Classees/18_coordination/afd_coordination_seance_travail_caritas_kisangani_028.jpg",
+          "alt": "Seance Travail Caritas Kisangani — photo 28",
+          "title": "Seance Travail Caritas Kisangani",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 28
+        },
+        {
+          "id": "lib-coordination-seance-travail-caritas-kisangani-coordination-28",
+          "src": "/assets/Banque des images AFD - Classees/18_coordination/afd_coordination_seance_travail_caritas_kisangani_029.jpg",
+          "alt": "Seance Travail Caritas Kisangani — photo 29",
+          "title": "Seance Travail Caritas Kisangani",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 29
+        },
+        {
+          "id": "lib-coordination-seance-travail-caritas-kisangani-coordination-29",
+          "src": "/assets/Banque des images AFD - Classees/18_coordination/afd_coordination_seance_travail_caritas_kisangani_030.jpg",
+          "alt": "Seance Travail Caritas Kisangani — photo 30",
+          "title": "Seance Travail Caritas Kisangani",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 30
+        },
+        {
+          "id": "lib-coordination-seance-travail-caritas-kisangani-coordination-30",
+          "src": "/assets/Banque des images AFD - Classees/18_coordination/afd_coordination_seance_travail_caritas_kisangani_031.jpg",
+          "alt": "Seance Travail Caritas Kisangani — photo 31",
+          "title": "Seance Travail Caritas Kisangani",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 31
+        },
+        {
+          "id": "lib-coordination-seance-travail-caritas-kisangani-coordination-31",
+          "src": "/assets/Banque des images AFD - Classees/18_coordination/afd_coordination_seance_travail_caritas_kisangani_032.jpg",
+          "alt": "Seance Travail Caritas Kisangani — photo 32",
+          "title": "Seance Travail Caritas Kisangani",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 32
+        },
+        {
+          "id": "lib-coordination-seance-travail-caritas-kisangani-coordination-32",
+          "src": "/assets/Banque des images AFD - Classees/18_coordination/afd_coordination_seance_travail_caritas_kisangani_033.jpg",
+          "alt": "Seance Travail Caritas Kisangani — photo 33",
+          "title": "Seance Travail Caritas Kisangani",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 33
+        },
+        {
+          "id": "lib-coordination-seance-travail-caritas-kisangani-coordination-33",
+          "src": "/assets/Banque des images AFD - Classees/18_coordination/afd_coordination_seance_travail_caritas_kisangani_034.jpg",
+          "alt": "Seance Travail Caritas Kisangani — photo 34",
+          "title": "Seance Travail Caritas Kisangani",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 34
+        },
+        {
+          "id": "lib-coordination-seance-travail-caritas-kisangani-coordination-34",
+          "src": "/assets/Banque des images AFD - Classees/18_coordination/afd_coordination_seance_travail_caritas_kisangani_035.jpg",
+          "alt": "Seance Travail Caritas Kisangani — photo 35",
+          "title": "Seance Travail Caritas Kisangani",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 35
+        },
+        {
+          "id": "lib-coordination-seance-travail-caritas-kisangani-coordination-35",
+          "src": "/assets/Banque des images AFD - Classees/18_coordination/afd_coordination_seance_travail_caritas_kisangani_036.jpg",
+          "alt": "Seance Travail Caritas Kisangani — photo 36",
+          "title": "Seance Travail Caritas Kisangani",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 36
+        },
+        {
+          "id": "lib-coordination-seance-travail-caritas-kisangani-coordination-36",
+          "src": "/assets/Banque des images AFD - Classees/18_coordination/afd_coordination_seance_travail_caritas_kisangani_037.jpg",
+          "alt": "Seance Travail Caritas Kisangani — photo 37",
+          "title": "Seance Travail Caritas Kisangani",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 37
+        },
+        {
+          "id": "lib-coordination-seance-travail-caritas-kisangani-coordination-37",
+          "src": "/assets/Banque des images AFD - Classees/18_coordination/afd_coordination_seance_travail_caritas_kisangani_038.jpg",
+          "alt": "Seance Travail Caritas Kisangani — photo 38",
+          "title": "Seance Travail Caritas Kisangani",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 38
+        },
+        {
+          "id": "lib-coordination-seance-travail-caritas-kisangani-coordination-38",
+          "src": "/assets/Banque des images AFD - Classees/18_coordination/afd_coordination_seance_travail_caritas_kisangani_039.jpg",
+          "alt": "Seance Travail Caritas Kisangani — photo 39",
+          "title": "Seance Travail Caritas Kisangani",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 39
+        },
+        {
+          "id": "lib-coordination-seance-travail-caritas-kisangani-coordination-39",
+          "src": "/assets/Banque des images AFD - Classees/18_coordination/afd_coordination_seance_travail_caritas_kisangani_040.jpg",
+          "alt": "Seance Travail Caritas Kisangani — photo 40",
+          "title": "Seance Travail Caritas Kisangani",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 40
+        },
+        {
+          "id": "lib-coordination-seance-travail-caritas-kisangani-coordination-40",
+          "src": "/assets/Banque des images AFD - Classees/18_coordination/afd_coordination_seance_travail_caritas_kisangani_041.jpg",
+          "alt": "Seance Travail Caritas Kisangani — photo 41",
+          "title": "Seance Travail Caritas Kisangani",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 41
+        },
+        {
+          "id": "lib-coordination-seance-travail-caritas-kisangani-coordination-41",
+          "src": "/assets/Banque des images AFD - Classees/18_coordination/afd_coordination_seance_travail_caritas_kisangani_042.jpg",
+          "alt": "Seance Travail Caritas Kisangani — photo 42",
+          "title": "Seance Travail Caritas Kisangani",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 42
+        },
+        {
+          "id": "lib-coordination-seance-travail-caritas-kisangani-coordination-42",
+          "src": "/assets/Banque des images AFD - Classees/18_coordination/afd_coordination_seance_travail_caritas_kisangani_043.jpg",
+          "alt": "Seance Travail Caritas Kisangani — photo 43",
+          "title": "Seance Travail Caritas Kisangani",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 43
+        },
+        {
+          "id": "lib-coordination-seance-travail-caritas-kisangani-coordination-43",
+          "src": "/assets/Banque des images AFD - Classees/18_coordination/afd_coordination_seance_travail_caritas_kisangani_044.jpg",
+          "alt": "Seance Travail Caritas Kisangani — photo 44",
+          "title": "Seance Travail Caritas Kisangani",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 44
+        },
+        {
+          "id": "lib-coordination-seance-travail-caritas-kisangani-coordination-44",
+          "src": "/assets/Banque des images AFD - Classees/18_coordination/afd_coordination_seance_travail_caritas_kisangani_045.jpg",
+          "alt": "Seance Travail Caritas Kisangani — photo 45",
+          "title": "Seance Travail Caritas Kisangani",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 45
+        }
+      ],
+      "coverImageUrl": "/assets/Banque des images AFD - Classees/18_coordination/afd_coordination_seance_travail_caritas_kisangani_001.jpg",
+      "photoCount": 45,
+      "downloadCount": 0,
+      "publishedAt": null,
+      "updatedAt": null
+    },
+    {
+      "id": "lib-gouvernance-remise-documents-coordination-tshopo-gouvernance",
+      "slug": "gouvernance-remise-documents-coordination-tshopo-gouvernance",
+      "categorySlug": "gouvernance",
+      "categoryLabel": "Gouvernance",
+      "domainSlug": "femmes-leadership-gouvernance-communautaire",
+      "folder": "19_gouvernance",
+      "title": "Remise Documents Coordination Tshopo",
+      "summary": "Archive photographique officielle AFD — Gouvernance.",
+      "description": "Cette fiche documente une activité AFD dans le domaine « Gouvernance ». Les images proviennent de la banque institutionnelle classée.",
+      "status": "en_cours",
+      "published": true,
+      "featured": false,
+      "eventDate": null,
+      "province": null,
+      "territory": null,
+      "locality": null,
+      "locationName": null,
+      "project": null,
+      "partners": [],
+      "tags": [
+        "Gouvernance"
+      ],
+      "author": "AFD ASBL",
+      "images": [
+        {
+          "id": "lib-gouvernance-remise-documents-coordination-tshopo-gouvernance-0",
+          "src": "/assets/Banque des images AFD - Classees/19_gouvernance/afd_gouvernance_remise_documents_coordination_tshopo_001.jpg",
+          "alt": "Remise Documents Coordination Tshopo — photo 1",
+          "title": "Remise Documents Coordination Tshopo",
+          "caption": null,
+          "isCover": true,
+          "orderIndex": 1
+        },
+        {
+          "id": "lib-gouvernance-remise-documents-coordination-tshopo-gouvernance-1",
+          "src": "/assets/Banque des images AFD - Classees/19_gouvernance/afd_gouvernance_remise_documents_coordination_tshopo_002.jpg",
+          "alt": "Remise Documents Coordination Tshopo — photo 2",
+          "title": "Remise Documents Coordination Tshopo",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 2
+        },
+        {
+          "id": "lib-gouvernance-remise-documents-coordination-tshopo-gouvernance-2",
+          "src": "/assets/Banque des images AFD - Classees/19_gouvernance/afd_gouvernance_remise_documents_coordination_tshopo_003.jpg",
+          "alt": "Remise Documents Coordination Tshopo — photo 3",
+          "title": "Remise Documents Coordination Tshopo",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 3
+        },
+        {
+          "id": "lib-gouvernance-remise-documents-coordination-tshopo-gouvernance-3",
+          "src": "/assets/Banque des images AFD - Classees/19_gouvernance/afd_gouvernance_remise_documents_coordination_tshopo_004.jpg",
+          "alt": "Remise Documents Coordination Tshopo — photo 4",
+          "title": "Remise Documents Coordination Tshopo",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 4
+        },
+        {
+          "id": "lib-gouvernance-remise-documents-coordination-tshopo-gouvernance-4",
+          "src": "/assets/Banque des images AFD - Classees/19_gouvernance/afd_gouvernance_remise_documents_coordination_tshopo_005.jpg",
+          "alt": "Remise Documents Coordination Tshopo — photo 5",
+          "title": "Remise Documents Coordination Tshopo",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 5
+        }
+      ],
+      "coverImageUrl": "/assets/Banque des images AFD - Classees/19_gouvernance/afd_gouvernance_remise_documents_coordination_tshopo_001.jpg",
+      "photoCount": 5,
+      "downloadCount": 0,
+      "publishedAt": null,
+      "updatedAt": null
+    },
+    {
+      "id": "lib-sensibilisation-sensibilisation-8-mars-camp-kabila-sensibilisation",
+      "slug": "sensibilisation-sensibilisation-8-mars-camp-kabila-sensibilisation",
+      "categorySlug": "sensibilisation",
+      "categoryLabel": "Sensibilisation",
+      "domainSlug": "protection-vbg-droits-femmes",
+      "folder": "22_sensibilisation",
+      "title": "Sensibilisation 8 Mars Camp Kabila",
+      "summary": "Archive photographique officielle AFD — Sensibilisation.",
+      "description": "Cette fiche documente une activité AFD dans le domaine « Sensibilisation ». Les images proviennent de la banque institutionnelle classée.",
+      "status": "terminee",
+      "published": true,
+      "featured": false,
+      "eventDate": null,
+      "province": null,
+      "territory": null,
+      "locality": null,
+      "locationName": null,
+      "project": null,
+      "partners": [],
+      "tags": [
+        "Sensibilisation"
+      ],
+      "author": "AFD ASBL",
+      "images": [
+        {
+          "id": "lib-sensibilisation-sensibilisation-8-mars-camp-kabila-sensibilisation-0",
+          "src": "/assets/Banque des images AFD - Classees/22_sensibilisation/afd_sensibilisation_sensibilisation_8_mars_camp_kabila_001.jpg",
+          "alt": "Sensibilisation 8 Mars Camp Kabila — photo 1",
+          "title": "Sensibilisation 8 Mars Camp Kabila",
+          "caption": null,
+          "isCover": true,
+          "orderIndex": 1
+        },
+        {
+          "id": "lib-sensibilisation-sensibilisation-8-mars-camp-kabila-sensibilisation-1",
+          "src": "/assets/Banque des images AFD - Classees/22_sensibilisation/afd_sensibilisation_sensibilisation_8_mars_camp_kabila_002.jpg",
+          "alt": "Sensibilisation 8 Mars Camp Kabila — photo 2",
+          "title": "Sensibilisation 8 Mars Camp Kabila",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 2
+        },
+        {
+          "id": "lib-sensibilisation-sensibilisation-8-mars-camp-kabila-sensibilisation-2",
+          "src": "/assets/Banque des images AFD - Classees/22_sensibilisation/afd_sensibilisation_sensibilisation_8_mars_camp_kabila_003.jpg",
+          "alt": "Sensibilisation 8 Mars Camp Kabila — photo 3",
+          "title": "Sensibilisation 8 Mars Camp Kabila",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 3
+        },
+        {
+          "id": "lib-sensibilisation-sensibilisation-8-mars-camp-kabila-sensibilisation-3",
+          "src": "/assets/Banque des images AFD - Classees/22_sensibilisation/afd_sensibilisation_sensibilisation_8_mars_camp_kabila_004.jpg",
+          "alt": "Sensibilisation 8 Mars Camp Kabila — photo 4",
+          "title": "Sensibilisation 8 Mars Camp Kabila",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 4
+        },
+        {
+          "id": "lib-sensibilisation-sensibilisation-8-mars-camp-kabila-sensibilisation-4",
+          "src": "/assets/Banque des images AFD - Classees/22_sensibilisation/afd_sensibilisation_sensibilisation_8_mars_camp_kabila_005.jpg",
+          "alt": "Sensibilisation 8 Mars Camp Kabila — photo 5",
+          "title": "Sensibilisation 8 Mars Camp Kabila",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 5
+        },
+        {
+          "id": "lib-sensibilisation-sensibilisation-8-mars-camp-kabila-sensibilisation-5",
+          "src": "/assets/Banque des images AFD - Classees/22_sensibilisation/afd_sensibilisation_sensibilisation_8_mars_camp_kabila_006.jpg",
+          "alt": "Sensibilisation 8 Mars Camp Kabila — photo 6",
+          "title": "Sensibilisation 8 Mars Camp Kabila",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 6
+        },
+        {
+          "id": "lib-sensibilisation-sensibilisation-8-mars-camp-kabila-sensibilisation-6",
+          "src": "/assets/Banque des images AFD - Classees/22_sensibilisation/afd_sensibilisation_sensibilisation_8_mars_camp_kabila_007.jpg",
+          "alt": "Sensibilisation 8 Mars Camp Kabila — photo 7",
+          "title": "Sensibilisation 8 Mars Camp Kabila",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 7
+        }
+      ],
+      "coverImageUrl": "/assets/Banque des images AFD - Classees/22_sensibilisation/afd_sensibilisation_sensibilisation_8_mars_camp_kabila_001.jpg",
+      "photoCount": 7,
+      "downloadCount": 0,
+      "publishedAt": null,
+      "updatedAt": null
+    },
+    {
+      "id": "lib-visites-institutionnelles-civilites-autorites-mambasa-visites-institutionnelles",
+      "slug": "visites-institutionnelles-civilites-autorites-mambasa-visites-institutionnelles",
+      "categorySlug": "visites-institutionnelles",
+      "categoryLabel": "Événements institutionnels",
+      "domainSlug": "femmes-leadership-gouvernance-communautaire",
+      "folder": "24_visites_institutionnelles",
+      "title": "Institutionnelles Civilites Autorites Mambasa",
+      "summary": "Archive photographique officielle AFD — Événements institutionnels.",
+      "description": "Cette fiche documente une activité AFD dans le domaine « Événements institutionnels ». Les images proviennent de la banque institutionnelle classée.",
+      "status": "archivee",
+      "published": true,
+      "featured": false,
+      "eventDate": null,
+      "province": null,
+      "territory": null,
+      "locality": null,
+      "locationName": null,
+      "project": null,
+      "partners": [],
+      "tags": [
+        "Événements institutionnels"
+      ],
+      "author": "AFD ASBL",
+      "images": [
+        {
+          "id": "lib-visites-institutionnelles-civilites-autorites-mambasa-visites-institutionnelles-0",
+          "src": "/assets/Banque des images AFD - Classees/24_visites_institutionnelles/afd_visites_institutionnelles_civilites_autorites_mambasa_001.jpg",
+          "alt": "Institutionnelles Civilites Autorites Mambasa — photo 1",
+          "title": "Institutionnelles Civilites Autorites Mambasa",
+          "caption": null,
+          "isCover": true,
+          "orderIndex": 1
+        },
+        {
+          "id": "lib-visites-institutionnelles-civilites-autorites-mambasa-visites-institutionnelles-1",
+          "src": "/assets/Banque des images AFD - Classees/24_visites_institutionnelles/afd_visites_institutionnelles_civilites_autorites_mambasa_002.jpg",
+          "alt": "Institutionnelles Civilites Autorites Mambasa — photo 2",
+          "title": "Institutionnelles Civilites Autorites Mambasa",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 2
+        }
+      ],
+      "coverImageUrl": "/assets/Banque des images AFD - Classees/24_visites_institutionnelles/afd_visites_institutionnelles_civilites_autorites_mambasa_001.jpg",
+      "photoCount": 2,
+      "downloadCount": 0,
+      "publishedAt": null,
+      "updatedAt": null
+    },
+    {
+      "id": "lib-visites-institutionnelles-visite-mcz-hgr-mambasa-visites-institutionnelles",
+      "slug": "visites-institutionnelles-visite-mcz-hgr-mambasa-visites-institutionnelles",
+      "categorySlug": "visites-institutionnelles",
+      "categoryLabel": "Événements institutionnels",
+      "domainSlug": "femmes-leadership-gouvernance-communautaire",
+      "folder": "24_visites_institutionnelles",
+      "title": "Institutionnelles Visite Mcz Hgr Mambasa",
+      "summary": "Archive photographique officielle AFD — Événements institutionnels.",
+      "description": "Cette fiche documente une activité AFD dans le domaine « Événements institutionnels ». Les images proviennent de la banque institutionnelle classée.",
+      "status": "terminee",
+      "published": true,
+      "featured": false,
+      "eventDate": null,
+      "province": null,
+      "territory": null,
+      "locality": null,
+      "locationName": null,
+      "project": null,
+      "partners": [],
+      "tags": [
+        "Événements institutionnels"
+      ],
+      "author": "AFD ASBL",
+      "images": [
+        {
+          "id": "lib-visites-institutionnelles-visite-mcz-hgr-mambasa-visites-institutionnelles-0",
+          "src": "/assets/Banque des images AFD - Classees/24_visites_institutionnelles/afd_visites_institutionnelles_visite_mcz_hgr_mambasa_001.jpg",
+          "alt": "Institutionnelles Visite Mcz Hgr Mambasa — photo 1",
+          "title": "Institutionnelles Visite Mcz Hgr Mambasa",
+          "caption": null,
+          "isCover": true,
+          "orderIndex": 1
+        },
+        {
+          "id": "lib-visites-institutionnelles-visite-mcz-hgr-mambasa-visites-institutionnelles-1",
+          "src": "/assets/Banque des images AFD - Classees/24_visites_institutionnelles/afd_visites_institutionnelles_visite_mcz_hgr_mambasa_002.jpg",
+          "alt": "Institutionnelles Visite Mcz Hgr Mambasa — photo 2",
+          "title": "Institutionnelles Visite Mcz Hgr Mambasa",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 2
+        },
+        {
+          "id": "lib-visites-institutionnelles-visite-mcz-hgr-mambasa-visites-institutionnelles-2",
+          "src": "/assets/Banque des images AFD - Classees/24_visites_institutionnelles/afd_visites_institutionnelles_visite_mcz_hgr_mambasa_003.jpg",
+          "alt": "Institutionnelles Visite Mcz Hgr Mambasa — photo 3",
+          "title": "Institutionnelles Visite Mcz Hgr Mambasa",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 3
+        },
+        {
+          "id": "lib-visites-institutionnelles-visite-mcz-hgr-mambasa-visites-institutionnelles-3",
+          "src": "/assets/Banque des images AFD - Classees/24_visites_institutionnelles/afd_visites_institutionnelles_visite_mcz_hgr_mambasa_004.jpg",
+          "alt": "Institutionnelles Visite Mcz Hgr Mambasa — photo 4",
+          "title": "Institutionnelles Visite Mcz Hgr Mambasa",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 4
+        },
+        {
+          "id": "lib-visites-institutionnelles-visite-mcz-hgr-mambasa-visites-institutionnelles-4",
+          "src": "/assets/Banque des images AFD - Classees/24_visites_institutionnelles/afd_visites_institutionnelles_visite_mcz_hgr_mambasa_005.jpg",
+          "alt": "Institutionnelles Visite Mcz Hgr Mambasa — photo 5",
+          "title": "Institutionnelles Visite Mcz Hgr Mambasa",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 5
+        },
+        {
+          "id": "lib-visites-institutionnelles-visite-mcz-hgr-mambasa-visites-institutionnelles-5",
+          "src": "/assets/Banque des images AFD - Classees/24_visites_institutionnelles/afd_visites_institutionnelles_visite_mcz_hgr_mambasa_006.jpg",
+          "alt": "Institutionnelles Visite Mcz Hgr Mambasa — photo 6",
+          "title": "Institutionnelles Visite Mcz Hgr Mambasa",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 6
+        },
+        {
+          "id": "lib-visites-institutionnelles-visite-mcz-hgr-mambasa-visites-institutionnelles-6",
+          "src": "/assets/Banque des images AFD - Classees/24_visites_institutionnelles/afd_visites_institutionnelles_visite_mcz_hgr_mambasa_007.jpg",
+          "alt": "Institutionnelles Visite Mcz Hgr Mambasa — photo 7",
+          "title": "Institutionnelles Visite Mcz Hgr Mambasa",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 7
+        },
+        {
+          "id": "lib-visites-institutionnelles-visite-mcz-hgr-mambasa-visites-institutionnelles-7",
+          "src": "/assets/Banque des images AFD - Classees/24_visites_institutionnelles/afd_visites_institutionnelles_visite_mcz_hgr_mambasa_008.jpg",
+          "alt": "Institutionnelles Visite Mcz Hgr Mambasa — photo 8",
+          "title": "Institutionnelles Visite Mcz Hgr Mambasa",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 8
+        },
+        {
+          "id": "lib-visites-institutionnelles-visite-mcz-hgr-mambasa-visites-institutionnelles-8",
+          "src": "/assets/Banque des images AFD - Classees/24_visites_institutionnelles/afd_visites_institutionnelles_visite_mcz_hgr_mambasa_009.jpg",
+          "alt": "Institutionnelles Visite Mcz Hgr Mambasa — photo 9",
+          "title": "Institutionnelles Visite Mcz Hgr Mambasa",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 9
+        },
+        {
+          "id": "lib-visites-institutionnelles-visite-mcz-hgr-mambasa-visites-institutionnelles-9",
+          "src": "/assets/Banque des images AFD - Classees/24_visites_institutionnelles/afd_visites_institutionnelles_visite_mcz_hgr_mambasa_010.jpg",
+          "alt": "Institutionnelles Visite Mcz Hgr Mambasa — photo 10",
+          "title": "Institutionnelles Visite Mcz Hgr Mambasa",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 10
+        },
+        {
+          "id": "lib-visites-institutionnelles-visite-mcz-hgr-mambasa-visites-institutionnelles-10",
+          "src": "/assets/Banque des images AFD - Classees/24_visites_institutionnelles/afd_visites_institutionnelles_visite_mcz_hgr_mambasa_011.jpg",
+          "alt": "Institutionnelles Visite Mcz Hgr Mambasa — photo 11",
+          "title": "Institutionnelles Visite Mcz Hgr Mambasa",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 11
+        },
+        {
+          "id": "lib-visites-institutionnelles-visite-mcz-hgr-mambasa-visites-institutionnelles-11",
+          "src": "/assets/Banque des images AFD - Classees/24_visites_institutionnelles/afd_visites_institutionnelles_visite_mcz_hgr_mambasa_012.jpg",
+          "alt": "Institutionnelles Visite Mcz Hgr Mambasa — photo 12",
+          "title": "Institutionnelles Visite Mcz Hgr Mambasa",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 12
+        },
+        {
+          "id": "lib-visites-institutionnelles-visite-mcz-hgr-mambasa-visites-institutionnelles-12",
+          "src": "/assets/Banque des images AFD - Classees/24_visites_institutionnelles/afd_visites_institutionnelles_visite_mcz_hgr_mambasa_013.jpg",
+          "alt": "Institutionnelles Visite Mcz Hgr Mambasa — photo 13",
+          "title": "Institutionnelles Visite Mcz Hgr Mambasa",
+          "caption": null,
+          "isCover": false,
+          "orderIndex": 13
+        }
+      ],
+      "coverImageUrl": "/assets/Banque des images AFD - Classees/24_visites_institutionnelles/afd_visites_institutionnelles_visite_mcz_hgr_mambasa_001.jpg",
+      "photoCount": 13,
+      "downloadCount": 0,
+      "publishedAt": null,
+      "updatedAt": null
+    }
+  ]
+}

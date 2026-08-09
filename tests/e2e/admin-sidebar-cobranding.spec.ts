@@ -4,7 +4,7 @@ import {
   skipWithoutAdminCredentials,
 } from "./helpers/admin-auth";
 
-test.describe("Sidebar admin — co-branding", () => {
+test.describe("Sidebar admin — identité AFD", () => {
   test.beforeEach(({}, testInfo) => {
     skipWithoutAdminCredentials();
     test.skip(
@@ -13,16 +13,16 @@ test.describe("Sidebar admin — co-branding", () => {
     );
   });
 
-  test("produit LISUNGI + org AFD + éditeur", async ({ page }) => {
+  test("plateforme et organisation AFD", async ({ page }) => {
     await loginAsAdmin(page);
     await page.goto("/admin");
     const sidebar = page.locator("[data-admin-sidebar]");
     await expect(sidebar.locator("[data-product-brand]")).toContainText(
-      "LISUNGI",
+      "AFD",
     );
     await expect(sidebar.locator("[data-organization-identity]")).toBeVisible();
     await expect(sidebar.locator("[data-publisher-brand]")).toContainText(
-      /Lisungi Hub/i,
+      /Plateforme officielle AFD/i,
     );
   });
 

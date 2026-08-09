@@ -71,3 +71,4 @@
 ## Prochaine étape schéma
 
 Rédiger des migrations **additives** numérotées (après audit live `supabase db pull`) — hors de cette phase d’alignement code.
+

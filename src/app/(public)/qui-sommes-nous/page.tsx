@@ -18,7 +18,7 @@ import { siteConfig } from "@/config/site";
 export const metadata: Metadata = {
   title: "Présentation de l’AFD",
   description:
-    "Découvrez l’Alliance des Femmes pour le Développement — ONG nationale congolaise créée en 2019, portée par les femmes et les jeunes.",
+    "Découvrez l’Alliance des Femmes pour le Développement — ONG nationale congolaise créée le 24 janvier 2020, portée par les femmes et les jeunes.",
 };
 
 const pillarIcons = {
@@ -37,7 +37,7 @@ export default function QuiSommesNousPage() {
     <PublicPageShell
       title="Présentation de l’AFD"
       eyebrow="Qui sommes-nous"
-      description={`${identity.legalName} — ONG nationale congolaise créée en ${identity.foundedYear}, engagée aux côtés des communautés vulnérables.`}
+      description={`${identity.legalName} — ONG nationale congolaise créée le ${identity.foundedLabel}, engagée aux côtés des communautés vulnérables.`}
       breadcrumbs={[
         { label: "Accueil", href: "/" },
         { label: "Qui sommes-nous" },
@@ -100,7 +100,7 @@ export default function QuiSommesNousPage() {
             </div>
             <div>
               <dt className="font-semibold text-[var(--afd-ink)]">Création</dt>
-              <dd className="text-[var(--afd-muted)]">{identity.foundedYear}</dd>
+              <dd className="text-[var(--afd-muted)]">{identity.foundedLabel}</dd>
             </div>
             <div>
               <dt className="font-semibold text-[var(--afd-ink)]">Contact</dt>

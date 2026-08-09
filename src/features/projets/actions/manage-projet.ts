@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import { requirePermission } from "@/lib/auth/require-permission";
+import { revalidatePublicContent } from "@/lib/cache/revalidate-public";
 import { createClientSafe } from "@/lib/supabase/safe";
 
 const schema = z.object({
@@ -67,6 +68,7 @@ export async function saveProjet(formData: FormData) {
   }
 
   revalidatePath("/admin/projets");
+  revalidatePublicContent(["/actions/projets"]);
   redirect("/admin/projets");
 }
 
@@ -79,6 +81,7 @@ export async function archiveProjet(id: string) {
     .update({ active: false, updated_at: new Date().toISOString() })
     .eq("id", id);
   revalidatePath("/admin/projets");
+  revalidatePublicContent(["/actions/projets"]);
 }
 
 export async function restoreProjet(id: string) {
@@ -90,4 +93,5 @@ export async function restoreProjet(id: string) {
     .update({ active: true, updated_at: new Date().toISOString() })
     .eq("id", id);
   revalidatePath("/admin/projets");
+  revalidatePublicContent(["/actions/projets"]);
 }

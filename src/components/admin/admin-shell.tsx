@@ -59,6 +59,7 @@ export function AdminShell({
         <AdminSidebar
           badges={badges}
           role={viewer.role}
+          roles={viewer.roles ?? [viewer.role]}
           collapsed={collapsed}
           onToggleCollapsed={toggle}
         />
@@ -69,6 +70,7 @@ export function AdminShell({
         onClose={() => setMobileOpen(false)}
         badges={badges}
         role={viewer.role}
+        roles={viewer.roles ?? [viewer.role]}
       />
 
       <div

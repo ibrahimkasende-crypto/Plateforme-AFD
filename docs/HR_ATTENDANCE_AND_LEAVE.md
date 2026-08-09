@@ -44,3 +44,4 @@ Par employé, type et année : `acquis`, `pris`, `report`.
 ## Seeds démo
 
 Le seed RH crée des présences et congés fictifs pour juin–août 2026 (`scripts/seed-hr-presentation.ts`).
+

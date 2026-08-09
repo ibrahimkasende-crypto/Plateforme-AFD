@@ -34,3 +34,4 @@ Le composant `ModulePlaceholder` a été transformé en état vide professionnel
 ## Navigation
 
 9 groupes accordéon ; Paramètres retiré de la sidebar → icône header.
+

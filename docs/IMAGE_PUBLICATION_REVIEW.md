@@ -14,3 +14,4 @@ Les images sélectionnées pour le site local sont **à valider** avant mise en 
 | `/images/afd/home/hero-afd.webp` | Hero candidat | possible | possible | à vérifier | non activé (hero actuel conservé) |
 
 Aucune photo n’est présentée comme « bénéficiaire nommé » sans preuve.
+

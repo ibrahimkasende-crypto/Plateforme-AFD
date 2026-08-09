@@ -38,3 +38,4 @@ OCR_CLOUD_ENABLED=false
 ## Interdit de versionner
 
 `.env`, `.env.local`, `.env.production`, `*.pem`, `*.key`, `credentials.json`, `service-account*.json`
+

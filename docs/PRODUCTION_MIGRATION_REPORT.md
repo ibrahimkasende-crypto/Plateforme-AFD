@@ -2,20 +2,20 @@
 
 **Date :** 2026-07-19  
 **Dernière migration fichier :** `20260719_054_rls_audit_function.sql`  
-**Projet mandaté :** `ndkcywqihtnuoydwicrq` (ADF_BD)
+**Projet mandaté :** `mxxuxnoqnwjygawvvhcb` (AFD)
 
 ---
 
 ## Avertissement critique
 
-Le `.env` local pointait vers **`qsyvkaxlwxbhuphvctpl`** (Plateforme-AFD) alors que le projet mandaté est **`ndkcywqihtnuoydwicrq`**.
+Le `.env` local pointait vers **`ancien-projet-supabase`** (Plateforme-AFD) alors que le projet mandaté est **`mxxuxnoqnwjygawvvhcb`**.
 
 Conséquences :
 
 | Risque | Impact |
 |--------|--------|
 | `supabase db push` / migrate sur mauvais projet | Schéma divergé ; preuves invalides |
-| Historique `schema_migrations` | **Non fiable** sans audit sur ADF_BD |
+| Historique `schema_migrations` | **Non fiable** sans audit sur AFD |
 | Timeout DB une fois (CLI lié au bon projet) | Impossible de confirmer l’état distant aujourd’hui |
 | Seeds | Peuvent avoir pollué le mauvais projet |
 
@@ -43,7 +43,7 @@ Liste complète : `supabase/migrations/`.
 
 | Élément | Statut |
 |---------|--------|
-| Push documenté vers ADF_BD | **Non attesté** |
+| Push documenté vers AFD | **Non attesté** |
 | Push possible vers mauvais projet | **Risque élevé (historique)** |
 | Drift schema local vs remote | **INCONNU** |
 | Action requise | Audit `supabase migration list` / SQL distant **après** connect stable |
@@ -52,11 +52,11 @@ Liste complète : `supabase/migrations/`.
 
 ## Procédure recommandée (après backup)
 
-1. Backup ADF_BD → `PRODUCTION_BACKUP_RECORD.md`.  
-2. Lier CLI explicitement à `ndkcywqihtnuoydwicrq`.  
+1. Backup AFD → `PRODUCTION_BACKUP_RECORD.md`.  
+2. Lier CLI explicitement à `mxxuxnoqnwjygawvvhcb`.  
 3. Comparer migrations locales vs remote.  
 4. Appliquer **uniquement** les manquantes ; journaliser chaque étape.  
-5. Rejouer `AFD_REQUIRE_RLS=1 npm run test:rls` contre ADF_BD.  
+5. Rejouer `AFD_REQUIRE_RLS=1 npm run test:rls` contre AFD.  
 6. Mettre à jour ce rapport (dates, résultats — **sans inventer**).
 
 ---
@@ -65,3 +65,4 @@ Liste complète : `supabase/migrations/`.
 
 **Migrations : NON CERTIFIÉES en production.**  
 Release : **PRODUCTION_BLOQUÉE** côté schéma.
+

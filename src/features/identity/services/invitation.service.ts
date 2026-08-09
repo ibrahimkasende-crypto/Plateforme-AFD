@@ -17,6 +17,7 @@ export type InviteAdminInput = {
   hasInvite: boolean;
   hasCreateAdmin: boolean;
   hasCreateSuperAdmin: boolean;
+  hasManagePrincipal?: boolean;
   mfaAal?: string | null;
   reason?: string;
   fonction?: string;
@@ -34,13 +35,16 @@ export async function inviteAdministrator(
     hasCreateSuperAdmin: input.hasCreateSuperAdmin,
     hasCreateAdmin: input.hasCreateAdmin,
     hasInvite: input.hasInvite,
+    hasManagePrincipal: input.hasManagePrincipal,
   });
   if (!gate.ok) {
     throw new Error(gate.reason || "Attribution refusée.");
   }
 
   if (
-    (input.roleCode === "super_admin" || input.roleCode === "platform_owner") &&
+    (input.roleCode === "super_admin" ||
+      input.roleCode === "platform_owner" ||
+      input.roleCode === "admin_principal") &&
     input.mfaAal !== "aal2"
   ) {
     throw new Error(
@@ -88,7 +92,8 @@ export async function inviteAdministrator(
         doit_configurer_mfa:
           input.requireMfa ||
           input.roleCode === "super_admin" ||
-          input.roleCode === "platform_owner",
+          input.roleCode === "platform_owner" ||
+          input.roleCode === "admin_principal",
         cree_par: input.actorId,
         updated_at: new Date().toISOString(),
       } as never,
@@ -96,7 +101,6 @@ export async function inviteAdministrator(
     );
 
   if (profileError) {
-    // Tentative de nettoyage Auth
     await service.auth.admin.deleteUser(userId).catch(() => undefined);
     throw new Error("Échec de création du profil.");
   }
@@ -134,6 +138,19 @@ export async function inviteAdministrator(
     expires_at: new Date(Date.now() + 7 * 24 * 3600 * 1000).toISOString(),
   } as never);
 
+  if (
+    input.roleCode === "admin_principal" ||
+    input.roleCode === "administrateur"
+  ) {
+    await service.from("admin_principal_history" as never).insert({
+      user_id: userId,
+      action: "invited",
+      actor_id: input.actorId,
+      justification: input.reason ?? null,
+      metadata: { email, role: input.roleCode },
+    } as never);
+  }
+
   await appendAuditLog(supabase, {
     action: "users.invite",
     module: "identity",
@@ -142,11 +159,12 @@ export async function inviteAdministrator(
     newValues: {
       email,
       role: input.roleCode,
-      // jamais de mot de passe
     },
     reason: input.reason,
     sensitivity:
-      input.roleCode === "platform_owner" || input.roleCode === "super_admin"
+      input.roleCode === "platform_owner" ||
+      input.roleCode === "super_admin" ||
+      input.roleCode === "admin_principal"
         ? "strictement_confidentiel"
         : "sensible",
   });

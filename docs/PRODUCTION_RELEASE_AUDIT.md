@@ -23,9 +23,9 @@ Aucun Dockerfile. Aucune config Hostinger dans le dépôt. CI ajoutée : `.githu
 
 | Élément | Valeur | Statut |
 |---------|--------|--------|
-| Projet mandaté | `ndkcywqihtnuoydwicrq` (ADF_BD) | Référence production |
-| `.env` local (avant correction) | `qsyvkaxlwxbhuphvctpl` (Plateforme-AFD) | **ÉCART CRITIQUE** |
-| CLI après correction | Lié à `ndkcywqihtnuoydwicrq` | OK |
+| Projet mandaté | `mxxuxnoqnwjygawvvhcb` (AFD) | Référence production |
+| `.env` local (avant correction) | `ancien-projet-supabase` (Plateforme-AFD) | **ÉCART CRITIQUE** |
+| CLI après correction | Lié à `mxxuxnoqnwjygawvvhcb` | OK |
 | Connexion DB | Timeout observé une fois | Non fiable tant que non revalidé |
 
 **Risque :** migrations / seeds / tests RLS ont pu cibler le mauvais projet. Toute preuve DB antérieure à la correction est suspecte.
@@ -103,3 +103,4 @@ Sources : `docs/MODULE_COMPLETION_MATRIX.md`, `src/config/operationnel-evidence.
 7. CI présente mais job RLS conditionné aux secrets GitHub (peut être skip).
 
 **Ne pas revendiquer `PRODUCTION_RÉUSSIE`.**
+

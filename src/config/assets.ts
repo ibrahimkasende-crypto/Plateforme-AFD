@@ -1,34 +1,37 @@
 /**
  * Chemins centralisés des assets publics AFD.
- * Les fichiers vivent dans `public/assets/` → URL `/assets/...`.
+ * Images éditoriales → Supabase Storage (afd-media).
+ * Brand / logos partenaires → fichiers locaux dans `public/`.
  */
+import {
+  afdBankImage,
+  afdImages,
+  programmeFallbackImages,
+} from "@/config/afd-images";
+
 export const assets = {
   brand: {
     logo: "/assets/brand/Logo_AFD.jpeg",
   },
-  product: {
-    lisungiLogo: "/images/afd/LisungiHub/logo_lisungi.png",
-  },
   home: {
-    hero: "/assets/home/Femmes_AFD.png",
-    presentation: "/assets/home/presentation_afd.png",
+    /** Hero : banque Storage (pas de PNG local dans le ZIP). */
+    hero: afdImages.homeHeroSlides[0].src,
+    /** Image présentation accueil — Storage. */
+    presentation: afdBankImage(
+      "24_visites_institutionnelles/afd_visites_institutionnelles_visite_mcz_hgr_mambasa_012.jpg",
+    ),
   },
   programmes: {
     directory: "/assets/programmes",
     /** Visuels de secours lorsque `image_url` n’est pas encore renseigné. */
-    fallbacks: [
-      "/images/afd/programmes/autonomisation-economique.webp",
-      "/images/afd/programmes/sante-nutrition.webp",
-      "/images/afd/programmes/wash.webp",
-      "/images/afd/programmes/protection-droits-femmes.webp",
-    ],
+    fallbacks: [...programmeFallbackImages],
   },
   projets: {
     directory: "/assets/projets",
   },
   impact: {
     directory: "/assets/impact",
-    histoirePrincipale: "/assets/impact/histoire-principale.webp",
+    histoirePrincipale: afdImages.histoireImpact.src,
   },
   actualites: {
     directory: "/assets/actualites",

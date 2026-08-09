@@ -44,5 +44,8 @@ export const DOCUMENT_TYPE_OPTIONS = [
   { value: "compte_rendu", label: "Compte rendu", module: "documents" },
   { value: "proces_verbal", label: "Procès-verbal", module: "documents" },
   { value: "rapport_institutionnel", label: "Rapport institutionnel", module: "rapports" },
+  { value: "fiche_projet", label: "Fiche / rapport de projet", module: "projets" },
+  { value: "fiche_programme", label: "Fiche programme", module: "programmes" },
+  { value: "article_actualite", label: "Article / communiqué", module: "actualites" },
   { value: "autre", label: "Autre", module: "autre" },
 ] as const;

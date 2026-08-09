@@ -1,28 +1,26 @@
 import { expect, test } from "@playwright/test";
 
-test.describe("Offre Mambasa", () => {
-  test("offre visible sur l’accueil et la fiche", async ({ page }) => {
+test.describe("Offre Mambasa (expirée)", () => {
+  test("n’apparaît plus sur l’accueil ni en fiche publique", async ({
+    page,
+  }) => {
     await page.goto("/");
     await expect(
       page.getByRole("heading", { name: /Rejoignez l’équipe AFD/i }),
-    ).toBeVisible({ timeout: 15000 });
-    await expect(page.getByText(/MAMBASA/i).first()).toBeVisible();
-
-    await page.goto("/ressources/opportunites/chef-de-projet-base-a-mambasa");
+    ).toHaveCount(0);
     await expect(
-      page.getByRole("heading", {
+      page.getByRole("link", {
         name: /Chef de projet basé à MAMBASA/i,
       }),
-    ).toBeVisible();
-    await expect(
-      page.getByRole("link", { name: /Postuler maintenant/i }),
-    ).toBeVisible();
-    await expect(
-      page.getByRole("link", { name: /Télécharger l’offre complète/i }),
-    ).toBeVisible();
+    ).toHaveCount(0);
+
+    const response = await page.goto(
+      "/ressources/opportunites/chef-de-projet-base-a-mambasa",
+    );
+    expect(response?.status()).toBeGreaterThanOrEqual(400);
   });
 
-  test("document PDF accessible", async ({ request }) => {
+  test("document PDF historique toujours accessible", async ({ request }) => {
     const response = await request.get(
       "/documents/offres/chef-de-projet-mambasa/chef-projet-mambasa-afd.pdf",
     );

@@ -1,11 +1,6 @@
 "use client";
 
-import {
-  errorClassName,
-  fieldClassName,
-  labelClassName,
-  submitClassName,
-} from "@/components/ui/form-styles";
+import { fieldClassName } from "@/components/ui/form-styles";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
@@ -19,11 +14,11 @@ const resetPasswordSchema = z
   .object({
     password: z
       .string()
-      .min(8, "Le mot de passe doit contenir au moins 8 caractères")
+      .min(12, "Le mot de passe doit contenir au moins 12 caractères")
       .max(200),
     confirmPassword: z
       .string()
-      .min(8, "Confirmez votre mot de passe")
+      .min(12, "Confirmez votre mot de passe")
       .max(200),
   })
   .refine((data) => data.password === data.confirmPassword, {

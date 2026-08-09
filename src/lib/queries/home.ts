@@ -82,8 +82,7 @@ async function withClient<T>(
 
 export async function getPublicImpactStats(): Promise<PublicImpactStats> {
   const published = homeContent.publishedImpactStats;
-
-  return {
+  const fallback: PublicImpactStats = {
     personnesAccompagnees: published.personnesAccompagnees,
     femmesAccompagnees: published.femmesAccompagnees,
     projetsRealises: published.projetsRealises,
@@ -93,6 +92,65 @@ export async function getPublicImpactStats(): Promise<PublicImpactStats> {
     source: "published",
     missing: [],
   };
+
+  return withClient(fallback, async (supabase) => {
+    const { data, error } = await supabase
+      .from("chiffres_impact" as never)
+      .select("key, value, active, validated")
+      .eq("active", true);
+
+    if (error || !data || data.length === 0) return fallback;
+
+    const rows = data as Array<{
+      key: string;
+      value: number | null;
+      validated: boolean | null;
+    }>;
+
+    const byKey = new Map(
+      rows
+        .filter((r) => r.value != null)
+        .map((r) => [r.key, Number(r.value)]),
+    );
+
+    const pickNum = (...keys: string[]) => {
+      for (const k of keys) {
+        const v = byKey.get(k);
+        if (typeof v === "number" && Number.isFinite(v)) return v;
+      }
+      return null;
+    };
+
+    const personnesAccompagnees =
+      pickNum("personnes_accompagnees", "personnesAccompagnees", "beneficiaires") ??
+      fallback.personnesAccompagnees;
+    const femmesAccompagnees =
+      pickNum("femmes_accompagnees", "femmesAccompagnees", "femmes_pct") ??
+      fallback.femmesAccompagnees;
+    const projetsRealises =
+      pickNum("projets_realises", "projetsRealises", "projets") ??
+      fallback.projetsRealises;
+    const provincesCouvertes =
+      pickNum("provinces_couvertes", "provincesCouvertes", "provinces") ??
+      fallback.provincesCouvertes;
+    const partenairesActifs =
+      pickNum("partenaires_actifs", "partenairesActifs", "partenaires") ??
+      fallback.partenairesActifs;
+    const activitesRealisees =
+      pickNum("activites_realisees", "activitesRealisees", "activites") ??
+      fallback.activitesRealisees;
+
+    return {
+      personnesAccompagnees,
+      femmesAccompagnees,
+      projetsRealises,
+      provincesCouvertes,
+      partenairesActifs,
+      activitesRealisees,
+      source: "supabase",
+      missing: [],
+    };
+  });
 }
 
 export async function getFeaturedPrograms(): Promise<FeaturedProgram[]> {
@@ -159,8 +217,36 @@ export async function getFeaturedProjects(): Promise<FeaturedProject[]> {
 }
 
 export async function getFeaturedImpactStory(): Promise<FeaturedImpactStory> {
-  // Table histoires_impact non encore créée — ne pas inventer de récit.
-  return null;
+  return withClient(null, async (supabase) => {
+    const { data, error } = await supabase
+      .from("histoires_impact")
+      .select("id, title, excerpt, location, image_url, slug, published, status")
+      .eq("published", true)
+      .is("deleted_at", null)
+      .order("updated_at", { ascending: false })
+      .limit(1)
+      .maybeSingle();
+
+    if (error || !data) return null;
+
+    const row = data as {
+      id: string;
+      title: string;
+      excerpt: string | null;
+      location: string | null;
+      image_url: string | null;
+      slug: string;
+    };
+
+    return {
+      id: row.id,
+      title: row.title,
+      excerpt: row.excerpt ?? "",
+      location: row.location,
+      imageUrl: row.image_url,
+      href: `/impact/histoires/${row.slug}`,
+    };
+  });
 }
 
 export async function getLatestPublishedNews(): Promise<LatestNews[]> {

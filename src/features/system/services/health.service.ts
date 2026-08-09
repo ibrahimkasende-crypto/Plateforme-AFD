@@ -1,5 +1,10 @@
 import "server-only";
 
+import {
+  getSupabaseProjectRefFromEnv,
+  isSupabaseServiceRoleConfigured,
+  MANDATED_SUPABASE_PROJECT_REF,
+} from "@/config/env";
 import { createClientSafe } from "@/lib/supabase/safe";
 
 export type SystemHealthReport = {
@@ -11,6 +16,10 @@ export type SystemHealthReport = {
   appVersion: string;
   emailConfigured: boolean;
   serdipayConfigured: boolean;
+  supabasePublicConfigured: boolean;
+  serviceRoleConfigured: boolean;
+  supabaseProjectRef: string | null;
+  mandatedProjectOk: boolean | null;
   notes: string[];
 };
 
@@ -22,11 +31,21 @@ export async function collectSystemHealth(): Promise<SystemHealthReport> {
   let jobsPending = 0;
   let jobsFailed = 0;
 
+  const supabasePublicConfigured = Boolean(supabase);
+  const serviceRoleConfigured = isSupabaseServiceRoleConfigured();
+  const supabaseProjectRef = getSupabaseProjectRefFromEnv();
+  const mandatedProjectOk = supabaseProjectRef
+    ? supabaseProjectRef === MANDATED_SUPABASE_PROJECT_REF
+    : null;
+
   if (!supabase) {
     notes.push("Client Supabase non configuré — statut base inconnu.");
   } else {
     try {
-      const { error } = await supabase.from("ref_statuts" as never).select("code").limit(1);
+      const { error } = await supabase
+        .from("ref_statuts" as never)
+        .select("code")
+        .limit(1);
       databaseOk = !error;
       if (error) notes.push(`Base : ${error.message}`);
     } catch {
@@ -56,7 +75,9 @@ export async function collectSystemHealth(): Promise<SystemHealthReport> {
   }
 
   const emailConfigured = Boolean(
-    process.env.EMAIL_PROVIDER && process.env.EMAIL_API_KEY && process.env.EMAIL_FROM,
+    process.env.EMAIL_PROVIDER &&
+      process.env.EMAIL_API_KEY &&
+      process.env.EMAIL_FROM,
   );
   const serdipayConfigured = Boolean(
     process.env.SERDIPAY_BASE_URL &&
@@ -68,6 +89,16 @@ export async function collectSystemHealth(): Promise<SystemHealthReport> {
 
   if (!emailConfigured) notes.push("Email newsletter : Configuration requise.");
   if (!serdipayConfigured) notes.push("SerdiPay : Configuration requise.");
+  if (!serviceRoleConfigured) {
+    notes.push(
+      "SUPABASE_SERVICE_ROLE_KEY absente — invitations admin / OCR worker / jobs service indisponibles.",
+    );
+  }
+  if (mandatedProjectOk === false) {
+    notes.push(
+      `Projet Supabase inattendu (${supabaseProjectRef}) — attendu ${MANDATED_SUPABASE_PROJECT_REF}.`,
+    );
+  }
 
   return {
     checkedAt: new Date().toISOString(),
@@ -78,6 +109,10 @@ export async function collectSystemHealth(): Promise<SystemHealthReport> {
     appVersion: process.env.npm_package_version || "0.1.0",
     emailConfigured,
     serdipayConfigured,
+    supabasePublicConfigured,
+    serviceRoleConfigured,
+    supabaseProjectRef,
+    mandatedProjectOk,
     notes,
   };
 }

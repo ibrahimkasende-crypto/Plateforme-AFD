@@ -2,12 +2,11 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { z } from "zod";
-import { signIn } from "@/actions/auth";
 import { errorClassName } from "@/components/ui/form-styles";
 
 const loginSchema = z.object({
@@ -24,6 +23,7 @@ const compactField =
   "min-h-[40px] w-full rounded-lg border border-[var(--afd-border)] bg-[#f7fbff] px-3 text-sm text-[var(--afd-ink)] transition focus-visible:border-[var(--afd-blue)] focus-visible:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--afd-blue)]/25";
 
 export function LoginForm() {
+  const router = useRouter();
   const searchParams = useSearchParams();
   const nextParam = searchParams.get("next");
   const safeNext =
@@ -51,14 +51,41 @@ export function LoginForm() {
   function onSubmit(values: LoginFormValues) {
     setErrorMessage(null);
     startTransition(async () => {
-      const result = await signIn({
-        email: values.email,
-        password: values.password,
-        next: values.next,
-      });
+      try {
+        const res = await fetch("/api/auth/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            email: values.email.trim().toLowerCase(),
+            password: values.password,
+          }),
+        });
 
-      if (!result.ok) {
-        setErrorMessage(result.message);
+        const data = (await res.json()) as {
+          ok?: boolean;
+          message?: string;
+          next?: string;
+        };
+
+        if (!res.ok || !data.ok) {
+          setErrorMessage(
+            data.message ||
+              "Identifiants incorrects ou compte inaccessible.",
+          );
+          return;
+        }
+
+        const destination =
+          safeNext && safeNext.startsWith("/admin")
+            ? safeNext
+            : data.next || "/admin";
+
+        router.replace(destination);
+        router.refresh();
+      } catch {
+        setErrorMessage(
+          "Impossible de joindre le serveur de connexion. Réessayez.",
+        );
       }
     });
   }

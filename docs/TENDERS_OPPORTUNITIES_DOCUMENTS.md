@@ -5,3 +5,4 @@
 - Documents / rapports : publication uniquement des contenus `publie`
 
 Modules Studio reliés aux CRUD existants (`/admin/opportunites`, `/admin/documents`, `/admin/rapports`).
+

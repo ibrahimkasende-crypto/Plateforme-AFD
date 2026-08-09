@@ -23,3 +23,4 @@
 `src/config/permissions.ts` + `requirePermission()` sur les pages admin.
 
 Les rôles navigateur seuls ne suffisent jamais : contrôle serveur + RLS.
+

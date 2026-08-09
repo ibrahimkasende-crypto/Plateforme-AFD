@@ -48,3 +48,4 @@ Fonctions SQL : `is_active_admin()`, `has_role()`, `has_permission()`.
 - Migration rôles app + journal
 - Sidebar filtrée + layout protégé
 - Docs super admin + tests e2e
+

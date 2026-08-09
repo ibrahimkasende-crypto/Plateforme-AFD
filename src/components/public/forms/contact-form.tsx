@@ -18,10 +18,22 @@ import {
 } from "@/components/ui/form-styles";
 import { submitContactAction } from "@/features/contact/actions/submit-contact";
 
+const REQUEST_TYPES = [
+  { value: "", label: "Sélectionner (facultatif)" },
+  { value: "information", label: "Demande d’information" },
+  { value: "partenariat", label: "Partenariat" },
+  { value: "adhesion", label: "Adhésion" },
+  { value: "don", label: "Don / soutien" },
+  { value: "autre", label: "Autre" },
+] as const;
+
 const formSchema = z.object({
   name: z.string().trim().min(2, "Le nom est requis").max(120),
   email: z.string().trim().email("Adresse e-mail invalide"),
   phone: z.string().trim().max(40).optional(),
+  organisation: z.string().trim().max(200).optional(),
+  requestType: z.string().trim().max(80).optional(),
+  province: z.string().trim().max(120).optional(),
   subject: z.string().trim().min(3, "Le sujet est requis").max(200),
   message: z.string().trim().min(10, "Le message est requis").max(5000),
   consent: z.boolean().refine((value) => value === true, {
@@ -45,6 +57,9 @@ export function ContactForm() {
       name: "",
       email: "",
       phone: "",
+      organisation: "",
+      requestType: "",
+      province: "",
       subject: "",
       message: "",
       consent: false,
@@ -115,17 +130,63 @@ export function ContactForm() {
           </div>
         </div>
 
-        <div>
-          <label htmlFor="contact-phone" className={labelClassName}>
-            Téléphone{" "}
-            <span className="font-normal text-[var(--afd-muted)]">(facultatif)</span>
-          </label>
-          <input
-            id="contact-phone"
-            type="tel"
-            className={fieldClassName}
-            {...register("phone")}
-          />
+        <div className="grid gap-5 sm:grid-cols-2">
+          <div>
+            <label htmlFor="contact-phone" className={labelClassName}>
+              Téléphone{" "}
+              <span className="font-normal text-[var(--afd-muted)]">(facultatif)</span>
+            </label>
+            <input
+              id="contact-phone"
+              type="tel"
+              className={fieldClassName}
+              {...register("phone")}
+            />
+          </div>
+          <div>
+            <label htmlFor="contact-organisation" className={labelClassName}>
+              Organisation{" "}
+              <span className="font-normal text-[var(--afd-muted)]">(facultatif)</span>
+            </label>
+            <input
+              id="contact-organisation"
+              type="text"
+              className={fieldClassName}
+              {...register("organisation")}
+            />
+          </div>
+        </div>
+
+        <div className="grid gap-5 sm:grid-cols-2">
+          <div>
+            <label htmlFor="contact-request-type" className={labelClassName}>
+              Type de demande{" "}
+              <span className="font-normal text-[var(--afd-muted)]">(facultatif)</span>
+            </label>
+            <select
+              id="contact-request-type"
+              className={fieldClassName}
+              {...register("requestType")}
+            >
+              {REQUEST_TYPES.map((item) => (
+                <option key={item.value || "none"} value={item.value}>
+                  {item.label}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <label htmlFor="contact-province" className={labelClassName}>
+              Province{" "}
+              <span className="font-normal text-[var(--afd-muted)]">(facultatif)</span>
+            </label>
+            <input
+              id="contact-province"
+              type="text"
+              className={fieldClassName}
+              {...register("province")}
+            />
+          </div>
         </div>
 
         <div>

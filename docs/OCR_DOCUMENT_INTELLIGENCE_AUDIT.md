@@ -90,3 +90,4 @@ Finances, bénéficiaires, signatures, contacts, pièces justificatives → clas
 7. Notifications, tests, docs, commit local  
 
 Principe absolu : **aucune écriture officielle avant approbation humaine**.
+

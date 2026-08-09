@@ -73,3 +73,4 @@ Pages `/admin/analyse/*` : zoom, dataZoom, visualMap, interactions avancées.
 6. Sidebar collapsed UX  
 7. Thème charts + ECharts dynamique  
 8. Tests E2E + validation + commit local  
+

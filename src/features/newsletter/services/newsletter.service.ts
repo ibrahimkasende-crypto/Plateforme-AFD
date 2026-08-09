@@ -1,4 +1,5 @@
 import { createClientSafe } from "@/lib/supabase/safe";
+import { createAdminServiceClient } from "@/lib/supabase/admin-service";
 import {
   NewsletterProviderNotConfiguredError,
   type NewsletterProvider,
@@ -13,7 +14,8 @@ let emailProvider: NewsletterProvider | null = null;
 export type NewsletterSubscribeStatus =
   | "subscribed"
   | "already_subscribed"
-  | "prepared";
+  | "prepared"
+  | "reactivated";
 
 export type NewsletterSubscribeResult = {
   ok: true;
@@ -30,8 +32,14 @@ function normalizeEmail(email: string) {
   return email.trim().toLowerCase();
 }
 
+type SubscribeExtras = {
+  source?: string;
+  userId?: string | null;
+  provider?: string | null;
+};
+
 export async function subscribeToNewsletter(
-  input: NewsletterSubscriberInput & { source?: string },
+  input: NewsletterSubscriberInput & SubscribeExtras,
 ): Promise<NewsletterSubscribeResult> {
   const email = normalizeEmail(input.email);
   const supabase = await createClientSafe();
@@ -46,6 +54,7 @@ export async function subscribeToNewsletter(
     };
   }
 
+  const now = new Date().toISOString();
   const payload = {
     email,
     nom: input.firstName?.trim() || null,
@@ -53,11 +62,15 @@ export async function subscribeToNewsletter(
     statut: "actif",
     source: input.source ?? "site_public",
     consentement: true as const,
-    subscribed_at: new Date().toISOString(),
+    subscribed_at: now,
+    unsubscribed_at: null,
+    user_id: input.userId ?? null,
+    updated_at: now,
   };
 
-  // Table hors database.types.ts tant que les types générés ne sont pas régénérés.
-  const { error } = await supabase.from("abonnes_newsletter" as never).insert(payload as never);
+  const { error } = await supabase
+    .from("abonnes_newsletter" as never)
+    .insert(payload as never);
 
   if (!error) {
     return {
@@ -70,15 +83,50 @@ export async function subscribeToNewsletter(
   }
 
   if (error.code === "23505") {
+    const admin = createAdminServiceClient();
+    const client = admin ?? supabase;
+
+    const existing = await client
+      .from("abonnes_newsletter" as never)
+      .select("id, statut" as never)
+      .eq("email" as never, email)
+      .maybeSingle();
+
+    const row = existing.data as { id?: string; statut?: string } | null;
+    if (row?.statut === "desinscrit" && row.id) {
+      const { error: updateError } = await client
+        .from("abonnes_newsletter" as never)
+        .update({
+          statut: "actif",
+          consentement: true,
+          subscribed_at: now,
+          unsubscribed_at: null,
+          source: input.source ?? "site_public",
+          nom: input.firstName?.trim() || null,
+          user_id: input.userId ?? null,
+          updated_at: now,
+        } as never)
+        .eq("id" as never, row.id);
+
+      if (!updateError) {
+        return {
+          ok: true,
+          status: "reactivated",
+          email,
+          message:
+            "Votre abonnement à la newsletter a été réactivé. Merci de suivre les actions de l’AFD.",
+        };
+      }
+    }
+
     return {
       ok: true,
       status: "already_subscribed",
       email,
-      message: "Cette adresse e-mail est déjà inscrite à la newsletter AFD.",
+      message: "Cette adresse est déjà inscrite à notre newsletter.",
     };
   }
 
-  // Table absente ou RLS non prête
   if (
     error.code === "42P01" ||
     error.message.toLowerCase().includes("schema cache") ||

@@ -62,3 +62,4 @@ Projet : `D:\Plateforme-AFD\AFD`
 5. Page détail + document + postuler
 6. Sécuriser dépôt candidature
 7. Docs + tests + commit local (pas de push)
+

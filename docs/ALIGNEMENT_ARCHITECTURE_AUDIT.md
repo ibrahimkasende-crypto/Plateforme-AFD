@@ -127,3 +127,4 @@ Toutes les deps métier (`@supabase/*`, `@tanstack/react-query`, `recharts`, `lu
 10. Commit local + push vers le dépôt GitHub cible.
 
 **Règle :** ne pas supprimer de fichiers utiles avant alignement ; ne pas casser Supabase.
+

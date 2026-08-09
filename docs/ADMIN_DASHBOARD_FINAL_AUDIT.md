@@ -247,3 +247,4 @@ Test Playwright `admin-dashboard-layout.spec.ts` encode la cible zero-scroll via
 1. Suite e2e scindée : layout, data, filters, actions, permissions, responsive.
 2. Mettre à jour `ADMIN_DASHBOARD_VISUAL_COMPARISON.md` après capture.
 3. Supprimer ou migrer `admin-dashboard.spec.ts` vers les nouveaux specs.
+

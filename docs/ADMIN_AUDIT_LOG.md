@@ -52,3 +52,4 @@ limit 50;
 Définir une politique de rétention selon la sensibilité (recommandé : 7 ans pour paie/RH confidentiel).
 
 Voir : `docs/IDENTITY_RBAC_HR_PAYROLL_AUDIT.md` (audit initial).
+

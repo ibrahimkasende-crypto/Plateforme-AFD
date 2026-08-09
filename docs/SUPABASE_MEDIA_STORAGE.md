@@ -17,3 +17,4 @@ Métadonnées uniquement (chemin, MIME, alt, crédit, consentement, visibilité�
 `npx tsx scripts/migrate-local-assets-to-supabase.ts --dry-run`
 
 Nécessite `SUPABASE_SERVICE_ROLE_KEY` pour un upload réel. Ne supprime pas les fichiers locaux.
+

@@ -1,7 +1,7 @@
 # Enregistrement backup production
 
 **Date :** 2026-07-19  
-**Projet cible :** `ndkcywqihtnuoydwicrq` (ADF_BD)  
+**Projet cible :** `mxxuxnoqnwjygawvvhcb` (AFD)  
 **Statut backup :** **PARTIEL — schéma public uniquement**
 
 ---
@@ -45,3 +45,4 @@
 1. Dump data complet (`pg_dump` data-only ou dashboard) hors heures de pointe.  
 2. Vérifier backups automatiques Supabase.  
 3. Tester restore sur projet staging.
+

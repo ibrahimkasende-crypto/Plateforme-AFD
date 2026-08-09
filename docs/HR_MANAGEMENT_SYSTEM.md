@@ -54,3 +54,4 @@ Lot : `afd-hr-presentation-2026` (`is_demo=true`, emails `@demo.afd.local`).
 - Documents : permissions `hr_documents.*`, bucket privé.
 
 Voir aussi : `docs/HR_EMPLOYEE_LIFECYCLE.md`, `docs/HR_RLS_POLICIES.md`.
+

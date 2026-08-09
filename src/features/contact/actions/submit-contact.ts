@@ -1,14 +1,17 @@
 "use server";
 
 import { z } from "zod";
-import { submitContactMessage } from "@/lib/mutations/public/contact";
+import { processContactMessage } from "@/lib/contact/process-contact-message";
 
 const contactSchema = z.object({
   name: z.string().trim().min(2, "Le nom est requis").max(120),
   email: z.string().trim().email("Adresse e-mail invalide").max(200),
   phone: z.string().trim().max(40).optional(),
+  organisation: z.string().trim().max(200).optional(),
+  requestType: z.string().trim().max(80).optional(),
   subject: z.string().trim().min(3, "Le sujet est requis").max(200),
   message: z.string().trim().min(10, "Le message est requis").max(5000),
+  province: z.string().trim().max(120).optional(),
   consent: z.literal(true, {
     error: "Le consentement est obligatoire",
   }),
@@ -18,6 +21,7 @@ const contactSchema = z.object({
 export type ContactActionResult = {
   ok: boolean;
   message: string;
+  emailNotificationSent?: boolean;
 };
 
 const recentSubmissions = new Map<string, number>();
@@ -37,6 +41,7 @@ export async function submitContactAction(
     return {
       ok: true,
       message: "Votre message a bien été enregistré. Merci.",
+      emailNotificationSent: true,
     };
   }
 
@@ -52,12 +57,15 @@ export async function submitContactAction(
   recentSubmissions.set(key, now);
 
   try {
-    const result = await submitContactMessage({
+    const result = await processContactMessage({
       name: parsed.data.name,
       email: parsed.data.email,
       phone: parsed.data.phone,
+      organisation: parsed.data.organisation,
+      requestType: parsed.data.requestType,
       subject: parsed.data.subject,
       message: parsed.data.message,
+      province: parsed.data.province,
     });
 
     if (!result.ok) {
@@ -73,6 +81,7 @@ export async function submitContactAction(
     return {
       ok: true,
       message: "Votre message a bien été enregistré. Merci de contacter l’AFD.",
+      emailNotificationSent: result.emailNotificationSent,
     };
   } catch {
     return {

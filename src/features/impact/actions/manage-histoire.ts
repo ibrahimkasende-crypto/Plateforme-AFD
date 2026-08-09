@@ -88,6 +88,7 @@ export async function saveHistoire(formData: FormData) {
   revalidatePath("/admin/publications/histoires-impact");
   revalidatePath("/impact/histoires");
   revalidatePath("/impact");
+  revalidatePath("/");
   redirect("/admin/publications/histoires-impact");
 }
 

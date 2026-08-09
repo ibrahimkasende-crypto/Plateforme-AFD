@@ -13,3 +13,4 @@
 La restauration doit être exécutée uniquement par une personne autorisée, selon le plan de reprise validé par l’AFD. Elle comprend la base, les politiques RLS, les fonctions, les buckets et leurs objets.
 
 Ne pas affirmer qu’une sauvegarde automatique existe tant que sa fréquence, sa rétention et son test de restauration ne sont pas documentés dans le tableau de bord Supabase.
+

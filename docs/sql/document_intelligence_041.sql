@@ -1,4 +1,4 @@
--- Colonnes de révision / intégrité complémentaires (non destructif).
+﻿-- Colonnes de révision / intégrité complémentaires (non destructif).
 
 alter table public.ocr_champs_extraits
   add column if not exists review_status text not null default 'pending',
@@ -28,3 +28,4 @@ alter table public.ocr_modeles_extraction
     'finance', 'finances', 'stock', 'stocks', 'logistique', 'activite', 'activites',
     'beneficiaires', 'indicateurs', 'rapports', 'documents', 'autre'
   ));
+

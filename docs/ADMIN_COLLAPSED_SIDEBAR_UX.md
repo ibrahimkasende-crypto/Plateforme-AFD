@@ -16,3 +16,4 @@ Clic sur une icône de groupe en mode réduit :
 
 Distribution verticale : `justify-evenly` + `gap` adaptatif.
 Bouton **Voir le site public** ancré en bas (`data-admin-public-site`).
+

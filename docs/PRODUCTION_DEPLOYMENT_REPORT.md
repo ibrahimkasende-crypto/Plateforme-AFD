@@ -14,7 +14,7 @@
 | Hébergement Hostinger | **NOT CONNECTED** |
 | Domaine | `https://afd-rdc.org` candidat — **non vérifié** |
 | Env prod | **Non configurées** sur hébergeur |
-| Projet Supabase | Mandaté `ndkcywqihtnuoydwicrq` ; historique local mismatch |
+| Projet Supabase | Mandaté `mxxuxnoqnwjygawvvhcb` ; historique local mismatch |
 | Backup | **PARTIEL** — schéma public SHA-256 `3E68A315…0195` (61 550 o) ; dump data **échec** |
 | Migrations remote | Historique CLI incomplet sur `ndk…` ; `db push` **non exécuté** (risque) |
 | Validations locales | typecheck/lint/unit/rls/build **OK** |
@@ -27,11 +27,11 @@
 ## Checklist GO
 
 - [x] typecheck / lint / unit / build locaux  
-- [x] Backup schéma ADF_BD (hash connu)  
+- [x] Backup schéma AFD (hash connu)  
 - [ ] Backup data complet  
 - [ ] Remote GitHub cible clarifié  
-- [ ] Migrations enregistrées / appliquées proprement sur `ndkcywqihtnuoydwicrq`  
-- [ ] RLS rejouée avec env pointant vers ADF_BD  
+- [ ] Migrations enregistrées / appliquées proprement sur `mxxuxnoqnwjygawvvhcb`  
+- [ ] RLS rejouée avec env pointant vers AFD  
 - [ ] Storage checklist live  
 - [ ] Hostinger connecté + Node 20–24  
 - [ ] Env prod (démo = false, Supabase `ndk…`)  
@@ -62,3 +62,4 @@
 ## Verdict
 
 **PRODUCTION_BLOQUÉE** (brouillon figé jusqu’à preuve Hostinger + domaine + env + backup).
+

@@ -46,3 +46,4 @@ Dossier `public/images/afd/provinces/` réservé pour localisations vérifiées.
 
 `src/config/demo-data/intervention-zones.ts` + `NEXT_PUBLIC_ENABLE_DEMO_CONTENT=true`  
 Badge « Données de démonstration » obligatoire.
+

@@ -21,3 +21,4 @@ https://afd-rdc.org/espace-employe
 - Ajouter aussi l’URL de preview Hostinger temporaire si fournie.
 - Ne pas laisser d’URL `localhost` en production sans besoin de debug.
 - Après changement, tester connexion admin et reset password.
+

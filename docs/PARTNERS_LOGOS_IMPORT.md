@@ -108,3 +108,4 @@ Routes confirmées : `/partenaires`, `/admin/partenaires`, `/admin/partenaires/n
 - Logos locaux `/images/afd/partenaires/...` jusqu’à upload Storage  
 - Clé `service_role` jamais exposée au navigateur  
 - Pas de push GitHub dans cette opération
+

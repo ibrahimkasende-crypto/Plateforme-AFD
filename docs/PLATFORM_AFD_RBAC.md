@@ -10,3 +10,4 @@
 - Ne jamais faire confiance au rôle navigateur
 - `platform_owner` / `super_admin` : accès étendu, MFA pour actions critiques
 - Pas d’auto-promotion / pas de self-role change
+

@@ -29,3 +29,4 @@ Bouton **Retour au tableau de bord** restaure les filtres.
 
 `src/features/admin-analytics/services/admin-analytics.service.ts` — lectures Supabase + `requirePermission`.
 Migration RPC optionnelle : `20260719_031_admin_analytics_rpc.sql`.
+

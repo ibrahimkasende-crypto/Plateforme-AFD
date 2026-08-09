@@ -32,6 +32,8 @@ function mapRow(row: DomainRow): InterventionDomain {
   const fallback =
     FALLBACK_INTERVENTION_DOMAINS.find((d) => d.slug === row.slug) ??
     FALLBACK_INTERVENTION_DOMAINS[0];
+  const officialFallbackImage =
+    fallback.slug === row.slug ? fallback.imageSrc : null;
 
   return {
     id: row.id,
@@ -51,7 +53,7 @@ function mapRow(row: DomainRow): InterventionDomain {
       : fallback.expectedResults,
     keywords: row.keywords?.length ? row.keywords : fallback.keywords,
     icon: row.icon ?? fallback.icon,
-    imageSrc: row.image_url,
+    imageSrc: row.image_url ?? officialFallbackImage ?? fallback.imageSrc,
     imageAlt: row.image_alt ?? fallback.imageAlt,
     orderIndex: row.order_index ?? fallback.orderIndex,
     status:

@@ -55,7 +55,7 @@ export default async function AdminMonProfilPage() {
     <main className="mx-auto max-w-2xl space-y-6 p-6">
       <AdminPageHeader
         title="Mon profil"
-        description="Compte utilisateur — distinct du produit LISUNGI et de l’organisation cliente."
+        description="Compte utilisateur rattaché à l’administration AFD."
         backFallbackHref="/admin"
       />
 
@@ -70,7 +70,7 @@ export default async function AdminMonProfilPage() {
           </p>
         </div>
         <p className="ml-auto text-[11px] text-slate-400">
-          Produit : {productBrand.productName}
+          Plateforme : {productBrand.productName}
         </p>
       </section>
 
@@ -105,6 +105,10 @@ export default async function AdminMonProfilPage() {
           {session.viewer.roleLabel}
         </p>
         <p>
+          <Link href="/admin/mon-profil/securite" className="text-[var(--afd-blue)]">
+            Sécurité
+          </Link>
+          {" · "}
           <Link href="/admin/parametres" className="text-[var(--afd-blue)]">
             Paramètres
           </Link>

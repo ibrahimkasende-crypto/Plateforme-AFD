@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import { requirePermission } from "@/lib/auth/require-permission";
+import { revalidatePublicContent } from "@/lib/cache/revalidate-public";
 import { createClientSafe } from "@/lib/supabase/safe";
 
 const schema = z.object({
@@ -54,6 +55,7 @@ export async function saveChiffreImpact(formData: FormData) {
 
   revalidatePath("/admin/indicateurs");
   revalidatePath("/admin/publications/notre-impact");
+  revalidatePublicContent(["/impact", "/impact/resultats"]);
   redirect("/admin/indicateurs");
 }
 
@@ -66,6 +68,7 @@ export async function deactivateChiffreImpact(id: string) {
     .update({ active: false, updated_at: new Date().toISOString() } as never)
     .eq("id", id);
   revalidatePath("/admin/indicateurs");
+  revalidatePublicContent(["/impact", "/impact/resultats"]);
 }
 
 export async function activateChiffreImpact(id: string) {
@@ -77,4 +80,5 @@ export async function activateChiffreImpact(id: string) {
     .update({ active: true, updated_at: new Date().toISOString() } as never)
     .eq("id", id);
   revalidatePath("/admin/indicateurs");
+  revalidatePublicContent(["/impact", "/impact/resultats"]);
 }

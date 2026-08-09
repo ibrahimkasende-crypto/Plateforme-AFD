@@ -71,3 +71,4 @@ Sections : stats, domaines, actualités (home/grid), opportunités
 - Réfraction réelle du DOM non capturée (simulation visuelle uniquement — volontaire pour la perf)
 - Parallaxe limitée au composant `ParallaxMedia` (non appliquée partout)
 - Certains modules admin restent hors scope
+

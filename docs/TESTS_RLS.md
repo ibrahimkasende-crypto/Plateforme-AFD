@@ -12,3 +12,4 @@ Exécuter ces scénarios sur une instance de préproduction après les migration
 | Super admin | Rôles, profils, paramètres | Aucun contournement de la validation métier |
 
 Vérifier aussi : insertions avec statut interne forcé, champs trop longs, fichiers interdits, accès aux rapports privés, URL signées expirées et tentatives d’écriture avec clé anon.
+

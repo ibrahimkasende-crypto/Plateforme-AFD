@@ -51,3 +51,4 @@ Tables : `temoignages`, `appels_offres`, `appels_offres_documents`, `pages`, `se
 
 - `git push`
 - `supabase db reset`
+

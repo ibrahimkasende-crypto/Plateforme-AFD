@@ -25,7 +25,7 @@ Champs utiles : `status`, `checks.supabase`, `latencyMs`, `environment`, `versio
 | — | — | — | *Aucune entrée* | — | — |
 
 <!-- Ajouter une ligne par contrôle manuel ou alerte. Exemple :
-| 2026-07-20T10:00:00Z | WARN | /api/health | supabase=degraded, latencyMs=1200 | Vérifier ADF_BD | alice |
+| 2026-07-20T10:00:00Z | WARN | /api/health | supabase=degraded, latencyMs=1200 | Vérifier AFD | alice |
 -->
 
 ---
@@ -40,3 +40,4 @@ Champs utiles : `status`, `checks.supabase`, `latencyMs`, `environment`, `versio
 | Après migrate | RLS + smoke E2E |
 
 **Pas d’alerte automatique configurée à ce jour.**
+

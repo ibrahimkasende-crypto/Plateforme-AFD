@@ -18,3 +18,4 @@ Accessible via icône Settings du header (`parametres:manage`) → `/admin/param
 CONFIRM=yes npm run seed:presentation
 CONFIRM=yes npm run seed:complete-admin
 ```
+

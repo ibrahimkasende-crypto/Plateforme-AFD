@@ -10,3 +10,4 @@ Modules finalisés ou connectés dans cette phase :
 - Histoires d’impact, Témoignages, Appels d’offres, Permissions, Résultats
 
 Les modules déjà CRUD (programmes, projets, indicateurs, enquêtes, équipe, etc.) sont conservés.
+

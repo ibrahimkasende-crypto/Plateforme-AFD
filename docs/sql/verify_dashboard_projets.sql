@@ -1,4 +1,4 @@
--- Vérifier que les projets de présentation existent (alimente statut / secteur / carte).
+﻿-- Vérifier que les projets de présentation existent (alimente statut / secteur / carte).
 -- Si projets_total = 0, exécuter docs/sql/force_seed_projets_presentation.sql
 -- (plus fiable que le seed complet si des slugs programmes existent déjà).
 
@@ -18,3 +18,4 @@ FROM public.projets
 WHERE coalesce(active, true)
 GROUP BY 1
 ORDER BY nb DESC;
+

@@ -130,3 +130,4 @@ Résultat (mobile-375 + desktop-1440) : **7 passed, 1 skipped** (menu desktop sk
 - Tests e2e limités à Chromium ; captures non versionnées
 - Sections projets / zones / partenaires présentes mais hors checklist stricte « maquette »
 - Menu : click Playwright nécessite parfois `force: true` (overlay loader/curseur)
+

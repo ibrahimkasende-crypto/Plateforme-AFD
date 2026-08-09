@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { requirePermission } from "@/lib/auth/require-permission";
+import { revalidatePublicContent } from "@/lib/cache/revalidate-public";
 import { createClientSafe } from "@/lib/supabase/safe";
 
 const schema = z.object({
@@ -37,6 +38,7 @@ export async function saveSiteParameter(formData: FormData) {
   }
 
   revalidatePath("/admin/parametres");
+  revalidatePublicContent(["/mentions-legales", "/politique-confidentialite"]);
 }
 
 export async function saveSiteParameters(formData: FormData) {

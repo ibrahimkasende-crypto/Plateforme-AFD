@@ -138,3 +138,4 @@ Après exécution de la capture :
 2. Cocher les lignes du tableau §4
 3. Réduire la liste §5 aux seuls écarts résiduels
 4. Archiver un diff PNG dans `docs/references/admin-dashboard-diff-YYYYMMDD.png`
+

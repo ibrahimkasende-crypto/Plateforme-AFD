@@ -1,4 +1,4 @@
--- Copie pratique de la migration 20260718_006_opportunites_documents.sql.
+﻿-- Copie pratique de la migration 20260718_006_opportunites_documents.sql.
 create extension if not exists pgcrypto;
 create table if not exists opportunites (
   id uuid primary key default gen_random_uuid(), titre text not null, slug text not null unique, reference text unique,
@@ -79,3 +79,4 @@ insert into storage.buckets (id, name, public) values
   ('candidatures-privees', 'candidatures-privees', false),
   ('documents-publics', 'documents-publics', true),
   ('documents-prives', 'documents-prives', false) on conflict (id) do nothing;
+

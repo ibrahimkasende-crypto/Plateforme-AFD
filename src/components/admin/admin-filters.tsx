@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useId, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import {
+  ChartNoAxesCombined,
   ChevronDown,
   Download,
   FilePlus,
@@ -298,6 +299,15 @@ export function AdminFilters({
         <RotateCcw className="size-3.5" aria-hidden />
         <span className="hidden xl:inline">Réinitialiser</span>
       </button>
+
+      <Link
+        href="/admin/dashboard/donnees-mensuelles"
+        className="inline-flex h-[38px] shrink-0 items-center gap-1 rounded-lg border border-[var(--admin-border)] px-2.5 text-[11px] font-medium text-[var(--admin-text)] hover:border-[var(--admin-primary)]/40 hover:bg-slate-50"
+        title="Mettre à jour les chiffres du tableau de bord"
+      >
+        <ChartNoAxesCombined className="size-3.5" aria-hidden />
+        <span className="hidden lg:inline">Chiffres mensuels</span>
+      </Link>
 
       <div className="relative ml-auto shrink-0">
         <button

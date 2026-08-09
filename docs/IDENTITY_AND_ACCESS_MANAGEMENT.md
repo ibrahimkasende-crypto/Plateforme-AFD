@@ -42,3 +42,4 @@ Migration de référence : `supabase/migrations/20260719_050_identity_hr_payroll
 Script one-shot : `scripts/bootstrap-platform-owner.ts` (variable `PLATFORM_OWNER_EMAIL`).
 
 Voir aussi : `docs/SUPER_ADMIN_SECURITY.md`, `docs/ADMIN_INVITATION_WORKFLOW.md`, `docs/RBAC_AND_ACCESS_SCOPES.md`.
+

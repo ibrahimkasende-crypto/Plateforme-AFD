@@ -90,3 +90,4 @@ Résumé :
 - Stats / domaines / programmes / news lisibles.
 - Newsletter et popup utilisables avec clavier virtuel.
 - `npm run typecheck` / `lint` / `build` / e2e.
+

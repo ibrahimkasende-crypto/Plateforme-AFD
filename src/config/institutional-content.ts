@@ -8,6 +8,8 @@ export const institutionalContent = {
     acronym: siteConfig.acronym,
     country: siteConfig.country,
     foundedYear: homeContent.organization.foundedYear,
+    foundedDate: homeContent.organization.foundedDate,
+    foundedLabel: homeContent.organization.foundedLabel,
     tagline: homeContent.hero.title,
     summary: homeContent.about.paragraphs.join("\n\n"),
     highlights: homeContent.about.highlights,
@@ -41,10 +43,10 @@ export const institutionalContent = {
   pillars: homeContent.pillars,
   timeline: [
     {
-      year: "2019",
+      year: "2020",
       title: "Création de l’AFD",
       description:
-        "Fondation de l’Alliance des Femmes pour le Développement en tant qu’ONG nationale congolaise, portée par les femmes et les jeunes.",
+        "Fondation de l’Alliance des Femmes pour le Développement le 24 janvier 2020 en tant qu’ONG nationale congolaise, portée par les femmes et les jeunes.",
     },
     {
       year: "2024",

@@ -3,6 +3,9 @@ import type { NextConfig } from "next";
 const isProd = process.env.NODE_ENV === "production";
 
 const nextConfig: NextConfig = {
+  // Déploiement CyberPanel / VPS : runtime Node autonome (PM2 + reverse proxy).
+  // Compatible App Router, API routes, Server Actions, middleware, next/image.
+  output: "standalone",
   // Désactive le N Next.js ; le chargement admin utilise le logo AFD.
   devIndicators: false,
   // Avatars / uploads FormData (limite client 5 Mo) — défaut Next = 1 Mo
@@ -15,8 +18,18 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "*.supabase.co",
+        hostname: "mxxuxnoqnwjygawvvhcb.supabase.co",
         pathname: "/storage/v1/object/public/**",
+      },
+      {
+        protocol: "https",
+        hostname: "mxxuxnoqnwjygawvvhcb.supabase.co",
+        pathname: "/storage/v1/render/image/public/**",
+      },
+      {
+        protocol: "https",
+        hostname: "mxxuxnoqnwjygawvvhcb.supabase.co",
+        pathname: "/storage/v1/object/sign/**",
       },
     ],
   },
@@ -63,6 +76,29 @@ const nextConfig: NextConfig = {
       { source: "/assets/brand/logo-afd.jpg", destination: "/assets/brand/Logo_AFD.jpeg", permanent: true },
       { source: "/assets/home/hero-afd.jpg", destination: "/assets/home/Femmes_AFD.png", permanent: true },
       { source: "/about", destination: "/qui-sommes-nous", permanent: true },
+      { source: "/a-propos", destination: "/qui-sommes-nous", permanent: true },
+      {
+        source: "/domaines-intervention",
+        destination: "/actions/domaines-intervention",
+        permanent: true,
+      },
+      {
+        source: "/domaines-intervention/:slug*",
+        destination: "/actions/domaines-intervention/:slug*",
+        permanent: true,
+      },
+      { source: "/programmes", destination: "/actions/programmes", permanent: true },
+      {
+        source: "/programmes/:slug",
+        destination: "/actions/programmes/:slug",
+        permanent: true,
+      },
+      { source: "/projets", destination: "/actions/projets", permanent: true },
+      {
+        source: "/projets/:slug",
+        destination: "/actions/projets/:slug",
+        permanent: true,
+      },
       { source: "/programs", destination: "/actions/programmes", permanent: true },
       {
         source: "/programs/:slug",
@@ -89,10 +125,21 @@ const nextConfig: NextConfig = {
       },
       { source: "/membership", destination: "/adhesion", permanent: true },
       { source: "/donate", destination: "/soutenir", permanent: true },
+      { source: "/nous-soutenir", destination: "/soutenir", permanent: true },
+      {
+        source: "/opportunites",
+        destination: "/ressources/opportunites",
+        permanent: true,
+      },
+      {
+        source: "/opportunites/:path*",
+        destination: "/ressources/opportunites/:path*",
+        permanent: true,
+      },
       { source: "/impact-stories", destination: "/impact/histoires", permanent: false },
       { source: "/legal", destination: "/mentions-legales", permanent: true },
       { source: "/team", destination: "/qui-sommes-nous/equipe", permanent: true },
-      { source: "/partners", destination: "/qui-sommes-nous", permanent: false },
+      { source: "/partners", destination: "/partenaires", permanent: true },
       {
         source: "/organisation",
         destination: "/qui-sommes-nous",
@@ -105,8 +152,18 @@ const nextConfig: NextConfig = {
       },
       {
         source: "/admin/login",
-        destination: "/admin",
+        destination: "/connexion",
         permanent: false,
+      },
+      {
+        source: "/admin/journaux",
+        destination: "/admin/journal-activite",
+        permanent: true,
+      },
+      {
+        source: "/admin/journal",
+        destination: "/admin/journal-activite",
+        permanent: true,
       },
     ];
   },

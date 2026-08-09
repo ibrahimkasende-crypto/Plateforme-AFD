@@ -61,3 +61,4 @@ JPG programmes / actualites sous `public/images/afd/` (secours local).
 - typecheck : OK
 - lint : OK (0 erreur ; warning préexistant newsletter form)
 - build : OK
+

@@ -26,7 +26,7 @@ Aucune authentification, CAPTCHA ou espace privé n’a été contourné.
 - Taille : 7 858 560 octets
 - MIME : application/pdf
 - URL source document :  
-  `https://ndkcywqihtnuoydwicrq.supabase.co/storage/v1/object/public/documents/offres/1784241669013-offre-afd-chef-de-projet-et-officier-sante-nutrition.pdf`
+  `/documents/offres/chef-de-projet-mambasa/chef-projet-mambasa-afd.pdf`
 
 ## Extraction PDF
 
@@ -86,3 +86,4 @@ Contact RH visible sur la page recrutement de l’ancien site (mailto spontané)
 - Le titre API est générique (« Recrutement des postes »).
 - La description API et le nom du PDF mentionnent **deux** postes : Chef de projet **et** Officier Santé nutrition, tous deux à Mambasa.
 - Sans texte extractible du PDF, le détail métier n’est pas retranscrit en HTML.
+

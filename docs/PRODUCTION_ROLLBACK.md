@@ -9,7 +9,7 @@
 
 1. Pas de rollback inventé : si rien n’est en prod, **rollback = ne pas déployer**.  
 2. Toujours restaurer depuis un backup **attesté** (`PRODUCTION_BACKUP_RECORD.md`).  
-3. Ne jamais « réparer » en poussant des seeds démo sur ADF_BD.
+3. Ne jamais « réparer » en poussant des seeds démo sur AFD.
 
 ---
 
@@ -42,7 +42,7 @@
 | Étape | Action |
 |-------|--------|
 | 1 | **Stop** nouveaux `db push` |
-| 2 | Restaurer dump attesté sur `ndkcywqihtnuoydwicrq` |
+| 2 | Restaurer dump attesté sur `mxxuxnoqnwjygawvvhcb` |
 | 3 | Revalider `afd_rls_audit_report` + `test:rls` |
 | 4 | Rejouer smoke E2E opérationnel |
 | 5 | Mettre à jour `PRODUCTION_BACKUP_RECORD.md` / migration report |
@@ -53,13 +53,13 @@ Sans backup : **restauration impossible** — d’où le blocage actuel.
 
 ## Scénario D — Mauvaise cible projet (mismatch)
 
-Si une opération a touché `qsyvkaxlwxbhuphvctpl` par erreur :
+Si une opération a touché `ancien-projet-supabase` par erreur :
 
 | Étape | Action |
 |-------|--------|
 | 1 | Arrêter immédiatement scripts / CLI |
 | 2 | Ne pas « synchroniser » les deux projets à l’aveugle |
-| 3 | Auditer ADF_BD séparément |
+| 3 | Auditer AFD séparément |
 | 4 | Traiter l’autre projet comme hors prod |
 
 ---
@@ -80,3 +80,4 @@ Si une opération a touché `qsyvkaxlwxbhuphvctpl` par erreur :
 À renseigner dans `PRODUCTION_HANDOVER.md` (ops + DB + domaine).
 
 **État :** procédures documentées — **non exercées en production** (rien de déployé).
+

@@ -223,3 +223,4 @@ Sources :
 8. Régénérer `src/types/database.types.ts`
 
 Voir aussi `docs/MODULE_COMPLETION_MATRIX.json` pour la version machine-lisible.
+

@@ -4,6 +4,50 @@ import { createClientSafe } from "@/lib/supabase/safe";
 import { getOcrDashboardStats } from "@/features/document-intelligence/services/document-dashboard.service";
 import { DocumentStatusBadge } from "@/features/document-intelligence/components/DocumentStatusBadge";
 
+const IMPORT_TYPES: {
+  title: string;
+  description: string;
+  href: string;
+  badge: string;
+}[] = [
+  {
+    title: "Rapport de mission",
+    description: "PDF, Word, scan ou ZIP — mission, activités, photos, dépenses proposées.",
+    href: "/admin/import-intelligent/missions",
+    badge: "A",
+  },
+  {
+    title: "Rapport financier Excel",
+    description: "Budgets, dépenses, soldes — jamais appliqué sans validation humaine.",
+    href: "/admin/import-intelligent/finances",
+    badge: "B",
+  },
+  {
+    title: "Dossier photos",
+    description: "Images ou ZIP — album, tags, photothèque, site public après validation.",
+    href: "/admin/import-intelligent/photos",
+    badge: "C",
+  },
+  {
+    title: "Communication Word",
+    description: "Actualité, histoire d’impact, communiqué — brouillon + SEO.",
+    href: "/admin/import-intelligent/communications",
+    badge: "D",
+  },
+  {
+    title: "Liste de bénéficiaires",
+    description: "Excel/CSV — normalisation, doublons, rattachement projet/activité.",
+    href: "/admin/import-intelligent/beneficiaires",
+    badge: "E",
+  },
+  {
+    title: "Projet / programme / activité",
+    description: "Import générique de contenu éditorial opérationnel.",
+    href: "/admin/projets/nouvelle/import",
+    badge: "+",
+  },
+];
+
 export default async function ImportIntelligentPage() {
   await requirePermission("ocr.view");
   const supabase = await createClientSafe();
@@ -28,14 +72,10 @@ export default async function ImportIntelligentPage() {
       };
 
   const kpiCards = [
-    { label: "Documents importés", value: stats.kpis.imported, href: "/admin/import-intelligent" },
+    { label: "Documents importés", value: stats.kpis.imported, href: "/admin/import-intelligent/historique" },
     { label: "En traitement", value: stats.kpis.processing, href: "/admin/import-intelligent/file-attente" },
     { label: "À réviser", value: stats.kpis.toReview, href: "/admin/import-intelligent?filter=needs_review" },
     { label: "Approuvés", value: stats.kpis.approved, href: "/admin/import-intelligent?filter=approved" },
-    { label: "Rejetés", value: stats.kpis.rejected, href: "/admin/import-intelligent?filter=rejected" },
-    { label: "Anomalies ouvertes", value: stats.kpis.openAnomalies, href: "/admin/import-intelligent?filter=anomalies" },
-    { label: "Temps moyen (s)", value: stats.kpis.avgProcessingSeconds, href: "/admin/import-intelligent/file-attente" },
-    { label: "Confiance moyenne", value: stats.kpis.avgConfidence, href: "/admin/import-intelligent" },
   ];
 
   return (
@@ -43,11 +83,11 @@ export default async function ImportIntelligentPage() {
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div>
           <h1 className="font-display text-2xl font-bold text-slate-900">
-            Import intelligent
+            Centre d’import intelligent
           </h1>
-          <p className="mt-1 text-sm text-slate-600">
-            OCR, extraction, contrôles et validation humaine — aucune donnée officielle
-            avant approbation.
+          <p className="mt-1 max-w-2xl text-sm text-slate-600">
+            Transformez vos documents, rapports, tableaux et photos en données
+            structurées. Aucune publication sans validation humaine.
           </p>
         </div>
         <div className="flex flex-wrap gap-2">
@@ -55,7 +95,13 @@ export default async function ImportIntelligentPage() {
             href="/admin/import-intelligent/nouveau"
             className="rounded-lg bg-[var(--afd-orange)] px-4 py-2 text-sm font-bold text-white"
           >
-            Nouvel import
+            Nouvel import OCR
+          </Link>
+          <Link
+            href="/admin/import-intelligent/historique"
+            className="rounded-lg bg-white px-4 py-2 text-sm font-semibold text-slate-700 ring-1 ring-slate-200"
+          >
+            Historique
           </Link>
           <Link
             href="/admin/import-intelligent/modeles"
@@ -63,20 +109,31 @@ export default async function ImportIntelligentPage() {
           >
             Modèles
           </Link>
-          <Link
-            href="/admin/import-intelligent/regles"
-            className="rounded-lg bg-white px-4 py-2 text-sm font-semibold text-slate-700 ring-1 ring-slate-200"
-          >
-            Règles
-          </Link>
-          <Link
-            href="/admin/import-intelligent/file-attente"
-            className="rounded-lg bg-white px-4 py-2 text-sm font-semibold text-slate-700 ring-1 ring-slate-200"
-          >
-            File d’attente
-          </Link>
         </div>
       </div>
+
+      <section className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+        {IMPORT_TYPES.map((item) => (
+          <Link
+            key={item.href}
+            href={item.href}
+            className="group rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:border-[var(--afd-blue)] hover:shadow-md"
+          >
+            <span className="inline-flex size-8 items-center justify-center rounded-lg bg-[#eaf5fd] text-xs font-bold text-[var(--afd-blue)]">
+              {item.badge}
+            </span>
+            <h2 className="mt-3 text-base font-semibold text-slate-900 group-hover:text-[var(--afd-blue)]">
+              {item.title}
+            </h2>
+            <p className="mt-1 text-sm leading-relaxed text-slate-600">
+              {item.description}
+            </p>
+            <span className="mt-3 inline-block text-sm font-semibold text-[var(--afd-blue)]">
+              Commencer →
+            </span>
+          </Link>
+        ))}
+      </section>
 
       <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
         {kpiCards.map((card) => (
@@ -95,53 +152,34 @@ export default async function ImportIntelligentPage() {
         ))}
       </div>
 
-      <div className="grid gap-4 lg:grid-cols-3">
-        <section className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm lg:col-span-2">
-          <h2 className="font-display text-base font-bold">Traitements récents</h2>
-          <ul className="mt-3 divide-y divide-slate-100">
-            {stats.recent.length === 0 ? (
-              <li className="py-6 text-sm text-slate-500">Aucun document importé.</li>
-            ) : (
-              stats.recent.map((doc) => (
-                <li key={doc.id} className="flex items-center justify-between gap-3 py-3">
-                  <div>
-                    <Link
-                      href={`/admin/import-intelligent/${doc.id}`}
-                      className="text-sm font-semibold text-[var(--admin-primary)] hover:underline"
-                    >
-                      {doc.type_document}
-                    </Link>
-                    <p className="text-[11px] text-slate-500">
-                      {doc.module_cible || "—"} · {new Date(doc.created_at).toLocaleString("fr-FR")}
-                    </p>
-                  </div>
-                  <DocumentStatusBadge status={doc.status} />
-                </li>
-              ))
-            )}
-          </ul>
-        </section>
-
-        <section className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
-          <h2 className="font-display text-base font-bold">Anomalies critiques</h2>
-          <ul className="mt-3 space-y-2">
-            {stats.criticalAnomalies.length === 0 ? (
-              <li className="text-sm text-slate-500">Aucune anomalie critique ouverte.</li>
-            ) : (
-              stats.criticalAnomalies.map((a) => (
-                <li key={a.id}>
+      <section className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+        <h2 className="font-display text-base font-bold">Traitements récents</h2>
+        <ul className="mt-3 divide-y divide-slate-100">
+          {stats.recent.length === 0 ? (
+            <li className="py-6 text-sm text-slate-500">
+              Aucun document importé. Lancez un import recommandé ci-dessus.
+            </li>
+          ) : (
+            stats.recent.map((doc) => (
+              <li key={doc.id} className="flex items-center justify-between gap-3 py-3">
+                <div>
                   <Link
-                    href={`/admin/import-intelligent/${a.document_id}/anomalies`}
-                    className="block rounded-lg border border-red-100 bg-red-50/60 px-3 py-2 text-xs text-red-900"
+                    href={`/admin/import-intelligent/${doc.id}`}
+                    className="text-sm font-semibold text-[var(--admin-primary)] hover:underline"
                   >
-                    {a.message}
+                    {doc.type_document}
                   </Link>
-                </li>
-              ))
-            )}
-          </ul>
-        </section>
-      </div>
+                  <p className="text-[11px] text-slate-500">
+                    {doc.module_cible || "—"} ·{" "}
+                    {new Date(doc.created_at).toLocaleString("fr-FR")}
+                  </p>
+                </div>
+                <DocumentStatusBadge status={doc.status} />
+              </li>
+            ))
+          )}
+        </ul>
+      </section>
     </div>
   );
 }

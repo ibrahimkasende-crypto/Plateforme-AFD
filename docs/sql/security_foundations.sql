@@ -1,4 +1,4 @@
--- Phase 4 — fondations de sécurité non destructives.
+﻿-- Phase 4 — fondations de sécurité non destructives.
 -- PRÉREQUIS OBLIGATOIRE : sauvegarde PostgreSQL + Storage et validation du
 -- schéma réel de l'instance cible. Cette migration ne supprime aucune donnée.
 
@@ -243,3 +243,4 @@ create policy "Super admin gère les rôles utilisateurs"
 on utilisateurs_roles for all to authenticated
 using (public.has_role('super_admin'))
 with check (public.has_role('super_admin'));
+

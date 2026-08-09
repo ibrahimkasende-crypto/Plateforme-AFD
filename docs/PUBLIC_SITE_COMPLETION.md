@@ -84,3 +84,4 @@ Architecture préparée (`getSerdiPayConfig`). Si non configuré : intention enr
 ## 25. Prochaine phase
 
 Dashboard administrateur complet.
+

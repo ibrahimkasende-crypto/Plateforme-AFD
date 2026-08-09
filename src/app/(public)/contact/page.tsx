@@ -3,6 +3,7 @@ import { Mail, MapPin, Phone } from "lucide-react";
 import { ContactForm } from "@/components/public/forms/contact-form";
 import { PublicPageShell } from "@/components/public/PublicPageShell";
 import { siteConfig } from "@/config/site";
+import { getResolvedPublicSiteSettings } from "@/lib/queries/public/site-settings";
 
 export const metadata: Metadata = {
   title: "Contact",
@@ -15,8 +16,10 @@ function isPhonePlaceholder(phone: string): boolean {
   return phone.replace(/\D/g, "").includes("000");
 }
 
-export default function ContactPage() {
-  const phoneIsPlaceholder = isPhonePlaceholder(siteConfig.contact.phone);
+export default async function ContactPage() {
+  const settings = await getResolvedPublicSiteSettings();
+  const contact = settings.contact;
+  const phoneIsPlaceholder = isPhonePlaceholder(contact.phone);
 
   return (
     <PublicPageShell
@@ -35,7 +38,8 @@ export default function ContactPage() {
               Coordonnées
             </h2>
             <p className="mt-2 text-sm leading-relaxed text-[var(--afd-muted)]">
-              Retrouvez les informations de contact institutionnelles de {siteConfig.shortName}.
+              Retrouvez les informations de contact institutionnelles de{" "}
+              {settings.shortName}.
             </p>
           </div>
 
@@ -45,10 +49,10 @@ export default function ContactPage() {
               <div>
                 <p className="text-sm font-semibold text-[var(--afd-ink)]">E-mail</p>
                 <a
-                  href={`mailto:${siteConfig.contact.email}`}
+                  href={`mailto:${contact.email}`}
                   className="text-sm text-[var(--afd-blue)] hover:underline"
                 >
-                  {siteConfig.contact.email}
+                  {contact.email}
                 </a>
               </div>
             </li>
@@ -59,19 +63,18 @@ export default function ContactPage() {
                 <p className="text-sm font-semibold text-[var(--afd-ink)]">Téléphone</p>
                 {phoneIsPlaceholder ? (
                   <>
-                    <p className="text-sm text-[var(--afd-muted)]">
-                      {siteConfig.contact.phone}
-                    </p>
+                    <p className="text-sm text-[var(--afd-muted)]">{contact.phone}</p>
                     <p className="mt-1 text-xs text-[var(--afd-muted)]">
-                      Numéro provisoire — information institutionnelle à compléter par l’AFD.
+                      Numéro provisoire — information institutionnelle à compléter
+                      par l’AFD.
                     </p>
                   </>
                 ) : (
                   <a
-                    href={`tel:${siteConfig.contact.phone.replace(/\s/g, "")}`}
+                    href={`tel:${contact.phone.replace(/\s/g, "")}`}
                     className="text-sm text-[var(--afd-blue)] hover:underline"
                   >
-                    {siteConfig.contact.phone}
+                    {contact.phone}
                   </a>
                 )}
               </div>
@@ -81,23 +84,13 @@ export default function ContactPage() {
               <MapPin className="mt-0.5 size-5 shrink-0 text-[var(--afd-blue)]" aria-hidden />
               <div>
                 <p className="text-sm font-semibold text-[var(--afd-ink)]">Adresse</p>
-                <p className="text-sm text-[var(--afd-muted)]">{siteConfig.contact.address}</p>
+                <p className="text-sm text-[var(--afd-muted)]">{contact.address}</p>
               </div>
             </li>
           </ul>
         </aside>
 
-        <div className="rounded-2xl border border-[var(--afd-border)] bg-[var(--afd-background)] p-6 md:p-8">
-          <h2 className="font-display text-xl font-semibold text-[var(--afd-ink)]">
-            Envoyer un message
-          </h2>
-          <p className="mt-2 text-sm text-[var(--afd-muted)]">
-            Remplissez le formulaire ci-dessous. Nous vous répondrons dans les meilleurs délais.
-          </p>
-          <div className="mt-6">
-            <ContactForm />
-          </div>
-        </div>
+        <ContactForm />
       </div>
     </PublicPageShell>
   );

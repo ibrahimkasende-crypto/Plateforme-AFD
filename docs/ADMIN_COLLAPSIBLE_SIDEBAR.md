@@ -19,3 +19,4 @@
 ## Pied de sidebar
 - Photo institutionnelle **supprimée**
 - Bouton compact « Voir le site public » → `/` nouvel onglet
+

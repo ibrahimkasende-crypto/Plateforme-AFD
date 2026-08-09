@@ -12,11 +12,34 @@ import { hasPermission } from "@/lib/auth/has-permission";
 import { getUserRoleNames } from "@/lib/auth/get-user-role";
 import { inviteUserAction } from "@/features/identity/actions/invite-user";
 import {
+  assertCannotTouchSuperAdmin,
   assertNotSelfAccountDeletion,
   assertNotSelfRoleChange,
 } from "@/features/identity/security/privilege-guards";
 import { updateUserRoleSecure } from "@/features/identity/services/invitation.service";
 import { appendAuditLog } from "@/features/identity/services/audit.service";
+
+async function revokeUserSessions(userId: string) {
+  const service = createAdminServiceClient();
+  if (!service) return;
+  await service.auth.admin.signOut(userId).catch(() => undefined);
+}
+
+async function getTargetRoleNames(
+  supabase: NonNullable<Awaited<ReturnType<typeof createClientSafe>>>,
+  targetId: string,
+): Promise<string[]> {
+  const { data } = await supabase
+    .from("utilisateurs_roles" as never)
+    .select("roles(nom)")
+    .eq("utilisateur_id", targetId);
+  return (data ?? []).flatMap((row) => {
+    const r = row as { roles?: { nom?: string } | { nom?: string }[] | null };
+    if (!r.roles) return [];
+    if (Array.isArray(r.roles)) return r.roles.map((x) => x.nom || "");
+    return [r.roles.nom || ""];
+  });
+}
 
 const roleEnum = z.enum(roles);
 
@@ -43,7 +66,14 @@ export async function updateAdminUser(formData: FormData) {
   if (!supabase) return;
 
   const actorRoles = await getUserRoleNames(session.user.id);
+  const targetRoles = await getTargetRoleNames(supabase, id);
   const becomingInactive = parsed.data.actif !== "on";
+
+  try {
+    assertCannotTouchSuperAdmin(actorRoles, targetRoles);
+  } catch {
+    return;
+  }
 
   if (parsed.data.role) {
     assertNotSelfRoleChange(session.user.id, id);
@@ -95,14 +125,15 @@ export async function updateAdminUser(formData: FormData) {
     .update({
       nom_complet: parsed.data.nom_complet,
       actif: parsed.data.actif === "on",
-      statut_compte: parsed.data.actif === "on" ? "active" : "disabled",
+      statut_compte: parsed.data.actif === "on" ? "active" : "suspended",
       updated_at: new Date().toISOString(),
     } as never)
     .eq("id", id);
 
   if (becomingInactive) {
+    await revokeUserSessions(id);
     await appendAuditLog(supabase, {
-      action: "users.disable",
+      action: "users.suspend",
       module: "identity",
       entityType: "profils_administrateurs",
       entityId: id,
@@ -134,17 +165,27 @@ export async function deactivateAdminUser(id: string) {
   const supabase = await createClientSafe();
   if (!supabase) return;
 
+  const actorRoles = await getUserRoleNames(session.user.id);
+  const targetRoles = await getTargetRoleNames(supabase, id);
+  try {
+    assertCannotTouchSuperAdmin(actorRoles, targetRoles);
+  } catch {
+    return;
+  }
+
   await supabase
     .from("profils_administrateurs" as never)
     .update({
       actif: false,
-      statut_compte: "disabled",
+      statut_compte: "suspended",
       updated_at: new Date().toISOString(),
     } as never)
     .eq("id", id);
 
+  await revokeUserSessions(id);
+
   await appendAuditLog(supabase, {
-    action: "users.disable",
+    action: "users.suspend",
     module: "identity",
     entityType: "profils_administrateurs",
     entityId: id,

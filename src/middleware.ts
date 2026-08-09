@@ -11,7 +11,8 @@ function isAuthPage(pathname: string): boolean {
   return (
     pathname === "/connexion" ||
     pathname === "/mot-de-passe-oublie" ||
-    pathname === "/nouveau-mot-de-passe"
+    pathname === "/nouveau-mot-de-passe" ||
+    pathname === "/auth/reset-password"
   );
 }
 
@@ -22,7 +23,12 @@ function isAuthPage(pathname: string): boolean {
  * La vérification profil/rôle/actif reste dans requireAdmin() (layout).
  */
 export async function middleware(request: NextRequest) {
-  let supabaseResponse = NextResponse.next({ request });
+  const requestHeaders = new Headers(request.headers);
+  requestHeaders.set("x-afd-pathname", request.nextUrl.pathname);
+
+  let supabaseResponse = NextResponse.next({
+    request: { headers: requestHeaders },
+  });
 
   const env = getSupabasePublicEnv();
 
@@ -45,7 +51,9 @@ export async function middleware(request: NextRequest) {
         cookiesToSet.forEach(({ name, value }) => {
           request.cookies.set(name, value);
         });
-        supabaseResponse = NextResponse.next({ request });
+        supabaseResponse = NextResponse.next({
+          request: { headers: requestHeaders },
+        });
         cookiesToSet.forEach(({ name, value, options }) => {
           supabaseResponse.cookies.set(name, value, options);
         });
@@ -66,15 +74,8 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(loginUrl);
   }
 
-  // Utilisateur connecté sur page de connexion → laisser le layout/admin
-  // décider via requireAdmin (profil actif requis).
   if (isAuthPage(pathname) && user && pathname === "/connexion") {
-    const adminUrl = request.nextUrl.clone();
-    const next = request.nextUrl.searchParams.get("next");
-    adminUrl.pathname =
-      next && next.startsWith("/") && !next.startsWith("//") ? next : "/admin";
-    adminUrl.search = "";
-    // Ne redirige pas automatiquement ici : un compte sans profil
+    // Ne redirige pas automatiquement : un compte sans profil
     // doit pouvoir rester sur /connexion après échec signIn.
   }
 

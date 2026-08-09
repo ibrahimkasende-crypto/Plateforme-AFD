@@ -45,3 +45,4 @@ Lors du statut `embauche`, renseigner `employe_converti_id` et créer :
 ## Distinction opportunités publiques
 
 Les candidatures publiques (`/admin/candidatures`, module opportunités) restent séparées du pipeline RH interne (`hr_candidatures_rh`).
+

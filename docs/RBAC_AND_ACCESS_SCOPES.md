@@ -55,3 +55,4 @@ Mapping sidebar → permission : `src/config/admin-nav-permissions.ts`.
 3. Journaliser toute élévation via `audit_logs`.
 
 Voir : `docs/IDENTITY_AND_ACCESS_MANAGEMENT.md`, `docs/ADMIN_RLS_PERMISSIONS.md`.
+

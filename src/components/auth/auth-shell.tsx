@@ -31,7 +31,7 @@ export function AuthShell({ title, children, subtitle }: AuthShellProps) {
           <div className="mt-3.5">{children}</div>
         </div>
 
-        <p className="mt-3.5 text-center text-[11px] text-white/55" data-powered-by-lisungi>
+        <p className="mt-3.5 text-center text-[11px] text-white/55" data-afd-platform-brand>
           {productBrand.poweredByLabel}
         </p>
         <p className="mt-1 text-center text-[10px] text-white/40">

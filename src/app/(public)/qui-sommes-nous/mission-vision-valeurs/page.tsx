@@ -13,6 +13,7 @@ import { PublicPageShell } from "@/components/public/PublicPageShell";
 import { institutionalContent } from "@/config/institutional-content";
 import { siteConfig } from "@/config/site";
 import { getPublishedPageByRoute } from "@/lib/queries/public/pages";
+import { getResolvedPublicSiteSettings } from "@/lib/queries/public/site-settings";
 
 export async function generateMetadata(): Promise<Metadata> {
   const cms = await getPublishedPageByRoute(
@@ -55,6 +56,10 @@ export default async function MissionVisionValeursPage() {
   }
 
   const { mission, vision, values, pillars } = institutionalContent;
+  const settings = await getResolvedPublicSiteSettings();
+  const missionContent = settings.mission || mission.content;
+  const visionContent = settings.vision || vision.content;
+  const valuesIntro = settings.values;
 
   return (
     <PublicPageShell
@@ -73,7 +78,7 @@ export default async function MissionVisionValeursPage() {
             {mission.title}
           </h2>
           <p className="mt-4 leading-relaxed text-[var(--afd-muted)]">
-            {mission.content}
+            {missionContent}
           </p>
         </article>
         <article className="rounded-2xl border border-[var(--afd-border)] bg-[var(--afd-surface)] p-6">
@@ -81,10 +86,16 @@ export default async function MissionVisionValeursPage() {
             {vision.title}
           </h2>
           <p className="mt-4 leading-relaxed text-[var(--afd-muted)]">
-            {vision.content}
+            {visionContent}
           </p>
         </article>
       </div>
+
+      {valuesIntro ? (
+        <p className="mt-8 whitespace-pre-line leading-relaxed text-[var(--afd-muted)]">
+          {valuesIntro}
+        </p>
+      ) : null}
 
       <section className="mt-14">
         <h2 className="font-display text-2xl font-semibold text-[var(--afd-ink)]">

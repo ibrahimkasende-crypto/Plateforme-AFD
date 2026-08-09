@@ -242,3 +242,4 @@ const { data } = await supabase.rpc("get_admin_dashboard", {
 ```
 
 Puis mapper snake_case → types TypeScript existants.
+

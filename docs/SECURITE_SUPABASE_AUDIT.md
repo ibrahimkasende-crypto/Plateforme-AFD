@@ -39,3 +39,4 @@ Date : 15 juillet 2026. Ce document est fondé sur les fichiers versionnés ; l�
 3. `20260715_003_storage_security.sql` : buckets et politiques Storage.
 
 Avant application : exporter le schéma, sauvegarder la base et Storage, tester sur un projet de préproduction, inventorier les politiques et vérifier les comptes admin existants.
+

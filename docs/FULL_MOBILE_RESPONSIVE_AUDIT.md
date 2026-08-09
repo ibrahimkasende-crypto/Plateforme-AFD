@@ -53,3 +53,4 @@ La version desktop est conservée. La version mobile était encore trop proche d
 3. Scénarisation accueil (programmes + CTAs)  
 4. Pages secondaires (filtres, PageHero)  
 5. Tests multi-viewports + typecheck / lint / build  
+

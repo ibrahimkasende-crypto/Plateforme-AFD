@@ -11,3 +11,4 @@ Variables serveur uniquement (voir `.env.example`).
 | `mock` | Tests uniquement (`NODE_ENV=test` ou non-prod) |
 
 Fallback Tesseract : jamais présenté comme succès cloud. Échec principal non masqué.
+

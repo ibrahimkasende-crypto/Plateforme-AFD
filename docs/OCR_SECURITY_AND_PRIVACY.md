@@ -7,3 +7,4 @@
 - Hook antivirus prévu (non bloquant)  
 - RLS + permissions serveur + Storage  
 - Documents OCR jamais publics par défaut  
+

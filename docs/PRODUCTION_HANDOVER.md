@@ -9,9 +9,9 @@
 
 La plateforme Next.js (`D:\Plateforme-AFD\AFD`, branche `reconstruction-nextjs`) dispose d’un noyau **~7 modules opérationnels**, d’une CI naissante, d’une route `/api/health`, et d’intégrations externes **honnêtement bloquées** (newsletter, SerdiPay, OCR cloud).
 
-Le déploiement est **bloqué** faute de : Hostinger connecté, domaine vérifié, variables prod, backup DB, et certification migrations/RLS/Storage sur le projet mandaté **`ndkcywqihtnuoydwicrq`**.
+Le déploiement est **bloqué** faute de : Hostinger connecté, domaine vérifié, variables prod, backup DB, et certification migrations/RLS/Storage sur le projet mandaté **`mxxuxnoqnwjygawvvhcb`**.
 
-Écart critique historique : `.env` local vers **`qsyvkaxlwxbhuphvctpl`**.
+Écart critique historique : `.env` local vers **`ancien-projet-supabase`**.
 
 ---
 
@@ -63,7 +63,7 @@ Le déploiement est **bloqué** faute de : Hostinger connecté, domaine vérifi�
 
 - Hostinger / domaine live  
 - Backup attesté  
-- Certifications RLS / Storage / migrations **sur ADF_BD**  
+- Certifications RLS / Storage / migrations **sur AFD**  
 - ~25 modules `fonctionnel_non_teste`  
 - Monitoring live  
 
@@ -72,7 +72,7 @@ Le déploiement est **bloqué** faute de : Hostinger connecté, domaine vérifi�
 ## Prochaines actions (ordre suggéré)
 
 1. Clarifier remote GitHub (`AFD` vs `ADF`).  
-2. Backup `ndkcywqihtnuoydwicrq` → remplir `PRODUCTION_BACKUP_RECORD.md`.  
+2. Backup `mxxuxnoqnwjygawvvhcb` → remplir `PRODUCTION_BACKUP_RECORD.md`.  
 3. Auditer migrations remote ; corriger drift.  
 4. Rejouer `test:rls` + E2E opérationnel.  
 5. Connecter Hostinger + env (démo **false**).  
@@ -88,8 +88,9 @@ Le déploiement est **bloqué** faute de : Hostinger connecté, domaine vérifi�
 | Product owner | | |
 | Tech lead | | |
 | Ops Hostinger / DNS | | |
-| Admin Supabase ADF_BD | | |
+| Admin Supabase AFD | | |
 
 ---
 
 **Remise :** documentation honnête — **pas de PRODUCTION_RÉUSSIE**.
+

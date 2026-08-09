@@ -3,8 +3,8 @@
 import { useEffect, useState } from "react";
 import { DesktopNavigation } from "@/components/public/desktop-navigation";
 import { HeaderActions } from "@/components/public/header-actions";
-import { HeaderLogo } from "@/components/public/header-logo";
 import { MobileNavigation } from "@/components/public/mobile-navigation";
+import { OrganizationBrand } from "@/components/public/organization-brand";
 import { ThemeToggle } from "@/components/public/theme-toggle";
 import { cn } from "@/lib/utils";
 
@@ -24,11 +24,22 @@ function useScrolled(threshold = 16) {
   return scrolled;
 }
 
+/**
+ * Header public — 3 zones stables :
+ * gauche (marque) | centre (nav desktop) | droite (actions / hamburger)
+ *
+ * Breakpoints :
+ * - &lt; 1280 : menu mobile
+ * - 1280–1439 : desktop compact + « Plus »
+ * - ≥ 1440 : desktop complet + marque full
+ */
 export function SiteHeader() {
   const scrolled = useScrolled();
 
   return (
     <header
+      data-testid="site-header"
+      data-scrolled={scrolled ? "true" : "false"}
       className={cn(
         "sticky top-0 z-50 border-b transition-[box-shadow,background-color,border-color] duration-200",
         "border-[var(--afd-border)] bg-[var(--afd-header-bg)]",
@@ -39,25 +50,41 @@ export function SiteHeader() {
     >
       <div
         className={cn(
-          "mx-auto grid w-full max-w-[1600px] min-w-0 items-center px-3 sm:px-4 lg:px-4",
-          "grid-cols-[minmax(0,1fr)_auto] min-[1200px]:grid-cols-[auto_minmax(0,1fr)_auto]",
-          "min-[1200px]:gap-x-4",
-          "h-16 min-[1200px]:h-[86px]",
-          scrolled && "min-[1200px]:h-[80px]",
+          "mx-auto flex w-full max-w-[1600px] min-w-0 items-center",
+          "h-16 min-[1280px]:h-[4.5rem] min-[1440px]:h-[5rem]",
+          "gap-3 px-4 sm:px-5 min-[1280px]:gap-4 min-[1280px]:px-6 min-[1440px]:gap-6 min-[1440px]:px-8",
         )}
       >
-        <HeaderLogo compact={scrolled} className="min-w-0 justify-self-start" />
-
-        <DesktopNavigation className="hidden min-[1200px]:flex" />
-
-        <div className="hidden items-center gap-2 justify-self-end min-[1200px]:flex">
-          <ThemeToggle />
-          <HeaderActions compact={scrolled} />
+        {/* ZONE GAUCHE — marque */}
+        <div
+          data-header-zone="left"
+          className="flex min-w-0 shrink-0 items-center"
+        >
+          <OrganizationBrand variant="auto" />
         </div>
 
-        <div className="flex min-w-0 items-center gap-1.5 justify-self-end min-[1200px]:hidden sm:gap-2">
-          <ThemeToggle className="size-10 shrink-0" />
-          <MobileNavigation />
+        {/* ZONE CENTRE — navigation desktop (≥1280) */}
+        <div
+          data-header-zone="center"
+          className="hidden min-w-0 flex-1 items-center justify-center min-[1280px]:flex"
+        >
+          <DesktopNavigation />
+        </div>
+
+        {/* ZONE DROITE — actions desktop / mobile */}
+        <div
+          data-header-zone="right"
+          className="ml-auto flex shrink-0 items-center gap-1.5 sm:gap-2"
+        >
+          <div className="hidden items-center gap-2 min-[1280px]:flex">
+            <ThemeToggle />
+            <HeaderActions compact={scrolled} />
+          </div>
+
+          <div className="flex items-center gap-1.5 min-[1280px]:hidden sm:gap-2">
+            <ThemeToggle className="size-10 shrink-0" />
+            <MobileNavigation />
+          </div>
         </div>
       </div>
     </header>

@@ -3,6 +3,7 @@
  * Source éditoriale : orientations AFD (dont afd-rdc.org) — modernisé localement.
  * Les administrateurs peuvent compléter / remplacer via Supabase (domaines_intervention).
  */
+import { afdBankImage } from "@/config/afd-images";
 
 export type InterventionDomainStatus = "brouillon" | "publie" | "archive";
 
@@ -31,15 +32,25 @@ export type InterventionDomain = {
   topics: readonly string[];
 };
 
-/** Images du dossier public/images/afd/Domaines — appariées par nom de fichier. */
+/** Images de la banque AFD classée — appariées par sujet visible. */
 const domainImages = {
-  economie: encodeURI("/images/afd/Domaines/autonomisation-economique.jpg"),
-  protection: encodeURI("/images/afd/Domaines/Femmes face aux violences.jpg"),
-  sante: encodeURI("/images/afd/Domaines/Femmes santes Maternelle.jpg"),
-  wash: encodeURI("/images/afd/Domaines/Femme et acces a l'eau.jpg"),
-  education: encodeURI("/images/afd/Domaines/Femme et leadership.jpg"),
-  urgences: encodeURI(
-    "/images/afd/Domaines/Femmes dans la reponse Humanitaire.jpg",
+  economie: afdBankImage(
+    "19_gouvernance/afd_gouvernance_remise_documents_coordination_tshopo_005.jpg",
+  ),
+  protection: afdBankImage(
+    "22_sensibilisation/afd_sensibilisation_sensibilisation_8_mars_camp_kabila_004.jpg",
+  ),
+  sante: afdBankImage(
+    "01_sante/afd_sante_sensibilisation_cpn_salama_012.jpg",
+  ),
+  wash: afdBankImage(
+    "06_wash/afd_wash_sensibilisation_dotation_lavage_mains_site_ceca_20_makoko_1_007.jpg",
+  ),
+  education: afdBankImage(
+    "19_gouvernance/afd_gouvernance_remise_documents_coordination_tshopo_001.jpg",
+  ),
+  urgences: afdBankImage(
+    "17_missions_terrain/afd_missions_terrain_visite_evaluation_site_deplaces_site_ceca_20_makoko_1_010.jpg",
   ),
 } as const;
 
@@ -77,7 +88,7 @@ export const FALLBACK_INTERVENTION_DOMAINS: readonly InterventionDomain[] = [
     icon: "Briefcase",
     imageSrc: domainImages.economie,
     imageAlt:
-      "Personnes participant à une activité d’autonomisation économique.",
+      "Délégation AFD devant une affiche liée à la promotion économique et à l’entrepreneuriat.",
     orderIndex: 1,
     status: "publie",
     featured: true,
@@ -125,7 +136,7 @@ export const FALLBACK_INTERVENTION_DOMAINS: readonly InterventionDomain[] = [
     icon: "Shield",
     imageSrc: domainImages.protection,
     imageAlt:
-      "Illustration liée à la protection et aux droits des femmes.",
+      "Activité de sensibilisation sur les droits des femmes et des filles.",
     orderIndex: 2,
     status: "publie",
     featured: true,
@@ -173,7 +184,8 @@ export const FALLBACK_INTERVENTION_DOMAINS: readonly InterventionDomain[] = [
     keywords: ["Santé", "Maternité", "Prévention"],
     icon: "HeartPulse",
     imageSrc: domainImages.sante,
-    imageAlt: "Illustration liée à la santé maternelle et infantile.",
+    imageAlt:
+      "Femmes réunies pendant une séance de sensibilisation en santé communautaire.",
     orderIndex: 3,
     status: "publie",
     featured: false,
@@ -220,7 +232,8 @@ export const FALLBACK_INTERVENTION_DOMAINS: readonly InterventionDomain[] = [
     keywords: ["WASH", "Eau", "Hygiène"],
     icon: "Droplets",
     imageSrc: domainImages.wash,
-    imageAlt: "Illustration liée à l’accès à l’eau et à l’hygiène.",
+    imageAlt:
+      "Dispositifs de lavage des mains installés lors d’une activité WASH.",
     orderIndex: 4,
     status: "publie",
     featured: false,
@@ -267,7 +280,7 @@ export const FALLBACK_INTERVENTION_DOMAINS: readonly InterventionDomain[] = [
     icon: "Users",
     imageSrc: domainImages.education,
     imageAlt:
-      "Illustration liée au leadership et à la gouvernance communautaire des femmes.",
+      "Remise de documents lors d’une activité institutionnelle de gouvernance.",
     orderIndex: 5,
     status: "publie",
     featured: false,
@@ -314,7 +327,7 @@ export const FALLBACK_INTERVENTION_DOMAINS: readonly InterventionDomain[] = [
     icon: "LifeBuoy",
     imageSrc: domainImages.urgences,
     imageAlt:
-      "Illustration liée aux femmes dans la réponse humanitaire et d’urgence.",
+      "Équipe AFD évaluant les besoins dans un site de déplacés.",
     orderIndex: 6,
     status: "publie",
     featured: true,

@@ -1,23 +1,52 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { subscribeToNewsletter } from "@/features/newsletter/services/newsletter.service";
+import { safeAuthNext } from "@/lib/auth/safe-auth-next";
+import { NEWSLETTER_OAUTH_INTENT_COOKIE } from "@/lib/newsletter/google-oauth";
 import { createClient } from "@/lib/supabase/server";
 
-function safeNext(next: string | null, fallback: string): string {
-  if (!next || !next.startsWith("/") || next.startsWith("//")) {
-    return fallback;
-  }
-  return next;
+function clearNewsletterIntentCookie(response: NextResponse) {
+  response.cookies.set(NEWSLETTER_OAUTH_INTENT_COOKIE, "", {
+    path: "/",
+    maxAge: 0,
+    sameSite: "lax",
+  });
 }
 
 /**
  * Callback Supabase Auth (magic link / reset password / OAuth).
- * Avec `newsletter=1` : récupère l’e-mail Google, inscrit à la newsletter, puis déconnecte.
+ *
+ * Flux newsletter (`newsletter=1`) :
+ * - échange le code contre une session ;
+ * - ne crée aucun rôle / profil admin ;
+ * - ne s’inscrit pas encore (consentement côté UI) ;
+ * - redirige vers `/?newsletter=google-success` (ou `next` interne sûr).
  */
 export async function GET(request: NextRequest) {
   const { searchParams, origin } = request.nextUrl;
   const code = searchParams.get("code");
-  const forNewsletter = searchParams.get("newsletter") === "1";
-  const next = safeNext(searchParams.get("next"), forNewsletter ? "/" : "/admin");
+  const errorDescription = searchParams.get("error_description");
+  const errorCode = searchParams.get("error");
+  const intentCookie =
+    request.cookies.get(NEWSLETTER_OAUTH_INTENT_COOKIE)?.value === "1";
+  const forNewsletter =
+    searchParams.get("newsletter") === "1" || intentCookie;
+
+  const defaultNext = forNewsletter
+    ? "/?newsletter=google-success"
+    : "/admin";
+  const next = safeAuthNext(searchParams.get("next"), defaultNext);
+
+  if (errorCode || errorDescription) {
+    if (forNewsletter) {
+      const url = new URL("/", origin);
+      url.searchParams.set("newsletter", "error");
+      const response = NextResponse.redirect(url);
+      clearNewsletterIntentCookie(response);
+      return response;
+    }
+    return NextResponse.redirect(
+      new URL("/connexion?erreur=callback", origin),
+    );
+  }
 
   if (code) {
     try {
@@ -30,60 +59,58 @@ export async function GET(request: NextRequest) {
             data: { user },
           } = await supabase.auth.getUser();
 
-          const email = user?.email?.trim();
+          const email =
+            user?.email?.trim() ||
+            (typeof user?.user_metadata?.email === "string"
+              ? user.user_metadata.email.trim()
+              : "");
+
           if (!user || !email) {
             await supabase.auth.signOut();
-            return NextResponse.redirect(
-              new URL(`${next}?newsletter=missing_email`, origin),
-            );
+            const redirectUrl = new URL("/", origin);
+            redirectUrl.searchParams.set("newsletter", "missing_email");
+            const response = NextResponse.redirect(redirectUrl);
+            clearNewsletterIntentCookie(response);
+            return response;
           }
 
-          const meta = user.user_metadata ?? {};
-          const firstName =
-            typeof meta.given_name === "string"
-              ? meta.given_name
-              : typeof meta.full_name === "string"
-                ? meta.full_name.split(" ")[0]
-                : typeof meta.name === "string"
-                  ? meta.name.split(" ")[0]
-                  : undefined;
-
-          try {
-            const result = await subscribeToNewsletter({
-              email,
-              firstName,
-              preferences: [],
-              consent: true,
-              source: "google_oauth",
-            });
-
-            // Session Google publique : on ne la conserve pas (newsletter seulement).
-            await supabase.auth.signOut();
-
-            const status =
-              result.status === "already_subscribed" ? "already" : "subscribed";
-            const redirectUrl = new URL(next, origin);
-            redirectUrl.searchParams.set("newsletter", status);
-            return NextResponse.redirect(redirectUrl);
-          } catch {
-            await supabase.auth.signOut();
-            const redirectUrl = new URL(next, origin);
-            redirectUrl.searchParams.set("newsletter", "error");
-            return NextResponse.redirect(redirectUrl);
+          // Session conservée uniquement pour préremplir l’e-mail + confirmer le consentement.
+          const redirectUrl = new URL(next, origin);
+          if (!redirectUrl.searchParams.has("newsletter")) {
+            redirectUrl.searchParams.set("newsletter", "google-success");
           }
+          const response = NextResponse.redirect(redirectUrl);
+          clearNewsletterIntentCookie(response);
+          return response;
         }
 
         return NextResponse.redirect(new URL(next, origin));
       }
+
+      console.error("[auth/callback]", {
+        step: "exchangeCodeForSession",
+        forNewsletter,
+        at: new Date().toISOString(),
+        type: error.name || "AuthError",
+      });
     } catch {
-      // fallthrough
+      console.error("[auth/callback]", {
+        step: "exchange_exception",
+        forNewsletter,
+        at: new Date().toISOString(),
+      });
     }
   }
 
   if (forNewsletter) {
-    return NextResponse.redirect(
-      new URL(`${safeNext(searchParams.get("next"), "/")}?newsletter=error`, origin),
+    const errUrl = new URL(
+      safeAuthNext(searchParams.get("next"), "/"),
+      origin,
     );
+    errUrl.searchParams.set("newsletter", "error");
+    const response = NextResponse.redirect(errUrl);
+    clearNewsletterIntentCookie(response);
+    return response;
   }
 
   return NextResponse.redirect(

@@ -80,3 +80,4 @@ OK (`npm run build` — 73 pages)
 - Ajouter Navigation Menu Radix/shadcn si le design system l’introduit
 - Auth / compte utilisateur dans le header (hors scope)
 - Contrôle visuel manuel sur 320–1440 px via `npm run dev`
+

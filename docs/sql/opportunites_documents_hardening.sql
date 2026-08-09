@@ -1,4 +1,4 @@
--- Complément non destructif : colonnes candidatures, storage policies, niveaux confidentialité.
+﻿-- Complément non destructif : colonnes candidatures, storage policies, niveaux confidentialité.
 
 alter table candidatures
   add column if not exists pays text,
@@ -121,3 +121,4 @@ with check (
   bucket_id = 'candidatures-privees'
   and (storage.foldername(name))[1] = 'candidatures'
 );
+

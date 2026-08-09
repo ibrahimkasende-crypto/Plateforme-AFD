@@ -13,9 +13,7 @@ import {
   formClassName,
   formShellClassName,
   labelClassName,
-  selectClassName,
   submitClassName,
-  textareaClassName,
 } from "@/components/ui/form-styles";
 import { siteConfig, type AllowedCurrency, type SupportType } from "@/config/site";
 import { createDonationIntentAction } from "@/features/dons/actions/create-donation-intent";

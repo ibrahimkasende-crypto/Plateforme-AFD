@@ -116,12 +116,15 @@ export type SidebarBadges = {
   messages: number | null;
   adhesions: number | null;
   notifications: number | null;
+  /** Non lus messagerie pro (null = indisponible / non sync IMAP). */
+  messagerie: number | null;
 };
 
 export type AdminViewer = {
   displayName: string;
   roleLabel: string;
   role: Role;
+  roles?: string[];
   initials: string;
   canReadFinances: boolean;
   avatarUrl?: string;

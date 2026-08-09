@@ -23,7 +23,7 @@
 |---|----------|--------|
 | 1 | `/api/health` accessible depuis Internet | PENDING (pas d’URL live) |
 | 2 | `environment=production` dans la réponse | PENDING |
-| 3 | `checks.supabase=ok` sur ADF_BD | PENDING |
+| 3 | `checks.supabase=ok` sur AFD | PENDING |
 | 4 | Alerte si status ≠ ok | **Absent** |
 | 5 | Logs Hostinger centralisés | **Absent / NOT CONNECTED** |
 | 6 | Corrélation version app (`0.1.0`) ↔ commit | PENDING |
@@ -43,3 +43,4 @@ Codes : `200` si ok/degraded ; `503` si error.
 
 Observabilité **minimale en code** (`/api/health`), **non opérationnelle en production**.  
 Compléter cette checklist avant GO.
+

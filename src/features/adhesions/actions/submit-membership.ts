@@ -43,13 +43,12 @@ export async function submitMembershipAction(
   const key = parsed.data.email.toLowerCase();
   const now = Date.now();
   const last = recentSubmissions.get(key) ?? 0;
-  if (now - last < 15_000) {
+  if (now - last < 8_000) {
     return {
       ok: false,
       message: "Veuillez patienter quelques secondes avant une nouvelle tentative.",
     };
   }
-  recentSubmissions.set(key, now);
 
   try {
     const result = await submitMembershipRequest({
@@ -63,6 +62,8 @@ export async function submitMembershipAction(
     });
 
     if (!result.ok) {
+      // Ne pas bloquer les retries si l’enregistrement a échoué.
+      recentSubmissions.delete(key);
       return {
         ok: false,
         message:
@@ -72,12 +73,15 @@ export async function submitMembershipAction(
       };
     }
 
+    recentSubmissions.set(key, now);
+
     return {
       ok: true,
       message:
         "Votre demande d’adhésion a bien été transmise. L’équipe AFD l’examinera et vous contactera.",
     };
   } catch {
+    recentSubmissions.delete(key);
     return {
       ok: false,
       message: "Une erreur est survenue. Veuillez réessayer plus tard.",

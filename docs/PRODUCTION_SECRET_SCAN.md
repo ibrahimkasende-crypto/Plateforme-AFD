@@ -22,7 +22,7 @@
 
 | Fichier | Statut Git | Action |
 |---------|------------|--------|
-| `.env` / `.env.local` | Ignoré | Ne jamais committer ; vérifier qu’ils pointent vers `ndkcywqihtnuoydwicrq` |
+| `.env` / `.env.local` | Ignoré | Ne jamais committer ; vérifier qu’ils pointent vers `mxxuxnoqnwjygawvvhcb` |
 | `.env.e2e.local` | Ignoré (pattern) | Réservé tests |
 
 ---
@@ -31,7 +31,7 @@
 
 | Risque | Note |
 |--------|------|
-| Mismatch projet Supabase | Local a pu pointer vers `qsyvkaxlwxbhuphvctpl` — données / clés du mauvais projet |
+| Mismatch projet Supabase | Local a pu pointer vers `ancien-projet-supabase` — données / clés du mauvais projet |
 | `service_role` en prod | Doit rester **uniquement** côté serveur (Hostinger / runtime) |
 | Démo admin | Flag public — pas un secret, mais fuite de données fictives si `true` |
 
@@ -43,3 +43,4 @@
 Scan automatisé complet (gitleaks / trufflehog) : **non exécuté dans ce rapport** — à planifier avant GO.
 
 **Aucune valeur secrète n’est reproduite dans ce document.**
+

@@ -73,3 +73,4 @@ Ne pas modifier le layout `(public)` ni les composants homepage. Préférer nouv
 4. Page dashboard (filtres, KPI, graphs, alertes, quick actions)  
 5. Permissions finance  
 6. Responsive + e2e + docs + commit local
+

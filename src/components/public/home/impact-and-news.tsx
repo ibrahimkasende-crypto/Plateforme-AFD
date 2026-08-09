@@ -11,12 +11,13 @@ import type { FeaturedImpactStory } from "@/lib/queries/home";
 import { getFeaturedNews } from "@/lib/queries/public/news";
 
 export async function ImpactAndNews({
-  story: _story,
+  story: _ignoredStory,
 }: {
   story: FeaturedImpactStory;
   /** Conservé pour compatibilité avec l’appelant homepage. */
   news?: unknown;
 }) {
+  void _ignoredStory;
   const news = await getFeaturedNews(3);
 
   return (

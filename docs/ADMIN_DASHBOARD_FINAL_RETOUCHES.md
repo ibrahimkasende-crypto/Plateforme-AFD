@@ -26,3 +26,4 @@
 - `--admin-kpi-row-height: 88px`
 - `--admin-secondary-row-height: 76px`
 - Photo bas de sidebar supprimée → bouton « Voir le site public »
+

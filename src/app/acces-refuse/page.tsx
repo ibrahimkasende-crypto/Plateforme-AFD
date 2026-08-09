@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ExternalLink, LogIn, LogOut, ShieldAlert } from "lucide-react";
-import { signOut } from "@/actions/auth";
+import { ExternalLink, LogIn, ShieldAlert } from "lucide-react";
+import { LogoutButton } from "@/components/auth/logout-button";
 import { AuthShell } from "@/components/auth/auth-shell";
 
 export const metadata: Metadata = {
@@ -73,15 +73,7 @@ export default async function AccesRefusePage({
             Retour à la connexion
           </Link>
 
-          <form action={signOut}>
-            <button
-              type="submit"
-              className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-lg border border-red-200 px-4 text-sm font-semibold text-red-700 transition hover:bg-red-50"
-            >
-              <LogOut className="size-4" aria-hidden />
-              Se déconnecter
-            </button>
-          </form>
+          <LogoutButton className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-lg border border-red-200 px-4 text-sm font-semibold text-red-700 transition hover:bg-red-50 disabled:opacity-60" />
         </div>
       </div>
     </AuthShell>

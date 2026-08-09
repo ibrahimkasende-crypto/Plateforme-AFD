@@ -35,3 +35,4 @@ Doublons historiques de logos supprimés (un seul logo officiel conservé).
 - Config : `src/config/assets.ts`
 - Utilisé par : `site.ts`, `home-content.ts`
 - Redirections permanentes des anciens chemins dans `next.config.ts`
+

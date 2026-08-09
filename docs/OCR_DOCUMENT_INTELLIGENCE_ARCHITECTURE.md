@@ -20,3 +20,4 @@ Document importé → Analyse sécurité → Empreinte SHA-256 → Classificatio
 ## File asynchrone
 
 Table `ocr_jobs` + RPC `claim_ocr_job` (SKIP LOCKED). L’upload HTTP ne traite pas les gros documents de façon synchrone ; `after()` tente un job, sinon le worker reprend.
+

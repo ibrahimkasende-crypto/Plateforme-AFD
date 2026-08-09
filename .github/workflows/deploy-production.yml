@@ -1,0 +1,131 @@
+name: Deploy production
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: "Git SHA ou ref à déployer (vide = commit du workflow)"
+        required: false
+        type: string
+      skip_public_check:
+        description: "Ignorer le health check HTTPS public"
+        required: false
+        type: boolean
+        default: false
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    name: Validate
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Unit tests
+        run: npm run test
+
+      - name: Build (standalone)
+        run: npm run build
+
+      - name: Prepare standalone
+        run: node scripts/prepare-standalone.mjs
+
+      - name: Verify standalone artifacts
+        run: |
+          test -f .next/standalone/server.js
+          test -d .next/standalone/.next/static
+          test -d .next/standalone/public
+
+  deploy:
+    name: Deploy VPS
+    needs: validate
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    environment: production
+    steps:
+      - name: Checkout (scripts)
+        uses: actions/checkout@v4
+
+      - name: Configure SSH
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.VPS_SSH_PRIVATE_KEY }}
+
+      - name: Add known hosts
+        env:
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+          VPS_PORT: ${{ secrets.VPS_PORT }}
+          VPS_KNOWN_HOSTS: ${{ secrets.VPS_KNOWN_HOSTS }}
+        run: |
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          if [ -n "${VPS_KNOWN_HOSTS}" ]; then
+            printf '%s\n' "${VPS_KNOWN_HOSTS}" >> ~/.ssh/known_hosts
+          else
+            ssh-keyscan -p "${VPS_PORT:-22}" -H "${VPS_HOST}" >> ~/.ssh/known_hosts
+          fi
+          chmod 600 ~/.ssh/known_hosts
+
+      - name: Deploy over SSH
+        env:
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+          VPS_PORT: ${{ secrets.VPS_PORT }}
+          VPS_USER: ${{ secrets.VPS_USER }}
+          VPS_APP_PATH: ${{ secrets.VPS_APP_PATH }}
+          VPS_DEPLOY_BRANCH: ${{ secrets.VPS_DEPLOY_BRANCH }}
+          DEPLOY_REF: ${{ inputs.ref || github.sha }}
+          SKIP_PUBLIC: ${{ github.event_name == 'workflow_dispatch' && inputs.skip_public_check && '1' || '0' }}
+        run: |
+          set -Eeuo pipefail
+          : "${VPS_HOST:?secret VPS_HOST manquant}"
+          : "${VPS_USER:?secret VPS_USER manquant}"
+          : "${VPS_APP_PATH:?secret VPS_APP_PATH manquant}"
+          PORT="${VPS_PORT:-22}"
+          BRANCH="${VPS_DEPLOY_BRANCH:-main}"
+
+          ssh -p "${PORT}" \
+            -o IdentitiesOnly=yes \
+            -o StrictHostKeyChecking=yes \
+            "${VPS_USER}@${VPS_HOST}" \
+            "export VPS_APP_PATH='${VPS_APP_PATH}' VPS_DEPLOY_BRANCH='${BRANCH}' SKIP_PUBLIC_CHECK='${SKIP_PUBLIC}' RUN_TYPECHECK=0; \
+             cd '${VPS_APP_PATH}/repo' && git fetch --prune origin && \
+             bash '${VPS_APP_PATH}/repo/scripts/deploy-production.sh' '${DEPLOY_REF}'"
+
+      - name: Public health check
+        if: ${{ !(inputs.skip_public_check) }}
+        run: |
+          set -Eeuo pipefail
+          for i in 1 2 3 4 5; do
+            if curl -fsS --max-time 30 https://afd-rdc.org/api/health | grep -q '"status":"ok"'; then
+              echo "Public health OK"
+              exit 0
+            fi
+            sleep 5
+          done
+          echo "Public health FAILED"
+          exit 1

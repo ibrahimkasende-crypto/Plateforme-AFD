@@ -11,6 +11,7 @@ import {
 import { siteConfig } from "@/config/site";
 import { HeaderActions } from "@/components/public/header-actions";
 import { HeaderLogo } from "@/components/public/header-logo";
+import { useBodyScrollLock } from "@/hooks/use-body-scroll-lock";
 import { cn } from "@/lib/utils";
 
 export function MobileNavigation() {
@@ -22,6 +23,8 @@ export function MobileNavigation() {
   const closeButtonRef = useRef<HTMLButtonElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
 
+  useBodyScrollLock(open);
+
   useEffect(() => {
     if (!open) {
       backdropArmedRef.current = false;
@@ -31,9 +34,7 @@ export function MobileNavigation() {
     const armTimer = window.setTimeout(() => {
       backdropArmedRef.current = true;
     }, 120);
-    const previousOverflow = document.body.style.overflow;
     const triggerNode = triggerRef.current;
-    document.body.style.overflow = "hidden";
     closeButtonRef.current?.focus();
 
     function onKeyDown(event: KeyboardEvent) {
@@ -43,12 +44,12 @@ export function MobileNavigation() {
     document.addEventListener("keydown", onKeyDown);
     return () => {
       window.clearTimeout(armTimer);
-      document.body.style.overflow = previousOverflow;
       document.removeEventListener("keydown", onKeyDown);
       triggerNode?.focus();
     };
   }, [open]);
 
+  // Reset menu when the route changes (pattern React « adjust state while rendering »)
   const [menuPath, setMenuPath] = useState(pathname);
   if (pathname !== menuPath) {
     setMenuPath(pathname);
@@ -66,14 +67,7 @@ export function MobileNavigation() {
   }
 
   return (
-    <div className="flex items-center gap-1.5 sm:gap-2">
-      <HeaderActions
-        compact
-        showJoin={false}
-        showSupport
-        className="flex"
-      />
-
+    <div className="flex items-center">
       <button
         ref={triggerRef}
         type="button"
@@ -140,8 +134,8 @@ export function MobileNavigation() {
 
               <div className="relative flex items-center justify-between gap-3 px-4 py-4">
                 <div className="min-w-0">
-                  <HeaderLogo onDark />
-                  <p className="mt-1.5 truncate pl-14 text-[11px] font-medium tracking-wide text-white/75">
+                  <HeaderLogo onDark variant="compact" />
+                  <p className="mt-1.5 truncate text-[11px] font-medium tracking-wide text-white/75">
                     {siteConfig.countryShort} · Ensemble pour le développement
                   </p>
                 </div>

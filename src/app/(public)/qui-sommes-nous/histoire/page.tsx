@@ -11,7 +11,7 @@ export async function generateMetadata(): Promise<Metadata> {
     title: cms?.titre || "Notre histoire",
     description:
       cms?.description_seo ||
-      "Histoire de l’Alliance des Femmes pour le Développement depuis 2019.",
+      "Histoire de l’Alliance des Femmes pour le Développement depuis le 24 janvier 2020.",
     alternates: { canonical: `${siteConfig.url}/qui-sommes-nous/histoire` },
   };
 }

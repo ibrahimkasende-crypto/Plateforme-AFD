@@ -9,3 +9,4 @@ Migration `20260719_051` remplace les politiques `USING (true)` des tables 030.
 ## Preuves
 - `tests/rls/wave1_foundations_rls.sql`
 - `docs/HR_RLS_POLICIES.md` (RH/paie)
+

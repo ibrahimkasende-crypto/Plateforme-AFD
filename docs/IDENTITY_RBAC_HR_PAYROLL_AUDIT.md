@@ -46,3 +46,4 @@ Organisation : Alliance des Femmes pour le Développement — AFD ASBL
 9. Seeds `is_demo` + tests + docs  
 
 **Principe** : aucune auto-promotion ; mots de passe jamais définis par un admin tiers ; paie clôturée immuable ; règles légales versionnées et validables.
+

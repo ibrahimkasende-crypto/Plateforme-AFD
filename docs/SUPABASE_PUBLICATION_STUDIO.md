@@ -27,3 +27,4 @@ Statuts : brouillon → en_revision → approuve → programme → publie → de
 ## Migration
 
 `supabase/migrations/20260718_008_publication_studio_foundations.sql`
+

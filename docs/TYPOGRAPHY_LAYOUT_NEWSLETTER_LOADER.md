@@ -116,3 +116,4 @@ Structure adaptée 320 → 1600px (nav, hero, stats 2/3/6, programmes 1/2/4, pop
 - Déploiement migration newsletter
 - Fréquence popup (7 jours)
 - Contenu exact des centres d’intérêt
+

@@ -9,6 +9,7 @@ import { productBrand } from "@/config/product-brand";
 import { requireAdmin } from "@/lib/auth/require-admin";
 import { createClientSafe } from "@/lib/supabase/safe";
 import { getDashboardBundle } from "@/services/dashboard.service";
+import { countCachedUnread } from "@/features/messagerie/services/mailbox.service";
 import type { SidebarBadges } from "@/features/statistiques/types/dashboard";
 import type { ReactNode } from "react";
 
@@ -23,6 +24,7 @@ const EMPTY_BADGES: SidebarBadges = {
   messages: 0,
   adhesions: 0,
   notifications: 0,
+  messagerie: null,
 };
 
 export default async function AdminLayout({
@@ -43,6 +45,7 @@ export default async function AdminLayout({
       messages: bundle.badges.messages ?? 0,
       adhesions: bundle.badges.adhesions ?? 0,
       notifications: bundle.badges.notifications ?? 0,
+      messagerie: null,
     };
     presentationMode = Boolean(bundle.presentationMode ?? bundle.demoMode);
   } catch {
@@ -53,7 +56,12 @@ export default async function AdminLayout({
     const supabase = await createClientSafe();
     if (supabase) {
       const unread = await countUnreadNotifications(supabase, session.user.id);
-      badges = { ...badges, notifications: unread };
+      const mailUnread = await countCachedUnread(supabase, session.user.id);
+      badges = {
+        ...badges,
+        notifications: unread,
+        messagerie: mailUnread,
+      };
       const rows = await listUserNotifications(supabase, session.user.id, {
         limit: 8,
       });

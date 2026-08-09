@@ -1,11 +1,6 @@
 "use client";
 
-import {
-  errorClassName,
-  fieldClassName,
-  labelClassName,
-  submitClassName,
-} from "@/components/ui/form-styles";
+import { fieldClassName } from "@/components/ui/form-styles";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";

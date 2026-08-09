@@ -58,3 +58,4 @@ Tant que ce document reste `NOT CONNECTED` :
 | Opérateur | |
 
 **Verdict actuel :** **NOT CONNECTED**.
+

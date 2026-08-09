@@ -13,6 +13,8 @@ import {
   Newspaper,
   PanelLeftClose,
   Shield,
+  ShieldCheck,
+  Sparkles,
   Target,
   UsersRound,
   Wallet,
@@ -20,7 +22,6 @@ import {
 } from "lucide-react";
 import { OrganizationIdentity } from "@/components/branding/organization-identity";
 import { OrganizationLogo } from "@/components/branding/organization-logo";
-import { ProductBrandBlock } from "@/components/branding/product-brand";
 import { PublisherBrand } from "@/components/branding/publisher-brand";
 import {
   adminNavGroups,
@@ -31,7 +32,6 @@ import {
 } from "@/config/admin-navigation";
 import { navItemAllowed } from "@/config/admin-nav-permissions";
 import { organizationBrand } from "@/config/organization-brand";
-import { productBrand } from "@/config/product-brand";
 import { roleHasPermission } from "@/config/permissions";
 import type { Role } from "@/config/roles";
 import type { SidebarBadges } from "@/features/statistiques/types/dashboard";
@@ -46,7 +46,9 @@ export const adminNavIconMap: Record<string, LucideIcon> = {
   UsersRound,
   Wallet,
   FileText,
+  Sparkles,
   Shield,
+  ShieldCheck,
 };
 
 function badgeClassName(key: AdminNavBadgeKey): string {
@@ -74,15 +76,20 @@ function groupHasActiveItem(pathname: string, group: AdminNavGroupDef): boolean 
   return group.items.some((item) => isNavActive(pathname, item.href));
 }
 
-function filterNavGroups(role: Role) {
+function filterNavGroups(role: Role, userRoles: string[] = []) {
   const has = (permission: Parameters<typeof roleHasPermission>[1]) =>
     roleHasPermission(role, permission);
+
+  const effectiveRoles =
+    userRoles.length > 0 ? userRoles : [role];
 
   return adminNavGroups
     .filter((group) => navGroupAllowed(group, has))
     .map((group) => {
       if (group.href) return group;
-      const items = group.items.filter((item) => navItemAllowed(item.href, has));
+      const items = group.items.filter((item) =>
+        navItemAllowed(item.href, has, item.rolesOnly, effectiveRoles),
+      );
       return { ...group, items };
     })
     .filter((group) => group.href || group.items.length > 0);
@@ -389,6 +396,7 @@ function NavGroupAccordion({
 type AdminSidebarNavProps = {
   badges: SidebarBadges;
   role: Role;
+  roles?: string[];
   collapsed?: boolean;
   onNavigate?: () => void;
   onExpandSidebar?: () => void;
@@ -398,13 +406,17 @@ type AdminSidebarNavProps = {
 export function AdminSidebarNav({
   badges,
   role,
+  roles = [],
   collapsed = false,
   onNavigate,
   onExpandSidebar,
   className,
 }: AdminSidebarNavProps) {
   const pathname = usePathname();
-  const groups = useMemo(() => filterNavGroups(role), [role]);
+  const groups = useMemo(
+    () => filterNavGroups(role, roles),
+    [role, roles],
+  );
 
   const [openGroups, setOpenGroups] = useState<Record<string, boolean>>(() => {
     const initial: Record<string, boolean> = {};
@@ -485,6 +497,7 @@ export function AdminSidebarNav({
 type AdminSidebarProps = {
   badges: SidebarBadges;
   role: Role;
+  roles?: string[];
   className?: string;
   onNavigate?: () => void;
   collapsed?: boolean;
@@ -494,6 +507,7 @@ type AdminSidebarProps = {
 export function AdminSidebar({
   badges,
   role,
+  roles = [],
   className,
   onNavigate,
   collapsed = false,
@@ -521,53 +535,46 @@ export function AdminSidebar({
     >
       <div className="shrink-0 border-b border-white/10 px-2.5 py-2.5">
         <div className={cn("flex items-center", collapsed ? "justify-center" : "gap-2.5")}>
-          <ProductBrandBlock
-            mode={collapsed ? "compact" : "extended"}
-            theme="dark"
-            logoAsButton={Boolean(onToggleCollapsed)}
-            onLogoClick={onToggleCollapsed}
-            logoAriaLabel={
-              collapsed ? "Ouvrir la barre latérale" : "Réduire la barre latérale"
-            }
-            logoTitle={
-              collapsed ? "Ouvrir la barre latérale" : "Réduire la barre latérale"
-            }
-            className={cn(!collapsed && "min-w-0 flex-1")}
-          />
-          {!collapsed && onToggleCollapsed ? (
+          {collapsed ? (
             <button
               type="button"
               onClick={onToggleCollapsed}
-              className="ml-auto inline-flex size-8 shrink-0 items-center justify-center rounded-md text-white/80 hover:bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
-              aria-label="Réduire la barre latérale"
+              className="inline-flex rounded-full focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+              aria-label="Ouvrir la barre latérale"
+              title="Ouvrir la barre latérale"
             >
-              <PanelLeftClose className="size-4" aria-hidden />
-            </button>
-          ) : null}
-        </div>
-
-        {collapsed ? (
-          <div className="mt-2 flex justify-center">
-            <span
-              className="inline-flex"
-              title={`${productBrand.tenantLabel} : ${organizationBrand.organizationLegalName}`}
-            >
-              <OrganizationLogo size="xs" className="ring-1 ring-white/30" />
+              <OrganizationLogo size="md" className="ring-1 ring-white/30" priority />
               <span className="sr-only">
-                {productBrand.tenantLabel} — {organizationBrand.organizationName}
+                {organizationBrand.organizationName}
               </span>
-            </span>
-          </div>
-        ) : (
-          <div className="mt-2.5 rounded-lg bg-white/5 px-2 py-1.5">
-            <OrganizationIdentity mode="extended" theme="dark" nameVariant="full" />
-          </div>
-        )}
+            </button>
+          ) : (
+            <>
+              <OrganizationIdentity
+                mode="extended"
+                theme="dark"
+                nameVariant="full"
+                className="min-w-0 flex-1"
+              />
+              {onToggleCollapsed ? (
+                <button
+                  type="button"
+                  onClick={onToggleCollapsed}
+                  className="ml-auto inline-flex size-8 shrink-0 items-center justify-center rounded-md text-white/80 hover:bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+                  aria-label="Réduire la barre latérale"
+                >
+                  <PanelLeftClose className="size-4" aria-hidden />
+                </button>
+              ) : null}
+            </>
+          )}
+        </div>
       </div>
 
       <AdminSidebarNav
         badges={badges}
         role={role}
+        roles={roles}
         collapsed={collapsed}
         onNavigate={onNavigate}
         onExpandSidebar={expandSidebar}

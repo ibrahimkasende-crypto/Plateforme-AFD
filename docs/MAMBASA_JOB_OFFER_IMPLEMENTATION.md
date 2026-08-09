@@ -93,3 +93,4 @@ Date limite, contrat, responsabilités texte, profil, compétences, pièces list
 ## Note opérationnelle
 
 Appliquer sur Supabase la migration `20260718_009_mambasa_opportunity_seed.sql` pour que les candidatures passent la contrainte FK `opportunite_id`. Sans migration, l’offre reste visible via le fallback `migrated-opportunities.ts`.
+

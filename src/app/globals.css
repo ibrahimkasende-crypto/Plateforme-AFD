@@ -89,7 +89,7 @@
   --admin-content-gap: 7px;
   --admin-card-radius: 9px;
   --admin-panel-padding: 9px;
-  --admin-filter-row-height: 40px;
+  --admin-filter-row-height: 58px;
   --admin-kpi-row-height: 78px;
   --admin-chart-row-one-height: minmax(195px, 1fr);
   --admin-chart-row-two-height: minmax(190px, 1fr);
@@ -110,7 +110,7 @@
     --admin-panel-padding: 8px;
     --admin-kpi-row-height: 82px;
     --admin-secondary-row-height: 72px;
-    --admin-filter-row-height: 36px;
+    --admin-filter-row-height: 52px;
     --admin-chart-row-one-height: minmax(168px, 1fr);
     --admin-chart-row-two-height: minmax(160px, 1fr);
   }
@@ -123,6 +123,7 @@
     --admin-panel-padding: 7px;
     --admin-kpi-row-height: 76px;
     --admin-secondary-row-height: 68px;
+    --admin-filter-row-height: 48px;
     --admin-header-height: 56px;
   }
 }
@@ -149,9 +150,9 @@
 .admin-dashboard-overview {
   display: grid;
   grid-template-columns: repeat(12, minmax(0, 1fr));
+  /* Pas de rangée KPI : plus d’espace pour les graphiques */
   grid-template-rows:
     var(--admin-filter-row-height)
-    var(--admin-kpi-row-height)
     var(--admin-chart-row-one-height)
     var(--admin-chart-row-two-height)
     var(--admin-secondary-row-height);
@@ -189,17 +190,36 @@
 
   .admin-dashboard-overview {
     height: auto;
+    width: 100%;
+    max-width: 100%;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: none;
+    overflow-x: hidden;
+  }
+
+  .admin-dashboard-overview > * {
+    grid-column: 1 / -1 !important;
+    max-width: 100%;
+  }
+
+  .admin-dashboard-overview .admin-panel,
+  .admin-dashboard-overview [data-kpi-card] {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .admin-dashboard-overview {
     gap: 6px;
     --admin-panel-padding: 6px;
     --dashboard-chart-title-size: 11px;
     --dashboard-body-size: 10px;
+    overflow-x: clip;
   }
 
   .admin-dashboard-overview > * {
     overflow: visible;
   }
 
-  /* Densité ~50 % : KPI, cartes, graphiques */
   .admin-dashboard-overview .admin-panel {
     padding: 6px !important;
     border-radius: 8px;
@@ -220,9 +240,32 @@
     font-size: 14px !important;
   }
 
-  /* Conteneur scrollable des pages admin hors dashboard */
   .admin-shell main.overflow-auto {
     padding: 10px !important;
+  }
+}
+
+@media (min-width: 640px) and (max-width: 1023px) {
+  .admin-dashboard-overview {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: none;
+    height: auto;
+    overflow-x: hidden;
+  }
+
+  .admin-dashboard-overview > [data-dashboard-filters],
+  .admin-dashboard-overview > .col-span-full {
+    grid-column: 1 / -1;
+  }
+
+  .admin-dashboard-overview > * {
+    grid-column: auto;
+  }
+}
+
+@media (min-width: 1024px) {
+  .admin-shell--overview .admin-main--overview {
+    overflow-x: hidden;
   }
 }
 
@@ -393,21 +436,62 @@ h3 {
   font-family: var(--font-heading), "Segoe UI", sans-serif;
   font-weight: 800;
   letter-spacing: -0.025em;
-  line-height: 1.08;
+  line-height: 1.2;
   font-size: var(--text-hero);
-  max-width: 40rem;
-  text-wrap: balance;
+  display: block;
+  max-width: none;
+  color: #ffffff;
+}
+
+/*
+ * Slogan hero — 3 lignes garanties :
+ * flex-direction:column empêche toute mise en ligne unique.
+ */
+h1.afd-h1-hero.hero-slogan {
+  display: flex !important;
+  flex-direction: column !important;
+  flex-wrap: nowrap !important;
+  align-items: flex-start !important;
+  justify-content: flex-start !important;
+  gap: 0 !important;
+  width: max-content !important;
+  max-width: min(100%, calc(100vw - 2rem)) !important;
+  white-space: normal !important;
+  text-align: left !important;
+}
+
+h1.afd-h1-hero.hero-slogan .hero-slogan-line {
+  display: block !important;
+  width: auto !important;
+  max-width: 100% !important;
+  white-space: nowrap !important;
+  filter: drop-shadow(0 2px 18px rgba(3, 27, 60, 0.45));
+}
+
+/* Dégradé blanc → ciel (texte animé + lignes statiques) */
+h1.afd-h1-hero.hero-slogan .hero-slogan-line,
+h1.afd-h1-hero.hero-slogan .hero-slogan-gradient {
+  background-image: linear-gradient(
+    to bottom right,
+    #ffffff 0%,
+    #e8f6ff 45%,
+    var(--afd-sky) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent !important;
+  -webkit-text-fill-color: transparent;
 }
 
 @media (max-width: 359px) {
   .afd-h1-hero {
-    font-size: clamp(1.85rem, 8.5vw, 2.125rem);
+    font-size: clamp(1.5rem, 7vw, 1.85rem);
   }
 }
 
 @media (min-width: 1024px) {
   .afd-h1-hero {
-    font-size: clamp(2.25rem, 4vw, 3.35rem);
+    font-size: clamp(2.25rem, 3.2vw, 2.85rem);
   }
 }
 
@@ -693,17 +777,24 @@ h3 {
 
 html {
   overflow-x: clip;
+  overflow-y: auto;
 }
 
 body {
   overflow-x: clip;
+  overflow-y: auto;
   min-width: 0;
+  min-height: 100%;
+  /* Préserve le défilement vertical même au-dessus des rails */
+  touch-action: pan-y pinch-zoom;
 }
 
-/* Rails horizontaux mobiles — scroll natif, pas de hijacking */
+/* Rails horizontaux mobiles — pan-x ET pan-y (ne jamais bloquer le scroll page) */
 .afd-h-rail {
-  touch-action: pan-x pinch-zoom;
+  touch-action: pan-x pan-y pinch-zoom;
   -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
+  overscroll-behavior-y: auto;
 }
 
 /* Conteneurs de cartes — container queries (Tailwind @min-[…]/card) */

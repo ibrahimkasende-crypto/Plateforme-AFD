@@ -12,6 +12,7 @@ type AdminMobileSidebarProps = {
   onClose: () => void;
   badges: SidebarBadges;
   role: Role;
+  roles?: string[];
 };
 
 export function AdminMobileSidebar({
@@ -19,6 +20,7 @@ export function AdminMobileSidebar({
   onClose,
   badges,
   role,
+  roles = [],
 }: AdminMobileSidebarProps) {
   return (
     <>
@@ -52,7 +54,12 @@ export function AdminMobileSidebar({
             <X className="size-5" aria-hidden />
           </button>
         </div>
-        <AdminSidebarNav badges={badges} role={role} onNavigate={onClose} />
+        <AdminSidebarNav
+          badges={badges}
+          role={role}
+          roles={roles}
+          onNavigate={onClose}
+        />
         <div className="mt-auto shrink-0 border-t border-white/10 p-4">
           <Link
             href="/"

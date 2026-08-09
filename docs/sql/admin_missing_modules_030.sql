@@ -1,4 +1,4 @@
--- Modules admin manquants : tables métier + colonnes demo sur tables existantes.
+﻿-- Modules admin manquants : tables métier + colonnes demo sur tables existantes.
 
 create extension if not exists pgcrypto;
 
@@ -215,3 +215,4 @@ select public._admin_table_policies('public.departements'::regclass);
 select public._admin_table_policies('public.partenariats_demandes'::regclass);
 
 drop function if exists public._admin_table_policies(regclass);
+

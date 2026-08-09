@@ -291,6 +291,7 @@ export function mapRpcPayloadToBundle(
         secondaryStats.find((s) => s.id === "adhesions")?.value ?? null,
       notifications:
         (pendingMessages ?? 0) > 0 ? pendingMessages : null,
+      messagerie: null,
     },
     viewer,
     accessibleSummary: `Tableau de bord généré le ${

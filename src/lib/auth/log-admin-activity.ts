@@ -7,7 +7,10 @@ export type AdminActivityAction =
   | "auth.password_reset_requested"
   | "auth.password_updated"
   | "auth.account_disabled_attempt"
-  | "auth.role_missing";
+  | "auth.role_missing"
+  | "mailbox.associate"
+  | "mailbox.status"
+  | "mailbox.password_reset_requested";
 
 /**
  * Journalise un événement admin sans secrets (pas de mot de passe / token).

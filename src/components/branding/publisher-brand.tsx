@@ -31,7 +31,7 @@ export function PublisherBrand({
       title={productBrand.poweredByLabel}
     >
       {showLogo ? (
-        <span className="relative inline-flex size-5 shrink-0 overflow-hidden rounded-full bg-white/90">
+        <span className="relative inline-flex size-5 shrink-0 overflow-visible">
           <Image
             src={productBrand.publisherLogo.src}
             alt=""

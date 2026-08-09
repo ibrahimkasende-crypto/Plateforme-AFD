@@ -59,3 +59,4 @@ Voir `tests/e2e/full-public-mobile-responsive.spec.ts`, `mobile-navigation`, `mo
 - Maquette PNG = référence desktop ; composition téléphone = rails premium.
 - Toutes les listes admin hors scope.
 - PDF iframes restent en `70vh` scrollable.
+

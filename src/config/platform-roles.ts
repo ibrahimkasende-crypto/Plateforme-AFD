@@ -1,6 +1,5 @@
 /**
- * Rôles plateforme (Lisungi Hub) vs rôles organisation (tenant).
- * Les administrateurs AFD ne sont pas des administrateurs Lisungi Hub.
+ * Rôles plateforme et rôles organisation pour l’administration AFD.
  */
 
 export const platformRoles = [
@@ -13,7 +12,7 @@ export const platformRoles = [
 export type PlatformRole = (typeof platformRoles)[number];
 
 export const platformRoleLabels: Record<PlatformRole, string> = {
-  platform_owner: "Propriétaire plateforme (Lisungi Hub)",
+  platform_owner: "Propriétaire plateforme AFD",
   platform_admin: "Administrateur plateforme",
   support_agent: "Agent support",
   billing_admin: "Administrateur facturation",

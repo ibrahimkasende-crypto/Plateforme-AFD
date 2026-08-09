@@ -61,3 +61,4 @@ Layouts `md+` / `lg+` / `xl+` inchangés dans l’esprit (grilles, hero panneau 
 - Certaines pages secondaires (CMS longues) restent principalement en stack vertical institutionnel — volontaire.  
 - La carte RDC reste verticale (pas de rail).  
 - Container queries dépendent du support navigateur moderne (OK pour cibles AFD).  
+

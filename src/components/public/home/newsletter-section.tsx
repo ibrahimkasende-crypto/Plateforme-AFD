@@ -10,17 +10,14 @@ import Link from "next/link";
 import { motion, useReducedMotion } from "motion/react";
 import { AnimatedSection } from "@/components/motion/animated-section";
 import { FadeIn } from "@/components/motion/FadeIn";
-import { NewsletterGoogleButton } from "@/components/newsletter/newsletter-google-button";
+import { NewsletterGoogleBlock } from "@/components/newsletter/newsletter-google-block";
 import { Section } from "@/components/shared/Section";
 import { SiteContainer } from "@/components/shared/SiteContainer";
-import {
-  checkboxClassName,
-  errorClassName,
-  fieldClassName,
-} from "@/components/ui/form-styles";
+import { fieldClassName } from "@/components/ui/form-styles";
 import { homeContent } from "@/config/home-content";
 import { subscribeNewsletterAction } from "@/features/newsletter/actions/subscribe";
 import { markNewsletterSubscribed } from "@/lib/newsletter/client-storage";
+import { isNewsletterGoogleButtonVisible } from "@/lib/newsletter/google-oauth";
 import { cn } from "@/lib/utils";
 
 const formSchema = z.object({
@@ -41,7 +38,6 @@ export function NewsletterSection() {
     register,
     handleSubmit,
     reset,
-    watch,
     formState: { errors },
   } = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -51,8 +47,6 @@ export function NewsletterSection() {
       website: "",
     },
   });
-
-  const consentChecked = watch("consent");
 
   function onSubmit(values: FormValues) {
     startTransition(async () => {
@@ -169,7 +163,9 @@ export function NewsletterSection() {
                       Inscrivez-vous gratuitement
                     </p>
                     <p className="mt-0.5 text-[13px] text-[var(--afd-muted)]">
-                      Avec Google ou votre adresse e-mail.
+                      {isNewsletterGoogleButtonVisible()
+                        ? "Avec Google ou votre adresse e-mail."
+                        : "Avec votre adresse e-mail."}
                     </p>
                   </div>
                 </div>
@@ -186,18 +182,6 @@ export function NewsletterSection() {
                 </div>
 
                 <div className="relative mt-5 space-y-3">
-                  <NewsletterGoogleButton
-                    consentChecked={Boolean(consentChecked)}
-                    disabled={pending}
-                    returnPath="/"
-                  />
-
-                  <div className="flex items-center gap-3 text-[11px] font-semibold uppercase tracking-wide text-[var(--afd-muted)]">
-                    <span className="h-px flex-1 bg-[var(--afd-border)]" />
-                    ou
-                    <span className="h-px flex-1 bg-[var(--afd-border)]" />
-                  </div>
-
                   <div className="min-w-0">
                     <label
                       htmlFor="newsletter-email"
@@ -229,19 +213,6 @@ export function NewsletterSection() {
                   </p>
                 ) : null}
 
-                <button
-                  type="submit"
-                  disabled={pending}
-                  className={cn(
-                    "afd-btn-text mt-4 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-[var(--afd-orange)] px-6 text-white shadow-[0_10px_28px_rgba(233,147,8,0.35)] transition duration-200 hover:bg-[var(--afd-orange-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--afd-orange)] focus-visible:ring-offset-2 disabled:opacity-60",
-                  )}
-                >
-                  {pending ? "Inscription…" : "S’inscrire à la newsletter"}
-                  {!pending ? (
-                    <ArrowRight className="size-4" aria-hidden />
-                  ) : null}
-                </button>
-
                 <label className="mt-4 flex items-start gap-3 text-[12px] leading-relaxed text-[var(--afd-muted)] sm:text-[13px]">
                   <input
                     type="checkbox"
@@ -263,6 +234,23 @@ export function NewsletterSection() {
                     {errors.consent.message}
                   </p>
                 ) : null}
+
+                <button
+                  type="submit"
+                  disabled={pending}
+                  className={cn(
+                    "afd-btn-text mt-4 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-[var(--afd-orange)] px-6 text-white shadow-[0_10px_28px_rgba(233,147,8,0.35)] transition duration-200 hover:bg-[var(--afd-orange-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--afd-orange)] focus-visible:ring-offset-2 disabled:opacity-60",
+                  )}
+                >
+                  {pending ? "Inscription…" : "S’inscrire avec mon e-mail"}
+                  {!pending ? (
+                    <ArrowRight className="size-4" aria-hidden />
+                  ) : null}
+                </button>
+
+                <div className="mt-3">
+                  <NewsletterGoogleBlock disabled={pending} />
+                </div>
 
                 <div
                   aria-live="polite"

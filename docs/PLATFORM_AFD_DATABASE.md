@@ -14,3 +14,4 @@ Régénération types :
 ```bash
 npx supabase gen types typescript --linked > src/types/database.types.ts
 ```
+

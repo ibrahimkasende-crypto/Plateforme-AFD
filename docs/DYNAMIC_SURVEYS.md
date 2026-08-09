@@ -30,3 +30,4 @@ texte court/long, nombre, date, téléphone, email, choix unique/multiple, liste
 - Consentement si requis
 - Pas de `eval()` pour la logique conditionnelle (champ JSON prévu, non exécuté)
 - Architecture compatible collecte mobile future (pas de mode offline revendiqué)
+

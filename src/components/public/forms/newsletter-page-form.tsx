@@ -6,7 +6,7 @@ import { useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
-import { NewsletterGoogleButton } from "@/components/newsletter/newsletter-google-button";
+import { NewsletterGoogleBlock } from "@/components/newsletter/newsletter-google-block";
 import {
   checkboxClassName,
   errorClassName,
@@ -51,7 +51,6 @@ export function NewsletterPageForm() {
   });
 
   const selectedInterests = watch("interests") ?? [];
-  const consentChecked = watch("consent");
 
   function toggleInterest(id: string) {
     const next = selectedInterests.includes(id)
@@ -93,18 +92,6 @@ export function NewsletterPageForm() {
           autoComplete="off"
           {...register("website")}
         />
-      </div>
-
-      <NewsletterGoogleButton
-        consentChecked={Boolean(consentChecked)}
-        disabled={pending}
-        returnPath="/ressources/newsletter"
-      />
-
-      <div className="flex items-center gap-3 text-[11px] font-semibold uppercase tracking-wide text-[var(--afd-muted)]">
-        <span className="h-px flex-1 bg-[var(--afd-border)]" />
-        ou
-        <span className="h-px flex-1 bg-[var(--afd-border)]" />
       </div>
 
       <div>
@@ -173,8 +160,10 @@ export function NewsletterPageForm() {
         disabled={pending}
         className={submitClassName}
       >
-        {pending ? "Inscription…" : "S’inscrire à la newsletter"}
+        {pending ? "Inscription…" : "S’inscrire avec mon e-mail"}
       </button>
+
+      <NewsletterGoogleBlock disabled={pending} />
     </form>
     </div>
   );

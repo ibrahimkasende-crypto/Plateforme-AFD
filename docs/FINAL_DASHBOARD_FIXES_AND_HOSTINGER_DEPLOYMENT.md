@@ -52,3 +52,4 @@
 
 - Le dépôt attendu `Plateforme-AFD` n’existe pas ; le remote correct est **Platefrome-AFD**.
 - Auth Supabase prod : `docs/SUPABASE_PRODUCTION_AUTH_CONFIGURATION.md`.
+

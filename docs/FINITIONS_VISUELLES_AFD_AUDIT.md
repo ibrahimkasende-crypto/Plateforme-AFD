@@ -77,3 +77,4 @@
 - Header sticky / drawer mobile (à aérer, pas réécrire).
 - `FadeIn`, footer, actions newsletter existantes (à étendre).
 - Palette bleue AFD (à recentrer sur le bleu logo `#0877D1`).
+

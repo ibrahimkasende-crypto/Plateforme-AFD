@@ -1,55 +1,73 @@
 import "server-only";
 
 import type { Role } from "@/config/roles";
+import {
+  PRINCIPAL_ROLE_CODES,
+  principalAssignableRoles,
+} from "@/config/afd-staff";
 
-const PRIVILEGED_ROLES = new Set([
-  "platform_owner",
-  "super_admin",
+const SUPER_ACTORS = new Set(["super_admin", "platform_owner"]);
+
+const PRINCIPAL_ACTORS = new Set([
+  "admin_principal_direction",
+  "admin_principal_it",
+  "admin_principal",
   "administrateur",
+  ...SUPER_ACTORS,
 ]);
 
-const OWNER_ONLY_ROLES = new Set(["platform_owner"]);
+export function isPrincipalRole(role: string): boolean {
+  return (PRINCIPAL_ROLE_CODES as readonly string[]).includes(role);
+}
 
-const SUPER_ADMIN_CREATABLE = new Set([
-  "administrateur",
-  "responsable_module",
-  "employe",
-  "agent_terrain",
-  "auditeur",
-  "partenaire_lecture",
-  "direction_generale",
-  "secretariat",
-  "charge_programmes",
-  "coordination_urgences",
-  "coordination_sante",
-  "coordination_developpement",
-  "coordination_meal",
-  "logistique",
-  "ressources_humaines",
-  "finance",
-  "communication",
-  "lecture_partenaire",
-]);
+export function isSuperActor(roles: string[]): boolean {
+  return roles.some((r) => SUPER_ACTORS.has(r));
+}
+
+export function isPrincipalActor(roles: string[]): boolean {
+  return roles.some((r) => PRINCIPAL_ACTORS.has(r));
+}
 
 export function isPrivilegedRole(role: string): boolean {
-  return PRIVILEGED_ROLES.has(role);
+  return (
+    SUPER_ACTORS.has(role) ||
+    isPrincipalRole(role) ||
+    role === "admin_module"
+  );
 }
 
 export function requiresOwnerForRole(role: string): boolean {
-  return OWNER_ONLY_ROLES.has(role);
+  return role === "platform_owner";
 }
 
+function actorIsPrincipalOnly(actorRoles: string[]): boolean {
+  return isPrincipalActor(actorRoles) && !isSuperActor(actorRoles);
+}
+
+/**
+ * Règles AFD :
+ * - super_admin / platform_owner → peut créer / remplacer les sièges Direction & IT
+ * - admin_principal_* → crée agents / modules / responsables (jamais super_admin)
+ * - personne ne s’auto-attribue un rôle via cette fonction seule
+ */
 export function canAssignRole(params: {
   actorRoles: string[];
   targetRole: string;
   hasCreateSuperAdmin: boolean;
   hasCreateAdmin: boolean;
   hasInvite: boolean;
+  hasManagePrincipal?: boolean;
 }): { ok: boolean; reason?: string } {
-  const { actorRoles, targetRole, hasCreateSuperAdmin, hasCreateAdmin, hasInvite } =
-    params;
+  const {
+    actorRoles,
+    targetRole,
+    hasCreateSuperAdmin,
+    hasCreateAdmin,
+    hasInvite,
+    hasManagePrincipal = false,
+  } = params;
 
-  if (!hasInvite && !hasCreateAdmin && !hasCreateSuperAdmin) {
+  if (!hasInvite && !hasCreateAdmin && !hasCreateSuperAdmin && !hasManagePrincipal) {
     return { ok: false, reason: "Permission d’invitation manquante." };
   }
 
@@ -64,38 +82,62 @@ export function canAssignRole(params: {
   }
 
   if (targetRole === "super_admin") {
+    if (actorIsPrincipalOnly(actorRoles)) {
+      return {
+        ok: false,
+        reason:
+          "Un Administrateur principal ne peut pas créer un Super Administrateur.",
+      };
+    }
     if (!actorRoles.includes("platform_owner") && !hasCreateSuperAdmin) {
       return {
         ok: false,
-        reason: "Permission users.create_super_admin ou rôle platform_owner requis.",
+        reason:
+          "Permission users.create_super_admin ou rôle platform_owner requis.",
       };
     }
     return { ok: true };
   }
 
-  if (targetRole === "administrateur") {
+  if (isPrincipalRole(targetRole)) {
     if (
-      !actorRoles.includes("platform_owner") &&
-      !actorRoles.includes("super_admin") &&
+      !isSuperActor(actorRoles) &&
+      !hasManagePrincipal &&
       !hasCreateAdmin
     ) {
-      return { ok: false, reason: "Permission users.create_admin requise." };
+      return {
+        ok: false,
+        reason:
+          "Seul le Super Administrateur peut créer ou remplacer un Administrateur principal.",
+      };
+    }
+    if (actorIsPrincipalOnly(actorRoles)) {
+      return {
+        ok: false,
+        reason:
+          "Un Administrateur principal ne peut pas créer ni remplacer un autre siège principal.",
+      };
     }
     return { ok: true };
   }
 
   if (
-    actorRoles.includes("platform_owner") ||
-    actorRoles.includes("super_admin") ||
-    hasInvite
+    isPrincipalActor(actorRoles) ||
+    hasInvite ||
+    hasCreateAdmin
   ) {
-    if (
-      !SUPER_ADMIN_CREATABLE.has(targetRole) &&
-      !actorRoles.includes("platform_owner")
-    ) {
-      return { ok: false, reason: "Rôle cible non autorisé." };
+    if (isSuperActor(actorRoles)) {
+      return { ok: true };
     }
-    return { ok: true };
+    if (
+      (principalAssignableRoles as readonly string[]).includes(targetRole)
+    ) {
+      return { ok: true };
+    }
+    return {
+      ok: false,
+      reason: "Rôle cible non autorisé pour l’Administrateur principal.",
+    };
   }
 
   return { ok: false, reason: "Attribution de rôle refusée." };
@@ -123,7 +165,22 @@ export function assertNotSelfAccountDeletion(
   }
 }
 
+export function assertCannotTouchSuperAdmin(
+  actorRoles: string[],
+  targetRoles: string[],
+): void {
+  const targetIsSuper =
+    targetRoles.includes("super_admin") ||
+    targetRoles.includes("platform_owner");
+  if (targetIsSuper && !isSuperActor(actorRoles)) {
+    throw new Error(
+      "Un Administrateur principal ne peut pas suspendre ni modifier le Super Administrateur.",
+    );
+  }
+}
+
 export function mapLegacyRole(role: string): Role | string {
   if (role === "lecture_partenaire") return "partenaire_lecture";
+  if (role === "administrateur") return "admin_principal";
   return role;
 }

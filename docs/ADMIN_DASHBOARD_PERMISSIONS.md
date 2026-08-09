@@ -171,3 +171,4 @@ AFD_E2E_ADMIN_PASSWORD=***
 2. Paramètre RPC `p_include_finance boolean` contrôlé par `finances:read`
 3. Middleware Next.js vérifiant `dashboard:read` avant SSR dashboard
 4. Tests RLS dédiés (`docs/TESTS_RLS.md`) pour tables dashboard
+

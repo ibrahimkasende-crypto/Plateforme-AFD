@@ -10,3 +10,4 @@ Statuts d’intégrité (jamais « document authentique » sur OCR seul) :
 - document non vérifié / nécessitant vérification / suspect / rejeté  
 
 Signature manuscrite ou cachet OCR ≠ preuve cryptographique.
+

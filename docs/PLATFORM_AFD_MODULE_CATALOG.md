@@ -15,3 +15,4 @@ Source de vérité détaillée : `docs/MODULE_COMPLETION_MATRIX.json`.
 
 ## Statuts autorisés
 `absent` · `maquette_seulement` · `partiel` · `fonctionnel_non_securise` · `fonctionnel_non_teste` · `operationnel` · `bloque_integration_externe`
+

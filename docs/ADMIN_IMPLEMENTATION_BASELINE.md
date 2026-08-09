@@ -106,3 +106,4 @@ Créés / renforcés :
 
 **Ne pas commencer par le polish UI.**  
 Priorité vague 1 : sécurité RLS + fondations partagées avant d’étendre stocks/logistique.
+

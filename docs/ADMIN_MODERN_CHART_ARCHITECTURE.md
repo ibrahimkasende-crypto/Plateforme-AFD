@@ -18,3 +18,4 @@
 ## Accessibilité
 
 Titre, résumé `sr-only`, vue tableau sur les pages analytiques, tooltips sombres, légendes cliquables, `prefers-reduced-motion`.
+

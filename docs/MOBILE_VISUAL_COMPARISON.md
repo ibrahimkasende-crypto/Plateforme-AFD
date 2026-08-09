@@ -33,3 +33,4 @@ Les captures pleine page temporaires ne sont pas versionnées (poids). Contrôle
 - Rails + `AdaptiveCard` (layouts CQ)
 - Filtres en drawer mobile
 - Hero focal téléphone / tablette / desktop
+

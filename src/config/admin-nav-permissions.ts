@@ -6,6 +6,7 @@ import type { Permission } from "@/config/permissions";
  */
 export const adminNavPermissions: Record<string, Permission | Permission[]> = {
   "/admin": "dashboard:read",
+  "/admin/dashboard/donnees-mensuelles": "dashboard:read",
   "/admin/programmes": "programmes:read",
   "/admin/projets": "projets:read",
   "/admin/activites": "activites:read",
@@ -31,6 +32,20 @@ export const adminNavPermissions: Record<string, Permission | Permission[]> = {
   "/admin/temoignages": "histoires:read",
   "/admin/actualites": "actualites:read",
   "/admin/publications": "actualites:read",
+  "/admin/publications/archives": "archives:read",
+  "/admin/bibliotheque": "archives:read",
+  "/admin/bibliotheque/activites": "archives:read",
+  "/admin/bibliotheque/albums": "archives:read",
+  "/admin/bibliotheque/photos": "archives:read",
+  "/admin/bibliotheque/videos": "archives:read",
+  "/admin/bibliotheque/rapports": "archives:read",
+  "/admin/bibliotheque/documents": "archives:read",
+  "/admin/bibliotheque/categories": "archives:read",
+  "/admin/bibliotheque/tags": "archives:read",
+  "/admin/bibliotheque/archives": "archives:read",
+  "/admin/bibliotheque/import": "archives:write",
+  "/admin/bibliotheque/parametres": "archives:read",
+  "/admin/publications/archives/nouvelle": "archives:write",
   "/admin/publications/pages": "pages:write",
   "/admin/mediatheque": "mediatheque:read",
   "/admin/newsletter": "newsletter:read",
@@ -55,7 +70,24 @@ export const adminNavPermissions: Record<string, Permission | Permission[]> = {
   "/admin/equipe": "equipe:read",
   "/admin/departements": "equipe:read",
   "/admin/utilisateurs": ["utilisateurs:read", "users.view"],
+  "/admin/administrateur-principal": [
+    "users.manage_principal",
+    "users.create_super_admin",
+  ],
+  "/admin/administrateur-principal/creer": [
+    "users.manage_principal",
+    "users.create_super_admin",
+  ],
+  "/admin/administrateur-principal/modifier": [
+    "users.manage_principal",
+    "users.create_super_admin",
+  ],
+  "/admin/administrateur-principal/historique": [
+    "users.manage_principal",
+    "users.view_audit",
+  ],
   "/admin/utilisateurs/nouveau": "users.invite",
+  "/admin/utilisateurs/invitations": "users.invite",
   "/admin/invitations": "users.invite",
   "/admin/acces": ["users.view", "users.assign_permissions"],
   "/admin/mon-profil": "dashboard:read",
@@ -101,9 +133,16 @@ export const adminNavPermissions: Record<string, Permission | Permission[]> = {
   "/admin/documents/nouveau": "documents:write",
   "/admin/import-intelligent": "ocr.view",
   "/admin/import-intelligent/nouveau": "ocr.upload",
+  "/admin/import-intelligent/missions": "ocr.upload",
+  "/admin/import-intelligent/finances": "ocr.upload",
+  "/admin/import-intelligent/photos": "ocr.upload",
+  "/admin/import-intelligent/communications": "ocr.upload",
+  "/admin/import-intelligent/beneficiaires": "ocr.upload",
+  "/admin/import-intelligent/historique": "ocr.view",
   "/admin/import-intelligent/modeles": "ocr.manage_models",
   "/admin/import-intelligent/regles": "ocr.manage_rules",
   "/admin/import-intelligent/file-attente": "ocr.process",
+  "/admin/parametres/demonstration": "parametres:manage",
   "/admin/exports": "rapports:export",
   "/admin/statistiques": "statistiques:read",
   "/admin/roles": "roles:manage",
@@ -119,7 +158,13 @@ export const adminNavPermissions: Record<string, Permission | Permission[]> = {
 export function navItemAllowed(
   href: string,
   has: (permission: Permission) => boolean,
+  itemRoles?: string[],
+  userRoles?: string[],
 ): boolean {
+  if (itemRoles?.length) {
+    const roles = userRoles ?? [];
+    if (!itemRoles.some((r) => roles.includes(r))) return false;
+  }
   const required = adminNavPermissions[href];
   if (!required) return true;
   if (Array.isArray(required)) {

@@ -10,6 +10,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useCallback, useMemo, useState } from "react";
 import { AdminMessagesButton } from "@/components/admin/header/admin-messages-button";
+import { AdminMailboxButton } from "@/components/admin/header/admin-mailbox-button";
 import {
   AdminNotificationsButton,
   type HeaderNotificationPreview,
@@ -17,9 +18,7 @@ import {
 import { AdminProfileMenu } from "@/components/admin/admin-profile-menu";
 import { AdminSearch } from "@/components/admin/admin-search";
 import { AfdEnvironmentBadge } from "@/components/admin/afd-environment-badge";
-import { OrganizationBadge } from "@/components/branding/organization-badge";
 import { resolveAdminNavTitle } from "@/config/admin-navigation";
-import { productBrand } from "@/config/product-brand";
 import type { AdminViewer, SidebarBadges } from "@/features/statistiques/types/dashboard";
 import { cn } from "@/lib/utils";
 
@@ -65,7 +64,7 @@ export function AdminHeader({
 
   return (
     <header className="sticky top-0 z-30 flex h-[var(--admin-header-height)] shrink-0 items-center gap-3 border-b border-[var(--admin-border)] bg-white px-3 md:px-4">
-      <div className="flex min-w-0 flex-1 items-center gap-2.5">
+      <div className="flex min-w-0 flex-1 items-center gap-2.5 lg:w-[220px] lg:flex-none xl:w-[260px]">
         <button
           type="button"
           onClick={onMenuClick}
@@ -75,25 +74,23 @@ export function AdminHeader({
           <Menu className="size-5" />
         </button>
         <div className="min-w-0">
-          <p className="hidden text-[10px] font-semibold uppercase tracking-wide text-[var(--admin-primary)] sm:block">
-            {productBrand.productName}
-          </p>
-          <h1 className="truncate font-display text-[20px] font-extrabold leading-none text-[var(--admin-text)] md:text-[24px]">
+          <h1 className="truncate font-display text-[19px] font-extrabold leading-none tracking-normal text-[var(--admin-text)] md:text-[22px]">
             {resolvedTitle}
           </h1>
         </div>
       </div>
 
-      <div className="hidden flex-1 justify-center lg:flex">
+      <div className="hidden min-w-0 flex-1 justify-center lg:flex">
         <AdminSearch />
       </div>
 
       <div className="flex shrink-0 items-center gap-1 md:gap-2">
-        <OrganizationBadge className="hidden md:inline-flex" />
-        <AfdEnvironmentBadge className="hidden sm:inline-flex" />        <AdminNotificationsButton
+        <AfdEnvironmentBadge className="hidden sm:inline-flex" />
+        <AdminNotificationsButton
           count={badges.notifications}
           previews={notificationPreviews}
         />
+        <AdminMailboxButton count={badges.messagerie ?? null} />
         <AdminMessagesButton count={badges.messages} />
         {canManageSettings ? (
           <Link

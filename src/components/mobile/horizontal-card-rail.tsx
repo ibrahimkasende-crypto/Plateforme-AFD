@@ -61,8 +61,8 @@ export function HorizontalCardRail({
         aria-label={label}
         tabIndex={0}
         className={cn(
-          "afd-h-rail flex overflow-x-auto overscroll-x-contain pb-1",
-          "snap-x snap-mandatory scroll-px-[var(--mobile-gutter)] px-[var(--mobile-gutter)]",
+          "afd-h-rail flex overflow-x-auto overflow-y-visible overscroll-x-contain pb-1",
+          "snap-x snap-proximity scroll-px-[var(--mobile-gutter)] px-[var(--mobile-gutter)]",
           "[-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden",
           "md:grid md:gap-5 md:overflow-visible md:px-0 md:pb-0 md:snap-none",
           desktopClassName ?? "md:grid-cols-2 lg:grid-cols-3",

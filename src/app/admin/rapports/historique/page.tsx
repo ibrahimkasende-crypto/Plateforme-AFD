@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { AdminEmptyCreate } from "@/components/admin/module/admin-empty-create";
 import { AdminPageHeader } from "@/components/admin/module/admin-page-header";
 import { updateRapportStatus } from "@/features/rapports/actions/manage-rapport";

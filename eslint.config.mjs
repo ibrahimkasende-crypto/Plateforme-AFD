@@ -14,6 +14,7 @@ const eslintConfig = defineConfig([
     "dist/**",
     "supabase/functions/**",
     "scripts/**",
+    "ecosystem.config.cjs",
     "test.js",
     "test-screenshot.mjs",
     "diagnostic.mjs",

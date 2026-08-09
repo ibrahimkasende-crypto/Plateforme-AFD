@@ -1,4 +1,4 @@
--- Phase auth admin — non destructive.
+﻿-- Phase auth admin — non destructive.
 -- Complète les rôles organisationnels AFD, permissions applicatives,
 -- journal d'activité et politiques de profil nécessaires à la connexion.
 
@@ -249,3 +249,4 @@ $$;
 revoke all on function public.log_admin_activity(text, jsonb, uuid) from public;
 grant execute on function public.log_admin_activity(text, jsonb, uuid) to authenticated;
 grant execute on function public.log_admin_activity(text, jsonb, uuid) to anon;
+

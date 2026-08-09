@@ -13,7 +13,7 @@ export default async function AdminOrganisationParametresPage() {
     <main className="mx-auto max-w-3xl space-y-6 p-6">
       <AdminPageHeader
         title="Organisation"
-        description={`${productBrand.tenantLabel} — paramètres institutionnels de l’organisation cliente.`}
+        description={`${productBrand.tenantLabel} — paramètres institutionnels AFD.`}
         backFallbackHref="/admin/parametres"
       />
 
@@ -75,8 +75,8 @@ export default async function AdminOrganisationParametresPage() {
           </div>
         </dl>
         <p className="pt-2 text-xs text-slate-400">
-          Ces paramètres concernent l’organisation cliente, pas l’éditeur{" "}
-          {productBrand.publisherName}.
+          Ces paramètres concernent l’identité institutionnelle de{" "}
+          {organizationBrand.organizationShortName}.
         </p>
       </section>
     </main>

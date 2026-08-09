@@ -15,7 +15,7 @@ const actionSchema = z.object({
 export type NewsletterActionResult = {
   ok: boolean;
   message: string;
-  status?: "subscribed" | "already_subscribed" | "prepared";
+  status?: "subscribed" | "already_subscribed" | "prepared" | "reactivated";
 };
 
 const recentSubmissions = new Map<string, number>();

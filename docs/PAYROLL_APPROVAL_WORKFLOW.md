@@ -53,3 +53,4 @@ Actions serveur : `src/features/payroll/actions/manage-payroll.ts`.
 ## Audit
 
 Consulter `audit_logs` où `module = 'payroll'` pour traçabilité des transitions.
+

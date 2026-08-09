@@ -126,3 +126,4 @@ Une image statique n’est **pas** utilisée comme remplacement de la carte inte
 | `npm run build` | OK (exit 0) — Next.js 16.2.10 Turbopack |
 
 Breakpoints cibles : 320 / 375 / 430 / 768 / 1024 / 1440 — disposition carte au-dessus + stats/liste en dessous sur mobile ; grille horizontale sur desktop.
+

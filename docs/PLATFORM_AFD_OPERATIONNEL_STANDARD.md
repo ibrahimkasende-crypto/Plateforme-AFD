@@ -58,3 +58,4 @@ Test : `tests/rls/rls-policy-enforcement.test.ts`
 - Logistique (demandes)
 
 Voir `docs/MODULE_COMPLETION_MATRIX.json` champ `preuvesOperationnel`.
+

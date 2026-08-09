@@ -77,3 +77,4 @@ Verdict : effet « glow ball » perçu comme traînée / halo bleu — à suppri
 6. Feature flags + tests e2e  
 
 Aucune modification Supabase / contenu métier.
+

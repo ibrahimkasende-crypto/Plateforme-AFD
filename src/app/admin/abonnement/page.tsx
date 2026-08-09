@@ -1,12 +1,10 @@
 import { AdminPageHeader } from "@/components/admin/module/admin-page-header";
-import { PoweredByLisungiHub } from "@/components/branding/powered-by-lisungi-hub";
 import { organizationBrand } from "@/config/organization-brand";
 import { productBrand } from "@/config/product-brand";
 import { requireAdmin } from "@/lib/auth/require-admin";
 
 /**
- * Page préparatoire — abonnement LISUNGI.
- * Ne bloque pas l’AFD ; données configurables (plan pilote interne).
+ * Page préparatoire — statut interne de la plateforme AFD.
  */
 export default async function AdminAbonnementPage() {
   await requireAdmin("/admin/abonnement");
@@ -27,7 +25,7 @@ export default async function AdminAbonnementPage() {
     <main className="mx-auto max-w-3xl space-y-6 p-6">
       <AdminPageHeader
         title="Abonnement"
-        description={`Plan ${productBrand.productName} pour ${organizationBrand.organizationShortName}.`}
+        description={`Statut de la plateforme d’administration pour ${organizationBrand.organizationShortName}.`}
         backFallbackHref="/admin/parametres"
       />
 
@@ -83,9 +81,8 @@ export default async function AdminAbonnementPage() {
 
         <p className="mt-4 text-xs text-slate-400">
           Aucun montant commercial n’est affiché en phase pilote. Les conditions
-          définitives seront communiquées par {productBrand.publisherName}.
+          définitives seront validées par {organizationBrand.organizationShortName}.
         </p>
-        <PoweredByLisungiHub className="mt-3" theme="light" />
       </section>
     </main>
   );

@@ -1,17 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import {
-  Cell,
-  Label,
-  Legend,
-  Pie,
-  PieChart,
-  ResponsiveContainer,
-  Tooltip,
-} from "recharts";
 import { AFD_CHART_COLORS } from "@/components/charts/chart-colors";
-import { DarkChartTooltip } from "@/components/charts/chart-tooltip";
 import type { NamedCount } from "@/features/statistiques/types/dashboard";
 
 type ProjectStatusChartProps = {
@@ -38,81 +28,68 @@ function openStatusAnalyse(router: ReturnType<typeof useRouter>, name: string) {
 export function ProjectStatusChart({ data }: ProjectStatusChartProps) {
   const router = useRouter();
   const total = data.reduce((sum, item) => sum + item.value, 0);
+  const rows = data.filter((item) => item.value > 0);
+
+  if (total <= 0 || rows.length === 0) {
+    return (
+      <div className="flex h-full items-center justify-center rounded-lg border border-dashed border-slate-200 text-center text-[11px] text-[var(--admin-muted)]">
+        Aucun statut projet disponible.
+      </div>
+    );
+  }
 
   return (
-    <ResponsiveContainer width="100%" height="100%">
-      <PieChart>
-        <Pie
-          data={data}
-          dataKey="value"
-          nameKey="name"
-          innerRadius="48%"
-          outerRadius="72%"
-          paddingAngle={2}
-          label={false}
-          style={{ cursor: "pointer" }}
-          onClick={(entry) => {
-            const name =
-              entry && typeof entry === "object" && "name" in entry
-                ? String(entry.name)
-                : null;
-            if (!name) return;
-            openStatusAnalyse(router, name);
-          }}
-        >
-          {data.map((entry, index) => (
-            <Cell
-              key={entry.name}
-              fill={entry.color ?? AFD_CHART_COLORS[index % AFD_CHART_COLORS.length]}
-            />
-          ))}
-          <Label
-            content={({ viewBox }) => {
-              if (!viewBox || !("cx" in viewBox) || !("cy" in viewBox)) return null;
-              const { cx, cy } = viewBox;
-              return (
-                <text x={cx} y={cy} textAnchor="middle" dominantBaseline="middle">
-                  <tspan
-                    x={cx}
-                    y={(cy ?? 0) - 2}
-                    fill="var(--admin-text)"
-                    fontSize={20}
-                    fontWeight={800}
-                    fontFamily="var(--font-heading), Manrope, sans-serif"
-                  >
-                    {total}
-                  </tspan>
-                  <tspan
-                    x={cx}
-                    y={(cy ?? 0) + 14}
-                    fill="var(--admin-muted)"
-                    fontSize={11}
-                  >
-                    Projets
-                  </tspan>
-                </text>
-              );
-            }}
-            position="center"
-          />
-        </Pie>
-        <Tooltip content={<DarkChartTooltip />} />
-        <Legend
-          verticalAlign="middle"
-          align="right"
-          layout="vertical"
-          iconType="circle"
-          wrapperStyle={{ fontSize: 11, paddingLeft: 4, cursor: "pointer" }}
-          onClick={(entry) => {
-            const name =
-              entry && typeof entry === "object" && "value" in entry
-                ? String(entry.value)
-                : null;
-            if (!name) return;
-            openStatusAnalyse(router, name);
-          }}
-        />
-      </PieChart>
-    </ResponsiveContainer>
+    <div className="flex h-full min-h-0 flex-col justify-center gap-1 sm:gap-2">
+      <div className="hidden items-end justify-between gap-2 sm:flex">
+        <p className="text-[10px] font-medium text-[var(--admin-muted)]">
+          Total projets
+        </p>
+        <p className="font-display text-[20px] font-extrabold leading-none tabular-nums tracking-normal text-[var(--admin-text)]">
+          {total}
+        </p>
+      </div>
+
+      <ul className="min-w-0 space-y-1 text-[10px] leading-tight sm:space-y-1.5 sm:text-[11px]">
+        {rows.map((item, index) => {
+          const color =
+            item.color ?? AFD_CHART_COLORS[index % AFD_CHART_COLORS.length];
+          const percent = item.percent ?? Math.round((item.value / total) * 100);
+          return (
+            <li key={item.name}>
+              <button
+                type="button"
+                onClick={() => openStatusAnalyse(router, item.name)}
+                className="group w-full rounded px-1 py-0 text-left transition hover:bg-slate-50 sm:py-0.5"
+              >
+                <span className="mb-0.5 flex items-center justify-between gap-2 sm:mb-1">
+                  <span className="flex min-w-0 items-center gap-1.5">
+                    <span
+                      className="size-2.5 shrink-0 rounded-full"
+                      style={{ backgroundColor: color }}
+                      aria-hidden
+                    />
+                    <span className="truncate font-medium text-[var(--admin-text)]">
+                      {item.name}
+                    </span>
+                  </span>
+                  <span className="shrink-0 font-bold tabular-nums text-[var(--admin-text)]">
+                    {item.value}
+                  </span>
+                </span>
+                <span className="block h-1.5 overflow-hidden rounded-full bg-slate-100">
+                  <span
+                    className="block h-full rounded-full transition group-hover:brightness-95"
+                    style={{
+                      width: `${Math.max(4, Math.min(100, percent))}%`,
+                      backgroundColor: color,
+                    }}
+                  />
+                </span>
+              </button>
+            </li>
+          );
+        })}
+      </ul>
+    </div>
   );
 }

@@ -15,8 +15,9 @@ const TABS: TabDef[] = [
     label: "Général",
     fields: [
       { key: "org.name", label: "Nom de l'organisation" },
+      { key: "org.short_name", label: "Nom court" },
       { key: "org.slogan", label: "Slogan" },
-      { key: "org.founded_year", label: "Année de fondation" },
+      { key: "org.founded_year", label: "Date / année de fondation" },
     ],
   },
   {
@@ -26,6 +27,16 @@ const TABS: TabDef[] = [
       { key: "org.mission", label: "Mission", type: "textarea" },
       { key: "org.vision", label: "Vision", type: "textarea" },
       { key: "org.values", label: "Valeurs", type: "textarea" },
+    ],
+  },
+  {
+    id: "marque",
+    label: "Marque",
+    fields: [
+      { key: "brand.logo_url", label: "URL du logo (Storage)" },
+      { key: "brand.favicon_url", label: "URL du favicon" },
+      { key: "home.hero_title", label: "Titre hero (accueil)", type: "textarea" },
+      { key: "home.hero_subtitle", label: "Sous-titre hero", type: "textarea" },
     ],
   },
   {
@@ -45,6 +56,8 @@ const TABS: TabDef[] = [
       { key: "social.twitter", label: "X / Twitter" },
       { key: "social.linkedin", label: "LinkedIn" },
       { key: "social.youtube", label: "YouTube" },
+      { key: "social.tiktok", label: "TikTok" },
+      { key: "social.whatsapp", label: "WhatsApp (lien wa.me)" },
     ],
   },
   {

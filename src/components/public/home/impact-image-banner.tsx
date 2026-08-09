@@ -12,16 +12,21 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { useReducedMotion } from "motion/react";
 import { impactBannerSlides } from "@/config/impact-banners";
+import { getSupabaseImageUrl } from "@/lib/images/supabase-image";
 
-/** Vitesse du défilement auto (px / seconde) — plus élevé = plus rapide */
-const AUTO_SPEED_PX_PER_SEC = 75;
+/** Vitesse du défilement auto (px / seconde) */
+const AUTO_SPEED_PX_PER_SEC = 55;
+/** Seuil (px) avant de capturer un geste horizontal */
+const AXIS_LOCK_PX = 10;
 
 export function ImpactImageBanner() {
   const reduceMotion = useReducedMotion();
   const scrollerRef = useRef<HTMLDivElement>(null);
   const [paused, setPaused] = useState(false);
   const draggingRef = useRef(false);
+  const axisLockedRef = useRef<"x" | "y" | null>(null);
   const dragStartX = useRef(0);
+  const dragStartY = useRef(0);
   const dragStartScroll = useRef(0);
 
   const loopSlides = [...impactBannerSlides, ...impactBannerSlides];
@@ -42,15 +47,11 @@ export function ImpactImageBanner() {
     const tick = (now: number) => {
       const dt = Math.min((now - last) / 1000, 0.05);
       last = now;
-
       el.scrollLeft += AUTO_SPEED_PX_PER_SEC * dt;
-
-      // Boucle fluide : quand on a parcouru la première moitié (copie), on revient
       const half = el.scrollWidth / 2;
       if (half > 0 && el.scrollLeft >= half) {
         el.scrollLeft -= half;
       }
-
       frame = window.requestAnimationFrame(tick);
     };
 
@@ -61,25 +62,51 @@ export function ImpactImageBanner() {
   function onPointerDown(event: ReactPointerEvent<HTMLDivElement>) {
     const el = scrollerRef.current;
     if (!el) return;
+    // Ne pas capturer immédiatement — attendre l’axe du geste
     draggingRef.current = true;
+    axisLockedRef.current = null;
     setPaused(true);
     dragStartX.current = event.clientX;
+    dragStartY.current = event.clientY;
     dragStartScroll.current = el.scrollLeft;
-    el.setPointerCapture(event.pointerId);
   }
 
   function onPointerMove(event: ReactPointerEvent<HTMLDivElement>) {
     if (!draggingRef.current) return;
     const el = scrollerRef.current;
     if (!el) return;
-    const delta = event.clientX - dragStartX.current;
-    el.scrollLeft = dragStartScroll.current - delta;
+
+    const dx = event.clientX - dragStartX.current;
+    const dy = event.clientY - dragStartY.current;
+
+    if (!axisLockedRef.current) {
+      if (Math.abs(dx) < AXIS_LOCK_PX && Math.abs(dy) < AXIS_LOCK_PX) return;
+      axisLockedRef.current = Math.abs(dx) >= Math.abs(dy) ? "x" : "y";
+      if (axisLockedRef.current === "x") {
+        el.setPointerCapture(event.pointerId);
+      } else {
+        // Geste vertical → laisser le scroll de page
+        draggingRef.current = false;
+        setPaused(false);
+        return;
+      }
+    }
+
+    if (axisLockedRef.current !== "x") return;
+    el.scrollLeft = dragStartScroll.current - dx;
   }
 
   function onPointerUp(event: ReactPointerEvent<HTMLDivElement>) {
     const el = scrollerRef.current;
+    if (axisLockedRef.current === "x") {
+      try {
+        el?.releasePointerCapture(event.pointerId);
+      } catch {
+        // ignore
+      }
+    }
     draggingRef.current = false;
-    el?.releasePointerCapture(event.pointerId);
+    axisLockedRef.current = null;
     setPaused(false);
   }
 
@@ -113,7 +140,6 @@ export function ImpactImageBanner() {
         onFocusCapture={pause}
         onBlurCapture={resume}
       >
-        {/* Fondus latéraux pour un rendu plus moderne */}
         <div
           className="pointer-events-none absolute inset-y-0 left-0 z-[1] w-8 bg-gradient-to-r from-[var(--afd-surface-elevated)] to-transparent sm:w-12"
           aria-hidden
@@ -125,7 +151,7 @@ export function ImpactImageBanner() {
 
         <div
           ref={scrollerRef}
-          className="afd-h-rail flex cursor-grab touch-pan-x snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-1 select-none active:cursor-grabbing [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden sm:gap-4 sm:px-6 lg:snap-none lg:px-0"
+          className="afd-h-rail flex cursor-grab snap-x snap-proximity gap-3 overflow-x-auto overflow-y-visible px-4 pb-1 select-none active:cursor-grabbing [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden sm:gap-4 sm:px-6 lg:snap-none lg:px-0"
           onPointerDown={onPointerDown}
           onPointerMove={onPointerMove}
           onPointerUp={onPointerUp}
@@ -137,7 +163,7 @@ export function ImpactImageBanner() {
               className="relative h-[168px] w-[min(84vw,300px)] shrink-0 snap-start overflow-hidden rounded-[16px] border border-[var(--afd-blue)]/10 bg-[var(--afd-navy)] shadow-[0_8px_24px_rgba(6,38,83,0.08)] sm:h-[200px] sm:w-[300px] sm:rounded-[18px] md:h-[220px] md:w-[340px]"
             >
               <Image
-                src={slide.image.src}
+                src={getSupabaseImageUrl(slide.image.src, { variant: "card" })}
                 alt={slide.image.alt}
                 fill
                 sizes="(max-width:768px) 84vw, 340px"

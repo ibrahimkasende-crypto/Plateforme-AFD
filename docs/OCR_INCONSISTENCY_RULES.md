@@ -8,3 +8,4 @@ Moteur : `src/features/document-intelligence/rules/`.
 - Bénéficiaires : catégories vs total, période dupliquée  
 
 Anomalies = info / warning / high / critical — jamais accusation automatique.
+

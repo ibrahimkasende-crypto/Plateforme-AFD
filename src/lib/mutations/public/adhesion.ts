@@ -25,6 +25,25 @@ export async function submitMembershipRequest(
     return { ok: false, reason: "unavailable" };
   }
 
+  // RPC security definer — fonctionne avec clé publishable (RLS table souvent bloquant).
+  const { data: rpcId, error: rpcError } = await supabase.rpc(
+    "submit_membership_request" as never,
+    {
+      p_full_name: input.full_name,
+      p_email: input.email,
+      p_phone: input.phone,
+      p_address: input.address,
+      p_gender: input.gender,
+      p_motivation: input.motivation,
+      p_member_type: input.member_type ?? null,
+    } as never,
+  );
+
+  if (!rpcError && rpcId) {
+    return { ok: true };
+  }
+
+  // Fallback insert direct (projets avec clé anon JWT + policy Insert membres).
   const payload: MembreInsert = {
     full_name: input.full_name,
     email: input.email,
@@ -38,6 +57,11 @@ export async function submitMembershipRequest(
 
   const { error } = await supabase.from("membres").insert(payload);
   if (error) {
+    console.error(
+      "[adhesion] insert failed:",
+      rpcError?.message ?? error.message,
+      error.code,
+    );
     return { ok: false, reason: "insert_failed" };
   }
 

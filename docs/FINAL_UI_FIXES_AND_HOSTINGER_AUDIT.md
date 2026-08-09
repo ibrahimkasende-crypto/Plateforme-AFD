@@ -50,3 +50,4 @@
 Voir `docs/HOSTINGER_DEPLOYMENT_FINAL.md` et `docs/HOSTINGER_ENVIRONMENT_VARIABLES.md`.
 
 **Statut déploiement :** accès hPanel non confirmé → `PRÊT_POUR_DÉPLOIEMENT_HOSTINGER` après validations locales.
+

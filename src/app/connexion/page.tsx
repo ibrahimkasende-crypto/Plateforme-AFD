@@ -6,8 +6,8 @@ import { organizationBrand } from "@/config/organization-brand";
 import { productBrand } from "@/config/product-brand";
 
 export const metadata: Metadata = {
-  title: `Connexion à ${productBrand.productName}`,
-  description: `Espace de gestion de ${organizationBrand.organizationName}, propulsé par ${productBrand.publisherName}.`,
+  title: `Connexion ${productBrand.productName}`,
+  description: `Espace de gestion de ${organizationBrand.organizationName}.`,
   robots: { index: false, follow: false },
 };
 
@@ -22,7 +22,7 @@ function LoginFormFallback() {
 export default function ConnexionPage() {
   return (
     <AuthShell
-      title={`Connexion à ${productBrand.productName}`}
+      title={`Connexion ${productBrand.productName}`}
       subtitle={`Espace de gestion de l’${organizationBrand.organizationName}`}
     >
       <Suspense fallback={<LoginFormFallback />}>

@@ -4,7 +4,7 @@ import {
   skipWithoutAdminCredentials,
 } from "./helpers/admin-auth";
 
-test.describe("Admin — identité produit LISUNGI", () => {
+test.describe("Admin — identité AFD", () => {
   test.beforeEach(({}, testInfo) => {
     skipWithoutAdminCredentials();
     test.skip(
@@ -13,13 +13,13 @@ test.describe("Admin — identité produit LISUNGI", () => {
     );
   });
 
-  test("LISUNGI visible dans le dashboard admin", async ({ page }) => {
+  test("AFD visible dans le dashboard admin", async ({ page }) => {
     await loginAsAdmin(page);
     await page.goto("/admin");
-    await expect(page.getByText("Bienvenue dans LISUNGI")).toBeVisible();
-    await expect(page.locator("[data-powered-by-lisungi]")).toContainText(
-      /Lisungi Hub/i,
+    await expect(page.getByText("Tableau de bord AFD")).toBeVisible();
+    await expect(page.locator("[data-afd-platform-brand]")).toContainText(
+      /Pilotage institutionnel AFD/i,
     );
-    await expect(page.locator("[data-admin-sidebar]")).toContainText("LISUNGI");
+    await expect(page.locator("[data-admin-sidebar]")).toContainText("AFD");
   });
 });

@@ -1,7 +1,8 @@
 /**
  * Actualités institutionnelles AFD (source éditoriale afd-rdc.org / contenus validés).
- * Images : public/images/afd/actualites
+ * Images : banque AFD classée, sélectionnées selon le sujet de chaque article.
  */
+import { afdBankImage } from "@/config/afd-images";
 
 export type MigratedNewsArticle = {
   id: string;
@@ -15,18 +16,202 @@ export type MigratedNewsArticle = {
   category: string | null;
   published_at: string | null;
   author: string | null;
-  source: "afd-rdc.org";
+  source: "afd-rdc.org" | "rapport-terrain-afd";
   migrationNote: string;
   themes: readonly string[];
 };
 
 const newsImages = {
-  sante: encodeURI("/images/afd/actualites/Amelioration de la sante.jpg"),
-  ituri: encodeURI("/images/afd/actualites/Urgence a Ituri.jpg"),
-  expansion: encodeURI("/images/afd/actualites/Expension AFD.jpg"),
+  capPreparation: afdBankImage(
+    "02_education/afd_education_preparation_enquete_cap_enfants_deplaces_kinshasa_2026_002.jpeg",
+  ),
+  capFormation: afdBankImage(
+    "02_education/afd_education_formation_enqueteurs_cap_enfants_deplaces_kinshasa_2026_001.jpeg",
+  ),
+  mveTshopo: afdBankImage(
+    "01_sante/afd_sante_reunion_suivi_evaluation_mve_dps_tshopo_2026_001.jpeg",
+  ),
+  plaidoyerSantePublique: afdBankImage(
+    "21_plaidoyer/afd_plaidoyer_mobilisation_osc_loi_sante_publique_kinshasa_2026_001.jpeg",
+  ),
+  santeIntimeGogynax: afdBankImage(
+    "01_sante/afd_sante_sensibilisation_sante_intime_femmes_gogynax_2026_004.jpeg",
+  ),
+  sante: afdBankImage(
+    "01_sante/afd_sante_sensibilisation_cpn_salama_011.jpg",
+  ),
+  ituri: afdBankImage(
+    "17_missions_terrain/afd_missions_terrain_visite_evaluation_site_deplaces_site_ceca_20_makoko_1_010.jpg",
+  ),
+  expansion: afdBankImage(
+    "24_visites_institutionnelles/afd_visites_institutionnelles_visite_mcz_hgr_mambasa_012.jpg",
+  ),
 } as const;
 
 export const MIGRATED_NEWS_ARTICLES: readonly MigratedNewsArticle[] = [
+  {
+    id: "field-sante-intime-gogynax",
+    slug: "sensibilisation-sante-intime-femmes-gogynax",
+    title:
+      "Santé intime des femmes : une sensibilisation axée sur la prévention et la dignité",
+    excerpt:
+      "L’AFD documente une séance d’information consacrée à la santé intime des femmes, avec des échanges communautaires autour de la prévention, de la dignité et de l’accès à des produits adaptés.",
+    preview:
+      "Cette activité met en avant la santé intime des femmes comme un enjeu de prévention, de dignité et d’accès à l’information. Les images montrent une rencontre avec les participantes, des échanges en salle et la présentation de supports Gogynax liés à la prévention des infections.",
+    content: `## Contexte
+
+L’AFD ASBL documente une activité de sensibilisation consacrée à la santé intime des femmes. Les supports visibles pendant la rencontre mettent l’accent sur la prévention, l’information et l’accès à des produits adaptés.
+
+## Déroulement
+
+La séance a réuni des femmes autour d’échanges pratiques animés en salle. Les intervenants ont présenté des messages de prévention et des supports liés à la santé intime, afin de renforcer la compréhension des participantes et de favoriser des choix éclairés.
+
+## Enjeu pour l’AFD
+
+La santé des femmes est directement liée à leur dignité, à leur autonomie et à leur participation sociale. Cette archive permettra de conserver la preuve visuelle de l’activité et de compléter les informations exactes dans le dashboard lorsque la date et le lieu définitifs seront validés.`,
+    image_url: newsImages.santeIntimeGogynax,
+    category: "Santé",
+    published_at: "2026-08-04T08:00:00.000Z",
+    author: "AFD ASBL",
+    source: "rapport-terrain-afd",
+    migrationNote:
+      "Lot photo renommé depuis Nauveau/18-25 — date et lieu exacts à confirmer dans le dashboard.",
+    themes: ["santé intime", "femmes", "prévention", "dignité"],
+  },
+  {
+    id: "field-mobilisation-osc-loi-sante-publique",
+    slug: "mobilisation-osc-revision-loi-sante-publique",
+    title:
+      "L’AFD participe à la mobilisation des OSC sur la loi relative à la santé publique",
+    excerpt:
+      "L’AFD ASBL a pris part à une mobilisation des organisations de la société civile sur la révision de l’article 81, alinéa 2, afin de soutenir des dispositions plus réalistes et accessibles.",
+    preview:
+      "Lors d’une matinée organisée par la CGND avec Si Jeunesse Savait, les OSC ont échangé sur la modification de la loi relative à la santé publique. L’enjeu principal portait sur l’accès aux méthodes de contraception non réversibles dans les zones où les médecins spécialisés sont peu disponibles.",
+    content: `## Contexte
+
+L’AFD ASBL a participé à la matinée de mobilisation des organisations de la société civile sur la proposition de modification de la loi relative à la santé publique, organisée par la CGND avec Si Jeunesse Savait.
+
+## Points clés
+
+Les échanges ont principalement porté sur l’article 81, alinéa 2, notamment l’exigence actuelle liée à l’avis de plusieurs médecins pour certaines méthodes de contraception non réversibles.
+
+Une enquête présentée pendant la rencontre a montré que cette exigence est difficilement applicable en République démocratique du Congo, surtout dans les zones reculées, en raison du nombre limité de médecins et de psychiatres.
+
+## Proposition soutenue
+
+Les organisations présentes ont proposé une révision de cette disposition afin de la rendre plus réaliste et plus accessible, notamment en réduisant l’exigence à l’avis d’un seul médecin. Les OSC ont marqué leur adhésion au processus par la signature du document prévu à cet effet.`,
+    image_url: newsImages.plaidoyerSantePublique,
+    category: "Plaidoyer",
+    published_at: "2026-08-03T08:00:00.000Z",
+    author: "AFD ASBL",
+    source: "rapport-terrain-afd",
+    migrationNote:
+      "Lot photo renommé depuis Nauveau/17 — mobilisation OSC santé publique.",
+    themes: ["plaidoyer", "santé publique", "droits des femmes", "OSC"],
+  },
+  {
+    id: "field-suivi-evaluation-mve-dps-tshopo",
+    slug: "suivi-evaluation-mve-dps-tshopo",
+    title:
+      "Suivi et évaluation de la MVE : l’AFD participe à la coordination sanitaire à la DPS Tshopo",
+    excerpt:
+      "Le 1er août 2026, l’AFD a pris part à une réunion de suivi et d’évaluation de la maladie à virus Ebola à la Division provinciale de la santé de la Tshopo.",
+    preview:
+      "La réunion de suivi et d’évaluation de la MVE a permis de revenir sur la situation épidémiologique, les problèmes identifiés, les recommandations, les échantillons en laboratoire et les fiches d’investigation. L’AFD poursuit son engagement dans la prévention communautaire et la circulation d’informations fiables.",
+    content: `## Réunion de coordination
+
+Le samedi 1er août 2026, l’AFD ASBL a participé à une réunion de suivi et d’évaluation de la maladie à virus Ebola dans la salle de réunion de la Division provinciale de la santé de la Tshopo.
+
+## Sujets abordés
+
+L’exposé a porté sur les problèmes identifiés, les recommandations, la persistance des échantillons au laboratoire et les fiches d’investigation.
+
+## Situation épidémiologique
+
+Les points saillants présentés pour la situation du 30 juillet 2026 mentionnaient sept cas confirmés, quatre cas suspects, cinq décès et cinq alertes, dont un militaire venant de l’Ituri qui aurait pris fuite.
+
+## Recommandations
+
+Les recommandations ont insisté sur la nécessité de remonter les messages au niveau national, de répondre rapidement aux rumeurs et publications sur les réseaux sociaux, et de protéger la dignité des familles en évitant le partage d’images de personnes atteintes ou décédées.`,
+    image_url: newsImages.mveTshopo,
+    category: "Santé",
+    published_at: "2026-08-01T08:00:00.000Z",
+    author: "AFD ASBL",
+    source: "rapport-terrain-afd",
+    migrationNote:
+      "Lot photo renommé depuis Nauveau/5-8 — réunion MVE DPS Tshopo.",
+    themes: ["MVE", "Ebola", "santé publique", "prévention", "Tshopo"],
+  },
+  {
+    id: "field-formation-enqueteurs-cap-kinshasa",
+    slug: "formation-enqueteurs-cap-rentree-scolaire-kinshasa",
+    title:
+      "Formation des enquêteurs CAP pour faciliter le retour à l’école",
+    excerpt:
+      "Le 27 juillet 2026 à Kinshasa, le consortium AFD, CSDI et AJDP a formé onze enquêteurs sur le formulaire de l’enquête CAP liée aux besoins d’appui à la rentrée scolaire.",
+    preview:
+      "La formation a permis de renforcer les capacités des enquêteurs avant la collecte prévue dans les sites de Maluku, Pakadjuma/Nsele et Lutendele/Mont-Ngafula. L’objectif est d’identifier les besoins réels des enfants déplacés afin de soutenir leur retour à l’école dès la rentrée 2026-2027.",
+    content: `## Formation à Kinshasa
+
+Le lundi 27 juillet 2026, dans la salle de réunion de la CONEPT RDC à Kinshasa, le consortium AFD, CSDI et AJDP a organisé une session de formation à l’intention des enquêteurs.
+
+## Objectif
+
+La formation portait sur l’utilisation du formulaire de l’enquête CAP consacrée aux besoins d’appui à la rentrée scolaire 2026-2027 des enfants en âge scolaire vivant dans les sites de déplacés de Maluku, Pakadjuma/Nsele et Lutendele/Mont-Ngafula.
+
+## Participants
+
+Au total, onze enquêteurs, dont cinq femmes, ont bénéficié de cette formation. L’activité visait à garantir une collecte de données de qualité, harmonisée et conforme à la méthodologie retenue.
+
+## Prochaine étape
+
+Prévue du 28 juillet au 1er août 2026, l’enquête permettra d’identifier les besoins réels des enfants en matière d’appui à la rentrée scolaire, afin de favoriser leur retour à l’école dès le mois de septembre.`,
+    image_url: newsImages.capFormation,
+    category: "Éducation",
+    published_at: "2026-07-27T08:00:00.000Z",
+    author: "Daniella AWA",
+    source: "rapport-terrain-afd",
+    migrationNote:
+      "Lot photo renommé depuis Nauveau/9-16 — formation enquêteurs CAP.",
+    themes: ["éducation", "enquête CAP", "formation", "enfants déplacés"],
+  },
+  {
+    id: "field-preparation-enquete-cap-kinshasa",
+    slug: "preparation-enquete-cap-rentree-scolaire-enfants-deplaces",
+    title:
+      "Des grandes réflexions se préparent pour l’éducation des enfants déplacés",
+    excerpt:
+      "Le 20 juillet 2026, l’AFD a accueilli AJDP et CSDI pour préparer l’outil de collecte de l’enquête CAP sur les besoins d’appui à la rentrée scolaire des enfants déplacés.",
+    preview:
+      "L’AFD, AJDP et CSDI ont harmonisé les indicateurs clés et finalisé un questionnaire adapté aux réalités du terrain. L’enquête permettra de documenter les besoins prioritaires des familles déplacées en fournitures scolaires, frais d’accès et appui psychosocial.",
+    content: `## Séance de travail
+
+Le lundi 20 juillet 2026, l’AFD a accueilli dans ses locaux deux organisations partenaires, AJDP et CSDI. En synergie, une séance de travail a été tenue afin de préparer et de revoir l’outil de collecte de données pour l’enquête CAP, c’est-à-dire Connaissances, Attitudes et Pratiques.
+
+## Objectif de l’enquête
+
+L’enquête porte sur les besoins d’appui à la rentrée scolaire des enfants déplacés des sites de Lutendele, Pakadjuma et Nsele.
+
+## Résultat de la séance
+
+À l’issue de cet échange, les trois organisations sont parvenues à harmoniser les indicateurs clés et à finaliser un questionnaire ciblé, adapté aux réalités du terrain.
+
+## Utilité des données
+
+L’outil permettra de cartographier avec précision les besoins prioritaires des familles déplacées, notamment les fournitures scolaires, les frais d’accès et l’appui psychosocial à l’approche de la rentrée des classes.
+
+## Prochaine étape
+
+Les équipes d’enquêteurs seront déployées sur les sites de Lutendele, Pakadjuma et Nsele afin de collecter des données fiables pour guider le plaidoyer et les interventions auprès des partenaires.`,
+    image_url: newsImages.capPreparation,
+    category: "Éducation",
+    published_at: "2026-07-20T08:00:00.000Z",
+    author: "Daniella AWA",
+    source: "rapport-terrain-afd",
+    migrationNote:
+      "Lot photo renommé depuis Nauveau/1-4 — préparation enquête CAP.",
+    themes: ["éducation", "rentrée scolaire", "déplacés", "enquête CAP"],
+  },
   {
     id: "migrated-lutte-contre-ebola",
     slug: "lutte-contre-ebola-sensibilisation-prevention",
@@ -79,7 +264,7 @@ La lutte contre Ebola exige une réponse collective, claire et responsable. L’
     author: null,
     source: "afd-rdc.org",
     migrationNote:
-      "Sujet réorienté vers la lutte contre Ebola — image Amelioration de la sante.jpg.",
+      "Sujet réorienté vers la lutte contre Ebola — image de sensibilisation STOP EBOLA.",
     themes: [
       "Ebola",
       "prévention",
@@ -121,7 +306,7 @@ Cette évaluation permet d’orienter une réponse humanitaire attentive à la d
     author: null,
     source: "afd-rdc.org",
     migrationNote:
-      "Contenu institutionnel publié — image Urgence a Ituri.jpg.",
+      "Contenu institutionnel publié — image d’évaluation du site CECA-20 MAKOKO.",
     themes: [
       "Ituri",
       "Mambasa",
@@ -158,7 +343,7 @@ Ce renforcement territorial vise à améliorer la proximité, la coordination et
     author: null,
     source: "afd-rdc.org",
     migrationNote:
-      "Contenu institutionnel publié — image Expension AFD.jpg.",
+      "Contenu institutionnel publié — image de visite institutionnelle à Mambasa.",
     themes: [
       "expansion",
       "maillage territorial",

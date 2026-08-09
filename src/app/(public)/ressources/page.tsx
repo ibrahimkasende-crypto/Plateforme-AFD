@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import {
+  Archive,
   Briefcase,
   FileText,
   ImageIcon,
@@ -13,11 +14,18 @@ import { siteConfig } from "@/config/site";
 export const metadata: Metadata = {
   title: "Ressources",
   description:
-    "Médiathèque, documents, appels d’offres, opportunités et newsletter de l’Alliance des Femmes pour le Développement.",
+    "Bibliothèque institutionnelle, médiathèque, documents, appels d’offres, opportunités et newsletter de l’Alliance des Femmes pour le Développement.",
   alternates: { canonical: `${siteConfig.url}/ressources` },
 };
 
 const RESOURCE_CARDS = [
+  {
+    href: "/bibliotheque",
+    title: "Bibliothèque institutionnelle",
+    description:
+      "Archives officielles des activités AFD : photos, domaines, preuves de terrain.",
+    icon: Archive,
+  },
   {
     href: "/ressources/mediatheque",
     title: "Médiathèque",

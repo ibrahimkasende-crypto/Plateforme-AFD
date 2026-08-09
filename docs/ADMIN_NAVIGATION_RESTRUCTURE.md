@@ -18,3 +18,4 @@
 
 ## Header
 Icône Settings → `/admin/parametres` (tooltip, focus, 40 px)
+

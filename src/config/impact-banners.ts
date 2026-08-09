@@ -15,49 +15,49 @@ export const impactBannerSlides: ImpactBannerSlide[] = [
   {
     image: afdImages.histoireImpact,
     message:
-      "Merci à l’AFD de nous accompagner avec dignité et respect.",
-    attribution: "Témoignage communautaire",
+      "Le lavage des mains devient un geste simple quand le matériel est là, visible et accessible.",
+    attribution: "Activité WASH",
   },
   {
     image: afdImages.impactGallery[0]!,
     message:
-      "Grâce à l’AFD, les femmes de notre quartier trouvent une voix et des moyens d’agir.",
-    attribution: "Bénéficiaire accompagnée",
+      "Informer les mères et les familles, c’est déjà renforcer la prévention.",
+    attribution: "Santé communautaire",
   },
   {
     image: afdImages.impactGallery[1]!,
     message:
-      "Ensemble avec l’AFD, nous construisons des réponses durables pour nos familles.",
-    attribution: "Partenaire local",
+      "Parler des droits des femmes et des filles ouvre un espace de protection et d’écoute.",
+    attribution: "Sensibilisation aux droits",
   },
   {
     image: afdImages.impactGallery[2]!,
     message:
-      "L’AFD est restée à nos côtés quand l’urgence a frappé. Nous n’oublierons pas.",
-    attribution: "Communauté soutenue",
+      "Des dispositifs concrets permettent aux familles de pratiquer l’hygiène au quotidien.",
+    attribution: "Prévention WASH",
   },
   {
     image: afdImages.impactGallery[3]!,
     message:
-      "Un grand merci à l’Alliance des Femmes pour le Développement pour son engagement.",
-    attribution: "Remerciement terrain",
+      "La proximité institutionnelle aide l’AFD à mieux coordonner ses réponses sur le terrain.",
+    attribution: "Visite institutionnelle",
   },
   {
     image: afdImages.actionsTerrain[0]!,
     message:
-      "Avec l’AFD, l’espoir redevient possible — chaque action compte pour nous.",
-    attribution: "Témoignage d’impact",
+      "Écouter les personnes déplacées permet de partir des besoins réels avant d’agir.",
+    attribution: "Mission terrain",
   },
   {
     image: afdImages.actionsTerrain[1]!,
     message:
-      "Nous remercions l’AFD d’investir dans les femmes et les jeunes de notre province.",
-    attribution: "Acteur communautaire",
+      "La démonstration rend les messages d’hygiène plus clairs pour toute la communauté.",
+    attribution: "Sensibilisation WASH",
   },
   {
     image: afdImages.actionsTerrain[2]!,
     message:
-      "L’AFD ne parle pas à notre place : elle marche avec nous.",
-    attribution: "Femme leader locale",
+      "Les journées de sensibilisation rapprochent les messages de protection des femmes et des filles.",
+    attribution: "Droits des femmes",
   },
 ];

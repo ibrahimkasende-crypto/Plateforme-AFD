@@ -21,13 +21,13 @@ export function ProductLogo({
   size = "md",
   className,
   priority = false,
-  rounded = true,
+  rounded = false,
 }: ProductLogoProps) {
   const px = SIZES[size];
   return (
     <span
       className={cn(
-        "relative inline-flex shrink-0 items-center justify-center overflow-hidden bg-white",
+        "relative inline-flex shrink-0 items-center justify-center overflow-hidden",
         rounded && "rounded-full",
         className,
       )}

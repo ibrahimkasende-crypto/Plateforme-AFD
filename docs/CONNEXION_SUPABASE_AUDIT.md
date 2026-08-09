@@ -23,3 +23,4 @@ Le schéma distant reste à récupérer avec Supabase CLI avant de créer les re
 - Le dépôt contient plusieurs lignées de migrations et le schéma distant peut différer.
 - Les anciennes routes et formulaires React/Vite ont été retirés du socle principal ; rien ne doit être reconnecté en supposant les anciens champs.
 - La CLI doit être liée et authentifiée avant `db pull` et génération des types.
+

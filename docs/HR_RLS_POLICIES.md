@@ -61,3 +61,4 @@ Toute nouvelle table RH/Paie doit :
 1. Activer RLS
 2. Définir policies SELECT / INSERT / UPDATE / DELETE
 3. Documenter la permission associée dans `admin-nav-permissions.ts`
+

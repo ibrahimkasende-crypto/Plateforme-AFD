@@ -20,3 +20,4 @@
 Pattern : labels au-dessus, hauteur 44px, rayon 8–10, focus bleu AFD, sections en cartes blanches, footer sticky.
 
 Validation : Zod + Server Actions existants ; champs sensibles non acceptés côté client.
+

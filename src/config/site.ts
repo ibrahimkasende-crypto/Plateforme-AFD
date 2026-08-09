@@ -35,7 +35,7 @@ export const siteConfig = {
   },
   contact: {
     email: "contact@afd-rdc.org",
-    phone: "+243 000 000 000",
+    phone: "+243 985 710 039",
     address: "République démocratique du Congo",
   },
   social: {
@@ -47,7 +47,8 @@ export const siteConfig = {
     youtube: process.env.NEXT_PUBLIC_SOCIAL_YOUTUBE ?? "",
     tiktok: process.env.NEXT_PUBLIC_SOCIAL_TIKTOK ?? "",
     /** Ex. https://wa.me/243XXXXXXXXX */
-    whatsapp: process.env.NEXT_PUBLIC_SOCIAL_WHATSAPP ?? "",
+    whatsapp:
+      process.env.NEXT_PUBLIC_SOCIAL_WHATSAPP ?? "https://wa.me/243985710039",
   },
   currencies: ["CDF", "USD", "EUR"] as const,
   defaultCurrency: "USD" as const,

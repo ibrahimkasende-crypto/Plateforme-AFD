@@ -70,3 +70,4 @@ Aucune requête homepage n’est encore branchée.
 5. Footer  
 6. Assemblage `page.tsx` + SEO  
 7. typecheck / lint / build + commit local  
+

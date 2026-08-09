@@ -47,7 +47,10 @@ export function NewsletterPopup({
             aria-hidden
           />
         </div>
-        <NewsletterPopupForm onSuccess={onSubscribed} />
+        <NewsletterPopupForm
+          onSuccess={onSubscribed}
+          onCancel={onDismiss}
+        />
       </div>
     </NewsletterDialog>
   );

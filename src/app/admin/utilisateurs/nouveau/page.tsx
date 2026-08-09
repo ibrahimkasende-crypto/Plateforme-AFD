@@ -1,6 +1,12 @@
 import Link from "next/link";
-import { roles, roleLabels } from "@/config/roles";
+import { InviteAgentWizard } from "@/components/admin/users/invite-agent-wizard";
+import { roles, type Role } from "@/config/roles";
+import { principalAssignableRoles } from "@/config/afd-staff";
 import { inviteUserAction } from "@/features/identity/actions/invite-user";
+import {
+  isPrincipalActor,
+  isSuperActor,
+} from "@/features/identity/security/privilege-guards";
 import { getInviteAvailable } from "@/features/utilisateurs/actions/manage-utilisateur";
 import { requirePermission } from "@/lib/auth/require-permission";
 import { requireAdmin } from "@/lib/auth/require-admin";
@@ -18,6 +24,8 @@ export default async function NouvelUtilisateurPage({ searchParams }: PageProps)
 
   const isSuperAdminFlow = params.type === "super_admin";
   const isPlatformOwner = session.roles.includes("platform_owner");
+  const actorIsSuper = isSuperActor(session.roles);
+  const actorIsPrincipal = isPrincipalActor(session.roles);
   const canCreateSuperAdmin = await hasPermission(
     session.user.id,
     "users.create_super_admin",
@@ -28,8 +36,7 @@ export default async function NouvelUtilisateurPage({ searchParams }: PageProps)
       <main className="max-w-2xl space-y-6 p-6">
         <h1 className="text-2xl font-bold">Invitation super administrateur</h1>
         <p className="rounded border border-red-200 bg-red-50 p-4 text-sm text-red-900">
-          Permission <code>users.create_super_admin</code> requise pour inviter un super
-          administrateur.
+          Permission <code>users.create_super_admin</code> requise.
         </p>
         <Link href="/admin/utilisateurs" className="text-sm text-[var(--afd-blue)]">
           Retour
@@ -38,161 +45,83 @@ export default async function NouvelUtilisateurPage({ searchParams }: PageProps)
     );
   }
 
-  const selectableRoles = roles.filter(
-    (role) => role !== "platform_owner" || isPlatformOwner,
-  );
-  const defaultRole = isSuperAdminFlow ? "super_admin" : "administrateur";
+  let selectableRoles: Role[] = [];
+  if (isSuperAdminFlow && (canCreateSuperAdmin || isPlatformOwner)) {
+    selectableRoles = ["super_admin"];
+  } else if (actorIsSuper) {
+    selectableRoles = roles.filter(
+      (role) =>
+        role !== "platform_owner" &&
+        role !== "admin_principal" &&
+        role !== "administrateur" &&
+        (role !== "super_admin" || canCreateSuperAdmin || isPlatformOwner),
+    );
+  } else if (actorIsPrincipal) {
+    selectableRoles = (principalAssignableRoles as readonly string[]).filter(
+      (code): code is Role => (roles as readonly string[]).includes(code),
+    );
+  } else {
+    selectableRoles = ["agent", "lecture_seule"];
+  }
+
+  const defaultRole = isSuperAdminFlow
+    ? "super_admin"
+    : selectableRoles.includes("agent")
+      ? "agent"
+      : selectableRoles[0] ?? "employe";
 
   return (
-    <main className="max-w-3xl space-y-6 p-6">
+    <main className="mx-auto w-full max-w-3xl space-y-6 p-4 md:p-6">
       <div>
-        <h1 className="text-2xl font-bold">Inviter un utilisateur administrateur</h1>
+        <h1 className="text-2xl font-bold">Inviter un utilisateur AFD</h1>
         <p className="mt-1 text-sm text-[var(--afd-muted)]">
-          Invitation par e-mail — aucun mot de passe n&apos;est défini par un tiers.
+          Formulaire en étapes — invitation par e-mail, sans mot de passe défini
+          par un tiers.
+          {actorIsPrincipal && !actorIsSuper
+            ? " En tant qu’Administrateur principal, vous créez les agents et responsables."
+            : null}
         </p>
+        {actorIsSuper && !isSuperAdminFlow ? (
+          <p className="mt-2 text-sm">
+            Pour l’Administrateur principal unique, utilisez{" "}
+            <Link
+              href="/admin/administrateur-principal/creer"
+              className="font-semibold text-[var(--afd-blue)] underline"
+            >
+              cet écran dédié
+            </Link>
+            .
+          </p>
+        ) : null}
       </div>
 
       {!inviteAvailable ? (
         <div className="rounded border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900">
           <p className="font-medium">Invitation indisponible</p>
           <p className="mt-1">
-            Définissez <code>SUPABASE_SERVICE_ROLE_KEY</code> côté serveur pour envoyer une
-            invitation par e-mail.
+            Ajoutez <code>SUPABASE_SERVICE_ROLE_KEY</code> dans les variables
+            d&apos;environnement Hostinger (Settings → API → service_role), puis
+            redéployez. Ne jamais utiliser{" "}
+            <code>NEXT_PUBLIC_SUPABASE_SERVICE_ROLE_KEY</code>.
+          </p>
+          <p className="mt-2 text-xs">
+            En local : ajoutez la clé dans <code>.env.local</code> et
+            redémarrez <code>npm run dev</code>.
           </p>
         </div>
       ) : null}
 
-      {isSuperAdminFlow ? (
-        <div className="rounded border border-amber-300 bg-amber-50 p-4 text-sm text-amber-950">
-          <p className="font-semibold">Compte très privilégié — MFA obligatoire</p>
-          <p className="mt-1">
-            L&apos;invitation d&apos;un super administrateur exige une session MFA (aal2) et une
-            justification écrite. Le compte devra configurer la MFA avant toute action sensible.
-          </p>
-        </div>
-      ) : null}
+      <InviteAgentWizard
+        action={inviteUserAction}
+        selectableRoles={selectableRoles}
+        defaultRole={defaultRole}
+        inviteAvailable={inviteAvailable}
+        actorIsPrincipal={actorIsPrincipal && !actorIsSuper}
+      />
 
-      <form action={inviteUserAction} className="space-y-8">
-        <fieldset className="space-y-4 rounded-lg border p-4" disabled={!inviteAvailable}>
-          <legend className="px-2 text-sm font-semibold uppercase tracking-wide text-slate-600">
-            1. Identité
-          </legend>
-          <label className="block space-y-1">
-            <span className="text-sm font-medium">E-mail professionnel</span>
-            <input
-              required
-              name="email"
-              type="email"
-              autoComplete="email"
-              className="w-full rounded border p-3"
-            />
-          </label>
-          <label className="block space-y-1">
-            <span className="text-sm font-medium">Nom complet</span>
-            <input required name="nom_complet" className="w-full rounded border p-3" />
-          </label>
-          <label className="block space-y-1">
-            <span className="text-sm font-medium">Téléphone (optionnel)</span>
-            <input name="telephone" type="tel" className="w-full rounded border p-3" />
-          </label>
-        </fieldset>
-
-        <fieldset className="space-y-4 rounded-lg border p-4" disabled={!inviteAvailable}>
-          <legend className="px-2 text-sm font-semibold uppercase tracking-wide text-slate-600">
-            2. Fonction
-          </legend>
-          <label className="block space-y-1">
-            <span className="text-sm font-medium">Fonction / titre</span>
-            <input name="fonction" className="w-full rounded border p-3" />
-          </label>
-        </fieldset>
-
-        <fieldset className="space-y-4 rounded-lg border p-4" disabled={!inviteAvailable}>
-          <legend className="px-2 text-sm font-semibold uppercase tracking-wide text-slate-600">
-            3. Type de compte
-          </legend>
-          <p className="text-sm text-slate-600">
-            {isSuperAdminFlow
-              ? "Flux super administrateur — accès étendu à la plateforme."
-              : "Compte administrateur standard — périmètre défini par le rôle attribué."}
-          </p>
-        </fieldset>
-
-        <fieldset className="space-y-4 rounded-lg border p-4" disabled={!inviteAvailable}>
-          <legend className="px-2 text-sm font-semibold uppercase tracking-wide text-slate-600">
-            4. Rôle
-          </legend>
-          <label className="block space-y-1">
-            <span className="text-sm font-medium">Rôle principal</span>
-            <select
-              name="role"
-              defaultValue={defaultRole}
-              className="w-full rounded border p-3"
-            >
-              {selectableRoles.map((role) => (
-                <option key={role} value={role}>
-                  {roleLabels[role]}
-                </option>
-              ))}
-            </select>
-          </label>
-          {!isPlatformOwner ? (
-            <p className="text-xs text-slate-500">
-              Le rôle <em>platform_owner</em> n&apos;est visible que pour un propriétaire
-              plateforme.
-            </p>
-          ) : null}
-        </fieldset>
-
-        <fieldset className="space-y-4 rounded-lg border p-4" disabled={!inviteAvailable}>
-          <legend className="px-2 text-sm font-semibold uppercase tracking-wide text-slate-600">
-            5. Sécurité
-          </legend>
-          <label className="inline-flex items-center gap-2 text-sm">
-            <input name="require_mfa" type="checkbox" defaultChecked={isSuperAdminFlow} />
-            Exiger la configuration MFA à la première connexion
-          </label>
-          {isSuperAdminFlow ? (
-            <label className="block space-y-1">
-              <span className="text-sm font-medium">Raison de l&apos;invitation *</span>
-              <textarea
-                required
-                name="reason"
-                rows={3}
-                className="w-full rounded border p-3"
-                placeholder="Justification métier (audit obligatoire)"
-              />
-            </label>
-          ) : (
-            <label className="block space-y-1">
-              <span className="text-sm font-medium">Raison (optionnel)</span>
-              <textarea name="reason" rows={2} className="w-full rounded border p-3" />
-            </label>
-          )}
-        </fieldset>
-
-        <fieldset className="space-y-4 rounded-lg border border-[var(--afd-blue)]/30 bg-slate-50 p-4">
-          <legend className="px-2 text-sm font-semibold uppercase tracking-wide text-slate-600">
-            6. Confirmation
-          </legend>
-          <p className="text-sm text-slate-700">
-            Un e-mail d&apos;invitation sera envoyé. L&apos;utilisateur définira son mot de passe
-            via le lien sécurisé reçu.
-          </p>
-          <div className="flex gap-3">
-            <button
-              type="submit"
-              className="rounded bg-[var(--afd-blue)] px-4 py-2 text-white disabled:opacity-50"
-              disabled={!inviteAvailable}
-            >
-              Envoyer l&apos;invitation
-            </button>
-            <Link href="/admin/utilisateurs" className="rounded border px-4 py-2">
-              Annuler
-            </Link>
-          </div>
-        </fieldset>
-      </form>
+      <Link href="/admin/utilisateurs" className="inline-block text-sm text-[var(--afd-blue)]">
+        Annuler et retourner à la liste
+      </Link>
     </main>
   );
 }

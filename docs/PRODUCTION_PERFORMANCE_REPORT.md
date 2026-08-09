@@ -46,3 +46,4 @@
 3. Surveiller timeouts Supabase (déjà observé en CLI).  
 
 **Verdict :** baseline qualitative seulement — **aucune performance production certifiée**.
+

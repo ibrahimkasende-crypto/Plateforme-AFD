@@ -44,3 +44,4 @@ Policies sur `storage.objects` :
 4. Chiffrer les sauvegardes contenant des buckets RH.
 
 Voir : `docs/HR_RLS_POLICIES.md`.
+

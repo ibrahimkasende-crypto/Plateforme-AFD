@@ -9,3 +9,4 @@
 7. Rollback logique possible  
 
 Champs critiques à faible confiance : révision obligatoire.
+

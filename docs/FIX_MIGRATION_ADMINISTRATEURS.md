@@ -25,3 +25,4 @@ select to_regclass('public.profils_administrateurs');
 select to_regclass('public.roles');
 select nom from roles order by nom;
 ```
+

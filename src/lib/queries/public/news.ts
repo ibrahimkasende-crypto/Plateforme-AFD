@@ -61,13 +61,15 @@ function fromRow(
     | "author"
   >,
 ): PublicNewsItem {
+  const curated = getMigratedNewsBySlug(row.slug);
+
   return {
     id: row.id,
     slug: row.slug,
     title: row.title,
     excerpt: row.excerpt,
     content: row.content,
-    image_url: row.image_url,
+    image_url: curated?.image_url ?? row.image_url,
     category: row.category,
     published_at: row.published_at,
     author: row.author,

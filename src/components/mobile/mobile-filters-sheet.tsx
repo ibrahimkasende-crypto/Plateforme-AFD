@@ -2,6 +2,7 @@
 
 import { useEffect, useId, useRef, useState, type ReactNode } from "react";
 import { Filter, X } from "lucide-react";
+import { useBodyScrollLock } from "@/hooks/use-body-scroll-lock";
 import { cn } from "@/lib/utils";
 
 /** Drawer filtres mobile — listes publiques (documents, opportunités, etc.). */
@@ -18,10 +19,10 @@ export function MobileFiltersSheet({
   const panelId = useId();
   const closeRef = useRef<HTMLButtonElement>(null);
 
+  useBodyScrollLock(open);
+
   useEffect(() => {
     if (!open) return;
-    const previous = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
     closeRef.current?.focus();
 
     function onKey(event: KeyboardEvent) {
@@ -29,7 +30,6 @@ export function MobileFiltersSheet({
     }
     document.addEventListener("keydown", onKey);
     return () => {
-      document.body.style.overflow = previous;
       document.removeEventListener("keydown", onKey);
     };
   }, [open]);

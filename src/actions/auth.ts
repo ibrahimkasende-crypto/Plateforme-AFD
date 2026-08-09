@@ -5,10 +5,11 @@ import { z } from "zod";
 import { createClient } from "@/lib/supabase/server";
 import { getAdminProfile } from "@/lib/auth/get-user-role";
 import { logAdminActivity } from "@/lib/auth/log-admin-activity";
+import { validatePasswordPolicy } from "@/lib/auth/password-policy";
 
 const signInSchema = z.object({
   email: z.string().trim().email("Adresse e-mail invalide").max(200),
-  password: z.string().min(8, "Mot de passe invalide").max(200),
+  password: z.string().min(1, "Mot de passe invalide").max(200),
   next: z.string().optional(),
 });
 
@@ -17,11 +18,8 @@ const emailSchema = z.object({
 });
 
 const passwordSchema = z.object({
-  password: z
-    .string()
-    .min(8, "Le mot de passe doit contenir au moins 8 caractères")
-    .max(200),
-  confirmPassword: z.string().min(8).max(200),
+  password: z.string().min(12).max(200),
+  confirmPassword: z.string().min(12).max(200),
 });
 
 export type AuthActionResult = {
@@ -78,18 +76,40 @@ export async function signIn(input: unknown): Promise<AuthActionResult> {
         };
       }
 
+      // Ne pas utiliser status===401 : mauvais mot de passe peut aussi être 401.
+      const keyBroken =
+        lowered.includes("invalid api key") ||
+        lowered.includes("invalid jwt") ||
+        lowered.includes("jwt malformed") ||
+        lowered.includes("no api key found");
+
+      if (keyBroken) {
+        return {
+          ok: false,
+          message:
+            "Clé Supabase invalide sur Hostinger. Importez Deploy/hostinger.env (URL + ANON ou PUBLISHABLE du projet mxxuxnoqnwjygawvvhcb), puis Redeploy / Rebuild.",
+        };
+      }
+
       // En développement : afficher le détail Supabase pour diagnostiquer.
       if (process.env.NODE_ENV === "development" && error?.message) {
         return {
           ok: false,
-          message: `Échec Auth Supabase : ${error.message}. Vérifiez que le user est bien dans le projet ADF_BD (ndkcywqihtnuoydwicrq) et que Email/Password est activé.`,
+          message: `Échec Auth Supabase : ${error.message}. Vérifiez que le compte existe dans le projet Supabase configuré et que Email/Password est activé.`,
         };
       }
 
+      const envUrl = process.env.NEXT_PUBLIC_SUPABASE_URL ?? "";
+      const wrongProject =
+        process.env.NEXT_PUBLIC_APP_ENV === "production" &&
+        envUrl.length > 0 &&
+        !envUrl.includes("mxxuxnoqnwjygawvvhcb");
+
       return {
         ok: false,
-        message:
-          "Identifiants incorrects ou compte inaccessible. Vérifiez l’e-mail exact et le mot de passe, ou réinitialisez-le dans Supabase Auth.",
+        message: wrongProject
+          ? "Hostinger pointe vers le mauvais projet Supabase. Dans les variables d’environnement, mettez NEXT_PUBLIC_SUPABASE_URL=https://mxxuxnoqnwjygawvvhcb.supabase.co et les clés anon/service du même projet, puis redéployez."
+          : "Identifiants incorrects ou compte inaccessible. Vérifiez l’e-mail exact et le mot de passe, ou réinitialisez-le dans Supabase Auth (projet mxxuxnoqnwjygawvvhcb).",
       };
     }
 
@@ -108,7 +128,14 @@ export async function signIn(input: unknown): Promise<AuthActionResult> {
       };
     }
 
-    if (!profile.actif) {
+    const statut = (profile.statut_compte || "").toLowerCase();
+    const statutBloque =
+      statut === "suspendu" ||
+      statut === "desactive" ||
+      statut === "disabled" ||
+      statut === "inactive";
+
+    if (!profile.actif || statutBloque) {
       await supabase.auth.signOut();
       await logAdminActivity(
         "auth.account_disabled_attempt",
@@ -181,7 +208,7 @@ export async function requestPasswordReset(
 
     // Toujours message générique (ne pas révéler l’existence du compte).
     await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${siteUrl()}/auth/callback?next=/nouveau-mot-de-passe`,
+      redirectTo: `${siteUrl()}/auth/reset-password`,
     });
 
     await logAdminActivity("auth.password_reset_requested", { email });
@@ -206,7 +233,7 @@ export async function updatePassword(
   if (!parsed.success) {
     return {
       ok: false,
-      message: "Le mot de passe doit contenir au moins 8 caractères.",
+      message: "Le mot de passe doit contenir au moins 12 caractères.",
     };
   }
 
@@ -230,6 +257,20 @@ export async function updatePassword(
       };
     }
 
+    const profile = await getAdminProfile(user.id);
+    const policy = validatePasswordPolicy(parsed.data.password, {
+      email: user.email,
+      displayName: profile?.nom_complet,
+      firstName: profile?.prenom,
+      lastName: profile?.nom_famille,
+    });
+    if (!policy.ok) {
+      return {
+        ok: false,
+        message: policy.message ?? "Mot de passe invalide.",
+      };
+    }
+
     const { error } = await supabase.auth.updateUser({
       password: parsed.data.password,
     });
@@ -241,7 +282,17 @@ export async function updatePassword(
       };
     }
 
-    await logAdminActivity("auth.password_updated", {}, user.id);
+    const now = new Date().toISOString();
+    await supabase
+      .from("profils_administrateurs" as never)
+      .update({
+        must_change_password: false,
+        password_changed_at: now,
+        updated_at: now,
+      } as never)
+      .eq("id", user.id);
+
+    await logAdminActivity("auth.password_updated", { source: "reset" }, user.id);
 
     return {
       ok: true,

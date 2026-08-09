@@ -30,31 +30,57 @@
 .DS_Store
 *.pem
 *.key
+*.ppk
+id_rsa*
+id_ed25519*
 credentials.json
 service-account*.json
 
-# backups (never commit)
+# backups / secrets (never commit)
 /backups/
 /production-backups/
+/secrets/
 *.dump
 *.sql.gz
 
-# debug
+# debug / logs
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
+*.log
+/logs/
 
-# env files (can opt-in for committing if needed)
+# env files — never commit secrets
 .env
 .env.local
 .env.*.local
 .env.production
 .env*
 !.env.example
+!.env.production.example
 
-# vercel
+# Legacy Hostinger ZIP workflow (plus nécessaire avec GitHub Actions)
+/Deploy/
+Deploy/hostinger.env
+Deploy/HOSTINGER_ENV.txt
+hostinger.env
+Plateforme-AFD-Production.zip
+Fiche-Projet-*.docx
+
+# Runtime releases (VPS)
+/releases/
+/current
+/shared/
+/tmp/ocr/
+
+# Médias lourds locaux → Supabase Storage (afd-media)
+/public/assets/Banque des images AFD*/
+/public/documents/
+
+# vercel / misc
 .vercel
+.codex-logs/
 
 # typescript
 *.tsbuildinfo

@@ -20,6 +20,7 @@ export type AdminSession = {
 async function toViewer(
   profile: ProfilAdministrateur,
   role: Role,
+  roles: string[] = [],
 ): Promise<AdminViewer> {
   const displayName =
     profile.nom_complet?.trim() || profile.email || "Administrateur AFD";
@@ -40,6 +41,7 @@ async function toViewer(
     displayName,
     roleLabel: roleLabels[role],
     role,
+    roles,
     initials: initials || "AF",
     canReadFinances: roleHasPermission(role, "finances:read"),
     avatarUrl,
@@ -49,6 +51,7 @@ async function toViewer(
 /**
  * Garde d’accès administration.
  * Redirige vers /connexion sans session, /acces-refuse sinon.
+ * Le changement de mot de passe est volontaire (Mon profil → Sécurité).
  */
 export async function requireAdmin(
   nextPath = "/admin",
@@ -92,7 +95,7 @@ export async function requireAdmin(
     profile: bundle.profile,
     role: bundle.primaryRole,
     roles: bundle.roles,
-    viewer: await toViewer(bundle.profile, bundle.primaryRole),
+    viewer: await toViewer(bundle.profile, bundle.primaryRole, bundle.roles),
   };
 }
 
@@ -111,6 +114,6 @@ export async function getAdminSession(): Promise<AdminSession | null> {
     profile: bundle.profile,
     role: bundle.primaryRole,
     roles: bundle.roles,
-    viewer: await toViewer(bundle.profile, bundle.primaryRole),
+    viewer: await toViewer(bundle.profile, bundle.primaryRole, bundle.roles),
   };
 }

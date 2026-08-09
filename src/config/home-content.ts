@@ -5,21 +5,19 @@ import { siteConfig } from "@/config/site";
 export const homeContent = {
   hero: {
     eyebrow: "ONG nationale congolaise",
-    title:
-      "Des femmes engagées pour des communautés plus fortes et résilientes.",
-    /** Coupures volontaires — exactement 3 lignes dans le hero */
+    title: "Des femmes engagées pour des communautés plus fortes",
     titleLines: [
       "Des femmes engagées",
       "pour des communautés",
-      "plus fortes et résilientes.",
+      "plus fortes",
     ] as const,
     description:
-      "Depuis 2019, l’Alliance des Femmes pour le Développement agit aux côtés des communautés vulnérables à travers des réponses humanitaires et des solutions durables, inclusives et participatives.",
+      "Depuis le 24 janvier 2020, l’Alliance des Femmes pour le Développement agit aux côtés des communautés vulnérables à travers des réponses humanitaires et des solutions durables, inclusives et participatives.",
     primaryCta: { label: "Découvrir nos actions", href: "/actions" },
     secondaryCta: { label: "Devenir partenaire", href: "/contact" },
     trustItems: [
       "ONG nationale congolaise",
-      "Créée en 2019",
+      "Créée le 24 janvier 2020",
       "Portée par les femmes et les jeunes",
     ] as const,
     institutionalNote:
@@ -36,7 +34,7 @@ export const homeContent = {
     eyebrow: "À propos de l’AFD",
     title: "Une ONG nationale au service des communautés",
     paragraphs: [
-      "Créée en 2019, l’Alliance des Femmes pour le Développement est une ONG nationale congolaise qui accompagne les communautés vulnérables à travers des réponses humanitaires et des programmes de développement durables, inclusifs et participatifs.",
+      "Créée le 24 janvier 2020, l’Alliance des Femmes pour le Développement est une ONG nationale congolaise qui accompagne les communautés vulnérables à travers des réponses humanitaires et des programmes de développement durables, inclusifs et participatifs.",
       "Portée principalement par les femmes et les jeunes, l’AFD agit pour un développement construit à partir des communautés, dans lequel les femmes participent pleinement aux décisions et à la transformation de leur environnement.",
     ] as const,
     highlights: [
@@ -162,7 +160,10 @@ export const homeContent = {
     activitesRealisees: 70,
   },
   organization: {
-    foundedYear: 2019,
+    /** Date officielle de création de l’organisation. */
+    foundedDate: "2020-01-24",
+    foundedYear: 2020,
+    foundedLabel: "24 janvier 2020",
     legalName: siteConfig.name,
     shortName: siteConfig.shortName,
     country: siteConfig.country,

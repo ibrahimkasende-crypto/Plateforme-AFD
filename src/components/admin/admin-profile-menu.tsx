@@ -1,9 +1,17 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
-import { ChevronDown, Database, ExternalLink, KeyRound, LogOut, UserRound } from "lucide-react";
-import { signOut } from "@/actions/auth";
+import { useRouter } from "next/navigation";
+import { useEffect, useRef, useState, useTransition } from "react";
+import {
+  ChevronDown,
+  Database,
+  ExternalLink,
+  KeyRound,
+  Loader2,
+  LogOut,
+  UserRound,
+} from "lucide-react";
 import { PresentationDataDialog } from "@/components/admin/presentation-data-dialog";
 import type { AdminViewer } from "@/features/statistiques/types/dashboard";
 
@@ -12,8 +20,10 @@ type AdminProfileMenuProps = {
 };
 
 export function AdminProfileMenu({ viewer }: AdminProfileMenuProps) {
+  const router = useRouter();
   const [open, setOpen] = useState(false);
   const [presentationOpen, setPresentationOpen] = useState(false);
+  const [loggingOut, startLogout] = useTransition();
   const containerRef = useRef<HTMLDivElement>(null);
   const isSuperAdmin =
     viewer.role === "super_admin" || viewer.role === "platform_owner";
@@ -30,6 +40,22 @@ export function AdminProfileMenu({ viewer }: AdminProfileMenuProps) {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
+  function handleLogout() {
+    startLogout(async () => {
+      try {
+        await fetch("/api/auth/logout", {
+          method: "POST",
+          credentials: "same-origin",
+        });
+      } catch {
+        // redirection quand même
+      }
+      setOpen(false);
+      router.replace("/connexion");
+      router.refresh();
+    });
+  }
 
   return (
     <div ref={containerRef} className="relative">
@@ -99,7 +125,7 @@ export function AdminProfileMenu({ viewer }: AdminProfileMenuProps) {
             </button>
           ) : null}
           <Link
-            href="/nouveau-mot-de-passe"
+            href="/admin/mon-profil/securite"
             role="menuitem"
             className="flex items-center gap-2 px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50"
             onClick={() => setOpen(false)}
@@ -107,17 +133,20 @@ export function AdminProfileMenu({ viewer }: AdminProfileMenuProps) {
             <KeyRound className="size-4" aria-hidden />
             Changer le mot de passe
           </Link>
-          <form action={signOut}>
-            <button
-              type="submit"
-              role="menuitem"
-              className="flex w-full items-center gap-2 px-4 py-2.5 text-left text-sm text-slate-700 hover:bg-slate-50"
-              onClick={() => setOpen(false)}
-            >
+          <button
+            type="button"
+            role="menuitem"
+            disabled={loggingOut}
+            className="flex w-full items-center gap-2 px-4 py-2.5 text-left text-sm text-slate-700 hover:bg-slate-50 disabled:opacity-60"
+            onClick={handleLogout}
+          >
+            {loggingOut ? (
+              <Loader2 className="size-4 animate-spin" aria-hidden />
+            ) : (
               <LogOut className="size-4" aria-hidden />
-              Déconnexion
-            </button>
-          </form>
+            )}
+            Se déconnecter
+          </button>
         </div>
       ) : null}
 

@@ -34,7 +34,7 @@ export async function submitPartnershipRequest(
     phone: input.phone?.trim() || null,
     subject: input.subject,
     message: input.message,
-    status: "pending",
+    status: "unread",
   };
 
   const { error } = await supabase.from("messages").insert(payload);

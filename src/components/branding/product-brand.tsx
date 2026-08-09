@@ -46,7 +46,7 @@ export function ProductBrandBlock({
         <button
           type="button"
           onClick={onLogoClick}
-          className="relative size-10 shrink-0 overflow-hidden rounded-full bg-white ring-2 ring-white/20 transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+          className="relative size-10 shrink-0 overflow-visible transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
           aria-label={logoAriaLabel}
           title={logoTitle}
         >
