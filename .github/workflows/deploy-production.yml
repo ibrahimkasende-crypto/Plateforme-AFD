@@ -49,8 +49,8 @@ jobs:
       - name: Unit tests
         run: npm run test
 
-      - name: Build standalone
-        run: npm run build:standalone
+      - name: Build production (standalone)
+        run: npm run build:production
 
       - name: Verify standalone artifacts
         run: |
