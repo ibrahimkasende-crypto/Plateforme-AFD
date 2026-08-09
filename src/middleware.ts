@@ -23,8 +23,15 @@ function isAuthPage(pathname: string): boolean {
  * La vérification profil/rôle/actif reste dans requireAdmin() (layout).
  */
 export async function middleware(request: NextRequest) {
+  const { pathname } = request.nextUrl;
+
+  // Health checks : jamais d’auth / jamais de session Supabase.
+  if (pathname === "/api/health" || pathname.startsWith("/api/health/")) {
+    return NextResponse.next();
+  }
+
   const requestHeaders = new Headers(request.headers);
-  requestHeaders.set("x-afd-pathname", request.nextUrl.pathname);
+  requestHeaders.set("x-afd-pathname", pathname);
 
   let supabaseResponse = NextResponse.next({
     request: { headers: requestHeaders },
@@ -65,8 +72,6 @@ export async function middleware(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  const { pathname } = request.nextUrl;
-
   if (isAdminPath(pathname) && !user) {
     const loginUrl = request.nextUrl.clone();
     loginUrl.pathname = "/connexion";
@@ -84,6 +89,10 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
+    /*
+     * Exclure assets Next, favicon, fichiers publics et health check.
+     * Auth middleware ne s’applique qu’au reste (notamment /admin).
+     */
+    "/((?!_next/static|_next/image|favicon.ico|api/health|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|txt|xml)$).*)",
   ],
 };

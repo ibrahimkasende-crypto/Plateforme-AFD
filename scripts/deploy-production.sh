@@ -16,6 +16,66 @@ set -Eeuo pipefail
 log() { printf '[deploy %s] %s\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$*"; }
 fail() { printf '[deploy][ERREUR] %s\n' "$*" >&2; exit 1; }
 
+# Health check strict : exige HTTP 200 + "status":"ok" (jamais un 404).
+# Retourne 0 si OK. Affiche corps / diagnostic en cas d'échec.
+wait_for_health() {
+  local url="$1"
+  local label="$2"
+  local timeout_s="${3:-30}"
+  local started
+  started="$(date +%s)"
+  local attempt=0
+  local body="" http_code="" curl_exit=0
+
+  while true; do
+    attempt=$((attempt + 1))
+    body="$(mktemp)"
+    set +e
+    http_code="$(curl -sS -o "${body}" -w '%{http_code}' --max-time 5 "${url}" 2>/tmp/afd-health-curl.err)"
+    curl_exit=$?
+    set -e
+
+    if [[ "${curl_exit}" -eq 0 && "${http_code}" == "200" ]] && grep -q '"status":"ok"' "${body}"; then
+      log "${label} OK (attempt=${attempt} http=${http_code})"
+      cat "${body}" || true
+      rm -f "${body}"
+      return 0
+    fi
+
+    local reason="unknown"
+    if [[ "${curl_exit}" -ne 0 ]]; then
+      if grep -qiE 'Connection refused|Failed to connect' /tmp/afd-health-curl.err 2>/dev/null; then
+        reason="connection_refused"
+      elif grep -qiE 'timed out|Timeout' /tmp/afd-health-curl.err 2>/dev/null; then
+        reason="timeout"
+      else
+        reason="curl_exit_${curl_exit}"
+      fi
+    elif [[ "${http_code}" == "404" ]]; then
+      reason="http_404"
+    elif [[ -n "${http_code}" ]]; then
+      reason="http_${http_code}"
+    fi
+
+    log "${label} tentative ${attempt} KO reason=${reason} http=${http_code:-n/a}"
+    if [[ -s "${body}" ]]; then
+      log "${label} body=$(head -c 400 "${body}" | tr '\n' ' ')"
+    fi
+    if [[ -s /tmp/afd-health-curl.err ]]; then
+      log "${label} curl_err=$(head -c 200 /tmp/afd-health-curl.err | tr '\n' ' ')"
+    fi
+    rm -f "${body}"
+
+    local now
+    now="$(date +%s)"
+    if (( now - started >= timeout_s )); then
+      log "${label} ÉCHEC après ${timeout_s}s (${attempt} tentatives)"
+      return 1
+    fi
+    sleep 1
+  done
+}
+
 APP_ROOT="${VPS_APP_PATH:-/home/afd-rdc.org/apps/plateforme-afd}"
 APP_USER="${VPS_APP_USER:-afdrd7787}"
 DEPLOY_BRANCH="${2:-${VPS_DEPLOY_BRANCH:-main}}"
@@ -187,18 +247,18 @@ SMOKE_PID=$!
 cleanup_smoke() { kill "${SMOKE_PID}" >/dev/null 2>&1 || true; wait "${SMOKE_PID}" 2>/dev/null || true; }
 trap cleanup_smoke EXIT
 
-ok_smoke=0
-for _ in $(seq 1 45); do
-  if curl -fsS --max-time 2 "http://127.0.0.1:${SMOKE_PORT}/api/health" >/dev/null 2>&1; then
-    ok_smoke=1
-    break
-  fi
-  sleep 1
-done
-[[ "${ok_smoke}" == "1" ]] || fail "Smoke health KO sur :${SMOKE_PORT} — current inchangé"
+wait_for_health "http://127.0.0.1:${SMOKE_PORT}/api/health" "Smoke" 45 \
+  || fail "Smoke health KO sur :${SMOKE_PORT} — current inchangé"
 cleanup_smoke
 trap - EXIT
 log "Smoke OK"
+
+HEALTH_BUILD_DIR="${RELEASE_DIR}/.next/standalone/.next/server/app/api/health"
+if [[ -d "${HEALTH_BUILD_DIR}" ]]; then
+  log "standalone health route compile OK: ${HEALTH_BUILD_DIR}"
+else
+  log "WARN: ${HEALTH_BUILD_DIR} introuvable — le smoke test reste la source de vérité"
+fi
 
 log "Switch current → ${RELEASE_DIR}"
 ln -sfn "${RELEASE_DIR}" "${CURRENT_LINK}.tmp"
@@ -206,15 +266,15 @@ mv -Tf "${CURRENT_LINK}.tmp" "${CURRENT_LINK}"
 
 cp -f "${RELEASE_DIR}/ecosystem.config.cjs" "${ECOSYSTEM}"
 export VPS_APP_PATH="${APP_ROOT}"
+export AFD_RELEASE_SHA="${FULL_SHA}"
 mkdir -p "${LOGS_DIR}"
 cd "${APP_ROOT}"
-log "pm2 startOrReload"
+log "pm2 startOrReload (cwd=current/.next/standalone)"
 pm2 startOrReload "${ECOSYSTEM}" --env production --update-env
 pm2 save
 
-sleep 3
 log "Health local ${HEALTH_LOCAL}"
-if ! curl -fsS --max-time 20 "${HEALTH_LOCAL}" | grep -q '"status":"ok"'; then
+if ! wait_for_health "${HEALTH_LOCAL}" "HealthLocal" 30; then
   log "Health local KO — rollback"
   if [[ -n "${PREVIOUS_TARGET}" && -d "${PREVIOUS_TARGET}" ]]; then
     ln -sfn "${PREVIOUS_TARGET}" "${CURRENT_LINK}.tmp"
@@ -228,7 +288,7 @@ fi
 
 if [[ "${SKIP_PUBLIC_CHECK}" != "1" ]]; then
   log "Health public ${HEALTH_PUBLIC}"
-  if ! curl -fsS --max-time 30 "${HEALTH_PUBLIC}" | grep -q '"status":"ok"'; then
+  if ! wait_for_health "${HEALTH_PUBLIC}" "HealthPublic" 30; then
     log "Health public KO — rollback (proxy OLS peut être absent au 1er deploy)"
     if [[ -n "${PREVIOUS_TARGET}" && -d "${PREVIOUS_TARGET}" ]]; then
       ln -sfn "${PREVIOUS_TARGET}" "${CURRENT_LINK}.tmp"
