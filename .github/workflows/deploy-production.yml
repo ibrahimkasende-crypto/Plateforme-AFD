@@ -10,13 +10,18 @@ on:
         required: false
         type: string
       skip_public_check:
-        description: "Ignorer le health check HTTPS public"
+        description: "Ignorer le health check HTTPS public (urgence uniquement)"
         required: false
         type: boolean
         default: false
+      run_tests:
+        description: "Exécuter les tests unitaires dans le job Validate"
+        required: false
+        type: boolean
+        default: true
 
 concurrency:
-  group: deploy-production
+  group: production-deployment
   cancel-in-progress: false
 
 permissions:
@@ -30,6 +35,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event_name == 'workflow_dispatch' && inputs.ref || github.sha }}
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -47,6 +54,7 @@ jobs:
         run: npm run lint
 
       - name: Unit tests
+        if: ${{ github.event_name != 'workflow_dispatch' || inputs.run_tests }}
         run: npm run test
 
       - name: Build production (standalone)
@@ -63,29 +71,37 @@ jobs:
     needs: validate
     runs-on: ubuntu-latest
     timeout-minutes: 45
-    environment: production
     steps:
-      - name: Checkout (scripts)
-        uses: actions/checkout@v4
+      - name: Resolve deploy SHA
+        id: meta
+        env:
+          INPUT_REF: ${{ github.event_name == 'workflow_dispatch' && inputs.ref || '' }}
+        run: |
+          set -Eeuo pipefail
+          if [ -n "${INPUT_REF}" ]; then
+            echo "deploy_sha=${INPUT_REF}" >> "$GITHUB_OUTPUT"
+          else
+            echo "deploy_sha=${GITHUB_SHA}" >> "$GITHUB_OUTPUT"
+          fi
+          echo "Requested deploy SHA will be: ${INPUT_REF:-$GITHUB_SHA}"
 
-      - name: Configure SSH
-        uses: webfactory/ssh-agent@v0.9.0
-        with:
-          ssh-private-key: ${{ secrets.VPS_SSH_PRIVATE_KEY }}
-
-      - name: Add known hosts
+      - name: Prepare SSH key and known_hosts
         env:
           VPS_HOST: ${{ secrets.VPS_HOST }}
           VPS_PORT: ${{ secrets.VPS_PORT }}
-          VPS_KNOWN_HOSTS: ${{ secrets.VPS_KNOWN_HOSTS }}
+          VPS_SSH_PRIVATE_KEY: ${{ secrets.VPS_SSH_PRIVATE_KEY }}
         run: |
+          set -Eeuo pipefail
+          : "${VPS_HOST:?secret VPS_HOST manquant}"
+          : "${VPS_SSH_PRIVATE_KEY:?secret VPS_SSH_PRIVATE_KEY manquant}"
+          PORT="${VPS_PORT:-22}"
           mkdir -p ~/.ssh
           chmod 700 ~/.ssh
-          if [ -n "${VPS_KNOWN_HOSTS}" ]; then
-            printf '%s\n' "${VPS_KNOWN_HOSTS}" >> ~/.ssh/known_hosts
-          else
-            ssh-keyscan -p "${VPS_PORT:-22}" -H "${VPS_HOST}" >> ~/.ssh/known_hosts
-          fi
+          KEY_FILE="$(mktemp)"
+          printf '%s\n' "$VPS_SSH_PRIVATE_KEY" > "$KEY_FILE"
+          chmod 600 "$KEY_FILE"
+          echo "SSH_KEY_FILE=${KEY_FILE}" >> "$GITHUB_ENV"
+          ssh-keyscan -p "${PORT}" -H "${VPS_HOST}" >> ~/.ssh/known_hosts
           chmod 600 ~/.ssh/known_hosts
 
       - name: Deploy over SSH
@@ -94,36 +110,80 @@ jobs:
           VPS_PORT: ${{ secrets.VPS_PORT }}
           VPS_USER: ${{ secrets.VPS_USER }}
           VPS_APP_PATH: ${{ secrets.VPS_APP_PATH }}
-          VPS_DEPLOY_BRANCH: ${{ secrets.VPS_DEPLOY_BRANCH }}
-          DEPLOY_REF: ${{ inputs.ref || github.sha }}
+          DEPLOY_SHA: ${{ steps.meta.outputs.deploy_sha }}
           SKIP_PUBLIC: ${{ github.event_name == 'workflow_dispatch' && inputs.skip_public_check && '1' || '0' }}
         run: |
           set -Eeuo pipefail
           : "${VPS_HOST:?secret VPS_HOST manquant}"
           : "${VPS_USER:?secret VPS_USER manquant}"
           : "${VPS_APP_PATH:?secret VPS_APP_PATH manquant}"
+          : "${DEPLOY_SHA:?deploy SHA manquant}"
           PORT="${VPS_PORT:-22}"
-          BRANCH="${VPS_DEPLOY_BRANCH:-main}"
+          KEY_FILE="${SSH_KEY_FILE:?}"
 
-          # Validations déjà faites dans le job validate → skip typecheck/lint/test sur VPS
-          ssh -p "${PORT}" \
+          # Met à jour le dépôt VPS sur le SHA exact, puis exécute le script de ce commit.
+          # Validations déjà faites dans Validate → skip typecheck/lint/test sur le VPS.
+          ssh -i "${KEY_FILE}" \
+            -p "${PORT}" \
             -o IdentitiesOnly=yes \
             -o StrictHostKeyChecking=yes \
+            -o BatchMode=yes \
             "${VPS_USER}@${VPS_HOST}" \
-            "export VPS_APP_PATH='${VPS_APP_PATH}' VPS_DEPLOY_BRANCH='${BRANCH}' SKIP_PUBLIC_CHECK='${SKIP_PUBLIC}' \
-             RUN_TYPECHECK=0 RUN_LINT=0 RUN_TEST=0; \
-             bash '${VPS_APP_PATH}/repo/scripts/deploy-production.sh' '${DEPLOY_REF}' '${BRANCH}'"
+            "set -Eeuo pipefail; \
+             cd '${VPS_APP_PATH}/repo'; \
+             git fetch --prune origin; \
+             git checkout --force '${DEPLOY_SHA}'; \
+             git reset --hard '${DEPLOY_SHA}'; \
+             export VPS_APP_PATH='${VPS_APP_PATH}' \
+                    VPS_DEPLOY_BRANCH='main' \
+                    SKIP_PUBLIC_CHECK='${SKIP_PUBLIC}' \
+                    RUN_TYPECHECK=0 RUN_LINT=0 RUN_TEST=0; \
+             bash scripts/deploy-production.sh '${DEPLOY_SHA}' main"
+
+      - name: Cleanup SSH key
+        if: always()
+        run: |
+          if [ -n "${SSH_KEY_FILE:-}" ] && [ -f "${SSH_KEY_FILE}" ]; then
+            shred -u "${SSH_KEY_FILE}" 2>/dev/null || rm -f "${SSH_KEY_FILE}"
+          fi
 
       - name: Public health check
-        if: ${{ !(inputs.skip_public_check) }}
+        if: ${{ !(github.event_name == 'workflow_dispatch' && inputs.skip_public_check) }}
         run: |
           set -Eeuo pipefail
-          for i in 1 2 3 4 5; do
-            if curl -fsS --max-time 30 https://afd-rdc.org/api/health | grep -q '"status":"ok"'; then
-              echo "Public health OK"
+          URL="https://afd-rdc.org/api/health"
+          deadline=$((SECONDS + 60))
+          attempt=0
+          while (( SECONDS < deadline )); do
+            attempt=$((attempt + 1))
+            body="$(mktemp)"
+            set +e
+            http_code="$(curl -sS -o "${body}" -w '%{http_code}' --max-time 15 -D /tmp/afd-health.hdr "${URL}")"
+            curl_exit=$?
+            set -e
+            ctype="$(grep -i '^content-type:' /tmp/afd-health.hdr | tr -d '\r' | awk '{print tolower($0)}' || true)"
+            if [ "${curl_exit}" -eq 0 ] \
+              && [ "${http_code}" = "200" ] \
+              && echo "${ctype}" | grep -q 'application/json' \
+              && grep -q '"status":"ok"' "${body}"; then
+              echo "Public health OK (attempt=${attempt} http=${http_code})"
+              cat "${body}"
+              rm -f "${body}"
               exit 0
             fi
+            echo "Public health tentative ${attempt} KO http=${http_code:-n/a} curl_exit=${curl_exit}"
+            rm -f "${body}"
             sleep 5
           done
-          echo "Public health FAILED"
+          echo "Public health FAILED after ~60s (last http=${http_code:-n/a})"
           exit 1
+
+      - name: Deploy summary
+        if: always()
+        env:
+          DEPLOY_SHA: ${{ steps.meta.outputs.deploy_sha }}
+        run: |
+          echo "Deploy SHA demandé: ${DEPLOY_SHA}"
+          echo "Job status: ${{ job.status }}"
+          echo "Le rollback automatique (si besoin) est géré par scripts/deploy-production.sh sur le VPS."
+          echo "Aucun second rollback n'est lancé depuis GitHub Actions."

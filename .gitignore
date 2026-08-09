@@ -33,6 +33,8 @@
 *.ppk
 id_rsa*
 id_ed25519*
+github_actions_afd_production
+github_actions_afd_production.pub
 credentials.json
 service-account*.json
 

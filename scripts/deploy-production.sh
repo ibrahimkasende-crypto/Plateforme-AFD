@@ -163,9 +163,13 @@ git -C "${GIT_DIR}" reset --hard "${REF}"
 
 SHORT_SHA="$(git -C "${GIT_DIR}" rev-parse --short=12 HEAD)"
 FULL_SHA="$(git -C "${GIT_DIR}" rev-parse HEAD)"
+# Si un SHA complet est fourni (ex. GitHub Actions github.sha), exiger une correspondance exacte
+if [[ "${REF}" =~ ^[0-9a-fA-F]{40}$ && "${FULL_SHA}" != "${REF}" ]]; then
+  fail "SHA déployé (${FULL_SHA}) ≠ SHA demandé (${REF})"
+fi
 STAMP="$(date +%Y%m%d-%H%M%S)-${SHORT_SHA}"
 RELEASE_DIR="${RELEASES_DIR}/${STAMP}"
-log "RELEASE=${RELEASE_DIR}"
+log "RELEASE=${RELEASE_DIR} sha=${FULL_SHA}"
 
 PREVIOUS_TARGET=""
 if [[ -L "${CURRENT_LINK}" ]]; then
