@@ -98,13 +98,25 @@ jobs:
           mkdir -p ~/.ssh
           chmod 700 ~/.ssh
           KEY_FILE="$(mktemp)"
-          # Normaliser CRLF Windows + garantir un newline final (évite error in libcrypto)
-          printf '%s' "${VPS_SSH_PRIVATE_KEY}" | tr -d '\r' > "${KEY_FILE}"
+          export KEY_FILE
+          # Accepte PEM multiligne OU base64 d'une seule ligne (fiable sous Windows / gh secret set)
+          if printf '%s' "${VPS_SSH_PRIVATE_KEY}" | tr -d '\r\n' | grep -q 'BEGIN OPENSSH PRIVATE KEY'; then
+            printf '%s' "${VPS_SSH_PRIVATE_KEY}" | tr -d '\r' > "${KEY_FILE}"
+          else
+            printf '%s' "${VPS_SSH_PRIVATE_KEY}" | tr -d '\r\n \t' | base64 -d > "${KEY_FILE}"
+          fi
           if [ -n "$(tail -c1 "${KEY_FILE}" 2>/dev/null || true)" ]; then
             printf '\n' >> "${KEY_FILE}"
           fi
           chmod 600 "${KEY_FILE}"
-          # Valider la clé sans jamais l'afficher
+          python3 - <<'PY'
+          import pathlib, os
+          d = pathlib.Path(os.environ["KEY_FILE"]).read_bytes()
+          print(
+              f"key_bytes={len(d)} newlines={d.count(10)} cr={d.count(13)} "
+              f"begins_openssh={d.startswith(b'-----BEGIN OPENSSH PRIVATE KEY-----')}"
+          )
+          PY
           ssh-keygen -y -f "${KEY_FILE}" >/dev/null
           echo "SSH_KEY_FILE=${KEY_FILE}" >> "$GITHUB_ENV"
           ssh-keyscan -p "${PORT}" -H "${VPS_HOST}" >> ~/.ssh/known_hosts

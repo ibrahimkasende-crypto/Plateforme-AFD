@@ -100,3 +100,16 @@ Le workflow appelle `scripts/deploy-production.sh` avec le SHA exact `${{ github
 7. Rollback automatique si échec
 
 **Ne jamais réactiver `nghttpx` sur le port 3000.**
+
+## Note sur `VPS_SSH_PRIVATE_KEY`
+
+Le secret accepte :
+1. le PEM OpenSSH multiligne, **ou**
+2. le **base64 d'une seule ligne** du fichier clé (recommandé si le collage Windows casse les retours à la ligne).
+
+Générer le base64 sous PowerShell (sans l'afficher) puis le coller dans le secret :
+
+```powershell
+[Convert]::ToBase64String([IO.File]::ReadAllBytes("C:\Users\IKAS\.ssh\github_actions_afd_production")) | Set-Clipboard
+```
+
