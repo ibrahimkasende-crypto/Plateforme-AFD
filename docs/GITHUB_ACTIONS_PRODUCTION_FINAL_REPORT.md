@@ -105,42 +105,40 @@ Le workflow n’ajoute pas de second rollback.
 
 ## 12. Résultat du workflow réel
 
-Pré-checks locaux / VPS (avant secrets GitHub) :
+Run réussi : https://github.com/ibrahimkasende-crypto/Plateforme-AFD/actions/runs/31324269594  
+Déclenchement : `workflow_dispatch` sur `main` (2026-08-09)
 
 | Contrôle | Résultat |
 |----------|----------|
-| Clé GHA SSH → VPS | OK (`afdrd7787` / `panel.afd-rdc.org`) |
-| Script deploy présent | OK |
+| SHA demandé | `281a2f5a28aefb194c6f7cb34892cee01b0465cb` |
+| SHA déployé | `281a2f5a28aefb194c6f7cb34892cee01b0465cb` |
+| Release | `20260809-173943-281a2f5a28ae` |
 | PM2 `plateforme-afd` | online |
-| Release courante (avant auto-deploy) | `79572536c98c…` |
-| Workflow YAML | OK |
-| `gh` CLI | non installé → secrets non poussés automatiquement |
+| Health local | OK (`"status":"ok"`) |
+| Health public | HTTP 200 `"status":"ok"` |
+| Jobs | Validate ✓ · Deploy VPS ✓ |
 
-Après création des 5 secrets GitHub et premier `workflow_dispatch` / push `main` :
+Corrections effectuées pendant le test réel :
 
-| Contrôle | Résultat |
-|----------|----------|
-| SHA demandé | _pending_ |
-| SHA déployé | _pending_ |
-| Release créée | _pending_ |
-| Health public Actions | _pending_ |
+1. `VPS_SSH_PRIVATE_KEY` stocké en **base64** (le PEM collé sous Windows provoquait `error in libcrypto`)
+2. Alias SSH VPS `github-afd` → Deploy Key restauré (sinon `git fetch` échoue)
 
 ## 13. Problèmes restants
 
-1. Les 5 repository secrets GitHub doivent être créés manuellement (`gh` absent ici).
-2. Tant que `VPS_SSH_PRIVATE_KEY` est absent, le job Deploy échouera après Validate.
-3. Changer le mot de passe root s’il a été exposé dans un chat précédent.
+1. Changer le mot de passe root s’il a été exposé dans un chat précédent.
+2. Optionnel : nettoyer les doublons éventuels dans `authorized_keys`.
 
 ## 14. Verdict final
 
-**Prêt côté code + clé VPS.**  
-**Bloqué uniquement par l’ajout des secrets GitHub** pour le premier déploiement automatique réel.
+**Déploiement automatique GitHub Actions opérationnel.**
 
-Après secrets :
+Flux quotidien :
 
-1. Actions → Deploy production → Run workflow (branche `main`)
-2. Vérifier Validate + Deploy VPS verts
-3. `curl -sS https://afd-rdc.org/api/health` → `"status":"ok"`
+```bash
+git add .
+git commit -m "description"
+git push origin main
+```
 
 ## Déclenchement test
 
