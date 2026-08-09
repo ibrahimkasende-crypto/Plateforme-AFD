@@ -98,8 +98,14 @@ jobs:
           mkdir -p ~/.ssh
           chmod 700 ~/.ssh
           KEY_FILE="$(mktemp)"
-          printf '%s\n' "$VPS_SSH_PRIVATE_KEY" > "$KEY_FILE"
-          chmod 600 "$KEY_FILE"
+          # Normaliser CRLF Windows + garantir un newline final (évite error in libcrypto)
+          printf '%s' "${VPS_SSH_PRIVATE_KEY}" | tr -d '\r' > "${KEY_FILE}"
+          if [ -n "$(tail -c1 "${KEY_FILE}" 2>/dev/null || true)" ]; then
+            printf '\n' >> "${KEY_FILE}"
+          fi
+          chmod 600 "${KEY_FILE}"
+          # Valider la clé sans jamais l'afficher
+          ssh-keygen -y -f "${KEY_FILE}" >/dev/null
           echo "SSH_KEY_FILE=${KEY_FILE}" >> "$GITHUB_ENV"
           ssh-keyscan -p "${PORT}" -H "${VPS_HOST}" >> ~/.ssh/known_hosts
           chmod 600 ~/.ssh/known_hosts
