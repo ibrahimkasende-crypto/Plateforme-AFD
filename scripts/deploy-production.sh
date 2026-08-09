@@ -284,8 +284,21 @@ cd "${APP_ROOT}"
 EXPECTED_STANDALONE="$(readlink -f "${CURRENT_LINK}/.next/standalone")"
 [[ -f "${EXPECTED_STANDALONE}/server.js" ]] || fail "server.js manquant: ${EXPECTED_STANDALONE}"
 
-# Forcer un redémarrage complet : startOrReload peut conserver un ancien cwd
-# (symptôme : smoke OK sur :3010, health :3000 = HTML 404).
+# Détecter collision de port (cause réelle observée : nghttpx sur 127.0.0.1:3000)
+if ss -lntp 2>/dev/null | grep -qE "127\\.0\\.0\\.1:${PORT}\\b|\\*:${PORT}\\b|0\\.0\\.0\\.0:${PORT}\\b"; then
+  probe_hdr="$(curl -sS -D- -o /tmp/afd-port-probe.body --max-time 3 \
+    "http://127.0.0.1:${PORT}/api/health" 2>/dev/null || true)"
+  if echo "${probe_hdr}" | grep -qiE 'nghttpx|CyberPanel-OLS|Server:.*OLS'; then
+    fail "Port ${PORT} occupé par nghttpx/CyberPanel (pas Node). Exécutez en root: systemctl disable --now nghttpx.service"
+  fi
+  # Si déjà notre app Next (JSON ok), on pourra recharger ; sinon risque EADDRINUSE
+  if ! echo "${probe_hdr}" | grep -q 'HTTP/.* 200' || ! grep -q '"status":"ok"' /tmp/afd-port-probe.body 2>/dev/null; then
+    log "WARN: port ${PORT} déjà en écoute — tentative pm2 delete puis bind"
+  fi
+fi
+
+# Forcer un redémarrage complet : startOrReload peut conserver un ancien cwd.
+# Ne jamais laisser un foreign listener (nghttpx) masquer un faux 404 HTML.
 log "pm2 delete + start (cwd=${EXPECTED_STANDALONE})"
 pm2 delete plateforme-afd >/dev/null 2>&1 || true
 pm2 start "${ECOSYSTEM}" --env production --update-env

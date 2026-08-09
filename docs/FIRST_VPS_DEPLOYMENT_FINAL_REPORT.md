@@ -1,80 +1,89 @@
-# Rapport final — premier déploiement VPS
+# Rapport final — diagnostic VPS (en cours)
 
 Date : 2026-08-09  
-Projet local : `D:\Plateforme-AFD\AFD`  
-Dépôt cible : `https://github.com/ibrahimkasende-crypto/Plateforme-AFD`  
 VPS : `afdrd7787@187.55.230.121`  
 App : `/home/afd-rdc.org/apps/plateforme-afd`
 
-## 1. Accès depuis Cursor
+## 1. Cause réelle du HTTP 404 sur `127.0.0.1:3000/api/health`
 
-| Contrôle | Résultat |
+**Le port 3000 n’était pas servi par Next.js / PM2.**
+
+Il est occupé par le service systemd **`nghttpx.service`** (HTTP/2 proxy), avec la config d’exemple :
+
+```text
+# /etc/nghttpx/nghttpx.conf
+frontend=127.0.0.1,3000;no-tls
+backend=127.0.0.1,80
+```
+
+Donc `curl http://127.0.0.1:3000/api/health` interroge **nghttpx → OpenLiteSpeed:80**, qui renvoie une page HTML 404 CyberPanel :
+
+```http
+HTTP/1.1 404 Not Found
+Content-Type: text/html
+X-Powered-By: CyberPanel-OLS/2.5.0
+Server: nghttpx
+```
+
+Ce n’est **pas** un problème de route `/api/health` manquante dans le build Next.
+
+## 2. Processus / service sur le port 3000
+
+| Élément | Valeur |
 |---|---|
-| SSH `afdrd7787@187.55.230.121` depuis Cursor | **ÉCHEC** — `Permission denied (publickey,password)` |
-| Clé SSH locale utilisable pour le VPS | **Absente** dans l’environnement agent |
-| Déploiement remote exécuté par l’agent | **Non** (pas d’accès) |
+| Service | `nghttpx.service` (**active/running**) |
+| Binaire | `/usr/sbin/nghttpx --conf=/etc/nghttpx/nghttpx.conf` |
+| Bind | `127.0.0.1:3000` → backend `127.0.0.1:80` |
+| PID visible par `afdrd7787` | masqué (`hidepid`) — `ss` sans process name |
+| Preuve | headers `Server: nghttpx` + unit systemd active |
 
-Conséquence : le premier démarrage PM2 sur le VPS doit être lancé via **une seule commande** documentée dans `docs/VPS_ONE_COMMAND_FIRST_DEPLOY.md`.
+## 3. État PM2 au moment du diagnostic
 
-## 2. Build local
-
-| Étape | Résultat |
+| Élément | Valeur |
 |---|---|
-| `npm ci` | OK (session précédente / deps présentes) |
-| `npm run typecheck` | OK |
-| `npm run lint` | OK |
-| `npm run test` | OK (67) |
-| `npm run build:production` | OK (standalone + prepare) |
-| Next.js | 16.2.10 |
-| React | 19.2.4 |
-| Node engines | `>=20 <=24` (VPS = 22.23.2) |
-| `output: "standalone"` | Oui |
+| App | `plateforme-afd` |
+| Status | **errored** (pid 0, 15 restarts) |
+| Erreur logs | `listen EADDRINUSE: address already in use 127.0.0.1:3000` |
+| script path | `.../current/.next/standalone/server.js` |
+| cwd | `.../current/.next/standalone` |
 
-## 3. Artefacts préparés dans le dépôt
+PM2 démarre correctement la bonne app, mais **échoue à binder** le port déjà pris.
 
-| Élément | Statut |
+## 4. Release / manifeste health
+
+| Élément | Valeur |
 |---|---|
-| `scripts/deploy-production.sh` | OK (repo `Plateforme-AFD`, sans arg, checks env owner/600) |
-| `scripts/rollback-production.sh` | OK |
-| `scripts/bootstrap-first-deploy.sh` | OK |
-| `scripts/prepare-standalone.mjs` | OK |
-| `ecosystem.config.cjs` | OK (700M, logs/, 127.0.0.1:3000) |
-| `src/app/api/health` | OK |
-| `.github/workflows/deploy-production.yml` | OK |
-| `docs/CYBERPANEL_OPENLITESPEED_FINAL_SETUP.md` | OK |
-| `docs/VPS_ONE_COMMAND_FIRST_DEPLOY.md` | OK |
+| current (symlink) | pointait vers `.../79572536c98c` puis release renommée en `.failed-*` |
+| Build standalone | **OK** (`server.js` présent) |
+| Route compilée | **présente** : `.next/standalone/.next/server/app/api/health` |
+| Manifeste | `"/api/health": {}` dans `functions-config-manifest.json` |
+| Smoke :3010 | **OK** (Next réel) |
 
-## 4. Serveur (à remplir après la commande unique)
+## 5. Correction requise (privilège root)
 
-| Contrôle | Statut actuel |
-|---|---|
-| Build serveur | **En attente** (commande VPS) |
-| SHA déployé | **En attente** |
-| Chemin release | **En attente** (`releases/YYYYMMDD-HHMMSS-SHA`) |
-| Lien `current` | Structure déjà créée côté VPS |
-| PM2 online | **En attente** |
-| `http://127.0.0.1:3000/api/health` | **En attente** |
-| `https://afd-rdc.org/api/health` | **En attente** (après OLS) |
-| Reverse proxy OLS | Doc finale prête — **action CyberPanel restante** |
-| SSL | À forcer dans CyberPanel |
-| GitHub Actions secrets | **À configurer** (`VPS_*`) |
-| Rollback script | Présent dans le dépôt |
+`afdrd7787` n’a **pas** sudo passwordless. Impossible d’arrêter `nghttpx` depuis cet utilisateur.
 
-## 5. Action humaine restante (une seule)
+**Une seule commande root nécessaire :**
 
-1. SSH en `afdrd7787` puis coller la commande de `docs/VPS_ONE_COMMAND_FIRST_DEPLOY.md`.
-2. Quand le health local est OK : appliquer `docs/CYBERPANEL_OPENLITESPEED_FINAL_SETUP.md` dans CyberPanel.
-3. Ajouter les secrets GitHub Actions (`VPS_HOST`, `VPS_PORT`, `VPS_USER`, `VPS_SSH_PRIVATE_KEY`, `VPS_APP_PATH`).
+```bash
+systemctl disable --now nghttpx.service
+```
 
-## 6. Sécurité
+Cela n’affecte pas MX/SPF/DKIM/email (nghttpx sample 3000→80 n’est pas le listener public 443).
 
-- Aucun secret demandé ni affiché.
-- `.env.production` VPS : non lu / non affiché.
-- Scan : pas de clé privée dans Git.
-- ZIP : non requis.
+Ensuite, en `afdrd7787`, le script `scripts/vps-finish-after-nghttpx-stop.sh` restaure la release et démarre PM2.
 
-## 7. Verdict
+## 6–15. Statuts (à compléter après arrêt nghttpx)
 
-**Code & pipeline : PRÊTS.**  
-**Déploiement runtime VPS depuis Cursor : BLOQUÉ (pas de clé SSH agent → VPS).**  
-**Prochaine étape bloquante unique : exécuter la commande unique sur le VPS.**
+| # | Point | Statut |
+|---|---|---|
+| 6 | Correction appliquée | **en attente** `systemctl disable --now nghttpx` |
+| 7 | Script deploy détecte nghttpx | **préparé** (fail explicite) |
+| 8 | PM2 online sur bonne release | **en attente** |
+| 9 | SHA | `79572536c98c...` (release existante) |
+| 10 | PM2 status | errored → à corriger |
+| 11 | Local `/api/health` | **en attente** |
+| 12 | Public `/api/health` | après OLS |
+| 13 | Reverse proxy | après health local |
+| 14 | GitHub Actions | après health local |
+| 15 | Verdict | **bloqué uniquement par nghttpx sur :3000** |
