@@ -141,3 +141,8 @@ Après secrets :
 1. Actions → Deploy production → Run workflow (branche `main`)
 2. Vérifier Validate + Deploy VPS verts
 3. `curl -sS https://afd-rdc.org/api/health` → `"status":"ok"`
+
+## Déclenchement test
+
+Workflow réel déclenché le 2026-08-09 17:14:43 (UTC+1) après création des secrets GitHub.
+
