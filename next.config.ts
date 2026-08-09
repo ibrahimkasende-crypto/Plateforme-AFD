@@ -64,9 +64,11 @@ const nextConfig: NextConfig = {
         ].join("; "),
       });
     }
+    // Headers uniquement — aucun rewrite. /api/health n’est pas dans redirects.
     return [{ source: "/:path*", headers: security }];
   },
   async redirects() {
+    // Aucune entrée ne cible /api/health.
     return [
       { source: "/brand/logo-afd.jpg", destination: "/assets/brand/Logo_AFD.jpeg", permanent: true },
       { source: "/images/adf1.jpg", destination: "/assets/home/Femmes_AFD.png", permanent: true },

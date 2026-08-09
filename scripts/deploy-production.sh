@@ -241,24 +241,34 @@ log "Smoke test standalone :${SMOKE_PORT}"
 (
   cd "${RELEASE_DIR}/.next/standalone"
   HOSTNAME=127.0.0.1 PORT="${SMOKE_PORT}" NODE_ENV=production \
+    GIT_SHA="${FULL_SHA}" \
     node server.js
 ) &
 SMOKE_PID=$!
 cleanup_smoke() { kill "${SMOKE_PID}" >/dev/null 2>&1 || true; wait "${SMOKE_PID}" 2>/dev/null || true; }
 trap cleanup_smoke EXIT
 
-wait_for_health "http://127.0.0.1:${SMOKE_PORT}/api/health" "Smoke" 45 \
-  || fail "Smoke health KO sur :${SMOKE_PORT} — current inchangé"
+# Smoke = test de LA nouvelle release (port temporaire) AVANT bascule current
+wait_for_health "http://127.0.0.1:${SMOKE_PORT}/api/health" "SmokeRelease" 45 \
+  || fail "Smoke health KO sur release :${SMOKE_PORT} — current inchangé"
+# Confirmer la différence 404 vs health
+smoke_404_code="$(curl -sS -o /dev/null -w '%{http_code}' --max-time 5 \
+  "http://127.0.0.1:${SMOKE_PORT}/api/route-inexistante" || true)"
+log "Smoke route inexistante http=${smoke_404_code} (attendu 404)"
 cleanup_smoke
 trap - EXIT
-log "Smoke OK"
+log "SmokeRelease OK"
 
 HEALTH_BUILD_DIR="${RELEASE_DIR}/.next/standalone/.next/server/app/api/health"
-if [[ -d "${HEALTH_BUILD_DIR}" ]]; then
-  log "standalone health route compile OK: ${HEALTH_BUILD_DIR}"
-else
-  log "WARN: ${HEALTH_BUILD_DIR} introuvable — le smoke test reste la source de vérité"
+[[ -d "${HEALTH_BUILD_DIR}" ]] || fail "Route health absente du standalone: ${HEALTH_BUILD_DIR}"
+if ! grep -R "api/health" "${RELEASE_DIR}/.next/server/"*manifest*.json >/dev/null 2>&1 \
+  && ! grep -R "api/health" "${RELEASE_DIR}/.next/standalone/.next/server/"*manifest*.json >/dev/null 2>&1; then
+  # Cherche aussi récursivement
+  if ! grep -R "api/health" "${RELEASE_DIR}/.next/server" --include='*manifest*.json' >/dev/null 2>&1; then
+    fail "Manifeste sans /api/health — build incomplet"
+  fi
 fi
+log "Manifeste contient api/health"
 
 log "Switch current → ${RELEASE_DIR}"
 ln -sfn "${RELEASE_DIR}" "${CURRENT_LINK}.tmp"
@@ -267,11 +277,45 @@ mv -Tf "${CURRENT_LINK}.tmp" "${CURRENT_LINK}"
 cp -f "${RELEASE_DIR}/ecosystem.config.cjs" "${ECOSYSTEM}"
 export VPS_APP_PATH="${APP_ROOT}"
 export AFD_RELEASE_SHA="${FULL_SHA}"
+export GIT_SHA="${FULL_SHA}"
 mkdir -p "${LOGS_DIR}"
 cd "${APP_ROOT}"
-log "pm2 startOrReload (cwd=current/.next/standalone)"
-pm2 startOrReload "${ECOSYSTEM}" --env production --update-env
+
+EXPECTED_STANDALONE="$(readlink -f "${CURRENT_LINK}/.next/standalone")"
+[[ -f "${EXPECTED_STANDALONE}/server.js" ]] || fail "server.js manquant: ${EXPECTED_STANDALONE}"
+
+# Forcer un redémarrage complet : startOrReload peut conserver un ancien cwd
+# (symptôme : smoke OK sur :3010, health :3000 = HTML 404).
+log "pm2 delete + start (cwd=${EXPECTED_STANDALONE})"
+pm2 delete plateforme-afd >/dev/null 2>&1 || true
+pm2 start "${ECOSYSTEM}" --env production --update-env
 pm2 save
+
+# Vérifier que PM2 exécute bien le server.js de la NOUVELLE release
+PM2_CWD="$(pm2 jlist 2>/dev/null | node -e '
+let d=""; process.stdin.on("data",c=>d+=c); process.stdin.on("end",()=>{
+  try {
+    const apps=JSON.parse(d);
+    const app=apps.find(a=>a.name==="plateforme-afd");
+    if(!app){ process.exit(2); }
+    process.stdout.write(String(app.pm2_env?.pm_cwd||""));
+  } catch { process.exit(3); }
+});
+' || true)"
+log "pm2_cwd=${PM2_CWD}"
+[[ -n "${PM2_CWD}" ]] || fail "Impossible de lire pm2 cwd"
+if [[ "$(readlink -f "${PM2_CWD}")" != "${EXPECTED_STANDALONE}" ]]; then
+  fail "PM2 cwd incorrect: ${PM2_CWD} != ${EXPECTED_STANDALONE}"
+fi
+PM2_SCRIPT="$(pm2 jlist 2>/dev/null | node -e '
+let d=""; process.stdin.on("data",c=>d+=c); process.stdin.on("end",()=>{
+  const apps=JSON.parse(d);
+  const app=apps.find(a=>a.name==="plateforme-afd");
+  process.stdout.write(String(app?.pm2_env?.pm_exec_path||app?.pm2_env?.script||""));
+});
+' || true)"
+log "pm2_script=${PM2_SCRIPT}"
+[[ "${PM2_SCRIPT}" == *"/server.js" || "${PM2_SCRIPT}" == *"server.js" ]] || fail "PM2 script inattendu: ${PM2_SCRIPT}"
 
 log "Health local ${HEALTH_LOCAL}"
 if ! wait_for_health "${HEALTH_LOCAL}" "HealthLocal" 30; then
@@ -279,7 +323,8 @@ if ! wait_for_health "${HEALTH_LOCAL}" "HealthLocal" 30; then
   if [[ -n "${PREVIOUS_TARGET}" && -d "${PREVIOUS_TARGET}" ]]; then
     ln -sfn "${PREVIOUS_TARGET}" "${CURRENT_LINK}.tmp"
     mv -Tf "${CURRENT_LINK}.tmp" "${CURRENT_LINK}"
-    pm2 startOrReload "${ECOSYSTEM}" --env production --update-env
+    pm2 delete plateforme-afd >/dev/null 2>&1 || true
+    pm2 start "${ECOSYSTEM}" --env production --update-env
     pm2 save
   fi
   mv "${RELEASE_DIR}" "${RELEASE_DIR}.failed-$(date +%s)" 2>/dev/null || true
@@ -293,7 +338,8 @@ if [[ "${SKIP_PUBLIC_CHECK}" != "1" ]]; then
     if [[ -n "${PREVIOUS_TARGET}" && -d "${PREVIOUS_TARGET}" ]]; then
       ln -sfn "${PREVIOUS_TARGET}" "${CURRENT_LINK}.tmp"
       mv -Tf "${CURRENT_LINK}.tmp" "${CURRENT_LINK}"
-      pm2 startOrReload "${ECOSYSTEM}" --env production --update-env
+      pm2 delete plateforme-afd >/dev/null 2>&1 || true
+      pm2 start "${ECOSYSTEM}" --env production --update-env
       pm2 save
     fi
     mv "${RELEASE_DIR}" "${RELEASE_DIR}.failed-$(date +%s)" 2>/dev/null || true

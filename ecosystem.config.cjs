@@ -1,10 +1,8 @@
 /**
  * PM2 — Plateforme-AFD
  *
- * Important : cwd = dossier standalone (comme le smoke test).
- * Lancer depuis `current/` (parent) provoque des 404 sur les App Routes.
- *
- * Aucun secret dans ce fichier.
+ * cwd DOIT être current/.next/standalone (pas current/).
+ * Aucun secret ici.
  */
 const path = require("node:path");
 
@@ -37,13 +35,13 @@ module.exports = {
         NODE_ENV: "production",
         HOSTNAME: "127.0.0.1",
         PORT: process.env.PORT || "3000",
-        AFD_RELEASE_SHA: process.env.AFD_RELEASE_SHA || "",
+        GIT_SHA: process.env.GIT_SHA || process.env.AFD_RELEASE_SHA || "",
       },
       env_production: {
         NODE_ENV: "production",
         HOSTNAME: "127.0.0.1",
         PORT: process.env.PORT || "3000",
-        AFD_RELEASE_SHA: process.env.AFD_RELEASE_SHA || "",
+        GIT_SHA: process.env.GIT_SHA || process.env.AFD_RELEASE_SHA || "",
       },
       env_file: envFile,
     },

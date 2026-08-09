@@ -17,15 +17,13 @@ function isAuthPage(pathname: string): boolean {
 }
 
 /**
- * Middleware Supabase SSR :
- * - rafraîchit la session (cookies) ;
- * - bloque l’accès à /admin sans utilisateur authentifié.
- * La vérification profil/rôle/actif reste dans requireAdmin() (layout).
+ * Middleware Supabase SSR — uniquement chemins auth/admin.
+ * /api/health n’est PAS dans le matcher (aucune auth / redirect / rewrite).
  */
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // Health checks : jamais d’auth / jamais de session Supabase.
+  // Ceinture + bretelles : jamais toucher au health check.
   if (pathname === "/api/health" || pathname.startsWith("/api/health/")) {
     return NextResponse.next();
   }
@@ -40,10 +38,10 @@ export async function middleware(request: NextRequest) {
   const env = getSupabasePublicEnv();
 
   if (!env) {
-    if (isAdminPath(request.nextUrl.pathname)) {
+    if (isAdminPath(pathname)) {
       const loginUrl = request.nextUrl.clone();
       loginUrl.pathname = "/connexion";
-      loginUrl.searchParams.set("next", request.nextUrl.pathname);
+      loginUrl.searchParams.set("next", pathname);
       return NextResponse.redirect(loginUrl);
     }
     return supabaseResponse;
@@ -80,19 +78,20 @@ export async function middleware(request: NextRequest) {
   }
 
   if (isAuthPage(pathname) && user && pathname === "/connexion") {
-    // Ne redirige pas automatiquement : un compte sans profil
-    // doit pouvoir rester sur /connexion après échec signIn.
+    // Pas de redirect auto : un compte sans profil doit pouvoir rester.
   }
 
   return supabaseResponse;
 }
 
 export const config = {
+  // Matcher restrictif : /api/health, assets et pages publiques hors scope.
   matcher: [
-    /*
-     * Exclure assets Next, favicon, fichiers publics et health check.
-     * Auth middleware ne s’applique qu’au reste (notamment /admin).
-     */
-    "/((?!_next/static|_next/image|favicon.ico|api/health|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|txt|xml)$).*)",
+    "/admin",
+    "/admin/:path*",
+    "/connexion",
+    "/mot-de-passe-oublie",
+    "/nouveau-mot-de-passe",
+    "/auth/reset-password",
   ],
 };
