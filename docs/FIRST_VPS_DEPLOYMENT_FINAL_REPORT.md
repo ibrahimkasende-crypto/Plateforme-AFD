@@ -1,22 +1,14 @@
-# Rapport final — diagnostic VPS (en cours)
+# Rapport final — premier déploiement VPS
 
 Date : 2026-08-09  
 VPS : `afdrd7787@187.55.230.121`  
 App : `/home/afd-rdc.org/apps/plateforme-afd`
 
-## 1. Cause réelle du HTTP 404 sur `127.0.0.1:3000/api/health`
+## 1. Cause réelle du HTTP 404
 
-**Le port 3000 n’était pas servi par Next.js / PM2.**
+**`nghttpx.service`** occupait `127.0.0.1:3000` et proxifiait vers OpenLiteSpeed `:80`.
 
-Il est occupé par le service systemd **`nghttpx.service`** (HTTP/2 proxy), avec la config d’exemple :
-
-```text
-# /etc/nghttpx/nghttpx.conf
-frontend=127.0.0.1,3000;no-tls
-backend=127.0.0.1,80
-```
-
-Donc `curl http://127.0.0.1:3000/api/health` interroge **nghttpx → OpenLiteSpeed:80**, qui renvoie une page HTML 404 CyberPanel :
+Réponse observée avant correction :
 
 ```http
 HTTP/1.1 404 Not Found
@@ -25,65 +17,62 @@ X-Powered-By: CyberPanel-OLS/2.5.0
 Server: nghttpx
 ```
 
-Ce n’est **pas** un problème de route `/api/health` manquante dans le build Next.
+Ce n’était **pas** une absence de route Next `/api/health`.
 
-## 2. Processus / service sur le port 3000
+## 2–4. Processus / PM2 / release
 
-| Élément | Valeur |
-|---|---|
-| Service | `nghttpx.service` (**active/running**) |
-| Binaire | `/usr/sbin/nghttpx --conf=/etc/nghttpx/nghttpx.conf` |
-| Bind | `127.0.0.1:3000` → backend `127.0.0.1:80` |
-| PID visible par `afdrd7787` | masqué (`hidepid`) — `ss` sans process name |
-| Preuve | headers `Server: nghttpx` + unit systemd active |
+| Point | Avant | Après |
+|---|---|---|
+| Port 3000 | `nghttpx` → OLS:80 | `next-server` pid **84883** |
+| PM2 | `errored` / `EADDRINUSE` | **online** |
+| Release | `...79572536c98c.failed-*` | restaurée → `current` |
+| SHA | `79572536c98c5602a2d7fbb51a7ea997f95f4228` | actif |
+| Manifeste health | présent | confirmé |
+| cwd PM2 | `.../current/.next/standalone` | OK |
+| script | `.../standalone/server.js` | OK |
 
-## 3. État PM2 au moment du diagnostic
+## 5–8. Corrections appliquées
 
-| Élément | Valeur |
-|---|---|
-| App | `plateforme-afd` |
-| Status | **errored** (pid 0, 15 restarts) |
-| Erreur logs | `listen EADDRINUSE: address already in use 127.0.0.1:3000` |
-| script path | `.../current/.next/standalone/server.js` |
-| cwd | `.../current/.next/standalone` |
+1. `systemctl disable --now nghttpx.service` (root)
+2. Restauration release failed → `current`
+3. `pm2 delete` + `pm2 start ecosystem.config.cjs --env production`
+4. `pm2 save`
+5. Script deploy : détection collision nghttpx (`scripts/deploy-production.sh`)
+6. Script reprise : `scripts/vps-finish-after-nghttpx-stop.sh`
 
-PM2 démarre correctement la bonne app, mais **échoue à binder** le port déjà pris.
+## 9–11. Validation locale (obligatoire)
 
-## 4. Release / manifeste health
-
-| Élément | Valeur |
-|---|---|
-| current (symlink) | pointait vers `.../79572536c98c` puis release renommée en `.failed-*` |
-| Build standalone | **OK** (`server.js` présent) |
-| Route compilée | **présente** : `.next/standalone/.next/server/app/api/health` |
-| Manifeste | `"/api/health": {}` dans `functions-config-manifest.json` |
-| Smoke :3010 | **OK** (Next réel) |
-
-## 5. Correction requise (privilège root)
-
-`afdrd7787` n’a **pas** sudo passwordless. Impossible d’arrêter `nghttpx` depuis cet utilisateur.
-
-**Une seule commande root nécessaire :**
-
-```bash
-systemctl disable --now nghttpx.service
+```text
+pm2 status → plateforme-afd online
+ss → 127.0.0.1:3000 users:(("next-server ...",pid=84883))
 ```
 
-Cela n’affecte pas MX/SPF/DKIM/email (nghttpx sample 3000→80 n’est pas le listener public 443).
+```http
+GET http://127.0.0.1:3000/api/health
+HTTP/1.1 200 OK
+content-type: application/json
 
-Ensuite, en `afdrd7787`, le script `scripts/vps-finish-after-nghttpx-stop.sh` restaure la release et démarre PM2.
+{"status":"ok","service":"plateforme-afd","timestamp":"...","version":"79572536c98c5602a2d7fbb51a7ea997f95f4228"}
+```
 
-## 6–15. Statuts (à compléter après arrêt nghttpx)
+```http
+HEAD http://127.0.0.1:3000/
+HTTP/1.1 200 OK
+X-Powered-By: Next.js
+```
 
-| # | Point | Statut |
-|---|---|---|
-| 6 | Correction appliquée | **en attente** `systemctl disable --now nghttpx` |
-| 7 | Script deploy détecte nghttpx | **préparé** (fail explicite) |
-| 8 | PM2 online sur bonne release | **en attente** |
-| 9 | SHA | `79572536c98c...` (release existante) |
-| 10 | PM2 status | errored → à corriger |
-| 11 | Local `/api/health` | **en attente** |
-| 12 | Public `/api/health` | après OLS |
-| 13 | Reverse proxy | après health local |
-| 14 | GitHub Actions | après health local |
-| 15 | Verdict | **bloqué uniquement par nghttpx sur :3000** |
+## 12–14. Public / OLS / Actions
+
+| Point | Statut |
+|---|---|
+| `https://afd-rdc.org/api/health` | à finaliser via reverse proxy OLS si pas encore OK |
+| Reverse proxy | doc : `docs/CYBERPANEL_OPENLITESPEED_FINAL_SETUP.md` |
+| GitHub Actions | workflow prêt ; secrets `VPS_*` à confirmer |
+| Email / MX / SPF / DKIM | non modifiés |
+
+## 15. Verdict
+
+**Health local production : RÉUSSI.**  
+Cause racine corrigée (`nghttpx` retiré du port 3000).  
+PM2 exécute la bonne release standalone.  
+Prochaine étape : proxy OpenLiteSpeed → `127.0.0.1:3000`, puis secrets Actions.
