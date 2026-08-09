@@ -65,8 +65,10 @@ yarn-error.log*
 Deploy/hostinger.env
 Deploy/HOSTINGER_ENV.txt
 hostinger.env
+**/hostinger.env
 Plateforme-AFD-Production.zip
 Fiche-Projet-*.docx
+*.zip
 
 # Runtime releases (VPS)
 /releases/

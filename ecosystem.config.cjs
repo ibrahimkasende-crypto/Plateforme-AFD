@@ -1,14 +1,15 @@
 /**
- * PM2 — Plateforme-AFD (releases + current + shared)
+ * PM2 — Plateforme-AFD (releases + current + shared + logs)
  *
- * Structure VPS attendue :
- *   $APP_ROOT/
+ * Structure VPS :
+ *   /home/afd-rdc.org/apps/plateforme-afd/
  *     current -> releases/<stamp>
  *     shared/.env.production
- *     shared/logs/
- *     ecosystem.config.cjs   (ce fichier, à la racine APP_ROOT)
+ *     logs/
+ *     ecosystem.config.cjs
  *
- * Les secrets ne sont PAS codés ici.
+ * Aucun secret dans ce fichier.
+ * Utilisateur PM2 recommandé : afdrd7787
  */
 const path = require("node:path");
 
@@ -16,16 +17,16 @@ const appRoot = process.env.VPS_APP_PATH
   ? path.resolve(process.env.VPS_APP_PATH)
   : __dirname;
 
-const standaloneDir = path.join(appRoot, "current", ".next", "standalone");
-const logsDir = path.join(appRoot, "shared", "logs");
+const currentDir = path.join(appRoot, "current");
+const logsDir = path.join(appRoot, "logs");
 const envFile = path.join(appRoot, "shared", ".env.production");
 
 module.exports = {
   apps: [
     {
       name: "plateforme-afd",
-      cwd: standaloneDir,
-      script: "server.js",
+      cwd: currentDir,
+      script: path.join(".next", "standalone", "server.js"),
       interpreter: "node",
       instances: 1,
       exec_mode: "fork",
@@ -47,7 +48,7 @@ module.exports = {
         HOSTNAME: "127.0.0.1",
         PORT: process.env.PORT || "3000",
       },
-      // PM2 5.2+ charge ce fichier ; sinon le script de déploiement exporte les vars.
+      // PM2 charge ce fichier (pas de secrets hardcodés ici).
       env_file: envFile,
     },
   ],

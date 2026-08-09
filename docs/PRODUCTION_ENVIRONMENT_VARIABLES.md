@@ -3,8 +3,15 @@
 Fichier réel **uniquement sur le VPS** :
 
 ```text
-$VPS_APP_PATH/shared/.env.production
-chmod 600 shared/.env.production
+/home/afd-rdc.org/apps/plateforme-afd/shared/.env.production
+chmod 600
+chown afdrd7787:afdrd7787
+```
+
+Création assistée :
+
+```bash
+sudo bash /home/afd-rdc.org/apps/plateforme-afd/repo/scripts/setup-production-env.sh
 ```
 
 Modèles dans le dépôt (sans secrets) :
@@ -12,30 +19,62 @@ Modèles dans le dépôt (sans secrets) :
 - `.env.example`
 - `.env.production.example`
 
+Chaque release reçoit un **lien symbolique** vers ce fichier (jamais une copie permanente des secrets).
+
 ---
 
-## Obligatoires
+## Runtime Node
 
 ```env
 NODE_ENV=production
 HOSTNAME=127.0.0.1
 PORT=3000
+```
 
+## App / site
+
+```env
 NEXT_PUBLIC_APP_ENV=production
 NEXT_PUBLIC_SITE_URL=https://afd-rdc.org
 NEXT_PUBLIC_APP_NAME=Plateforme-AFD
 NEXT_PUBLIC_APP_VERSION=0.1.0
+```
 
-NEXT_PUBLIC_SUPABASE_URL=https://mxxuxnoqnwjygawvvhcb.supabase.co
+## Supabase
+
+```env
+NEXT_PUBLIC_SUPABASE_URL=
 NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=
 # ou NEXT_PUBLIC_SUPABASE_ANON_KEY=
 
 SUPABASE_SERVICE_ROLE_KEY=
 ```
 
+Auth Supabase (console) :
+
+- Site URL : `https://afd-rdc.org`
+- Redirect URLs :
+  - `https://afd-rdc.org/auth/callback`
+  - `https://afd-rdc.org/**`
+  - `https://www.afd-rdc.org/auth/callback` (si www)
+  - `http://localhost:3000/auth/callback` (dev)
+
+## Feature flags
+
+```env
+NEXT_PUBLIC_ENABLE_ADMIN_DEMO_DATA=false
+NEXT_PUBLIC_ENABLE_DEMO_CONTENT=false
+NEXT_PUBLIC_ENABLE_SPONTANEOUS_APPLICATIONS=false
+NEXT_PUBLIC_ENABLE_WATER_RIPPLE=true
+NEXT_PUBLIC_ENABLE_SECTION_ANIMATIONS=true
+NEXT_PUBLIC_ENABLE_MOBILE_RAILS=true
+NEXT_PUBLIC_NEWSLETTER_GOOGLE_OAUTH_ENABLED=true
+```
+
 ## Contact / SMTP
 
 ```env
+CONTACT_NOTIFICATION_ENABLED=true
 CONTACT_NOTIFICATION_EMAIL=contactafdrdc@gmail.com
 CONTACT_FROM_EMAIL=admin@afd-rdc.org
 CONTACT_FROM_NAME=Site officiel AFD
@@ -48,14 +87,23 @@ MAIL_IMAP_SECURE=true
 MAIL_SMTP_HOST=afd-rdc.org
 MAIL_SMTP_PORT=587
 MAIL_SMTP_SECURE=false
-MAIL_SMTP_USERNAME=
+MAIL_SMTP_USERNAME=admin@afd-rdc.org
 MAIL_SMTP_PASSWORD=
 MAIL_INTEGRATED_ENABLED=false
 ```
 
-## OCR
+Test local/VPS (avec env chargé) :
+
+```bash
+npm run email:test-contact
+```
+
+## Newsletter / SerdiPay / OCR
 
 ```env
+NEWSLETTER_SEND_ENABLED=false
+SERDIPAY_ENABLED=false
+
 OCR_CLOUD_ENABLED=false
 OCR_PROVIDER=native
 OCR_MAX_FILE_SIZE_MB=25
@@ -64,37 +112,17 @@ OCR_DEFAULT_LANGUAGE=fr
 OCR_ORGANISATION_ID=afd-asbl
 ```
 
-## Flags publics
-
-```env
-NEXT_PUBLIC_ENABLE_ADMIN_DEMO_DATA=false
-NEXT_PUBLIC_ENABLE_DEMO_CONTENT=false
-NEXT_PUBLIC_NEWSLETTER_GOOGLE_OAUTH_ENABLED=true
-```
-
 ---
 
 ## Interdits en `NEXT_PUBLIC_*`
 
 - `SUPABASE_SERVICE_ROLE_KEY`
 - mot de passe SMTP
-- secret Google OAuth
-- token / mot de passe CyberPanel
-- clé SSH
-- tout token d’administration
+- secret Google
+- clé privée SSH
+- secret CyberPanel
+- token GitHub
 
----
+## Interdits dans Git / docs / logs / YAML
 
-## Secrets GitHub Actions (Settings → Secrets)
-
-| Secret | Usage |
-|---|---|
-| `VPS_HOST` | IP ou hostname SSH |
-| `VPS_PORT` | Port SSH (souvent 22) |
-| `VPS_USER` | Utilisateur Linux de déploiement |
-| `VPS_SSH_PRIVATE_KEY` | Clé privée Actions → VPS |
-| `VPS_APP_PATH` | Ex. `/home/afd-rdc.org/apps/plateforme-afd` |
-| `VPS_DEPLOY_BRANCH` | `main` |
-| `VPS_KNOWN_HOSTS` | (optionnel) sortie de `ssh-keyscan` |
-
-Aucun de ces secrets ne doit apparaître dans le YAML ni dans Git.
+Toute vraie valeur secrète. Utiliser uniquement des placeholders.

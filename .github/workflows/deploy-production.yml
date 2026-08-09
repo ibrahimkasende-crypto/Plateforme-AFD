@@ -49,11 +49,8 @@ jobs:
       - name: Unit tests
         run: npm run test
 
-      - name: Build (standalone)
-        run: npm run build
-
-      - name: Prepare standalone
-        run: node scripts/prepare-standalone.mjs
+      - name: Build standalone
+        run: npm run build:standalone
 
       - name: Verify standalone artifacts
         run: |
@@ -108,13 +105,14 @@ jobs:
           PORT="${VPS_PORT:-22}"
           BRANCH="${VPS_DEPLOY_BRANCH:-main}"
 
+          # Validations déjà faites dans le job validate → skip typecheck/lint/test sur VPS
           ssh -p "${PORT}" \
             -o IdentitiesOnly=yes \
             -o StrictHostKeyChecking=yes \
             "${VPS_USER}@${VPS_HOST}" \
-            "export VPS_APP_PATH='${VPS_APP_PATH}' VPS_DEPLOY_BRANCH='${BRANCH}' SKIP_PUBLIC_CHECK='${SKIP_PUBLIC}' RUN_TYPECHECK=0; \
-             cd '${VPS_APP_PATH}/repo' && git fetch --prune origin && \
-             bash '${VPS_APP_PATH}/repo/scripts/deploy-production.sh' '${DEPLOY_REF}'"
+            "export VPS_APP_PATH='${VPS_APP_PATH}' VPS_DEPLOY_BRANCH='${BRANCH}' SKIP_PUBLIC_CHECK='${SKIP_PUBLIC}' \
+             RUN_TYPECHECK=0 RUN_LINT=0 RUN_TEST=0; \
+             bash '${VPS_APP_PATH}/repo/scripts/deploy-production.sh' '${DEPLOY_REF}' '${BRANCH}'"
 
       - name: Public health check
         if: ${{ !(inputs.skip_public_check) }}

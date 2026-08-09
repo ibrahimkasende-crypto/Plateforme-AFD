@@ -14,13 +14,14 @@ log() { printf '[rollback %s] %s\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$*"; }
 fail() { printf '[rollback][ERREUR] %s\n' "$*" >&2; exit 1; }
 
 TARGET="${1:-previous}"
-APP_ROOT="${VPS_APP_PATH:-}"
-[[ -n "${APP_ROOT}" ]] || fail "VPS_APP_PATH non défini"
+APP_ROOT="${VPS_APP_PATH:-/home/afd-rdc.org/apps/plateforme-afd}"
 APP_ROOT="$(cd "${APP_ROOT}" && pwd)"
 PORT="${PORT:-3000}"
 HEALTH_LOCAL="${HEALTH_LOCAL:-http://127.0.0.1:${PORT}/api/health}"
 CURRENT_LINK="${APP_ROOT}/current"
 ECOSYSTEM="${APP_ROOT}/ecosystem.config.cjs"
+LOGS_DIR="${APP_ROOT}/logs"
+mkdir -p "${LOGS_DIR}"
 
 list_releases() {
   ls -1dt "${APP_ROOT}/releases"/* 2>/dev/null || true

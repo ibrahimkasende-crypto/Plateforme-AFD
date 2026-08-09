@@ -1,112 +1,123 @@
 # Premier déploiement CyberPanel (manuel, surveillé)
 
-> Ne pas activer GitHub Actions tant que cette procédure n’est pas validée.  
-> Ne pas se connecter au VPS tant que **IP**, **user SSH**, **port**, **chemin** ne sont pas confirmés.
+Domaine : **https://afd-rdc.org**  
+VPS : **187.55.230.121**  
+User app : **afdrd7787**  
+App : `/home/afd-rdc.org/apps/plateforme-afd`
+
+> Activer GitHub Actions **seulement après** réussite de cette procédure.  
+> Aucun ZIP. Ne pas écrire dans `public_html` pour Next.js.
 
 ---
 
-## 0. Prérequis confirmés
+## 0. Prérequis
 
-- [ ] IP publique du VPS
-- [ ] Utilisateur SSH de déploiement (pas root si possible)
-- [ ] Port SSH
-- [ ] Chemin réel (`ls /home/` → ex. `/home/afd-rdc.org/apps/plateforme-afd`)
-- [ ] Dépôt GitHub **privé**
-- [ ] Deploy Key lecture seule (VPS → GitHub)
-- [ ] Clé SSH Actions → VPS
+- [ ] Dépôt GitHub **privé** : `ibrahimkasende-crypto/Platefrome-AFD`
+- [ ] Deploy Key lecture seule (voir `docs/VPS_GITHUB_DEPLOY_KEY.md`)
+- [ ] Structure : `releases/`, `shared/`, `logs/`
+- [ ] Node **v22.x**, npm, git, pm2, rsync
+- [ ] Secrets GitHub Actions **pas encore obligatoires** pour ce premier run manuel
 
 ---
 
-## 1. Sauvegarder l’existant
-
-Sur le VPS :
+## 1. Deploy Key + test GitHub
 
 ```bash
-sudo mkdir -p /root/backups-afd-$(date +%Y%m%d)
-# Sauvegarder public_html / ancienne app Node / conf OLS selon l’existant
-```
-
-Ne pas supprimer l’ancien site avant health HTTPS OK.
-
----
-
-## 2. Structure
-
-```bash
-export VPS_APP_PATH=/home/afd-rdc.org/apps/plateforme-afd   # AJUSTER
-mkdir -p "$VPS_APP_PATH"/{releases,shared/logs,repo}
-chmod 700 "$VPS_APP_PATH/shared"
+sudo -u afdrd7787 -H ssh -T github-afd
 ```
 
 ---
 
-## 3. Clone dépôt (Deploy Key)
+## 2. Clone repo (une fois)
 
 ```bash
-# Générer Deploy Key (lecture seule) sur le VPS
-ssh-keygen -t ed25519 -f ~/.ssh/afd_github_deploy -N ""
-# Ajouter ~/.ssh/afd_github_deploy.pub dans GitHub → Settings → Deploy keys (read-only)
-
-GIT_SSH_COMMAND='ssh -i ~/.ssh/afd_github_deploy -o IdentitiesOnly=yes' \
-  git clone git@github.com:ibrahimkasende-crypto/Platefrome-AFD.git "$VPS_APP_PATH/repo"
+export VPS_APP_PATH=/home/afd-rdc.org/apps/plateforme-afd
+sudo -u afdrd7787 -H bash -lc '
+  mkdir -p "$VPS_APP_PATH"/{releases,shared,logs,repo}
+  if [ ! -d "$VPS_APP_PATH/repo/.git" ]; then
+    git clone git@github-afd:ibrahimkasende-crypto/Platefrome-AFD.git "$VPS_APP_PATH/repo"
+  fi
+  cd "$VPS_APP_PATH/repo" && git checkout main && git pull
+'
 ```
 
 ---
 
-## 4. Env partagé
+## 3. Fichier env (une fois)
 
 ```bash
-cp "$VPS_APP_PATH/repo/.env.production.example" "$VPS_APP_PATH/shared/.env.production"
-nano "$VPS_APP_PATH/shared/.env.production"
-chmod 600 "$VPS_APP_PATH/shared/.env.production"
+sudo bash /home/afd-rdc.org/apps/plateforme-afd/repo/scripts/setup-production-env.sh
 ```
 
-Voir `docs/PRODUCTION_ENVIRONMENT_VARIABLES.md`.
+Renseigner au minimum :
 
----
-
-## 5. Node + PM2
-
-```bash
-node -v   # 20–24
-npm -v
-npm install -g pm2
-```
-
----
-
-## 6. Copier ecosystem à la racine app
-
-```bash
-cp "$VPS_APP_PATH/repo/ecosystem.config.cjs" "$VPS_APP_PATH/ecosystem.config.cjs"
-```
-
----
-
-## 7. Premier deploy script
-
-```bash
-cd "$VPS_APP_PATH/repo"
-git checkout main
-git pull
-export VPS_APP_PATH
-export SKIP_PUBLIC_CHECK=1   # jusqu’à ce que le proxy OLS soit prêt
-bash scripts/deploy-production.sh "$(git rev-parse HEAD)"
-```
+- `NEXT_PUBLIC_SUPABASE_URL`
+- `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` (ou ANON)
+- `SUPABASE_SERVICE_ROLE_KEY`
+- `MAIL_SMTP_PASSWORD` (si emails activés)
 
 Vérifier :
 
 ```bash
-curl -fsS http://127.0.0.1:3000/api/health
-pm2 status
-pm2 logs plateforme-afd --lines 100
-pm2 save
-pm2 startup   # exécuter la commande root affichée
+sudo -u afdrd7787 -H bash -lc '
+  ls -l /home/afd-rdc.org/apps/plateforme-afd/shared/.env.production
+  # attendu : -rw------- afdrd7787 afdrd7787
+'
 ```
 
 ---
 
-## 8. OpenLiteSpeed proxy
+## 4. Ecosystem PM2
+
+```bash
+sudo -u afdrd7787 -H bash -lc '
+  export VPS_APP_PATH=/home/afd-rdc.org/apps/plateforme-afd
+  cp "$VPS_APP_PATH/repo/ecosystem.config.cjs" "$VPS_APP_PATH/ecosystem.config.cjs"
+'
+```
+
+---
+
+## 5. Premier deploy
+
+```bash
+sudo -u afdrd7787 -H bash -lc '
+  export VPS_APP_PATH=/home/afd-rdc.org/apps/plateforme-afd
+  export SKIP_PUBLIC_CHECK=1
+  cd "$VPS_APP_PATH/repo"
+  git fetch --prune origin
+  git checkout main
+  git pull --ff-only origin main
+  bash scripts/deploy-production.sh "$(git rev-parse HEAD)" main
+'
+```
+
+---
+
+## 6. Vérifications PM2 / local
+
+```bash
+sudo -u afdrd7787 -H bash -lc '
+  pm2 status
+  pm2 logs plateforme-afd --lines 100
+  curl -fsS http://127.0.0.1:3000/api/health
+  ss -lntp | grep 3000 || netstat -lntp | grep 3000
+'
+```
+
+Attendu : écoute `127.0.0.1:3000`, JSON `"status":"ok"`.
+
+```bash
+sudo -u afdrd7787 -H pm2 save
+# En root, exécuter la commande exacte affichée par :
+sudo env PATH=$PATH pm2 startup systemd -u afdrd7787 --hp /home/afd-rdc.org
+```
+
+Optionnel : `pm2 install pm2-logrotate`
+
+---
+
+## 7. OpenLiteSpeed proxy
 
 Suivre `docs/CYBERPANEL_OPENLITESPEED_PROXY_GUIDE.md`.
 
@@ -116,25 +127,41 @@ Puis :
 curl -fsS https://afd-rdc.org/api/health
 ```
 
----
+Relancer un deploy **sans** `SKIP_PUBLIC_CHECK` :
 
-## 9. Supabase Auth URLs
-
-- Site URL : `https://afd-rdc.org`
-- Redirect : `https://afd-rdc.org/auth/callback`, `https://afd-rdc.org/**`
-
----
-
-## 10. Emails
-
-Ne pas modifier MX/SPF/DKIM. Tester contact SMTP après proxy OK.
+```bash
+sudo -u afdrd7787 -H bash -lc '
+  export VPS_APP_PATH=/home/afd-rdc.org/apps/plateforme-afd
+  cd "$VPS_APP_PATH/repo"
+  bash scripts/deploy-production.sh "$(git rev-parse HEAD)" main
+'
+```
 
 ---
 
-## 11. Activer GitHub Actions
+## 8. Activer GitHub Actions
 
-1. Secrets `VPS_*` dans GitHub
-2. Environment `production` (optionnel mais recommandé)
-3. Protection branche `main`
-4. Premier `workflow_dispatch` manuel
-5. Ensuite seulement : push sur `main`
+Secrets (Settings → Secrets and variables → Actions) :
+
+| Secret | Valeur conceptuelle |
+|---|---|
+| `VPS_HOST` | `187.55.230.121` |
+| `VPS_PORT` | `22` |
+| `VPS_USER` | `afdrd7787` |
+| `VPS_SSH_PRIVATE_KEY` | clé privée Actions→VPS |
+| `VPS_APP_PATH` | `/home/afd-rdc.org/apps/plateforme-afd` |
+| `VPS_DEPLOY_BRANCH` | `main` |
+| `VPS_KNOWN_HOSTS` | (recommandé) sortie `ssh-keyscan` |
+
+Environment GitHub : `production`.
+
+Ensuite chaque :
+
+```bat
+cd /d D:\Plateforme-AFD\AFD
+git add .
+git commit -m "feat: description"
+git push origin main
+```
+
+déclenche le déploiement automatique.

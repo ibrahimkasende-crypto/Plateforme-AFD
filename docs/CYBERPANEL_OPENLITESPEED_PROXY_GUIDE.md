@@ -2,7 +2,8 @@
 
 Domaine : **https://afd-rdc.org**  
 Backend : **http://127.0.0.1:3000**  
-Panneau : **https://panel.afd-rdc.org:8090**
+Panneau : **https://panel.afd-rdc.org:8090**  
+User site : **afdrd7787** — home `/home/afd-rdc.org`
 
 > Next.js n’est **pas** un site PHP dans `public_html`.
 
@@ -18,9 +19,9 @@ ss -lntp | grep 3000   # doit écouter 127.0.0.1
 
 ---
 
-## 1. External App
+## 1. External App (OpenLiteSpeed)
 
-Dans OpenLiteSpeed WebAdmin ou VHost Conf du site `afd-rdc.org` :
+Via OLS WebAdmin ou configuration vhost `afd-rdc.org` :
 
 | Champ | Valeur |
 |---|---|
@@ -44,9 +45,7 @@ Dans OpenLiteSpeed WebAdmin ou VHost Conf du site `afd-rdc.org` :
 
 ---
 
-## 3. Headers
-
-Assurer la transmission de :
+## 3. Headers à transmettre
 
 - `Host`
 - `X-Forwarded-For`
@@ -63,26 +62,34 @@ Activer seulement si un besoin futur l’exige.
 
 ---
 
-## 5. Cache
+## 5. Cache (prudence)
 
-Exclure du cache public :
+**Ne pas** mettre en cache public agressif :
 
 - `/admin`, `/admin/*`
 - `/api/*`
 - `/auth/*`
 - `/connexion`
+- `/mot-de-passe-oublie`
+- pages dashboard / sessions / formulaires / OAuth callbacks
+
+Cache prudent éventuel uniquement pour :
+
+- assets `/_next/static/*`
+- images statiques publiques
 
 ---
 
 ## 6. SSL + HTTPS
 
-CyberPanel → SSL → Let’s Encrypt pour :
+CyberPanel → SSL → Let’s Encrypt :
 
 - `afd-rdc.org`
 - `www.afd-rdc.org` (si utilisé)
 
-Force HTTPS.  
-Politique recommandée : **www → apex**.
+Force HTTPS. Politique recommandée : **www → apex**.
+
+Listener HTTPS du vhost pointe vers le site `afd-rdc.org`.
 
 ---
 
@@ -91,6 +98,7 @@ Politique recommandée : **www → apex**.
 ```bash
 sudo /usr/local/lsws/bin/lswsctrl restart
 curl -I https://afd-rdc.org/api/health
+curl -fsS https://afd-rdc.org/api/health
 ```
 
 ---
@@ -99,4 +107,4 @@ curl -I https://afd-rdc.org/api/health
 
 - Config email CyberPanel
 - MX / SPF / DKIM / DMARC
-- Ouverture publique du port 3000
+- Boîtes mail existantes
