@@ -26,7 +26,6 @@ const bankIntentSchema = z.object({
   is_anonymous: z.boolean().optional(),
   support_type: z.string().trim().max(80).optional(),
   consent: z.literal(true),
-  website: z.string().max(0).optional(),
 });
 
 export type BankDonationResult = {
@@ -69,13 +68,6 @@ export async function createBankDonationIntentAction(
   const parsed = bankIntentSchema.safeParse(input);
   if (!parsed.success) {
     return { ok: false, message: "Veuillez vérifier les informations du formulaire." };
-  }
-  if (parsed.data.website) {
-    return {
-      ok: true,
-      message: "Votre déclaration de don a bien été enregistrée. Merci.",
-      reference: "AFD-DON-HIDDEN",
-    };
   }
 
   const service = createAdminServiceClient();

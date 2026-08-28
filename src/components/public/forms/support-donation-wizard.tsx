@@ -118,14 +118,6 @@ export function SupportDonationWizard({
 
   function onFormSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const hp = (
-      event.currentTarget.elements.namedItem("afd_hp_company") as HTMLInputElement | null
-    )?.value?.trim();
-    if (hp) {
-      setStep("done");
-      setDoneMessage("Votre déclaration de don a bien été enregistrée. Merci.");
-      return;
-    }
     void donorForm.handleSubmit(onDonorSubmit, onInvalid)(event);
   }
 
@@ -395,17 +387,6 @@ export function SupportDonationWizard({
                 <h3 className="font-display text-base font-semibold text-[var(--afd-ink)]">
                   Vos coordonnées
                 </h3>
-                {/* Honeypot hors RHF (évite l’autofill qui bloquait le submit sans message) */}
-                <div className="absolute -left-[9999px] h-0 w-0 overflow-hidden" aria-hidden>
-                  <label htmlFor="afd_hp_company">Société</label>
-                  <input
-                    id="afd_hp_company"
-                    name="afd_hp_company"
-                    type="text"
-                    tabIndex={-1}
-                    autoComplete="off"
-                  />
-                </div>
                 <div className="grid gap-4 sm:grid-cols-2">
                   <div>
                     <label className={labelClassName} htmlFor="donor_name">
