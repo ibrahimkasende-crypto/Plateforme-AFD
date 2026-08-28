@@ -3,7 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Building2, CreditCard, Smartphone } from "lucide-react";
 import Link from "next/link";
-import { useEffect, useMemo, useRef, useState, useTransition } from "react";
+import { useEffect, useMemo, useState, useTransition, type FormEvent } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -66,7 +66,6 @@ export function SupportDonationWizard({
   const [reference, setReference] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
   const [doneMessage, setDoneMessage] = useState<string | null>(null);
-  const honeypotRef = useRef<HTMLInputElement>(null);
 
   const donorForm = useForm<DonorValues>({
     resolver: zodResolver(donorSchema),
@@ -117,14 +116,20 @@ export function SupportDonationWizard({
     toast.error(first);
   }
 
-  function onDonorSubmit(values: DonorValues) {
-    // Honeypot : si rempli (bot), on simule un succès sans appeler le serveur
-    if (honeypotRef.current?.value) {
+  function onFormSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const hp = (
+      event.currentTarget.elements.namedItem("afd_hp_company") as HTMLInputElement | null
+    )?.value?.trim();
+    if (hp) {
       setStep("done");
       setDoneMessage("Votre déclaration de don a bien été enregistrée. Merci.");
       return;
     }
+    void donorForm.handleSubmit(onDonorSubmit, onInvalid)(event);
+  }
 
+  function onDonorSubmit(values: DonorValues) {
     if (method !== "bank_transfer") {
       toast.message(
         method === "card" ? "Carte bientôt disponible" : "Mobile Money bientôt disponible",
@@ -196,7 +201,7 @@ export function SupportDonationWizard({
     <div className="space-y-6">
       {step === "donate" ? (
         <form
-          onSubmit={donorForm.handleSubmit(onDonorSubmit, onInvalid)}
+          onSubmit={onFormSubmit}
           className={`${formClassName} space-y-6`}
           noValidate
         >
@@ -368,7 +373,6 @@ export function SupportDonationWizard({
                 <div className="absolute -left-[9999px] h-0 w-0 overflow-hidden" aria-hidden>
                   <label htmlFor="afd_hp_company">Société</label>
                   <input
-                    ref={honeypotRef}
                     id="afd_hp_company"
                     name="afd_hp_company"
                     type="text"
