@@ -22,7 +22,6 @@ import {
   type BankDonationCurrency,
 } from "@/features/dons/config/bank-donation";
 import {
-  createBankDonationIntentAction,
   getPrefillDonorAction,
   submitBankTransferProofAction,
 } from "@/features/dons/actions/bank-donation";
@@ -66,6 +65,7 @@ export function SupportDonationWizard({
   const [reference, setReference] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
   const [doneMessage, setDoneMessage] = useState<string | null>(null);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   const donorForm = useForm<DonorValues>({
     resolver: zodResolver(donorSchema),
@@ -144,37 +144,63 @@ export function SupportDonationWizard({
       return;
     }
     setAmountError(null);
+    setSubmitError(null);
 
     startTransition(async () => {
       try {
-        const result = await createBankDonationIntentAction({
-          donor_name: values.donor_name,
-          donor_email: values.donor_email,
-          donor_phone: values.donor_phone?.trim() || undefined,
-          donor_country: "République démocratique du Congo",
-          support_type: "don_general",
-          amount: parsedAmount,
-          currency,
-          consent: true as const,
-          is_anonymous: false,
+        // API HTTP (évite les Server Actions parfois bloquées derrière CyberPanel)
+        const response = await fetch("/api/dons/bank-transfer", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            donor_name: values.donor_name,
+            donor_email: values.donor_email,
+            donor_phone: values.donor_phone?.trim() || undefined,
+            donor_country: "République démocratique du Congo",
+            support_type: "don_general",
+            amount: parsedAmount,
+            currency,
+            consent: true,
+            is_anonymous: false,
+          }),
         });
 
-        if (!result.ok) {
-          toast.error(result.message || "Impossible d’enregistrer le don.");
+        let result: {
+          ok?: boolean;
+          message?: string;
+          donationId?: string;
+          reference?: string;
+        } = {};
+        try {
+          result = (await response.json()) as typeof result;
+        } catch {
+          result = {};
+        }
+
+        if (!response.ok || !result.ok) {
+          const msg =
+            result.message ||
+            "Impossible d’enregistrer le don. Vérifiez vos informations et réessayez.";
+          setSubmitError(msg);
+          toast.error(msg);
           return;
         }
 
         if (!result.reference) {
-          toast.error("La référence de don n’a pas pu être générée. Réessayez.");
+          const msg = "La référence de don n’a pas pu être générée. Réessayez.";
+          setSubmitError(msg);
+          toast.error(msg);
           return;
         }
 
         setDonationId(result.donationId ?? null);
         setReference(result.reference);
         setStep("transfer");
-        toast.success("Référence créée — effectuez le virement.");
+        toast.success("Coordonnées prêtes — effectuez le virement.");
       } catch {
-        toast.error("Une erreur est survenue. Veuillez réessayer.");
+        const msg = "Connexion impossible. Vérifiez votre réseau et réessayez.";
+        setSubmitError(msg);
+        toast.error(msg);
       }
     });
   }
@@ -441,8 +467,14 @@ export function SupportDonationWizard({
                 ) : null}
               </div>
 
+              {submitError ? (
+                <p role="alert" className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800">
+                  {submitError}
+                </p>
+              ) : null}
+
               <button type="submit" disabled={pending} className={submitClassName}>
-                {pending ? "Préparation…" : "Obtenir les coordonnées bancaires"}
+                {pending ? "Préparation…" : "Continuer vers les coordonnées bancaires"}
               </button>
             </>
           ) : (

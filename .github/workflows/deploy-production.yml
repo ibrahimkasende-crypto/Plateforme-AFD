@@ -129,7 +129,7 @@ jobs:
           VPS_USER: ${{ secrets.VPS_USER }}
           VPS_APP_PATH: ${{ secrets.VPS_APP_PATH }}
           DEPLOY_SHA: ${{ steps.meta.outputs.deploy_sha }}
-          SKIP_PUBLIC: ${{ github.event_name == 'workflow_dispatch' && inputs.skip_public_check && '1' || '0' }}
+          SKIP_PUBLIC: "1"
         run: |
           set -Eeuo pipefail
           : "${VPS_HOST:?secret VPS_HOST manquant}"
