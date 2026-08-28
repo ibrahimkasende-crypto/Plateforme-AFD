@@ -62,6 +62,7 @@ export const adminNavPermissions: Record<string, Permission | Permission[]> = {
   "/admin/dons/intentions": "dons:read",
   "/admin/dons/transactions": "payments:read",
   "/admin/dons/remboursements": "payments:manage",
+  "/admin/parametres/dons-paiements": "dons:bank_settings",
   "/admin/opportunites": "opportunites:read",
   "/admin/opportunites/nouvelle": "opportunites:write",
   "/admin/candidatures": "candidatures:read",

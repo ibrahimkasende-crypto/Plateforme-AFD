@@ -141,38 +141,228 @@ export type Database = {
       dons: {
         Row: {
           amount: number
+          bank_name: string | null
+          beneficiary_account: string | null
           created_at: string | null
           currency: string | null
+          donor_country: string | null
           donor_email: string
           donor_name: string
           donor_phone: string | null
           id: string
+          is_anonymous: boolean
+          message: string | null
           payment_method: string
+          reference: string | null
+          rejected_at: string | null
+          rejected_by: string | null
+          rejection_reason: string | null
           status: string | null
+          support_type: string | null
+          updated_at: string | null
+          user_id: string | null
+          verified_at: string | null
+          verified_by: string | null
         }
         Insert: {
           amount: number
+          bank_name?: string | null
+          beneficiary_account?: string | null
           created_at?: string | null
           currency?: string | null
+          donor_country?: string | null
           donor_email: string
           donor_name: string
           donor_phone?: string | null
           id?: string
+          is_anonymous?: boolean
+          message?: string | null
           payment_method: string
+          reference?: string | null
+          rejected_at?: string | null
+          rejected_by?: string | null
+          rejection_reason?: string | null
           status?: string | null
+          support_type?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+          verified_at?: string | null
+          verified_by?: string | null
         }
         Update: {
           amount?: number
+          bank_name?: string | null
+          beneficiary_account?: string | null
           created_at?: string | null
           currency?: string | null
+          donor_country?: string | null
           donor_email?: string
           donor_name?: string
           donor_phone?: string | null
           id?: string
+          is_anonymous?: boolean
+          message?: string | null
           payment_method?: string
+          reference?: string | null
+          rejected_at?: string | null
+          rejected_by?: string | null
+          rejection_reason?: string | null
           status?: string | null
+          support_type?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+          verified_at?: string | null
+          verified_by?: string | null
         }
         Relationships: []
+      }
+      dons_coordonnees_bancaires: {
+        Row: {
+          account_cdf: string
+          account_holder: string
+          account_usd: string
+          bank_name: string
+          cdf_enabled: boolean
+          correspondent_eur_address: string | null
+          correspondent_eur_bank: string | null
+          correspondent_eur_swift: string | null
+          correspondent_usd_address: string | null
+          correspondent_usd_bank: string | null
+          correspondent_usd_swift: string | null
+          created_at: string
+          eur_note: string | null
+          id: string
+          instructions: string | null
+          is_active: boolean
+          swift: string
+          updated_at: string
+          updated_by: string | null
+          usd_enabled: boolean
+        }
+        Insert: {
+          account_cdf?: string
+          account_holder?: string
+          account_usd?: string
+          bank_name?: string
+          cdf_enabled?: boolean
+          correspondent_eur_address?: string | null
+          correspondent_eur_bank?: string | null
+          correspondent_eur_swift?: string | null
+          correspondent_usd_address?: string | null
+          correspondent_usd_bank?: string | null
+          correspondent_usd_swift?: string | null
+          created_at?: string
+          eur_note?: string | null
+          id?: string
+          instructions?: string | null
+          is_active?: boolean
+          swift?: string
+          updated_at?: string
+          updated_by?: string | null
+          usd_enabled?: boolean
+        }
+        Update: {
+          account_cdf?: string
+          account_holder?: string
+          account_usd?: string
+          bank_name?: string
+          cdf_enabled?: boolean
+          correspondent_eur_address?: string | null
+          correspondent_eur_bank?: string | null
+          correspondent_eur_swift?: string | null
+          correspondent_usd_address?: string | null
+          correspondent_usd_bank?: string | null
+          correspondent_usd_swift?: string | null
+          created_at?: string
+          eur_note?: string | null
+          id?: string
+          instructions?: string | null
+          is_active?: boolean
+          swift?: string
+          updated_at?: string
+          updated_by?: string | null
+          usd_enabled?: boolean
+        }
+        Relationships: []
+      }
+      dons_preuves: {
+        Row: {
+          created_at: string
+          don_id: string
+          id: string
+          mime_type: string | null
+          original_filename: string | null
+          storage_path: string
+          uploaded_at: string
+          uploaded_by: string | null
+        }
+        Insert: {
+          created_at?: string
+          don_id: string
+          id?: string
+          mime_type?: string | null
+          original_filename?: string | null
+          storage_path: string
+          uploaded_at?: string
+          uploaded_by?: string | null
+        }
+        Update: {
+          created_at?: string
+          don_id?: string
+          id?: string
+          mime_type?: string | null
+          original_filename?: string | null
+          storage_path?: string
+          uploaded_at?: string
+          uploaded_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "dons_preuves_don_id_fkey"
+            columns: ["don_id"]
+            isOneToOne: false
+            referencedRelation: "dons"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      dons_status_history: {
+        Row: {
+          changed_by: string | null
+          created_at: string
+          don_id: string
+          from_status: string | null
+          id: string
+          note: string | null
+          to_status: string
+        }
+        Insert: {
+          changed_by?: string | null
+          created_at?: string
+          don_id: string
+          from_status?: string | null
+          id?: string
+          note?: string | null
+          to_status: string
+        }
+        Update: {
+          changed_by?: string | null
+          created_at?: string
+          don_id?: string
+          from_status?: string | null
+          id?: string
+          note?: string | null
+          to_status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "dons_status_history_don_id_fkey"
+            columns: ["don_id"]
+            isOneToOne: false
+            referencedRelation: "dons"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       galerie: {
         Row: {
@@ -1169,7 +1359,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      next_don_reference: {
+        Args: Record<PropertyKey, never>
+        Returns: string
+      }
     }
     Enums: {
       [_ in never]: never

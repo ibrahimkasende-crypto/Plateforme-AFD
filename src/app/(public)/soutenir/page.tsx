@@ -1,19 +1,23 @@
 import type { Metadata } from "next";
 import { Heart } from "lucide-react";
-import { SupportForm } from "@/components/public/forms/support-form";
+import { SupportDonationWizard } from "@/components/public/forms/support-donation-wizard";
 import { PublicPageShell } from "@/components/public/PublicPageShell";
 import { homeContent } from "@/config/home-content";
 import { siteConfig } from "@/config/site";
+import { getSerdiPayConfig } from "@/features/paiements/providers/serdipay";
+import { getActiveBankCoordinates } from "@/features/dons/services/bank-coordinates.service";
 
 export const metadata: Metadata = {
   title: "Soutenir l’AFD",
   description:
-    "Soutenez les actions de l’Alliance des Femmes pour le Développement. Enregistrez votre intention de don.",
+    "Soutenez les actions de l’Alliance des Femmes pour le Développement par virement bancaire ou intention de paiement en ligne.",
   alternates: { canonical: `${siteConfig.url}/soutenir` },
 };
 
-export default function SoutenirPage() {
+export default async function SoutenirPage() {
   const supportAction = homeContent.supportActions.find((item) => item.id === "soutenir");
+  const bankCoordinates = await getActiveBankCoordinates();
+  const serdiPay = getSerdiPayConfig();
 
   return (
     <PublicPageShell
@@ -47,40 +51,30 @@ export default function SoutenirPage() {
 
           <ul className="space-y-3 text-sm text-[var(--afd-muted)]">
             <li className="rounded-lg border border-[var(--afd-border)] bg-[var(--afd-surface)] px-4 py-3">
-              Don général ou soutien ciblé à un programme, un projet ou une urgence
+              Virement bancaire officiel Equity BCDC (USD ou CDF)
             </li>
             <li className="rounded-lg border border-[var(--afd-border)] bg-[var(--afd-surface)] px-4 py-3">
-              Devises acceptées : {siteConfig.currencies.join(", ")}
+              Paiement en ligne / Mobile Money via SerdiPay (activation progressive)
             </li>
             <li className="rounded-lg border border-[var(--afd-border)] bg-[var(--afd-surface)] px-4 py-3">
-              Votre intention de don est enregistrée de manière sécurisée
+              Référence unique et vérification manuelle avant confirmation
             </li>
           </ul>
-
-          <div
-            role="note"
-            className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm leading-relaxed text-amber-950 dark:border-amber-900/40 dark:bg-amber-950/30 dark:text-amber-100"
-          >
-            <p className="font-semibold">Paiement en ligne SerdiPay</p>
-            <p className="mt-1">
-              {supportAction?.note ??
-                "L’intégration SerdiPay sera activée après configuration officielle."}{" "}
-              En attendant, votre intention de don est enregistrée et l’équipe AFD vous contactera
-              pour finaliser votre soutien. Aucun paiement n’est traité tant que SerdiPay n’est pas
-              activé.
-            </p>
-          </div>
         </div>
 
         <div className="rounded-2xl border border-[var(--afd-border)] bg-[var(--afd-background)] p-6 md:p-8">
           <h2 className="font-display text-xl font-semibold text-[var(--afd-ink)]">
-            Enregistrer une intention de soutien
+            Faire un don
           </h2>
           <p className="mt-2 text-sm text-[var(--afd-muted)]">
-            Ce formulaire enregistre votre intention. Il ne confirme pas un paiement en ligne.
+            Choisissez votre moyen de paiement. Un virement n’est jamais considéré comme payé
+            avant vérification par l’AFD.
           </p>
           <div className="mt-6">
-            <SupportForm />
+            <SupportDonationWizard
+              bankCoordinates={bankCoordinates}
+              serdiPayAvailable={serdiPay.configured}
+            />
           </div>
         </div>
       </div>

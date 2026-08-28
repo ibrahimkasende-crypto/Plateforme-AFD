@@ -205,6 +205,10 @@ export const adminNavGroups: AdminNavGroupDef[] = [
       { label: "Mon profil", href: "/admin/mon-profil" },
       { label: "Paramètres", href: "/admin/parametres" },
       {
+        label: "Dons et paiements",
+        href: "/admin/parametres/dons-paiements",
+      },
+      {
         label: "Démonstration",
         href: "/admin/parametres/demonstration",
         rolesOnly: ["super_admin", "platform_owner"],
