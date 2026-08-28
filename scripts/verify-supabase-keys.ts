@@ -147,7 +147,7 @@ async function main() {
     "CYBERPANEL_PANEL_URL=https://panel.afd-rdc.org:8090",
     "",
     "NEWSLETTER_SEND_ENABLED=false",
-    "SERDIPAY_ENABLED=false",
+    "CARD_PAYMENT_ENABLED=false",
     "OCR_CLOUD_ENABLED=false",
     "OCR_PROVIDER=native",
     "OCR_ORGANISATION_ID=afd-asbl",

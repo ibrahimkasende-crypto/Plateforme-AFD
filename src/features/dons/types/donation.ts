@@ -25,7 +25,7 @@ export type PaymentTransaction = {
   id: string;
   donation_intent_id: string;
   internal_reference: string;
-  provider: "serdipay";
+  provider: "card" | "bank_transfer";
   provider_reference: string | null;
   amount: number;
   currency: AllowedCurrency;

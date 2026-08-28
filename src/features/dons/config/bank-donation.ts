@@ -1,5 +1,5 @@
 export const BANK_TRANSFER_METHOD = "bank_transfer" as const;
-export const SERDIPAY_METHOD = "serdipay" as const;
+export const CARD_METHOD = "card" as const;
 
 export const BANK_DONATION_STATUSES = [
   "pending",

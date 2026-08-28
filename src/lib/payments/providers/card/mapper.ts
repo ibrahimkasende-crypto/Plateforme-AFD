@@ -1,23 +1,27 @@
 import type { PaymentTransactionStatus } from "@/config/payment-statuses";
 
 /**
- * Normalisation des statuts fournisseur.
+ * Normalisation des statuts prestataire → statuts internes AFD.
+ * À compléter uniquement avec la documentation officielle du prestataire AFD
+ * (ex. Equity BCDC Eazzy e-Commerce / CyberSource).
  *
- * TODO SerdiPay: mapper les statuts officiels documentés uniquement.
- * Aucun statut inventé ne doit produire `confirmed`.
+ * Ne jamais mapper automatiquement vers `confirmed` côté navigateur.
  */
-export function mapSerdiPayStatus(
+export function mapCardProviderStatus(
   providerStatus: string,
 ): PaymentTransactionStatus {
   const normalized = providerStatus.trim().toLowerCase();
-
   switch (normalized) {
-    case "pending":
     case "created":
+    case "initiated":
+      return "created";
+    case "pending":
+    case "awaiting":
       return "pending";
     case "processing":
       return "processing";
     case "failed":
+    case "declined":
       return "failed";
     case "cancelled":
     case "canceled":
@@ -26,8 +30,8 @@ export function mapSerdiPayStatus(
       return "expired";
     case "refunded":
       return "refunded";
+    // confirmed / paid : uniquement après vérification serveur + webhook signé
     default:
-      // Ne jamais confirmer sans mapping officiel + vérification serveur.
       return "pending";
   }
 }

@@ -98,11 +98,11 @@ Test local/VPS (avec env chargé) :
 npm run email:test-contact
 ```
 
-## Newsletter / SerdiPay / OCR
+## Newsletter / Paiement carte / OCR
 
 ```env
 NEWSLETTER_SEND_ENABLED=false
-SERDIPAY_ENABLED=false
+CARD_PAYMENT_ENABLED=false
 
 OCR_CLOUD_ENABLED=false
 OCR_PROVIDER=native
@@ -111,6 +111,8 @@ OCR_MAX_PAGES=100
 OCR_DEFAULT_LANGUAGE=fr
 OCR_ORGANISATION_ID=afd-asbl
 ```
+
+> SerdiPay n’est pas utilisé par Plateforme-AFD (projet Campus Food distinct).
 
 ---
 

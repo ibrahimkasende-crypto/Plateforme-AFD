@@ -1,6 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Building2, CreditCard, Smartphone } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useMemo, useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
@@ -11,12 +12,10 @@ import {
   errorClassName,
   fieldClassName,
   formClassName,
-  formShellClassName,
   labelClassName,
   submitClassName,
 } from "@/components/ui/form-styles";
 import { BankDetailsCard } from "@/components/public/dons/bank-details-card";
-import { siteConfig, type AllowedCurrency, type SupportType } from "@/config/site";
 import {
   QUICK_AMOUNTS,
   formatDonationAmount,
@@ -27,41 +26,17 @@ import {
   getPrefillDonorAction,
   submitBankTransferProofAction,
 } from "@/features/dons/actions/bank-donation";
-import { createDonationIntentAction } from "@/features/dons/actions/create-donation-intent";
 import type { Database } from "@/types/database.types";
 
 type BankCoordinates = Database["public"]["Tables"]["dons_coordonnees_bancaires"]["Row"];
 
-const SUPPORT_TYPE_LABELS: Record<SupportType, string> = {
-  don_general: "Don général",
-  soutien_programme: "Soutien à un programme",
-  soutien_projet: "Soutien à un projet",
-  soutien_urgence: "Soutien aux urgences",
-  partenariat_institutionnel: "Partenariat institutionnel",
-  contribution_nature: "Contribution en nature",
-};
-
-type PaymentMethodChoice = "bank_transfer" | "serdipay";
-type Step =
-  | "method"
-  | "currency"
-  | "amount"
-  | "donor"
-  | "instructions"
-  | "proof"
-  | "done"
-  | "serdipay";
+type PaymentMethodId = "bank_transfer" | "card" | "mobile_money";
+type Step = "donate" | "transfer" | "done";
 
 const donorSchema = z.object({
   donor_name: z.string().trim().min(2, "Le nom est requis").max(120),
   donor_email: z.string().trim().email("Adresse e-mail invalide"),
   donor_phone: z.string().trim().max(40).optional(),
-  donor_country: z.string().trim().min(2, "Le pays est requis").max(80),
-  message: z.string().trim().max(1000).optional(),
-  is_anonymous: z.boolean().optional(),
-  support_type: z.enum(siteConfig.supportTypes, {
-    error: "Veuillez sélectionner un type de soutien",
-  }),
   consent: z.boolean().refine((v) => v === true, {
     message: "Le consentement est obligatoire",
   }),
@@ -70,34 +45,20 @@ const donorSchema = z.object({
 
 type DonorValues = z.infer<typeof donorSchema>;
 
-const serdipaySchema = z.object({
-  donor_name: z.string().trim().min(2).max(120),
-  donor_email: z.string().trim().email(),
-  donor_phone: z.string().trim().max(40).optional(),
-  amount: z
-    .string()
-    .trim()
-    .min(1)
-    .refine((v) => !Number.isNaN(Number(v)) && Number(v) > 0),
-  currency: z.enum(siteConfig.currencies),
-  support_type: z.enum(siteConfig.supportTypes),
-  message: z.string().trim().max(1000).optional(),
-  consent: z.boolean().refine((v) => v === true),
-  website: z.string().max(0).optional(),
-});
-
-type SerdipayValues = z.infer<typeof serdipaySchema>;
-
 type SupportDonationWizardProps = {
   bankCoordinates: BankCoordinates;
-  serdiPayAvailable: boolean;
+  cardPaymentAvailable: boolean;
 };
+
+const methodTileClass =
+  "flex flex-col items-center gap-2 rounded-2xl border px-3 py-4 text-center transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--afd-blue)]";
 
 export function SupportDonationWizard({
   bankCoordinates,
-  serdiPayAvailable,
+  cardPaymentAvailable,
 }: SupportDonationWizardProps) {
-  const [step, setStep] = useState<Step>("method");
+  const [step, setStep] = useState<Step>("donate");
+  const [method, setMethod] = useState<PaymentMethodId>("bank_transfer");
   const [currency, setCurrency] = useState<BankDonationCurrency>("USD");
   const [amount, setAmount] = useState<string>("");
   const [customAmount, setCustomAmount] = useState(false);
@@ -112,25 +73,6 @@ export function SupportDonationWizard({
       donor_name: "",
       donor_email: "",
       donor_phone: "",
-      donor_country: "République démocratique du Congo",
-      message: "",
-      is_anonymous: false,
-      support_type: undefined,
-      consent: false,
-      website: "",
-    },
-  });
-
-  const serdipayForm = useForm<SerdipayValues>({
-    resolver: zodResolver(serdipaySchema),
-    defaultValues: {
-      donor_name: "",
-      donor_email: "",
-      donor_phone: "",
-      amount: "",
-      currency: siteConfig.defaultCurrency,
-      support_type: undefined,
-      message: "",
       consent: false,
       website: "",
     },
@@ -138,42 +80,55 @@ export function SupportDonationWizard({
 
   useEffect(() => {
     void getPrefillDonorAction().then((prefill) => {
-      if (prefill.name) {
-        donorForm.setValue("donor_name", prefill.name);
-        serdipayForm.setValue("donor_name", prefill.name);
-      }
-      if (prefill.email) {
-        donorForm.setValue("donor_email", prefill.email);
-        serdipayForm.setValue("donor_email", prefill.email);
-      }
-      if (prefill.phone) {
-        donorForm.setValue("donor_phone", prefill.phone);
-        serdipayForm.setValue("donor_phone", prefill.phone);
-      }
+      if (prefill.name) donorForm.setValue("donor_name", prefill.name);
+      if (prefill.email) donorForm.setValue("donor_email", prefill.email);
+      if (prefill.phone) donorForm.setValue("donor_phone", prefill.phone);
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const quickAmounts = useMemo(() => QUICK_AMOUNTS[currency], [currency]);
   const parsedAmount = Number(amount);
+  const usdOk = bankCoordinates.usd_enabled;
+  const cdfOk = bankCoordinates.cdf_enabled;
 
-  function chooseMethod(next: PaymentMethodChoice) {
-    if (next === "serdipay") setStep("serdipay");
-    else setStep("currency");
+  function selectMethod(next: PaymentMethodId) {
+    setMethod(next);
+    if (next === "card" && !cardPaymentAvailable) {
+      toast.message("Carte Visa / Mastercard", {
+        description: "Bientôt disponible — contrat marchand AFD en cours.",
+      });
+      return;
+    }
+    if (next === "mobile_money") {
+      toast.message("Mobile Money", {
+        description: "Bientôt disponible sur Plateforme-AFD.",
+      });
+    }
   }
 
   function onDonorSubmit(values: DonorValues) {
+    if (method !== "bank_transfer") {
+      toast.message(
+        method === "card" ? "Carte bientôt disponible" : "Mobile Money bientôt disponible",
+      );
+      return;
+    }
     if (!parsedAmount || parsedAmount <= 0) {
       toast.error("Indiquez un montant valide.");
-      setStep("amount");
       return;
     }
     startTransition(async () => {
       const result = await createBankDonationIntentAction({
-        ...values,
+        donor_name: values.donor_name,
+        donor_email: values.donor_email,
+        donor_phone: values.donor_phone,
+        donor_country: "République démocratique du Congo",
+        support_type: "don_general",
         amount: parsedAmount,
         currency,
         consent: true,
+        is_anonymous: false,
       });
       if (!result.ok) {
         toast.error(result.message);
@@ -181,37 +136,8 @@ export function SupportDonationWizard({
       }
       setDonationId(result.donationId ?? null);
       setReference(result.reference ?? null);
-      setStep("instructions");
-      toast.success("Référence de don créée.");
-    });
-  }
-
-  function onSerdipaySubmit(values: SerdipayValues) {
-    startTransition(async () => {
-      const supportLabel = SUPPORT_TYPE_LABELS[values.support_type];
-      const composedMessage = [
-        `Type de soutien : ${supportLabel}`,
-        values.message?.trim(),
-      ]
-        .filter(Boolean)
-        .join("\n\n");
-      const result = await createDonationIntentAction({
-        donor_name: values.donor_name,
-        donor_email: values.donor_email,
-        donor_phone: values.donor_phone,
-        amount: Number(values.amount),
-        currency: values.currency as AllowedCurrency,
-        message: composedMessage || undefined,
-        consent: true,
-        website: values.website,
-      });
-      if (!result.ok) {
-        toast.error(result.message);
-        return;
-      }
-      setDoneMessage(result.message);
-      setStep("done");
-      toast.success(result.message);
+      setStep("transfer");
+      toast.success("Référence créée — effectuez le virement.");
     });
   }
 
@@ -231,348 +157,257 @@ export function SupportDonationWizard({
 
   return (
     <div className="space-y-6">
-      {step === "method" ? (
-        <div className="space-y-4">
-          <h3 className="font-display text-lg font-semibold text-[var(--afd-ink)]">
-            Choisir un moyen de paiement
-          </h3>
-          <div className="grid gap-3 sm:grid-cols-2">
-            <button
-              type="button"
-              onClick={() => chooseMethod("bank_transfer")}
-              className="rounded-2xl border border-[var(--afd-border)] bg-white p-5 text-left transition hover:border-[var(--afd-blue)] hover:shadow-sm"
-            >
-              <p className="font-semibold text-[var(--afd-ink)]">Virement bancaire</p>
-              <p className="mt-2 text-sm text-[var(--afd-muted)]">
-                USD ou CDF vers les comptes officiels Equity BCDC de l’AFD.
-              </p>
-            </button>
-            <button
-              type="button"
-              onClick={() => chooseMethod("serdipay")}
-              className="rounded-2xl border border-[var(--afd-border)] bg-white p-5 text-left transition hover:border-[var(--afd-blue)] hover:shadow-sm"
-            >
-              <p className="font-semibold text-[var(--afd-ink)]">Paiement en ligne / Mobile Money</p>
-              <p className="mt-2 text-sm text-[var(--afd-muted)]">
-                {serdiPayAvailable
-                  ? "Via SerdiPay (module en cours d’activation complète)."
-                  : "SerdiPay sera activé après configuration officielle — vous pouvez enregistrer une intention."}
-              </p>
-            </button>
-          </div>
-        </div>
-      ) : null}
-
-      {step === "currency" ? (
-        <div className="space-y-4">
-          <h3 className="font-display text-lg font-semibold">
-            Dans quelle devise souhaitez-vous effectuer votre don ?
-          </h3>
-          <div className="grid gap-3 sm:grid-cols-2">
-            {(["USD", "CDF"] as const)
-              .filter((c) => (c === "USD" ? bankCoordinates.usd_enabled : bankCoordinates.cdf_enabled))
-              .map((c) => (
-                <button
-                  key={c}
-                  type="button"
-                  onClick={() => {
-                    setCurrency(c);
-                    setAmount("");
-                    setCustomAmount(false);
-                    setStep("amount");
-                  }}
-                  className="rounded-2xl border border-[var(--afd-border)] bg-white px-4 py-5 text-left font-semibold hover:border-[var(--afd-blue)]"
-                >
-                  {c === "USD" ? "USD — Dollar américain" : "CDF — Franc congolais"}
-                </button>
-              ))}
-          </div>
-          <button type="button" className="text-sm text-[var(--afd-blue)]" onClick={() => setStep("method")}>
-            ← Retour
-          </button>
-        </div>
-      ) : null}
-
-      {step === "amount" ? (
-        <div className="space-y-4">
-          <h3 className="font-display text-lg font-semibold">Montant du don ({currency})</h3>
-          <div className="flex flex-wrap gap-2">
-            {quickAmounts.map((value) => (
+      {step === "donate" ? (
+        <form
+          onSubmit={donorForm.handleSubmit(onDonorSubmit)}
+          className={`${formClassName} space-y-6`}
+          noValidate
+        >
+          <div className="space-y-3">
+            <h3 className="font-display text-lg font-semibold text-[var(--afd-ink)]">
+              Moyen de paiement
+            </h3>
+            <div className="grid grid-cols-3 gap-2 sm:gap-3">
               <button
-                key={value}
                 type="button"
-                onClick={() => {
-                  setCustomAmount(false);
-                  setAmount(String(value));
-                }}
-                className={`rounded-lg border px-3 py-2 text-sm font-semibold ${
-                  amount === String(value) && !customAmount
-                    ? "border-[var(--afd-blue)] bg-[var(--afd-blue)] text-white"
-                    : "border-[var(--afd-border)]"
+                onClick={() => selectMethod("bank_transfer")}
+                aria-pressed={method === "bank_transfer"}
+                className={`${methodTileClass} ${
+                  method === "bank_transfer"
+                    ? "border-[var(--afd-blue)] bg-[var(--afd-blue)]/5 shadow-sm"
+                    : "border-[var(--afd-border)] bg-white hover:border-[var(--afd-blue)]"
                 }`}
               >
-                {formatDonationAmount(value, currency)} {currency}
+                <span className="inline-flex size-11 items-center justify-center rounded-full bg-[var(--afd-blue)]/10 text-[var(--afd-blue)]">
+                  <Building2 className="size-5" aria-hidden />
+                </span>
+                <span className="text-xs font-semibold text-[var(--afd-ink)] sm:text-sm">
+                  Virement
+                </span>
+                <span className="text-[10px] text-[var(--afd-muted)] sm:text-xs">Banque</span>
               </button>
-            ))}
-            <button
-              type="button"
-              onClick={() => {
-                setCustomAmount(true);
-                setAmount("");
-              }}
-              className={`rounded-lg border px-3 py-2 text-sm font-semibold ${
-                customAmount
-                  ? "border-[var(--afd-blue)] bg-[var(--afd-blue)] text-white"
-                  : "border-[var(--afd-border)]"
-              }`}
-            >
-              Autre montant
-            </button>
-          </div>
-          {customAmount ? (
-            <input
-              type="number"
-              min={1}
-              step={currency === "CDF" ? 1 : 0.01}
-              className={fieldClassName}
-              placeholder={`Montant en ${currency}`}
-              value={amount}
-              onChange={(e) => setAmount(e.target.value)}
-            />
-          ) : null}
-          <div className="flex flex-wrap gap-3">
-            <button type="button" className="text-sm text-[var(--afd-blue)]" onClick={() => setStep("currency")}>
-              ← Retour
-            </button>
-            <button
-              type="button"
-              disabled={!parsedAmount || parsedAmount <= 0}
-              className={submitClassName}
-              onClick={() => setStep("donor")}
-            >
-              Continuer
-            </button>
-          </div>
-        </div>
-      ) : null}
 
-      {step === "donor" ? (
-        <div className={formShellClassName}>
-          <form onSubmit={donorForm.handleSubmit(onDonorSubmit)} className={formClassName} noValidate>
-            <p className="text-sm text-[var(--afd-muted)]">
-              Montant :{" "}
-              <strong className="text-[var(--afd-ink)]">
-                {formatDonationAmount(parsedAmount, currency)} {currency}
-              </strong>
-            </p>
-            <div className="sr-only" aria-hidden>
-              <input type="text" tabIndex={-1} autoComplete="off" {...donorForm.register("website")} />
-            </div>
-            <div className="grid gap-4 sm:grid-cols-2">
-              <div>
-                <label className={labelClassName}>Nom complet</label>
-                <input className={fieldClassName} {...donorForm.register("donor_name")} />
-                {donorForm.formState.errors.donor_name ? (
-                  <p className={errorClassName}>{donorForm.formState.errors.donor_name.message}</p>
-                ) : null}
-              </div>
-              <div>
-                <label className={labelClassName}>E-mail</label>
-                <input type="email" className={fieldClassName} {...donorForm.register("donor_email")} />
-                {donorForm.formState.errors.donor_email ? (
-                  <p className={errorClassName}>{donorForm.formState.errors.donor_email.message}</p>
-                ) : null}
-              </div>
-            </div>
-            <div className="grid gap-4 sm:grid-cols-2">
-              <div>
-                <label className={labelClassName}>
-                  Téléphone <span className="font-normal text-[var(--afd-muted)]">(facultatif)</span>
-                </label>
-                <input type="tel" className={fieldClassName} {...donorForm.register("donor_phone")} />
-              </div>
-              <div>
-                <label className={labelClassName}>Pays</label>
-                <input className={fieldClassName} {...donorForm.register("donor_country")} />
-                {donorForm.formState.errors.donor_country ? (
-                  <p className={errorClassName}>{donorForm.formState.errors.donor_country.message}</p>
-                ) : null}
-              </div>
-            </div>
-            <div>
-              <label className={labelClassName}>Type de soutien</label>
-              <select
-                className="min-h-12 w-full rounded-lg border border-[var(--afd-border)] bg-[var(--afd-background)] px-3"
-                {...donorForm.register("support_type")}
+              <button
+                type="button"
+                onClick={() => selectMethod("card")}
+                aria-pressed={method === "card"}
+                className={`${methodTileClass} ${
+                  method === "card"
+                    ? "border-[var(--afd-border)] bg-[var(--afd-surface)]"
+                    : "border-dashed border-[var(--afd-border)] bg-[var(--afd-surface)]"
+                }`}
               >
-                <option value="">Sélectionner</option>
-                {siteConfig.supportTypes.map((type) => (
-                  <option key={type} value={type}>
-                    {SUPPORT_TYPE_LABELS[type]}
-                  </option>
-                ))}
-              </select>
-              {donorForm.formState.errors.support_type ? (
-                <p className={errorClassName}>{donorForm.formState.errors.support_type.message}</p>
-              ) : null}
-            </div>
-            <div>
-              <label className={labelClassName}>
-                Message <span className="font-normal text-[var(--afd-muted)]">(facultatif)</span>
-              </label>
-              <textarea rows={3} className="min-h-24 w-full rounded-lg border px-3 py-3" {...donorForm.register("message")} />
-            </div>
-            <label className="flex items-start gap-3 text-sm text-[var(--afd-muted)]">
-              <input type="checkbox" className={checkboxClassName} {...donorForm.register("is_anonymous")} />
-              <span>Don anonyme (le nom ne sera pas affiché publiquement)</span>
-            </label>
-            <label className="flex items-start gap-3 text-sm text-[var(--afd-muted)]">
-              <input type="checkbox" className={checkboxClassName} {...donorForm.register("consent")} />
-              <span>
-                J’accepte que l’AFD traite mes données pour enregistrer mon don.{" "}
-                <Link href="/politique-confidentialite" className="font-semibold text-[var(--afd-blue)]">
-                  Politique de confidentialité
-                </Link>
-              </span>
-            </label>
-            {donorForm.formState.errors.consent ? (
-              <p className={errorClassName}>{donorForm.formState.errors.consent.message}</p>
-            ) : null}
-            <div className="flex flex-wrap gap-3">
-              <button type="button" className="text-sm text-[var(--afd-blue)]" onClick={() => setStep("amount")}>
-                ← Retour
+                <span className="inline-flex size-11 items-center justify-center rounded-full bg-[var(--afd-orange)]/10 text-[var(--afd-orange)]">
+                  <CreditCard className="size-5" aria-hidden />
+                </span>
+                <span className="text-xs font-semibold text-[var(--afd-ink)] sm:text-sm">
+                  Carte
+                </span>
+                <span className="text-[10px] font-medium text-[var(--afd-orange)] sm:text-xs">
+                  {cardPaymentAvailable ? "Visa / MC" : "Bientôt"}
+                </span>
               </button>
-              <button type="submit" disabled={pending} className={submitClassName}>
-                {pending ? "Enregistrement…" : "Continuer vers les coordonnées bancaires"}
+
+              <button
+                type="button"
+                onClick={() => selectMethod("mobile_money")}
+                aria-pressed={method === "mobile_money"}
+                className={`${methodTileClass} border-dashed border-[var(--afd-border)] bg-[var(--afd-surface)]`}
+              >
+                <span className="inline-flex size-11 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-700">
+                  <Smartphone className="size-5" aria-hidden />
+                </span>
+                <span className="text-xs font-semibold text-[var(--afd-ink)] sm:text-sm">
+                  Mobile Money
+                </span>
+                <span className="text-[10px] font-medium text-[var(--afd-orange)] sm:text-xs">
+                  Bientôt
+                </span>
               </button>
             </div>
-          </form>
-        </div>
+          </div>
+
+          {method === "bank_transfer" ? (
+            <>
+              <div className="space-y-3">
+                <h3 className="font-display text-base font-semibold text-[var(--afd-ink)]">
+                  Montant
+                </h3>
+                <div className="flex gap-2">
+                  {usdOk ? (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setCurrency("USD");
+                        setAmount("");
+                        setCustomAmount(false);
+                      }}
+                      className={`rounded-lg border px-4 py-2 text-sm font-semibold ${
+                        currency === "USD"
+                          ? "border-[var(--afd-blue)] bg-[var(--afd-blue)] text-white"
+                          : "border-[var(--afd-border)]"
+                      }`}
+                    >
+                      USD
+                    </button>
+                  ) : null}
+                  {cdfOk ? (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setCurrency("CDF");
+                        setAmount("");
+                        setCustomAmount(false);
+                      }}
+                      className={`rounded-lg border px-4 py-2 text-sm font-semibold ${
+                        currency === "CDF"
+                          ? "border-[var(--afd-blue)] bg-[var(--afd-blue)] text-white"
+                          : "border-[var(--afd-border)]"
+                      }`}
+                    >
+                      CDF
+                    </button>
+                  ) : null}
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {quickAmounts.map((value) => (
+                    <button
+                      key={value}
+                      type="button"
+                      onClick={() => {
+                        setCustomAmount(false);
+                        setAmount(String(value));
+                      }}
+                      className={`rounded-lg border px-3 py-2 text-sm font-semibold ${
+                        amount === String(value) && !customAmount
+                          ? "border-[var(--afd-blue)] bg-[var(--afd-blue)] text-white"
+                          : "border-[var(--afd-border)]"
+                      }`}
+                    >
+                      {formatDonationAmount(value, currency)} {currency}
+                    </button>
+                  ))}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setCustomAmount(true);
+                      setAmount("");
+                    }}
+                    className={`rounded-lg border px-3 py-2 text-sm font-semibold ${
+                      customAmount
+                        ? "border-[var(--afd-blue)] bg-[var(--afd-blue)] text-white"
+                        : "border-[var(--afd-border)]"
+                    }`}
+                  >
+                    Autre
+                  </button>
+                </div>
+                {customAmount ? (
+                  <input
+                    type="number"
+                    min={1}
+                    step={currency === "CDF" ? 1 : 0.01}
+                    className={fieldClassName}
+                    placeholder={`Montant en ${currency}`}
+                    value={amount}
+                    onChange={(e) => setAmount(e.target.value)}
+                  />
+                ) : null}
+              </div>
+
+              <div className="space-y-4">
+                <h3 className="font-display text-base font-semibold text-[var(--afd-ink)]">
+                  Vos coordonnées
+                </h3>
+                <div className="sr-only" aria-hidden>
+                  <input type="text" tabIndex={-1} autoComplete="off" {...donorForm.register("website")} />
+                </div>
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <div>
+                    <label className={labelClassName}>Nom complet</label>
+                    <input className={fieldClassName} {...donorForm.register("donor_name")} />
+                    {donorForm.formState.errors.donor_name ? (
+                      <p className={errorClassName}>{donorForm.formState.errors.donor_name.message}</p>
+                    ) : null}
+                  </div>
+                  <div>
+                    <label className={labelClassName}>E-mail</label>
+                    <input type="email" className={fieldClassName} {...donorForm.register("donor_email")} />
+                    {donorForm.formState.errors.donor_email ? (
+                      <p className={errorClassName}>{donorForm.formState.errors.donor_email.message}</p>
+                    ) : null}
+                  </div>
+                </div>
+                <div>
+                  <label className={labelClassName}>
+                    Téléphone <span className="font-normal text-[var(--afd-muted)]">(facultatif)</span>
+                  </label>
+                  <input type="tel" className={fieldClassName} {...donorForm.register("donor_phone")} />
+                </div>
+                <label className="flex items-start gap-3 text-sm text-[var(--afd-muted)]">
+                  <input type="checkbox" className={checkboxClassName} {...donorForm.register("consent")} />
+                  <span>
+                    J’accepte le traitement de mes données pour ce don.{" "}
+                    <Link href="/politique-confidentialite" className="font-semibold text-[var(--afd-blue)]">
+                      Confidentialité
+                    </Link>
+                  </span>
+                </label>
+                {donorForm.formState.errors.consent ? (
+                  <p className={errorClassName}>{donorForm.formState.errors.consent.message}</p>
+                ) : null}
+              </div>
+
+              <button
+                type="submit"
+                disabled={pending || !parsedAmount || parsedAmount <= 0}
+                className={submitClassName}
+              >
+                {pending ? "Préparation…" : "Obtenir les coordonnées bancaires"}
+              </button>
+            </>
+          ) : (
+            <p className="rounded-xl border border-dashed border-[var(--afd-border)] bg-[var(--afd-surface)] px-4 py-4 text-sm text-[var(--afd-muted)]">
+              {method === "card"
+                ? "Le paiement par carte Visa / Mastercard sera activé dès que le contrat marchand AFD sera en place."
+                : "Le paiement Mobile Money sera proposé dès qu’un canal officiel AFD sera disponible."}{" "}
+              En attendant, choisissez le <strong className="text-[var(--afd-ink)]">virement bancaire</strong>.
+            </p>
+          )}
+        </form>
       ) : null}
 
-      {step === "instructions" && reference ? (
+      {step === "transfer" && reference ? (
         <div className="space-y-5">
           <BankDetailsCard coords={bankCoordinates} currency={currency} reference={reference} />
-          <p className="text-sm text-[var(--afd-muted)]">
-            Effectuez le virement depuis votre application bancaire, puis revenez ici pour déclarer
-            l’envoi et joindre une preuve.
-          </p>
-          <button type="button" className={submitClassName} onClick={() => setStep("proof")}>
-            J’ai effectué le virement
-          </button>
-        </div>
-      ) : null}
-
-      {step === "proof" && donationId ? (
-        <div className="space-y-4">
-          <h3 className="font-display text-lg font-semibold">Ajouter une preuve de paiement</h3>
-          <p className="text-sm text-[var(--afd-muted)]">
-            Formats acceptés : PDF, JPG, JPEG, PNG. Votre don restera « en attente de vérification »
-            jusqu’à confirmation par l’AFD.
-          </p>
-          {reference ? (
-            <p className="rounded-lg bg-[var(--afd-accent-soft)] px-3 py-2 text-sm">
-              Référence : <strong>{reference}</strong>
+          <div className="space-y-3 rounded-2xl border border-[var(--afd-border)] bg-white p-4">
+            <h3 className="font-display text-base font-semibold text-[var(--afd-ink)]">
+              Preuve de virement
+            </h3>
+            <p className="text-sm text-[var(--afd-muted)]">
+              Après le virement, joignez un PDF ou une photo (JPG/PNG). Le don reste en attente
+              jusqu’à vérification par l’AFD.
             </p>
-          ) : null}
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              const fd = new FormData(e.currentTarget);
-              onProofSubmit(fd);
-            }}
-            className="space-y-4"
-          >
-            <input type="hidden" name="donationId" value={donationId} />
-            <input
-              type="file"
-              name="proof"
-              accept=".pdf,.jpg,.jpeg,.png,application/pdf,image/jpeg,image/png"
-              required
-              className="block w-full text-sm"
-            />
-            <button type="submit" disabled={pending} className={submitClassName}>
-              {pending ? "Envoi…" : "Envoyer la preuve"}
-            </button>
-          </form>
-        </div>
-      ) : null}
-
-      {step === "serdipay" ? (
-        <div className={formShellClassName}>
-          <form
-            onSubmit={serdipayForm.handleSubmit(onSerdipaySubmit)}
-            className={formClassName}
-            noValidate
-          >
-            <p className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-950">
-              SerdiPay n’est pas encore pleinement activé. Ce formulaire enregistre une intention —
-              aucun paiement en ligne n’est confirmé ici.
-            </p>
-            <div className="sr-only" aria-hidden>
-              <input type="text" tabIndex={-1} autoComplete="off" {...serdipayForm.register("website")} />
-            </div>
-            <div className="grid gap-4 sm:grid-cols-2">
-              <div>
-                <label className={labelClassName}>Nom complet</label>
-                <input className={fieldClassName} {...serdipayForm.register("donor_name")} />
-              </div>
-              <div>
-                <label className={labelClassName}>E-mail</label>
-                <input type="email" className={fieldClassName} {...serdipayForm.register("donor_email")} />
-              </div>
-            </div>
-            <div>
-              <label className={labelClassName}>Téléphone (facultatif)</label>
-              <input type="tel" className={fieldClassName} {...serdipayForm.register("donor_phone")} />
-            </div>
-            <div>
-              <label className={labelClassName}>Type de soutien</label>
-              <select
-                className="min-h-12 w-full rounded-lg border px-3"
-                {...serdipayForm.register("support_type")}
-              >
-                <option value="">Sélectionner</option>
-                {siteConfig.supportTypes.map((type) => (
-                  <option key={type} value={type}>
-                    {SUPPORT_TYPE_LABELS[type]}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="grid gap-4 sm:grid-cols-[1fr_auto]">
-              <div>
-                <label className={labelClassName}>Montant</label>
-                <input type="number" min={1} step="0.01" className={fieldClassName} {...serdipayForm.register("amount")} />
-              </div>
-              <div>
-                <label className={labelClassName}>Devise</label>
-                <select className="min-h-12 rounded-lg border px-3" {...serdipayForm.register("currency")}>
-                  {siteConfig.currencies.map((c) => (
-                    <option key={c} value={c}>
-                      {c}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
-            <div>
-              <label className={labelClassName}>Message (facultatif)</label>
-              <textarea rows={3} className="min-h-24 w-full rounded-lg border px-3 py-3" {...serdipayForm.register("message")} />
-            </div>
-            <label className="flex items-start gap-3 text-sm text-[var(--afd-muted)]">
-              <input type="checkbox" className={checkboxClassName} {...serdipayForm.register("consent")} />
-              <span>J’accepte le traitement de mes données pour cette intention de soutien.</span>
-            </label>
-            <div className="flex flex-wrap gap-3">
-              <button type="button" className="text-sm text-[var(--afd-blue)]" onClick={() => setStep("method")}>
-                ← Retour
-              </button>
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                onProofSubmit(new FormData(e.currentTarget));
+              }}
+              className="space-y-4"
+            >
+              <input type="hidden" name="donationId" value={donationId ?? ""} />
+              <input
+                type="file"
+                name="proof"
+                accept=".pdf,.jpg,.jpeg,.png,application/pdf,image/jpeg,image/png"
+                required
+                className="block w-full text-sm"
+              />
               <button type="submit" disabled={pending} className={submitClassName}>
-                {pending ? "Enregistrement…" : "Enregistrer mon intention"}
+                {pending ? "Envoi…" : "Envoyer la preuve"}
               </button>
-            </div>
-          </form>
+            </form>
+          </div>
         </div>
       ) : null}
 
@@ -581,19 +416,16 @@ export function SupportDonationWizard({
           role="status"
           className="space-y-3 rounded-2xl border border-[var(--afd-border)] bg-[var(--afd-accent-soft)] px-5 py-5 text-[var(--afd-ink)]"
         >
-          <h3 className="font-display text-xl font-semibold">Merci pour votre soutien à l’AFD</h3>
+          <h3 className="font-display text-xl font-semibold">Merci pour votre soutien</h3>
           <p className="text-sm leading-relaxed">
             {doneMessage ??
-              "Votre déclaration de don a bien été enregistrée. Votre don sera confirmé après vérification de la réception du virement par l’AFD."}
+              "Votre déclaration a été enregistrée. Confirmation après vérification du virement par l’AFD."}
           </p>
           {reference ? (
             <p className="rounded-lg bg-white/70 px-3 py-2 font-mono text-sm">
               Référence : <strong>{reference}</strong>
             </p>
           ) : null}
-          <p className="text-xs text-[var(--afd-muted)]">
-            Aucun « paiement réussi » n’est confirmé avant validation manuelle par l’AFD.
-          </p>
         </div>
       ) : null}
     </div>

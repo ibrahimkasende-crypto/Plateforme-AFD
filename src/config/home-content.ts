@@ -136,7 +136,7 @@ export const homeContent = {
         "Soutenez les interventions de l’AFD. Le paiement en ligne sera prochainement disponible.",
       href: "/soutenir",
       cta: "Faire un don",
-      note: "L’intégration SerdiPay sera activée après configuration officielle.",
+      note: "Le virement bancaire Equity BCDC est disponible. La carte Visa/Mastercard sera activée après contrat marchand AFD.",
     },
     {
       id: "contact",

@@ -32,12 +32,13 @@ const serverSchema = z.object({
   EMAIL_PROVIDER: z.string().optional(),
   EMAIL_API_KEY: z.string().optional(),
   EMAIL_FROM: z.string().optional(),
-  SERDIPAY_ENABLED: boolFromEnv(false),
-  SERDIPAY_BASE_URL: z.string().optional(),
-  SERDIPAY_MERCHANT_ID: z.string().optional(),
-  SERDIPAY_API_KEY: z.string().optional(),
-  SERDIPAY_API_SECRET: z.string().optional(),
-  SERDIPAY_WEBHOOK_SECRET: z.string().optional(),
+  CARD_PAYMENT_ENABLED: boolFromEnv(false),
+  CARD_PAYMENT_PROVIDER_ID: z.string().optional(),
+  CARD_PAYMENT_BASE_URL: z.string().optional(),
+  CARD_PAYMENT_MERCHANT_ID: z.string().optional(),
+  CARD_PAYMENT_API_KEY: z.string().optional(),
+  CARD_PAYMENT_API_SECRET: z.string().optional(),
+  CARD_PAYMENT_WEBHOOK_SECRET: z.string().optional(),
   OCR_CLOUD_ENABLED: boolFromEnv(false),
   OCR_PROVIDER: z.string().default("native"),
   OCR_WORKER_SECRET: z.string().optional(),
@@ -74,12 +75,13 @@ function readServerEnv(): ServerEnv {
     EMAIL_PROVIDER: process.env.EMAIL_PROVIDER,
     EMAIL_API_KEY: process.env.EMAIL_API_KEY,
     EMAIL_FROM: process.env.EMAIL_FROM,
-    SERDIPAY_ENABLED: process.env.SERDIPAY_ENABLED,
-    SERDIPAY_BASE_URL: process.env.SERDIPAY_BASE_URL,
-    SERDIPAY_MERCHANT_ID: process.env.SERDIPAY_MERCHANT_ID,
-    SERDIPAY_API_KEY: process.env.SERDIPAY_API_KEY,
-    SERDIPAY_API_SECRET: process.env.SERDIPAY_API_SECRET,
-    SERDIPAY_WEBHOOK_SECRET: process.env.SERDIPAY_WEBHOOK_SECRET,
+    CARD_PAYMENT_ENABLED: process.env.CARD_PAYMENT_ENABLED,
+    CARD_PAYMENT_PROVIDER_ID: process.env.CARD_PAYMENT_PROVIDER_ID,
+    CARD_PAYMENT_BASE_URL: process.env.CARD_PAYMENT_BASE_URL,
+    CARD_PAYMENT_MERCHANT_ID: process.env.CARD_PAYMENT_MERCHANT_ID,
+    CARD_PAYMENT_API_KEY: process.env.CARD_PAYMENT_API_KEY,
+    CARD_PAYMENT_API_SECRET: process.env.CARD_PAYMENT_API_SECRET,
+    CARD_PAYMENT_WEBHOOK_SECRET: process.env.CARD_PAYMENT_WEBHOOK_SECRET,
     OCR_CLOUD_ENABLED: process.env.OCR_CLOUD_ENABLED,
     OCR_PROVIDER: process.env.OCR_PROVIDER,
     OCR_WORKER_SECRET: process.env.OCR_WORKER_SECRET,
@@ -106,16 +108,17 @@ export function getIntegrationFlags() {
   const s = readServerEnv();
   return {
     newsletterSendEnabled: s.NEWSLETTER_SEND_ENABLED,
-    serdipayEnabled: s.SERDIPAY_ENABLED,
+    cardPaymentEnabled: s.CARD_PAYMENT_ENABLED,
     ocrCloudEnabled: s.OCR_CLOUD_ENABLED,
     emailConfigured: Boolean(s.EMAIL_PROVIDER && s.EMAIL_API_KEY && s.EMAIL_FROM),
-    serdipayConfigured: Boolean(
-      s.SERDIPAY_ENABLED &&
-        s.SERDIPAY_BASE_URL &&
-        s.SERDIPAY_MERCHANT_ID &&
-        s.SERDIPAY_API_KEY &&
-        s.SERDIPAY_API_SECRET &&
-        s.SERDIPAY_WEBHOOK_SECRET,
+    cardPaymentConfigured: Boolean(
+      s.CARD_PAYMENT_ENABLED &&
+        s.CARD_PAYMENT_PROVIDER_ID &&
+        s.CARD_PAYMENT_BASE_URL &&
+        s.CARD_PAYMENT_MERCHANT_ID &&
+        s.CARD_PAYMENT_API_KEY &&
+        s.CARD_PAYMENT_API_SECRET &&
+        s.CARD_PAYMENT_WEBHOOK_SECRET,
     ),
   } as const;
 }

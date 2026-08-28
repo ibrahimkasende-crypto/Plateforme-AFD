@@ -15,7 +15,7 @@ export type SystemHealthReport = {
   jobsFailed: number;
   appVersion: string;
   emailConfigured: boolean;
-  serdipayConfigured: boolean;
+  cardPaymentConfigured: boolean;
   supabasePublicConfigured: boolean;
   serviceRoleConfigured: boolean;
   supabaseProjectRef: string | null;
@@ -79,16 +79,21 @@ export async function collectSystemHealth(): Promise<SystemHealthReport> {
       process.env.EMAIL_API_KEY &&
       process.env.EMAIL_FROM,
   );
-  const serdipayConfigured = Boolean(
-    process.env.SERDIPAY_BASE_URL &&
-      process.env.SERDIPAY_MERCHANT_ID &&
-      process.env.SERDIPAY_API_KEY &&
-      process.env.SERDIPAY_API_SECRET &&
-      process.env.SERDIPAY_WEBHOOK_SECRET,
+  const cardPaymentConfigured = Boolean(
+    /^(1|true|yes|on)$/i.test(process.env.CARD_PAYMENT_ENABLED ?? "") &&
+      process.env.CARD_PAYMENT_BASE_URL &&
+      process.env.CARD_PAYMENT_MERCHANT_ID &&
+      process.env.CARD_PAYMENT_API_KEY &&
+      process.env.CARD_PAYMENT_API_SECRET &&
+      process.env.CARD_PAYMENT_WEBHOOK_SECRET,
   );
 
   if (!emailConfigured) notes.push("Email newsletter : Configuration requise.");
-  if (!serdipayConfigured) notes.push("SerdiPay : Configuration requise.");
+  if (!cardPaymentConfigured) {
+    notes.push(
+      "Paiement carte Visa/Mastercard : désactivé (CARD_PAYMENT_ENABLED=false) — contrat marchand AFD requis.",
+    );
+  }
   if (!serviceRoleConfigured) {
     notes.push(
       "SUPABASE_SERVICE_ROLE_KEY absente — invitations admin / OCR worker / jobs service indisponibles.",
@@ -108,7 +113,7 @@ export async function collectSystemHealth(): Promise<SystemHealthReport> {
     jobsFailed,
     appVersion: process.env.npm_package_version || "0.1.0",
     emailConfigured,
-    serdipayConfigured,
+    cardPaymentConfigured,
     supabasePublicConfigured,
     serviceRoleConfigured,
     supabaseProjectRef,

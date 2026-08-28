@@ -41,7 +41,7 @@ Légende présence : **E** = `.env.example` · **L** = `.env.local` (clés) · *
 | `NEXT_PUBLIC_ENABLE_SECTION_ANIMATIONS` | Non | E P | Oui | — | — | |
 | `NEXT_PUBLIC_ENABLE_MOBILE_RAILS` | Non | E P | Oui | — | — | |
 | `NEWSLETTER_SEND_ENABLED` | Non | E P | Oui | — | — | false OK |
-| `SERDIPAY_ENABLED` | Non | E P | Oui | — | — | false OK |
+| `CARD_PAYMENT_ENABLED` | Non | E P | Oui | — | — | false OK |
 | `OCR_CLOUD_ENABLED` | Non | E P | Oui | — | — | false OK |
 | `OCR_PROVIDER` | Non | E P | Oui | — | — | |
 | `OCR_MAX_FILE_SIZE_MB` | Non | E P | Oui | — | — | |
@@ -49,7 +49,7 @@ Légende présence : **E** = `.env.example` · **L** = `.env.local` (clés) · *
 | `OCR_DEFAULT_LANGUAGE` | Non | E P | Oui | — | — | |
 | `OCR_ORGANISATION_ID` | Non | E P | Oui | — | — | |
 | `OCR_*` (autres) | Non | E | Oui | P si OCR avancé | — | Documentés dans example |
-| `SERDIPAY_*` | Si paiements | E | Oui | P si activation | — | |
+| `CARD_PAYMENT_*` | Si paiements carte | E | Oui | P si activation | — | Contrat marchand AFD |
 | `EMAIL_*` | Si envoi | E (ajouté) | Oui | P si newsletter send | — | |
 | `DATABASE_URL` | Scripts seed | E (ajouté) L | Scripts only | Pas Hostinger app | — | Pas Prisma/Drizzle |
 | `NEXT_PUBLIC_NEWSLETTER_GOOGLE_OAUTH_ENABLED` | Non | E L | Oui | P optionnel | — | |
@@ -164,7 +164,7 @@ Aucune URL `*.supabase.co` hardcodée dans `src/`.
 | `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | ✓ |
 | Flags demo / UI | ✓ |
 | `NEWSLETTER_SEND_ENABLED=false` | ✓ |
-| `SERDIPAY_ENABLED=false` | ✓ |
+| `CARD_PAYMENT_ENABLED=false` | ✓ |
 | OCR flags | ✓ |
 | **`SUPABASE_SERVICE_ROLE_KEY`** | ❌ **À AJOUTER** (secret Hostinger) |
 

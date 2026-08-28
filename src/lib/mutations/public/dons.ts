@@ -35,7 +35,7 @@ export async function createDonationIntent(
     donor_phone: input.donor_phone?.trim() || null,
     amount: input.amount,
     currency: input.currency,
-    payment_method: input.payment_method ?? "serdipay",
+    payment_method: input.payment_method ?? "bank_transfer",
     status: input.status,
   };
 

@@ -27,7 +27,8 @@ Ouvrir [http://localhost:3000](http://localhost:3000).
 - `docs/ARCHITECTURE_ALIGNED_V2.md`
 - `docs/ASSETS_ORGANISATION.md`
 - `docs/SUPABASE_TARGET_SCHEMA.md`
-- `docs/SERDIPAY_INTEGRATION_REQUIREMENTS.md`
+- `docs/CARD_PAYMENT_INTEGRATION.md`
+- `docs/DONS_BANK_TRANSFER_REPORT.md`
 - `docs/TYPOGRAPHY_LAYOUT_NEWSLETTER_LOADER.md`
 
 ## Assets

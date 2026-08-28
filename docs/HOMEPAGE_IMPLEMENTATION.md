@@ -54,11 +54,11 @@ Formulaire RHF + Zod + Server Action + Sonner + honeypot + rate limit léger.
 
 ## 11. Soutenir l’AFD
 
-CTA honnête : paiement prochainement disponible ; note SerdiPay non actif.
+CTA : virement bancaire Equity BCDC actif ; carte Visa/Mastercard « Bientôt disponible ».
 
-## 12. SerdiPay
+## 12. Paiement carte
 
-Non activé — aucun faux paiement.
+Architecture `src/lib/payments/providers/card/` — `CARD_PAYMENT_ENABLED=false`. SerdiPay hors périmètre (Campus Food).
 
 ## 13. Tests responsive
 

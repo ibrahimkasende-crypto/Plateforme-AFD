@@ -81,9 +81,11 @@ export default function PolitiqueConfidentialitePage() {
           </h2>
           <p className="mt-3">
             Les données relatives aux intentions de soutien sont enregistrées pour permettre le
-            traitement de votre demande par l’équipe AFD. Tant que le paiement en ligne SerdiPay
-            n’est pas activé, aucune transaction financière n’est effectuée via la plateforme. Les
-            informations de paiement ne sont pas collectées sur ce formulaire.
+            traitement de votre demande par l’équipe AFD. Le canal actif est le virement bancaire
+            vers les comptes officiels Equity BCDC de l’AFD. Le paiement par carte Visa/Mastercard
+            n’est pas encore activé : aucune transaction carte n’est effectuée via la plateforme
+            tant que le prestataire marchand propre à l’AFD n’est pas configuré. Les informations
+            de carte bancaire ne sont pas collectées sur ce formulaire.
           </p>
         </section>
 

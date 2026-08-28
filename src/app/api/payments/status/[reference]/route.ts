@@ -1,64 +1,39 @@
 import { NextResponse } from "next/server";
-import { getPaymentStatusByReference } from "@/services/payments.service";
 import {
-  SerdiPayNotConfiguredError,
-  getSerdiPayConfig,
-} from "@/features/paiements/providers/serdipay";
+  CardPaymentNotConfiguredError,
+  cardPaymentProvider,
+  getCardPaymentConfig,
+} from "@/lib/payments/providers/card";
+import { getPaymentStatusByReference } from "@/services/payments.service";
 
 export const runtime = "nodejs";
 
-type RouteContext = {
-  params: Promise<{ reference: string }>;
-};
-
-export async function GET(_request: Request, context: RouteContext) {
+export async function GET(
+  _request: Request,
+  context: { params: Promise<{ reference: string }> },
+) {
   const { reference } = await context.params;
+  const config = getCardPaymentConfig();
 
-  if (!reference) {
-    return NextResponse.json(
-      { ok: false, error: "Référence manquante" },
-      { status: 400 },
-    );
-  }
-
-  const config = getSerdiPayConfig();
   if (!config.configured) {
     return NextResponse.json(
-      {
-        ok: false,
-        error: "SerdiPay n’est pas encore configuré",
-        reference,
-      },
+      { ok: false, error: "Paiement carte AFD non configuré" },
       { status: 503 },
     );
   }
 
   try {
-    const transaction = await getPaymentStatusByReference(reference);
-    if (!transaction) {
-      return NextResponse.json(
-        { ok: false, error: "Transaction introuvable", reference },
-        { status: 404 },
-      );
+    const local = await getPaymentStatusByReference(reference);
+    if (local) {
+      return NextResponse.json({ ok: true, transaction: local });
     }
 
-    return NextResponse.json({
-      ok: true,
-      reference,
-      status: transaction.status,
-      webhook_verified: transaction.webhook_verified,
-    });
+    const remote = await cardPaymentProvider.getPaymentStatus(reference);
+    return NextResponse.json({ ok: true, provider: remote });
   } catch (error) {
-    if (error instanceof SerdiPayNotConfiguredError) {
-      return NextResponse.json(
-        { ok: false, error: error.message },
-        { status: 503 },
-      );
+    if (error instanceof CardPaymentNotConfiguredError) {
+      return NextResponse.json({ ok: false, error: error.message }, { status: 503 });
     }
-
-    return NextResponse.json(
-      { ok: false, error: "Impossible de vérifier le statut" },
-      { status: 500 },
-    );
+    return NextResponse.json({ ok: false, error: "Statut indisponible" }, { status: 500 });
   }
 }

@@ -55,13 +55,15 @@ Routes admin rapports + `ReportPreview` + `report-types.ts`.
 
 Route `/soutenir`, types de soutien dans `site.ts`, schéma intention de don Zod, séparation intention / transaction.
 
-## 14. Architecture SerdiPay
+## 14. Architecture paiement carte (générique)
 
-`PaymentProvider` + provider `serdipay/` + routes API create/status/webhook/return. Erreurs explicites « SerdiPay n’est pas encore configuré ». Aucun faux succès.
+`PaymentProvider` + `src/lib/payments/providers/card/` + routes API create/status/webhook/return/card.
+`CARD_PAYMENT_ENABLED=false` tant que le contrat marchand AFD n’est pas fourni. Aucun faux succès.
+SerdiPay n’est pas utilisé (Campus Food).
 
-## 15. Informations SerdiPay manquantes
+## 15. Informations prestataire carte manquantes
 
-Voir `docs/SERDIPAY_INTEGRATION_REQUIREMENTS.md`.
+Voir `docs/CARD_PAYMENT_INTEGRATION.md`.
 
 ## 16. Tables Supabase existantes
 
@@ -90,7 +92,7 @@ Commit local : `chore: align Plateforme-AFD architecture for development` (`6f5e
 1. Brancher Supabase SSR sur programmes / projets / actualités réels  
 2. Auth admin + enforcement rôles  
 3. Formulaire Soutenir + intentions_don  
-4. Intégration SerdiPay dès documentation officielle  
+4. Intégration carte Visa/Mastercard dès contrat + documentation officielle AFD (Eazzy/CyberSource) 
 5. Newsletter provider réel  
 6. Contenu institutionnel page par page  
 

@@ -224,9 +224,9 @@ const modules = [
     statut: "bloque_integration_externe",
     preuves: [
       "src/features/dons",
-      "src/features/paiements/providers/serdipay",
+      "src/lib/payments/providers/card",
     ],
-    restant: ["SerdiPay credentials", "rapprochement auto"],
+    restant: ["contrat marchand carte AFD", "validation admin preuves virement"],
   },
   {
     id: "opportunites",
@@ -706,7 +706,7 @@ mdLines.push(
   "1. Policies `USING (true)` sur modules admin 030 (`finances_*`, `activites`, etc.) — migration `20260719_030`.",
   "2. ~30 tables IAM/RH/paie sans RLS ou sans policies (`20260719_050`).",
   "3. Stocks / Logistique / Exports / Système = coquilles (pas de CRUD métier).",
-  "4. Newsletter et Dons bloqués par intégrations externes (email, SerdiPay).",
+  "4. Newsletter bloquée (email) ; carte Visa/MC désactivée jusqu’au contrat marchand AFD (SerdiPay = Campus Food uniquement).",
   "5. Sauvegardes : UI informative uniquement — ne jamais afficher « réussie » sans preuve.",
   "",
 );

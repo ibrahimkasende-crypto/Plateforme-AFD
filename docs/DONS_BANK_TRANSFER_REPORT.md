@@ -1,36 +1,41 @@
-# Rapport — Intégration virement bancaire AFD (dons)
+# Rapport — Dons Plateforme-AFD (virement + architecture carte)
 
-Date : 2026-08-28
+Date : 2026-08-28 (mise à jour périmètre)
 
-## Audit préalable
+## Confirmation de périmètre
 
-- Page publique : `/soutenir` (formulaire d’intention SerdiPay stub)
-- Table : `dons` (pas `donations`)
-- SerdiPay : provider stub conservé (`payment_method: serdipay`)
-- Admin : `/admin/dons` (confirm/refund basiques)
-- Pas de virement, preuve, reçu ni bucket dons
+**SerdiPay n’est pas utilisé par Plateforme-AFD et reste indépendant dans le projet Campus Food.**
 
-## Ajouts
+Séparation stricte : contrats marchands, providers, credentials, env, API, webhooks,
+tables/config et documentation.
 
-### Migrations
-- `supabase/migrations/20260828_100_dons_bank_transfer.sql`
-  - colonnes additives sur `dons`
-  - `dons_coordonnees_bancaires`, `dons_preuves`, `dons_status_history`
-  - `next_don_reference()`
-  - bucket privé `dons-preuves`
-  - RLS
+## Canaux AFD
 
-### Flux public
-- Choix : Virement | SerdiPay (conservé)
-- Devise USD/CDF → montant → identité → coordonnées (depuis Supabase) → preuve → confirmation sans « paiement réussi »
+| Canal | État |
+| --- | --- |
+| Virement Equity BCDC USD `00011050233200275289929` | **Actif** |
+| Virement Equity BCDC CDF `00011050233200275377520` | **Actif** |
+| Carte Visa/Mastercard (`src/lib/payments/providers/card/`) | Architecture seulement — `CARD_PAYMENT_ENABLED=false` |
+| Provider envisagé (étude) | Equity BCDC Eazzy e-Commerce / CyberSource |
 
-### Admin
-- Filtres Tous / En attente / Preuves / Confirmés / Rejetés
-- Détail `/admin/dons/[id]` + actions Confirmer / Rejeter + historique + preuve signée
-- Reçu `/admin/dons/[id]/recu` après `verified`
-- Paramètres `/admin/parametres/dons-paiements` (`dons:bank_settings`)
+## Flux public `/soutenir`
 
-### Sécurité
-- Preuves non publiques (Storage privé + signed URL admin)
-- Modification comptes réservée Super Admin / Admin IT / `dons:bank_settings`
-- Audit trail sur verify/reject/update bank coords
+1. Choix : **Virement bancaire** | **Carte** (« Bientôt disponible »)
+2. Devise USD/CDF → montant → identité → coordonnées officielles → upload preuve → confirmation
+3. Aucun « paiement réussi » automatique ; validation admin obligatoire
+
+## Admin
+
+- `/admin/dons`, `/admin/dons/[id]`, reçu `/admin/dons/[id]/recu`
+- Paramètres `/admin/parametres/dons-paiements`
+
+## Migrations
+
+- `20260828_100_dons_bank_transfer.sql` — virement, preuves, références, RLS
+- `20260828_110_dons_payment_method_afd_scope.sql` — retrait `serdipay` du périmètre DB
+
+## Paiement carte
+
+- Abstraction : `src/lib/payments/providers/card/`
+- Routes préparées : `/api/payments/create`, `status`, `webhook/card`, `return/card`
+- **Aucun** dossier `serdipay/`, **aucune** variable `SERDIPAY_*`

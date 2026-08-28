@@ -11,7 +11,7 @@ create table if not exists public.dons (
   donor_phone text,
   amount numeric not null check (amount > 0),
   currency text default 'USD',
-  payment_method text not null default 'serdipay',
+  payment_method text not null default 'bank_transfer',
   status text default 'pending',
   created_at timestamptz default now()
 );
@@ -256,7 +256,7 @@ with check (
   status in ('pending', 'intent')
   and amount > 0
   and coalesce(currency, '') in ('USD', 'CDF')
-  and payment_method in ('serdipay', 'bank_transfer', 'virement')
+  and payment_method in ('bank_transfer', 'virement', 'card', 'intent')
   and (
     (donor_email is not null and char_length(donor_email) between 5 and 254)
     or (

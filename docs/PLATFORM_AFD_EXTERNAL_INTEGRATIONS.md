@@ -23,24 +23,30 @@ EMAIL_REPLY_TO=
 
 ---
 
-## SerdiPay (dons / paiements)
+## Paiement carte Visa/Mastercard (dons)
 
-**Statut :** `bloque_integration_externe`
+**Statut :** architecture préparée, **non activée** (`CARD_PAYMENT_ENABLED=false`)
 
-### Variables requises
+Provider envisagé pour étude : Equity BCDC Eazzy e-Commerce / CyberSource (contrat marchand **AFD** requis).
+
+**Hors périmètre :** SerdiPay (Campus Food) — aucun code, secret ni configuration partagé.
+
+### Variables (placeholders)
 ```
-SERDIPAY_ENVIRONMENT=
-SERDIPAY_BASE_URL=
-SERDIPAY_MERCHANT_ID=
-SERDIPAY_API_KEY=
-SERDIPAY_API_SECRET=
-SERDIPAY_WEBHOOK_SECRET=
+CARD_PAYMENT_ENABLED=false
+CARD_PAYMENT_PROVIDER_ID=
+CARD_PAYMENT_BASE_URL=
+CARD_PAYMENT_MERCHANT_ID=
+CARD_PAYMENT_API_KEY=
+CARD_PAYMENT_API_SECRET=
+CARD_PAYMENT_WEBHOOK_SECRET=
 ```
 
 ### Règles
 - Pas d’endpoint inventé
 - Pas de confirmation de paiement simulée
-- Webhook idempotent prévu dans `src/app/api/payments/`
+- Abstraction : `src/lib/payments/providers/card/`
+- Voir `docs/CARD_PAYMENT_INTEGRATION.md`
 
 ---
 

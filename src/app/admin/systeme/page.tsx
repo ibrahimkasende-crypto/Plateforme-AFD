@@ -33,7 +33,7 @@ export default async function AdminSystemePage() {
         <Status ok={health.databaseOk} label="Base de données" />
         <Status ok={health.storageOk} label="Storage" />
         <Status ok={health.emailConfigured} label="Email / newsletter" />
-        <Status ok={health.serdipayConfigured} label="SerdiPay" />
+        <Status ok={health.cardPaymentConfigured} label="Paiement carte (Visa/MC)" />
       </div>
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         <Status

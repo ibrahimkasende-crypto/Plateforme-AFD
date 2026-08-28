@@ -52,9 +52,11 @@ Aucune migration destructive ajoutée pour inventer du contenu. RLS existantes c
 | Newsletter | `subscribeNewsletterAction` | `abonnes_newsletter` |
 | Soutenir | `createDonationIntentAction` | `dons` (intention) |
 
-## 15. SerdiPay
+## 15. Paiement carte
 
-Architecture préparée (`getSerdiPayConfig`). Si non configuré : intention enregistrée, message clair, **aucun faux succès de paiement**.
+Architecture `src/lib/payments/providers/card/` + `CARD_PAYMENT_ENABLED=false`.
+Si non configuré : intention / virement uniquement, message clair, **aucun faux succès carte**.
+SerdiPay hors périmètre (Campus Food).
 
 ## 16–18. Recherche, filtres, pagination
 
@@ -79,7 +81,7 @@ Architecture préparée (`getSerdiPayConfig`). Si non configuré : intention enr
 - Adresse / téléphone / hébergeur complets (marqueurs légaux)
 - Tableaux histoires, témoignages, rapports, AO, opportunités
 - Logos partenaires et médias via Supabase
-- Credentials SerdiPay production
+- Credentials paiement carte AFD (après contrat marchand)
 
 ## 25. Prochaine phase
 

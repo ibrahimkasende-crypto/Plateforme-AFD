@@ -4,20 +4,20 @@ import { SupportDonationWizard } from "@/components/public/forms/support-donatio
 import { PublicPageShell } from "@/components/public/PublicPageShell";
 import { homeContent } from "@/config/home-content";
 import { siteConfig } from "@/config/site";
-import { getSerdiPayConfig } from "@/features/paiements/providers/serdipay";
+import { isCardPaymentPubliclyAvailable } from "@/lib/payments/providers/card";
 import { getActiveBankCoordinates } from "@/features/dons/services/bank-coordinates.service";
 
 export const metadata: Metadata = {
   title: "Soutenir l’AFD",
   description:
-    "Soutenez les actions de l’Alliance des Femmes pour le Développement par virement bancaire ou intention de paiement en ligne.",
+    "Soutenez les actions de l’Alliance des Femmes pour le Développement par virement bancaire Equity BCDC (USD/CDF).",
   alternates: { canonical: `${siteConfig.url}/soutenir` },
 };
 
 export default async function SoutenirPage() {
   const supportAction = homeContent.supportActions.find((item) => item.id === "soutenir");
   const bankCoordinates = await getActiveBankCoordinates();
-  const serdiPay = getSerdiPayConfig();
+  const cardAvailable = isCardPaymentPubliclyAvailable();
 
   return (
     <PublicPageShell
@@ -51,13 +51,13 @@ export default async function SoutenirPage() {
 
           <ul className="space-y-3 text-sm text-[var(--afd-muted)]">
             <li className="rounded-lg border border-[var(--afd-border)] bg-[var(--afd-surface)] px-4 py-3">
-              Virement bancaire officiel Equity BCDC (USD ou CDF)
+              Virement Equity BCDC (USD / CDF) — disponible maintenant
             </li>
             <li className="rounded-lg border border-[var(--afd-border)] bg-[var(--afd-surface)] px-4 py-3">
-              Paiement en ligne / Mobile Money via SerdiPay (activation progressive)
+              Carte Visa / Mastercard et Mobile Money — bientôt disponibles
             </li>
             <li className="rounded-lg border border-[var(--afd-border)] bg-[var(--afd-surface)] px-4 py-3">
-              Référence unique et vérification manuelle avant confirmation
+              Parcours court : montant, coordonnées, virement, preuve
             </li>
           </ul>
         </div>
@@ -67,13 +67,12 @@ export default async function SoutenirPage() {
             Faire un don
           </h2>
           <p className="mt-2 text-sm text-[var(--afd-muted)]">
-            Choisissez votre moyen de paiement. Un virement n’est jamais considéré comme payé
-            avant vérification par l’AFD.
+            Choisissez une icône de paiement. Le virement n’est confirmé qu’après vérification AFD.
           </p>
           <div className="mt-6">
             <SupportDonationWizard
               bankCoordinates={bankCoordinates}
-              serdiPayAvailable={serdiPay.configured}
+              cardPaymentAvailable={cardAvailable}
             />
           </div>
         </div>

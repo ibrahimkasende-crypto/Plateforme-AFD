@@ -69,7 +69,7 @@ Si une opération a touché `ancien-projet-supabase` par erreur :
 | Problème | Rollback config |
 |----------|-----------------|
 | Données démo visibles | `NEXT_PUBLIC_ENABLE_ADMIN_DEMO_DATA=false` + rebuild |
-| Paiements instables | `SERDIPAY_ENABLED=false` |
+| Paiements carte | `CARD_PAYMENT_ENABLED=false` |
 | Newsletter spam / erreur | `NEWSLETTER_SEND_ENABLED=false` |
 | OCR cloud coûteux | `OCR_CLOUD_ENABLED=false`, `OCR_PROVIDER=native` |
 

@@ -1,8 +1,9 @@
 import { randomUUID } from "crypto";
 import {
-  SerdiPayNotConfiguredError,
-  serdiPayProvider,
-} from "@/features/paiements/providers/serdipay";
+  CardPaymentNotConfiguredError,
+  cardPaymentProvider,
+  getCardPaymentConfig,
+} from "@/lib/payments/providers/card";
 import type { PaymentTransaction } from "@/features/dons/types/donation";
 import type { DonationIntent } from "@/features/dons/types/donation";
 
@@ -15,8 +16,9 @@ export function createInternalPaymentReference() {
 }
 
 /**
- * Prépare une transaction liée à une intention.
- * Ne marque jamais `confirmed` sans vérification serveur SerdiPay.
+ * Prépare une transaction carte liée à une intention.
+ * Ne marque jamais `confirmed` sans vérification serveur + webhook signé.
+ * Inactif tant que CARD_PAYMENT_ENABLED=false / contrat AFD manquant.
  */
 export async function initiatePaymentForIntent(
   intent: DonationIntent,
@@ -24,17 +26,18 @@ export async function initiatePaymentForIntent(
   const now = new Date().toISOString();
   const internalReference = createInternalPaymentReference();
   const idempotencyKey = createIdempotencyKey();
+  const config = getCardPaymentConfig();
 
   const transaction: PaymentTransaction = {
     id: randomUUID(),
     donation_intent_id: intent.id,
     internal_reference: internalReference,
-    provider: "serdipay",
+    provider: "card",
     provider_reference: null,
     amount: intent.amount,
     currency: intent.currency,
     status: "created",
-    payment_method: null,
+    payment_method: "card",
     provider_status: null,
     provider_response: null,
     webhook_verified: false,
@@ -44,8 +47,22 @@ export async function initiatePaymentForIntent(
     updated_at: now,
   };
 
+  if (!config.configured) {
+    const message = new CardPaymentNotConfiguredError().message;
+    return {
+      transaction: {
+        ...transaction,
+        status: "failed",
+        failed_at: now,
+        updated_at: now,
+        provider_response: { error: message },
+      },
+      error: message,
+    };
+  }
+
   try {
-    await serdiPayProvider.createPayment({
+    await cardPaymentProvider.createPayment({
       amount: intent.amount,
       currency: intent.currency,
       internalReference,
@@ -57,14 +74,14 @@ export async function initiatePaymentForIntent(
         phone: intent.donor_phone ?? undefined,
         country: intent.donor_country ?? undefined,
       },
-      returnUrl: process.env.SERDIPAY_RETURN_URL ?? "",
-      callbackUrl: process.env.SERDIPAY_CALLBACK_URL ?? "",
+      returnUrl: config.returnUrl,
+      callbackUrl: config.callbackUrl,
     });
   } catch (error) {
     const message =
-      error instanceof SerdiPayNotConfiguredError
+      error instanceof CardPaymentNotConfiguredError
         ? error.message
-        : "Échec d’initialisation du paiement";
+        : "Échec d’initialisation du paiement carte";
 
     return {
       transaction: {

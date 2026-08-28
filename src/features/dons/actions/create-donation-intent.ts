@@ -2,7 +2,6 @@
 
 import { z } from "zod";
 import { siteConfig } from "@/config/site";
-import { getSerdiPayConfig } from "@/features/paiements/providers/serdipay";
 import { createDonationIntent } from "@/lib/mutations/public/dons";
 
 const donationSchema = z.object({
@@ -25,6 +24,11 @@ export type DonationIntentActionResult = {
 
 const recentSubmissions = new Map<string, number>();
 
+/**
+ * Enregistre une intention générique (hors virement bancaire guidé).
+ * Ne déclenche aucun prestataire externe.
+ * Le paiement carte n’est pas activé (CARD_PAYMENT_ENABLED=false).
+ */
 export async function createDonationIntentAction(
   input: unknown,
 ): Promise<DonationIntentActionResult> {
@@ -57,9 +61,6 @@ export async function createDonationIntentAction(
   }
   recentSubmissions.set(key, now);
 
-  const serdiPay = getSerdiPayConfig();
-  const paymentAvailable = serdiPay.configured;
-
   try {
     const result = await createDonationIntent({
       donor_name: parsed.data.donor_name,
@@ -67,8 +68,8 @@ export async function createDonationIntentAction(
       donor_phone: parsed.data.donor_phone,
       amount: parsed.data.amount,
       currency: parsed.data.currency,
-      payment_method: "serdipay",
-      status: paymentAvailable ? "pending" : "intent",
+      payment_method: "intent",
+      status: "intent",
     });
 
     if (!result.ok) {
@@ -82,21 +83,11 @@ export async function createDonationIntentAction(
       };
     }
 
-    if (!paymentAvailable) {
-      return {
-        ok: true,
-        message:
-          "Votre intention de don a été enregistrée. Le paiement en ligne via SerdiPay n’est pas encore activé — l’équipe AFD vous contactera pour finaliser votre soutien.",
-        paymentAvailable: false,
-        donationId: result.donationId,
-      };
-    }
-
     return {
       ok: true,
       message:
-        "Votre intention de don a été enregistrée. La redirection vers SerdiPay sera disponible dès l’activation complète du module de paiement.",
-      paymentAvailable: true,
+        "Votre intention de don a été enregistrée. Pour finaliser dès maintenant, utilisez le virement bancaire Equity BCDC.",
+      paymentAvailable: false,
       donationId: result.donationId,
     };
   } catch {
