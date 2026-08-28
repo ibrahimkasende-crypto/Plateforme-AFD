@@ -122,9 +122,13 @@ export async function createBankDonationIntentAction(
     .single();
 
   if (error || !data) {
+    console.error("[dons] createBankDonationIntentAction insert failed", error?.message ?? error);
     return {
       ok: false,
-      message: "Votre don n’a pas pu être enregistré. Réessayez plus tard.",
+      message:
+        error?.message?.includes("permission") || error?.code === "42501"
+          ? "Enregistrement refusé par la base. Contactez l’administrateur AFD."
+          : "Votre don n’a pas pu être enregistré. Réessayez plus tard.",
     };
   }
 

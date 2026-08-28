@@ -3,7 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Building2, CreditCard, Smartphone } from "lucide-react";
 import Link from "next/link";
-import { useEffect, useMemo, useState, useTransition } from "react";
+import { useEffect, useMemo, useRef, useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -37,10 +37,9 @@ const donorSchema = z.object({
   donor_name: z.string().trim().min(2, "Le nom est requis").max(120),
   donor_email: z.string().trim().email("Adresse e-mail invalide"),
   donor_phone: z.string().trim().max(40).optional(),
-  consent: z.boolean().refine((v) => v === true, {
-    message: "Le consentement est obligatoire",
-  }),
-  website: z.string().max(0).optional(),
+  consent: z
+    .boolean()
+    .refine((v) => v === true, { message: "Veuillez accepter le traitement de vos données." }),
 });
 
 type DonorValues = z.infer<typeof donorSchema>;
@@ -60,12 +59,14 @@ export function SupportDonationWizard({
   const [step, setStep] = useState<Step>("donate");
   const [method, setMethod] = useState<PaymentMethodId>("bank_transfer");
   const [currency, setCurrency] = useState<BankDonationCurrency>("USD");
-  const [amount, setAmount] = useState<string>("");
+  const [amount, setAmount] = useState<string>("10");
   const [customAmount, setCustomAmount] = useState(false);
+  const [amountError, setAmountError] = useState<string | null>(null);
   const [donationId, setDonationId] = useState<string | null>(null);
   const [reference, setReference] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
   const [doneMessage, setDoneMessage] = useState<string | null>(null);
+  const honeypotRef = useRef<HTMLInputElement>(null);
 
   const donorForm = useForm<DonorValues>({
     resolver: zodResolver(donorSchema),
@@ -74,8 +75,8 @@ export function SupportDonationWizard({
       donor_email: "",
       donor_phone: "",
       consent: false,
-      website: "",
     },
+    mode: "onSubmit",
   });
 
   useEffect(() => {
@@ -89,8 +90,8 @@ export function SupportDonationWizard({
 
   const quickAmounts = useMemo(() => QUICK_AMOUNTS[currency], [currency]);
   const parsedAmount = Number(amount);
-  const usdOk = bankCoordinates.usd_enabled;
-  const cdfOk = bankCoordinates.cdf_enabled;
+  const usdOk = bankCoordinates.usd_enabled !== false;
+  const cdfOk = bankCoordinates.cdf_enabled !== false;
 
   function selectMethod(next: PaymentMethodId) {
     setMethod(next);
@@ -107,37 +108,69 @@ export function SupportDonationWizard({
     }
   }
 
+  function onInvalid(errors: typeof donorForm.formState.errors) {
+    const first =
+      errors.donor_name?.message ||
+      errors.donor_email?.message ||
+      errors.consent?.message ||
+      "Veuillez compléter le formulaire.";
+    toast.error(first);
+  }
+
   function onDonorSubmit(values: DonorValues) {
+    // Honeypot : si rempli (bot), on simule un succès sans appeler le serveur
+    if (honeypotRef.current?.value) {
+      setStep("done");
+      setDoneMessage("Votre déclaration de don a bien été enregistrée. Merci.");
+      return;
+    }
+
     if (method !== "bank_transfer") {
       toast.message(
         method === "card" ? "Carte bientôt disponible" : "Mobile Money bientôt disponible",
       );
+      setMethod("bank_transfer");
       return;
     }
-    if (!parsedAmount || parsedAmount <= 0) {
-      toast.error("Indiquez un montant valide.");
+
+    if (!Number.isFinite(parsedAmount) || parsedAmount <= 0) {
+      setAmountError("Sélectionnez ou saisissez un montant.");
+      toast.error("Sélectionnez ou saisissez un montant.");
       return;
     }
+    setAmountError(null);
+
     startTransition(async () => {
-      const result = await createBankDonationIntentAction({
-        donor_name: values.donor_name,
-        donor_email: values.donor_email,
-        donor_phone: values.donor_phone,
-        donor_country: "République démocratique du Congo",
-        support_type: "don_general",
-        amount: parsedAmount,
-        currency,
-        consent: true,
-        is_anonymous: false,
-      });
-      if (!result.ok) {
-        toast.error(result.message);
-        return;
+      try {
+        const result = await createBankDonationIntentAction({
+          donor_name: values.donor_name,
+          donor_email: values.donor_email,
+          donor_phone: values.donor_phone?.trim() || undefined,
+          donor_country: "République démocratique du Congo",
+          support_type: "don_general",
+          amount: parsedAmount,
+          currency,
+          consent: true as const,
+          is_anonymous: false,
+        });
+
+        if (!result.ok) {
+          toast.error(result.message || "Impossible d’enregistrer le don.");
+          return;
+        }
+
+        if (!result.reference) {
+          toast.error("La référence de don n’a pas pu être générée. Réessayez.");
+          return;
+        }
+
+        setDonationId(result.donationId ?? null);
+        setReference(result.reference);
+        setStep("transfer");
+        toast.success("Référence créée — effectuez le virement.");
+      } catch {
+        toast.error("Une erreur est survenue. Veuillez réessayer.");
       }
-      setDonationId(result.donationId ?? null);
-      setReference(result.reference ?? null);
-      setStep("transfer");
-      toast.success("Référence créée — effectuez le virement.");
     });
   }
 
@@ -145,13 +178,17 @@ export function SupportDonationWizard({
     if (!donationId) return;
     formData.set("donationId", donationId);
     startTransition(async () => {
-      const result = await submitBankTransferProofAction(formData);
-      if (!result.ok) {
-        toast.error(result.message);
-        return;
+      try {
+        const result = await submitBankTransferProofAction(formData);
+        if (!result.ok) {
+          toast.error(result.message);
+          return;
+        }
+        setDoneMessage(result.message);
+        setStep("done");
+      } catch {
+        toast.error("Échec de l’envoi de la preuve. Réessayez.");
       }
-      setDoneMessage(result.message);
-      setStep("done");
     });
   }
 
@@ -159,7 +196,7 @@ export function SupportDonationWizard({
     <div className="space-y-6">
       {step === "donate" ? (
         <form
-          onSubmit={donorForm.handleSubmit(onDonorSubmit)}
+          onSubmit={donorForm.handleSubmit(onDonorSubmit, onInvalid)}
           className={`${formClassName} space-y-6`}
           noValidate
         >
@@ -239,8 +276,9 @@ export function SupportDonationWizard({
                       type="button"
                       onClick={() => {
                         setCurrency("USD");
-                        setAmount("");
+                        setAmount(String(QUICK_AMOUNTS.USD[0]));
                         setCustomAmount(false);
+                        setAmountError(null);
                       }}
                       className={`rounded-lg border px-4 py-2 text-sm font-semibold ${
                         currency === "USD"
@@ -256,8 +294,9 @@ export function SupportDonationWizard({
                       type="button"
                       onClick={() => {
                         setCurrency("CDF");
-                        setAmount("");
+                        setAmount(String(QUICK_AMOUNTS.CDF[0]));
                         setCustomAmount(false);
+                        setAmountError(null);
                       }}
                       className={`rounded-lg border px-4 py-2 text-sm font-semibold ${
                         currency === "CDF"
@@ -277,6 +316,7 @@ export function SupportDonationWizard({
                       onClick={() => {
                         setCustomAmount(false);
                         setAmount(String(value));
+                        setAmountError(null);
                       }}
                       className={`rounded-lg border px-3 py-2 text-sm font-semibold ${
                         amount === String(value) && !customAmount
@@ -292,6 +332,7 @@ export function SupportDonationWizard({
                     onClick={() => {
                       setCustomAmount(true);
                       setAmount("");
+                      setAmountError(null);
                     }}
                     className={`rounded-lg border px-3 py-2 text-sm font-semibold ${
                       customAmount
@@ -310,42 +351,80 @@ export function SupportDonationWizard({
                     className={fieldClassName}
                     placeholder={`Montant en ${currency}`}
                     value={amount}
-                    onChange={(e) => setAmount(e.target.value)}
+                    onChange={(e) => {
+                      setAmount(e.target.value);
+                      setAmountError(null);
+                    }}
                   />
                 ) : null}
+                {amountError ? <p className={errorClassName}>{amountError}</p> : null}
               </div>
 
               <div className="space-y-4">
                 <h3 className="font-display text-base font-semibold text-[var(--afd-ink)]">
                   Vos coordonnées
                 </h3>
-                <div className="sr-only" aria-hidden>
-                  <input type="text" tabIndex={-1} autoComplete="off" {...donorForm.register("website")} />
+                {/* Honeypot hors RHF (évite l’autofill qui bloquait le submit sans message) */}
+                <div className="absolute -left-[9999px] h-0 w-0 overflow-hidden" aria-hidden>
+                  <label htmlFor="afd_hp_company">Société</label>
+                  <input
+                    ref={honeypotRef}
+                    id="afd_hp_company"
+                    name="afd_hp_company"
+                    type="text"
+                    tabIndex={-1}
+                    autoComplete="off"
+                  />
                 </div>
                 <div className="grid gap-4 sm:grid-cols-2">
                   <div>
-                    <label className={labelClassName}>Nom complet</label>
-                    <input className={fieldClassName} {...donorForm.register("donor_name")} />
+                    <label className={labelClassName} htmlFor="donor_name">
+                      Nom complet
+                    </label>
+                    <input
+                      id="donor_name"
+                      className={fieldClassName}
+                      autoComplete="name"
+                      {...donorForm.register("donor_name")}
+                    />
                     {donorForm.formState.errors.donor_name ? (
                       <p className={errorClassName}>{donorForm.formState.errors.donor_name.message}</p>
                     ) : null}
                   </div>
                   <div>
-                    <label className={labelClassName}>E-mail</label>
-                    <input type="email" className={fieldClassName} {...donorForm.register("donor_email")} />
+                    <label className={labelClassName} htmlFor="donor_email">
+                      E-mail
+                    </label>
+                    <input
+                      id="donor_email"
+                      type="email"
+                      className={fieldClassName}
+                      autoComplete="email"
+                      {...donorForm.register("donor_email")}
+                    />
                     {donorForm.formState.errors.donor_email ? (
                       <p className={errorClassName}>{donorForm.formState.errors.donor_email.message}</p>
                     ) : null}
                   </div>
                 </div>
                 <div>
-                  <label className={labelClassName}>
+                  <label className={labelClassName} htmlFor="donor_phone">
                     Téléphone <span className="font-normal text-[var(--afd-muted)]">(facultatif)</span>
                   </label>
-                  <input type="tel" className={fieldClassName} {...donorForm.register("donor_phone")} />
+                  <input
+                    id="donor_phone"
+                    type="tel"
+                    className={fieldClassName}
+                    autoComplete="tel"
+                    {...donorForm.register("donor_phone")}
+                  />
                 </div>
                 <label className="flex items-start gap-3 text-sm text-[var(--afd-muted)]">
-                  <input type="checkbox" className={checkboxClassName} {...donorForm.register("consent")} />
+                  <input
+                    type="checkbox"
+                    className={checkboxClassName}
+                    {...donorForm.register("consent")}
+                  />
                   <span>
                     J’accepte le traitement de mes données pour ce don.{" "}
                     <Link href="/politique-confidentialite" className="font-semibold text-[var(--afd-blue)]">
@@ -358,11 +437,7 @@ export function SupportDonationWizard({
                 ) : null}
               </div>
 
-              <button
-                type="submit"
-                disabled={pending || !parsedAmount || parsedAmount <= 0}
-                className={submitClassName}
-              >
+              <button type="submit" disabled={pending} className={submitClassName}>
                 {pending ? "Préparation…" : "Obtenir les coordonnées bancaires"}
               </button>
             </>
