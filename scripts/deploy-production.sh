@@ -370,7 +370,11 @@ if ((${#ALL_RELEASES[@]} > KEEP_RELEASES)); then
     cur="$(readlink -f "${CURRENT_LINK}" || true)"
     [[ "${old}" == "${cur}" || "${old}" == "${PREVIOUS_TARGET}" ]] && continue
     log "Purge ancienne release $(basename "${old}")"
-    rm -rf "${old}"
+    # Ne jamais faire échouer un déploiement réussi à cause d’une purge (permissions root, etc.)
+    chmod -R u+w "${old}" 2>/dev/null || true
+    if ! rm -rf "${old}" 2>/tmp/afd-purge.err; then
+      log "WARN: purge incomplète $(basename "${old}") (current inchangé) — $(head -c 120 /tmp/afd-purge.err 2>/dev/null | tr '\n' ' ')"
+    fi
   done
 fi
 
