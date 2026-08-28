@@ -4,9 +4,11 @@ import { useState } from "react";
 import type { Database } from "@/types/database.types";
 import {
   accountForCurrency,
+  formatDonationAmount,
   type BankDonationCurrency,
 } from "@/features/dons/config/bank-donation";
 import { CopyButton } from "@/components/public/dons/copy-button";
+import { EquityUssdActions } from "@/components/public/dons/equity-ussd-actions";
 
 type BankCoordinates = Database["public"]["Tables"]["dons_coordonnees_bancaires"]["Row"];
 
@@ -14,11 +16,18 @@ type BankDetailsCardProps = {
   coords: BankCoordinates;
   currency: BankDonationCurrency;
   reference?: string | null;
+  amount?: number;
 };
 
-export function BankDetailsCard({ coords, currency, reference }: BankDetailsCardProps) {
+export function BankDetailsCard({
+  coords,
+  currency,
+  reference,
+  amount,
+}: BankDetailsCardProps) {
   const [intlOpen, setIntlOpen] = useState(false);
   const account = accountForCurrency(coords, currency);
+  const showUssd = Boolean(reference && amount && amount > 0);
 
   return (
     <div className="space-y-4">
@@ -39,6 +48,17 @@ export function BankDetailsCard({ coords, currency, reference }: BankDetailsCard
             <dt className="text-white/65">Devise</dt>
             <dd className="mt-1 font-medium">{currency}</dd>
           </div>
+          {amount && amount > 0 ? (
+            <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+              <div className="min-w-0 flex-1">
+                <dt className="text-white/65">Montant à virer</dt>
+                <dd className="mt-1 font-mono text-base font-semibold tracking-wide">
+                  {formatDonationAmount(amount, currency)} {currency}
+                </dd>
+              </div>
+              <CopyButton value={`${amount}`} label="Copier montant" />
+            </div>
+          ) : null}
           <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
             <div className="min-w-0 flex-1">
               <dt className="text-white/65">Numéro de compte</dt>
@@ -70,6 +90,16 @@ export function BankDetailsCard({ coords, currency, reference }: BankDetailsCard
           ) : null}
         </dl>
       </div>
+
+      {showUssd && reference && amount ? (
+        <EquityUssdActions
+          account={account}
+          amount={amount}
+          currency={currency}
+          reference={reference}
+          accountHolder={coords.account_holder}
+        />
+      ) : null}
 
       {coords.instructions ? (
         <p className="rounded-xl border border-[var(--afd-border)] bg-[var(--afd-surface)] px-4 py-3 text-sm text-[var(--afd-muted)]">

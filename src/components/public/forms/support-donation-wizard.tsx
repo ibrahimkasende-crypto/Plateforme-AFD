@@ -454,7 +454,12 @@ export function SupportDonationWizard({
 
       {step === "transfer" && reference ? (
         <div className="space-y-5">
-          <BankDetailsCard coords={bankCoordinates} currency={currency} reference={reference} />
+          <BankDetailsCard
+            coords={bankCoordinates}
+            currency={currency}
+            reference={reference}
+            amount={parsedAmount}
+          />
           <div className="space-y-3 rounded-2xl border border-[var(--afd-border)] bg-white p-4">
             <h3 className="font-display text-base font-semibold text-[var(--afd-ink)]">
               Preuve de virement
